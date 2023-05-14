@@ -1,6 +1,7 @@
 package com.example.scarlet
 
 import android.content.res.Resources
+import android.database.Cursor
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -15,16 +16,6 @@ private const val NO_PREVIOUS_BLOCK_MSG = "No previous blocks"
 private fun Int.dpToPx(): Int {
     val density = Resources.getSystem().displayMetrics.density
     return (this * density).roundToInt()
-}
-
-private fun getActiveBlock(): Any? {
-    // TODO
-    return null
-}
-
-private fun getPreviousTrainingBlocks(): List<Any> {
-    // TODO
-    return emptyList()
 }
 
 class TrainingLogsActivity : AppCompatActivity() {
@@ -47,13 +38,32 @@ class TrainingLogsActivity : AppCompatActivity() {
     }
 
     private fun displayActiveBlockSection() {
-        val activeBlock = getActiveBlock()
+        val activeBlock = this.getActiveBlock()
 
         activeBlock?.let {
             TODO("Not yet implemented")
         } ?: run {
             this.activeBlockBtn.text = NO_ACTIVE_BLOCK_MSG
         }
+    }
+
+    private fun getActiveBlock(): String? {
+        val dbHelper = ScarletDbHelper(this)
+        val db = dbHelper.readableDatabase
+
+        val cursor: Cursor = db.rawQuery("SELECT name FROM block WHERE NOT completed", null)
+
+        if (cursor.count > 1) {
+            TODO("Not Implemented Yet (throw a custom Exception)")
+        }
+
+        var activeBlockName: String? = null
+        if (cursor.moveToFirst()) {
+            activeBlockName = cursor.getString(cursor.getColumnIndexOrThrow("name"))
+        }
+
+        cursor.close()
+        return activeBlockName
     }
 
     private fun displayPreviousBlocksSection() {
@@ -78,5 +88,10 @@ class TrainingLogsActivity : AppCompatActivity() {
         } else {
             TODO("Not yet implemented")
         }
+    }
+
+    private fun getPreviousTrainingBlocks(): List<Any> {
+        // TODO
+        return emptyList()
     }
 }
