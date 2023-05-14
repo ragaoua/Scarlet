@@ -9,8 +9,8 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import kotlin.math.roundToInt
 
-private val NO_ACTIVE_BLOCK_MSG = "No active block\nClick to start a new block"
-private val NO_PREVIOUS_BLOCK_MSG = "No previous blocks"
+private const val NO_ACTIVE_BLOCK_MSG = "No active block\nClick to start a new block"
+private const val NO_PREVIOUS_BLOCK_MSG = "No previous blocks"
 
 private fun Int.dpToPx(): Int {
     val density = Resources.getSystem().displayMetrics.density
@@ -24,7 +24,7 @@ private fun getActiveBlock(): Any? {
 
 private fun getPreviousTrainingBlocks(): List<Any> {
     // TODO
-    return emptyList<Any>()
+    return emptyList()
 }
 
 class TrainingLogsActivity : AppCompatActivity() {
@@ -34,22 +34,31 @@ class TrainingLogsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_training_logs)
 
-        activeBlockBtn = findViewById(R.id.activeBlockBtn)
-
         ////////////////////////
         ///// Active block /////
         ////////////////////////
-        val activeBlock = getActiveBlock()
-        activeBlock?.let {
-            TODO("Not yet implemented")
-        } ?: run {
-            activeBlockBtn.text = NO_ACTIVE_BLOCK_MSG
-        }
+        activeBlockBtn = findViewById(R.id.activeBlockBtn)
+        this.displayActiveBlockSection()
 
         ////////////////////////
         /// Previous blocks ///
         ////////////////////////
+        this.displayPreviousBlocksSection()
+    }
+
+    private fun displayActiveBlockSection() {
+        val activeBlock = getActiveBlock()
+
+        activeBlock?.let {
+            TODO("Not yet implemented")
+        } ?: run {
+            this.activeBlockBtn.text = NO_ACTIVE_BLOCK_MSG
+        }
+    }
+
+    private fun displayPreviousBlocksSection() {
         val previousBlocks = getPreviousTrainingBlocks()
+
         if (previousBlocks.isEmpty()) {
             val constraintLayout = findViewById<ConstraintLayout>(R.id.constraintLayout)
             val noPreviousBlocksTv = TextView(this)
@@ -66,9 +75,7 @@ class TrainingLogsActivity : AppCompatActivity() {
             noPreviousBlocksTv.text = NO_PREVIOUS_BLOCK_MSG
 
             constraintLayout.addView(noPreviousBlocksTv)
-
-        }
-        else {
+        } else {
             TODO("Not yet implemented")
         }
     }
