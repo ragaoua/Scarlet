@@ -48,8 +48,7 @@ class TrainingLogsActivity : AppCompatActivity() {
                 // create the popup window
                 val width = LinearLayout.LayoutParams.WRAP_CONTENT
                 val height = LinearLayout.LayoutParams.WRAP_CONTENT
-                val focusable = true // lets taps outside the popup also dismiss it
-                val popupWindow = PopupWindow(popupView, width, height, focusable)
+                val popupWindow = PopupWindow(popupView, width, height, true)
 
                 // show the popup window
                 // which view you pass in doesn't matter, it is only used for the window token
