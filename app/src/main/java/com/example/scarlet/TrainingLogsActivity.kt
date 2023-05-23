@@ -1,14 +1,14 @@
 package com.example.scarlet
 
-import android.content.Context
+import android.content.Intent
 import android.content.res.Resources
 import android.database.Cursor
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
@@ -24,10 +24,13 @@ private fun dpToPx(dp: Int): Int {
 
 class TrainingLogsActivity : AppCompatActivity() {
     private lateinit var activeBlockBtn: Button
+    private lateinit var createBlockBtn: Button
+    private lateinit var newBlockNameEt: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_training_logs)
+
         activeBlockBtn = findViewById(R.id.activeBlockBtn)
 
         this.displayActiveBlockSection()
@@ -42,17 +45,38 @@ class TrainingLogsActivity : AppCompatActivity() {
             TODO("Not yet implemented")
         } ?: run {
             this.activeBlockBtn.setOnClickListener {
-                val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-                val popupView = inflater.inflate(R.layout.popup_add_block, null)
+                inflateNewBlockPopupView()
+            }
+        }
+    }
 
-                // create the popup window
-                val width = LinearLayout.LayoutParams.WRAP_CONTENT
-                val height = LinearLayout.LayoutParams.WRAP_CONTENT
-                val popupWindow = PopupWindow(popupView, width, height, true)
+    private fun inflateNewBlockPopupView() {
+        val popupView = layoutInflater.inflate(R.layout.activity_add_block_popup, null)
 
-                // show the popup window
-                // which view you pass in doesn't matter, it is only used for the window token
-                popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0)
+        val width = LinearLayout.LayoutParams.WRAP_CONTENT
+        val height = LinearLayout.LayoutParams.WRAP_CONTENT
+        val popupWindow = PopupWindow(popupView, width, height, true)
+        popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0)
+
+        createBlockBtn = popupView.findViewById(R.id.createBlockBtn)
+        newBlockNameEt = popupView.findViewById(R.id.blockNameEt)
+
+        definePopupViewListeners()
+    }
+
+    private fun definePopupViewListeners() {
+        createBlockBtn.setOnClickListener{
+            val blockName = newBlockNameEt.text.toString().trim()
+
+            if (blockName.isEmpty()){
+                TODO("Print a message indicating that the block name is empty")
+            }
+            else {
+                val blockId = createBlock(blockName)
+
+                val intent = Intent(this, ShowBlockActivity::class.java)
+                intent.putExtra("blockId", blockId)
+                startActivity(intent)
             }
         }
     }
@@ -103,5 +127,18 @@ class TrainingLogsActivity : AppCompatActivity() {
     private fun getPreviousTrainingBlocks(): List<Any> {
         // TODO
         return emptyList()
+    }
+
+    private fun createBlock(blockName: String): Long {
+        val dbHelper = ScarletDbHelper(this)
+        val db = dbHelper.writableDatabase
+
+        val statement = db.compileStatement("INSERT INTO block(name) VALUES(?)")
+        statement.bindString(1, blockName)
+
+        val blockId: Long = statement.executeInsert()
+        statement.close()
+
+        return blockId
     }
 }

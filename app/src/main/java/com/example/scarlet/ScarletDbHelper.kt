@@ -13,12 +13,12 @@ class ScarletDbHelper(context: Context) :
 
     override fun onCreate(db: SQLiteDatabase) {
         this.db = db
-        Log.i(TAG, "Creating the database schema")
+        Log.d(TAG, "Creating the database schema")
         db.execSQL(CREATE_SCHEMA_QUERY)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        Log.i(TAG, "Dropping and recreating the database schema")
+        Log.d(TAG, "Dropping and recreating the database schema")
         db!!.execSQL(DROP_SCHEMA_QUERY)
         this.onCreate(db)
     }
@@ -26,8 +26,7 @@ class ScarletDbHelper(context: Context) :
     companion object {
         private const val DATABASE_NAME = "scarlet"
         private const val DATABASE_VERSION = 1
-        private const val CREATE_SCHEMA_QUERY = "CREATE TABLE block(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, completed BOOLEAN)"
+        private const val CREATE_SCHEMA_QUERY = "CREATE TABLE block(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, completed BOOLEAN DEFAULT 0)"
         private const val DROP_SCHEMA_QUERY = "DROP TABLE IF EXISTS block"
     }
-
 }
