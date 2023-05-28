@@ -2,9 +2,9 @@ package com.example.scarlet
 
 import android.content.Intent
 import android.content.res.Resources
-import android.database.Cursor
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.Button
@@ -15,6 +15,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import kotlin.math.roundToInt
 
+private const val TAG = "TrainingLogsActivity"
 private const val NO_PREVIOUS_BLOCK_MSG = "No previous blocks"
 
 private fun dpToPx(dp: Int): Int {
@@ -33,16 +34,21 @@ class TrainingLogsActivity : AppCompatActivity() {
 
         activeBlockBtn = findViewById(R.id.activeBlockBtn)
 
-        this.displayActiveBlockSection()
+        displayActiveBlockSection()
 
-        this.displayPreviousBlocksSection()
+        displayPreviousBlocksSection()
     }
 
     private fun displayActiveBlockSection() {
-        val activeBlock = this.getActiveBlockName()
+        val activeBlock = this.getActiveBlock()
 
         activeBlock?.let {
-            TODO("Not yet implemented")
+            this.activeBlockBtn.text = activeBlock.name
+            this.activeBlockBtn.setOnClickListener {
+                val intent = Intent(this, ShowBlockActivity::class.java)
+                intent.putExtra("block", activeBlock)
+                startActivity(intent)
+            }
         } ?: run {
             this.activeBlockBtn.setOnClickListener {
                 inflateNewBlockPopupView()
@@ -69,35 +75,38 @@ class TrainingLogsActivity : AppCompatActivity() {
             val blockName = newBlockNameEt.text.toString().trim()
 
             if (blockName.isEmpty()){
-                TODO("Print a message indicating that the block name is empty")
+                // TODO
+                Log.d(TAG, "Print a message indicating that the block name is empty")
             }
             else {
-                val blockId = createBlock(blockName)
+                val block = createBlock(blockName)
 
                 val intent = Intent(this, ShowBlockActivity::class.java)
-                intent.putExtra("blockId", blockId)
+                intent.putExtra("block", block)
                 startActivity(intent)
             }
         }
     }
 
-    private fun getActiveBlockName(): String? {
+    private fun getActiveBlock(): Block? {
         val dbHelper = ScarletDbHelper(this)
         val db = dbHelper.readableDatabase
 
-        val cursor: Cursor = db.rawQuery("SELECT name FROM block WHERE NOT completed", null)
+        val cursor = db.rawQuery("SELECT * FROM block WHERE NOT completed", null)
 
         if (cursor.count > 1) {
-            TODO("Throw a custom Exception")
+            throw Exception("Too many active blocks. Should only get one")
         }
 
-        var activeBlockName: String? = null
+        var activeBlock: Block? = null
         if (cursor.moveToFirst()) {
-            activeBlockName = cursor.getString(cursor.getColumnIndexOrThrow("name"))
+            activeBlock = Block(cursor)
         }
 
         cursor.close()
-        return activeBlockName
+        db.close()
+
+        return activeBlock
     }
 
     private fun displayPreviousBlocksSection() {
@@ -120,7 +129,8 @@ class TrainingLogsActivity : AppCompatActivity() {
             val constraintLayout = findViewById<ConstraintLayout>(R.id.constraintLayout)
             constraintLayout.addView(noPreviousBlocksTv)
         } else {
-            TODO("Not yet implemented")
+            // TODO
+            Log.d(TAG, "NYI")
         }
     }
 
@@ -129,16 +139,17 @@ class TrainingLogsActivity : AppCompatActivity() {
         return emptyList()
     }
 
-    private fun createBlock(blockName: String): Long {
+    private fun createBlock(blockName: String): Block {
         val dbHelper = ScarletDbHelper(this)
         val db = dbHelper.writableDatabase
 
         val statement = db.compileStatement("INSERT INTO block(name) VALUES(?)")
         statement.bindString(1, blockName)
 
-        val blockId: Long = statement.executeInsert()
-        statement.close()
+        val block = Block(statement.executeInsert(), blockName, false)
 
-        return blockId
+        statement.close()
+        db.close()
+        return block
     }
 }
