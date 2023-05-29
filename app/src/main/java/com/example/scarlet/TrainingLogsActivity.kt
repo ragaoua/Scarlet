@@ -16,7 +16,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import kotlin.math.roundToInt
 
 private const val TAG = "TrainingLogsActivity"
-private const val NO_PREVIOUS_BLOCK_MSG = "No previous blocks"
+private const val NO_COMPLETED_BLOCK_MSG = "No completed block"
 
 private fun dpToPx(dp: Int): Int {
     val density = Resources.getSystem().displayMetrics.density
@@ -36,9 +36,16 @@ class TrainingLogsActivity : AppCompatActivity() {
 
         displayActiveBlockSection()
 
-        displayPreviousBlocksSection()
+        displayCompletedBlocksSection()
     }
 
+    /**
+     * Displays the "Active block" section of the activity.
+     *
+     * If an active block is found, sets the listener for activeBlockBtn
+     * to open the [ShowBlockActivity] for that block. Otherwise, the button
+     * inflates a popup to create a new block.
+     */
     private fun displayActiveBlockSection() {
         val activeBlock = this.getActiveBlock()
 
@@ -56,6 +63,9 @@ class TrainingLogsActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Inflates a popup to create a new block (activity_add_block_popup)
+     */
     private fun inflateNewBlockPopupView() {
         val popupView = layoutInflater.inflate(R.layout.activity_add_block_popup, null)
 
@@ -67,10 +77,15 @@ class TrainingLogsActivity : AppCompatActivity() {
         createBlockBtn = popupView.findViewById(R.id.createBlockBtn)
         newBlockNameEt = popupView.findViewById(R.id.blockNameEt)
 
-        definePopupViewListeners()
+        defineNewBlockPopupViewListeners()
     }
 
-    private fun definePopupViewListeners() {
+    /**
+     * Defines on click listener for [createBlockBtn].
+     *
+     * The button create a block and opens the [ShowBlockActivity] for that block
+     */
+    private fun defineNewBlockPopupViewListeners() {
         createBlockBtn.setOnClickListener{
             val blockName = newBlockNameEt.text.toString().trim()
 
@@ -88,6 +103,13 @@ class TrainingLogsActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Queries the database for the active block, then returns it.
+     *
+     * Throws a Exception if multiple active blocks are found.
+     *
+     * @return activeBlock
+     */
     private fun getActiveBlock(): Block? {
         val dbHelper = ScarletDbHelper(this)
         val db = dbHelper.readableDatabase
@@ -109,13 +131,20 @@ class TrainingLogsActivity : AppCompatActivity() {
         return activeBlock
     }
 
-    private fun displayPreviousBlocksSection() {
-        val previousBlocks = getPreviousTrainingBlocks()
+    /**
+     * Displays the "Previous blocks" section of the activity.
+     *
+     * Gets the previous training blocks, and displays a button for each.
+     *
+     * If no previous blocks are found, displays a TextView indicating so
+     */
+    private fun displayCompletedBlocksSection() {
+        val previousBlocks = getCompletedTrainingBlocks()
 
         if (previousBlocks.isEmpty()) {
-            val noPreviousBlocksTv = TextView(this)
-            noPreviousBlocksTv.id = View.generateViewId()
-            noPreviousBlocksTv.layoutParams = ConstraintLayout.LayoutParams(
+            val noCompletedBlocksTv = TextView(this)
+            noCompletedBlocksTv.id = View.generateViewId()
+            noCompletedBlocksTv.layoutParams = ConstraintLayout.LayoutParams(
                 ConstraintLayout.LayoutParams.WRAP_CONTENT,
                 ConstraintLayout.LayoutParams.WRAP_CONTENT
             ).apply {
@@ -124,21 +153,31 @@ class TrainingLogsActivity : AppCompatActivity() {
                 endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
                 topMargin = dpToPx(32)
             }
-            noPreviousBlocksTv.text = NO_PREVIOUS_BLOCK_MSG
+            noCompletedBlocksTv.text = NO_COMPLETED_BLOCK_MSG
 
             val constraintLayout = findViewById<ConstraintLayout>(R.id.constraintLayout)
-            constraintLayout.addView(noPreviousBlocksTv)
+            constraintLayout.addView(noCompletedBlocksTv)
         } else {
             // TODO
-            Log.d(TAG, "NYI")
+            Log.d(TAG, "Display a button for each block")
         }
     }
 
-    private fun getPreviousTrainingBlocks(): List<Any> {
+    /**
+     * @return List of completed blocks
+     */
+    private fun getCompletedTrainingBlocks(): List<Block> {
         // TODO
         return emptyList()
     }
 
+    /**
+     * Creates a training block
+     *
+     * @param blockName Name of the block to create
+     *
+     * @return The created block
+     */
     private fun createBlock(blockName: String): Block {
         val dbHelper = ScarletDbHelper(this)
         val db = dbHelper.writableDatabase
