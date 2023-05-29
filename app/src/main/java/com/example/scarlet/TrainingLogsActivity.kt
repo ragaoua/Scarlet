@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
@@ -15,7 +16,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import kotlin.math.roundToInt
 
 private const val TAG = "TrainingLogsActivity"
-private const val NO_COMPLETED_BLOCK_MSG = "No completed block"
+private const val NO_COMPLETED_BLOCK_MSG = "No completed blocks"
 
 private fun dpToPx(dp: Int): Int {
     val density = Resources.getSystem().displayMetrics.density
@@ -26,11 +27,13 @@ class TrainingLogsActivity : AppCompatActivity() {
     private lateinit var activeBlockBtn: Button
     private lateinit var createBlockBtn: Button
     private lateinit var newBlockNameEt: EditText
+    private lateinit var constraintLayout: ConstraintLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_training_logs)
         activeBlockBtn = findViewById(R.id.activeBlockBtn)
+        constraintLayout = findViewById(R.id.constraintLayout)
 
         displayActiveBlockSection()
         displayCompletedBlocksSection()
@@ -48,11 +51,7 @@ class TrainingLogsActivity : AppCompatActivity() {
 
         activeBlock?.let {
             this.activeBlockBtn.text = activeBlock.name
-            this.activeBlockBtn.setOnClickListener {
-                val intent = Intent(this, BlockActivity::class.java)
-                intent.putExtra("block", activeBlock)
-                startActivity(intent)
-            }
+            setBlockButtonOnClickListener(activeBlockBtn, activeBlock)
         } ?: run {
             this.activeBlockBtn.setOnClickListener {
                 inflateNewBlockPopupView()
@@ -129,42 +128,86 @@ class TrainingLogsActivity : AppCompatActivity() {
     }
 
     /**
-     * Displays the "Completed training blocks" section of the activity.
-     *
-     * Gets the completed training blocks, and displays a button for each.
+     * Gets all completed training blocks, and displays a Button for each.
      *
      * If no completed blocks are found, displays a TextView indicating so
      */
     private fun displayCompletedBlocksSection() {
-        val completedBlocks = getCompletedTrainingBlocks()
+        val completedBlocks = getCompletedBlocks()
 
         if (completedBlocks.isEmpty()) {
             val noCompletedBlocksTv = TextView(this)
-            noCompletedBlocksTv.layoutParams = ConstraintLayout.LayoutParams(
-                ConstraintLayout.LayoutParams.WRAP_CONTENT,
-                ConstraintLayout.LayoutParams.WRAP_CONTENT
-            ).apply {
-                topToBottom = R.id.completedBlocksTv
-                startToStart = ConstraintLayout.LayoutParams.PARENT_ID
-                endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
-                topMargin = dpToPx(32)
-            }
             noCompletedBlocksTv.text = NO_COMPLETED_BLOCK_MSG
-
-            val constraintLayout = findViewById<ConstraintLayout>(R.id.constraintLayout)
-            constraintLayout.addView(noCompletedBlocksTv)
+            addViewToConstraintLayout(noCompletedBlocksTv, R.id.completedBlocksTv)
         } else {
-            // TODO
-            Log.d(TAG, "Display a button for each block")
+            var topToBottomTargetId = R.id.completedBlocksTv
+            for (block in completedBlocks) {
+                val blockButton = Button(this)
+                blockButton.text = block.name
+                addViewToConstraintLayout(blockButton, topToBottomTargetId)
+
+                blockButton.id = View.generateViewId()
+                topToBottomTargetId = blockButton.id
+
+                setBlockButtonOnClickListener(blockButton, block)
+            }
         }
+    }
+
+    /**
+     * Sets the onClick listener for [blockButton] to open a new [BlockActivity]
+     *
+     * @param blockButton Button to set the listener for
+     * @param block block to send via the intent
+     */
+    private fun setBlockButtonOnClickListener(blockButton: Button, block: Block) {
+        blockButton.setOnClickListener {
+            val intent = Intent(this, BlockActivity::class.java)
+            intent.putExtra("block", block)
+            startActivity(intent)
+        }
+    }
+
+    /**
+     * Add [view] to the [constraintLayout]. Constrains the top side of the view to
+     * the bottom side of the view identified by [topToBottomTargetId]
+     *
+     * @param view View to add to the [constraintLayout]
+     * @param topToBottomTargetId Identifier of a target view. The top side of
+     * the added view will be constrained to the bottom side of this target view
+     */
+    private fun addViewToConstraintLayout(view: View, topToBottomTargetId: Int) {
+        view.layoutParams = ConstraintLayout.LayoutParams(
+            ConstraintLayout.LayoutParams.WRAP_CONTENT,
+            ConstraintLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            topToBottom = topToBottomTargetId
+            startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+            endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+            topMargin = dpToPx(32)
+        }
+
+        constraintLayout.addView(view)
     }
 
     /**
      * @return List of completed blocks
      */
-    private fun getCompletedTrainingBlocks(): List<Block> {
-        // TODO
-        return emptyList()
+    private fun getCompletedBlocks(): ArrayList<Block> {
+        val dbHelper = ScarletDbHelper(this)
+        val db = dbHelper.readableDatabase
+
+        val cursor = db.rawQuery("SELECT * FROM block WHERE completed", null)
+
+        val blocks = ArrayList<Block>()
+        while (cursor.moveToNext()) {
+            blocks.add(Block(cursor))
+        }
+
+        cursor.close()
+        db.close()
+
+        return blocks
     }
 
     /**
