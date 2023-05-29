@@ -1,4 +1,4 @@
-package com.example.scarlet
+package com.example.scarlet.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,6 +6,10 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.example.scarlet.model.Block
+import com.example.scarlet.R
+import com.example.scarlet.ScarletDbHelper
+import com.example.scarlet.model.Session
 
 private const val TAG = "BlockActivity"
 private const val NO_SESSIONS_MSG = "No sessions found"

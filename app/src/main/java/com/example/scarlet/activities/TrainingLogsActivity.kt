@@ -1,4 +1,4 @@
-package com.example.scarlet
+package com.example.scarlet.activities
 
 import android.content.Intent
 import android.content.res.Resources
@@ -13,6 +13,9 @@ import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.example.scarlet.model.Block
+import com.example.scarlet.R
+import com.example.scarlet.ScarletDbHelper
 import kotlin.math.roundToInt
 
 private const val TAG = "TrainingLogsActivity"
