@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
@@ -31,11 +30,9 @@ class TrainingLogsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_training_logs)
-
         activeBlockBtn = findViewById(R.id.activeBlockBtn)
 
         displayActiveBlockSection()
-
         displayCompletedBlocksSection()
     }
 
@@ -43,7 +40,7 @@ class TrainingLogsActivity : AppCompatActivity() {
      * Displays the "Active block" section of the activity.
      *
      * If an active block is found, sets the listener for activeBlockBtn
-     * to open the [ShowBlockActivity] for that block. Otherwise, the button
+     * to open the [BlockActivity] for that block. Otherwise, the button
      * inflates a popup to create a new block.
      */
     private fun displayActiveBlockSection() {
@@ -52,7 +49,7 @@ class TrainingLogsActivity : AppCompatActivity() {
         activeBlock?.let {
             this.activeBlockBtn.text = activeBlock.name
             this.activeBlockBtn.setOnClickListener {
-                val intent = Intent(this, ShowBlockActivity::class.java)
+                val intent = Intent(this, BlockActivity::class.java)
                 intent.putExtra("block", activeBlock)
                 startActivity(intent)
             }
@@ -83,7 +80,7 @@ class TrainingLogsActivity : AppCompatActivity() {
     /**
      * Defines on click listener for [createBlockBtn].
      *
-     * The button create a block and opens the [ShowBlockActivity] for that block
+     * The button create a block and opens the [BlockActivity] for that block
      */
     private fun defineNewBlockPopupViewListeners() {
         createBlockBtn.setOnClickListener{
@@ -96,7 +93,7 @@ class TrainingLogsActivity : AppCompatActivity() {
             else {
                 val block = createBlock(blockName)
 
-                val intent = Intent(this, ShowBlockActivity::class.java)
+                val intent = Intent(this, BlockActivity::class.java)
                 intent.putExtra("block", block)
                 startActivity(intent)
             }
@@ -132,23 +129,22 @@ class TrainingLogsActivity : AppCompatActivity() {
     }
 
     /**
-     * Displays the "Previous blocks" section of the activity.
+     * Displays the "Completed training blocks" section of the activity.
      *
-     * Gets the previous training blocks, and displays a button for each.
+     * Gets the completed training blocks, and displays a button for each.
      *
-     * If no previous blocks are found, displays a TextView indicating so
+     * If no completed blocks are found, displays a TextView indicating so
      */
     private fun displayCompletedBlocksSection() {
-        val previousBlocks = getCompletedTrainingBlocks()
+        val completedBlocks = getCompletedTrainingBlocks()
 
-        if (previousBlocks.isEmpty()) {
+        if (completedBlocks.isEmpty()) {
             val noCompletedBlocksTv = TextView(this)
-            noCompletedBlocksTv.id = View.generateViewId()
             noCompletedBlocksTv.layoutParams = ConstraintLayout.LayoutParams(
                 ConstraintLayout.LayoutParams.WRAP_CONTENT,
                 ConstraintLayout.LayoutParams.WRAP_CONTENT
             ).apply {
-                topToBottom = R.id.previousBlocksTv
+                topToBottom = R.id.completedBlocksTv
                 startToStart = ConstraintLayout.LayoutParams.PARENT_ID
                 endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
                 topMargin = dpToPx(32)

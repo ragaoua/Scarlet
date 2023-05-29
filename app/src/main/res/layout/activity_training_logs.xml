@@ -41,11 +41,11 @@
         app:layout_constraintTop_toBottomOf="@+id/activeBlockTv" />
 
     <TextView
-        android:id="@+id/previousBlocksTv"
+        android:id="@+id/completedBlocksTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="@string/previous_training_blocks"
+        android:text="@string/completed_training_blocks"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
