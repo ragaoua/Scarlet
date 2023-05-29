@@ -21,21 +21,21 @@ class ScarletDbHelper(context: Context) :
     }
 
     /**
-     * Executes SQL to create the Block table
+     * Executes SQL to create the BLOCK table
      */
     private fun createBlockTable() {
         val createTableQuery = """
             CREATE TABLE IF NOT EXISTS block (
                 id INTEGER PRIMARY KEY,
                 name TEXT,
-                completed INTEGER
+                completed BOOLEAN DEFAULT 0
             )
         """
         db.execSQL(createTableQuery)
     }
 
     /**
-     * Executes SQL to create the Session table
+     * Executes SQL to create the SESSION table
      */
     private fun createSessionTable() {
         val createTableQuery = """

@@ -17,7 +17,7 @@ class BlockActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_show_block)
+        setContentView(R.layout.activity_block)
         blockNameTv = findViewById(R.id.blockNameTv)
         sessionsVLL = findViewById(R.id.sessionsVLL)
 
@@ -69,7 +69,7 @@ class BlockActivity : AppCompatActivity() {
         val cursor = db.rawQuery("SELECT * FROM session WHERE block_id = ?", arrayOf(block.id.toString()))
 
         val sessions = ArrayList<Session>()
-        if (cursor.moveToFirst()) {
+        while (cursor.moveToNext()) {
             sessions.add(Session(cursor))
         }
 
