@@ -2,7 +2,6 @@ package com.example.scarlet.activities
 
 import android.content.Intent
 import android.content.res.Resources
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -12,10 +11,14 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.lifecycleScope
 import com.example.scarlet.model.Block
 import com.example.scarlet.R
-import com.example.scarlet.ScarletDbHelper
+import com.example.scarlet.ScarletDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 private const val TAG = "TrainingLogsActivity"
@@ -50,14 +53,21 @@ class TrainingLogsActivity : AppCompatActivity() {
      * inflates a popup to create a new block.
      */
     private fun displayActiveBlockSection() {
-        val activeBlock = this.getActiveBlock()
+        val dbInstance = ScarletDatabase.getInstance(this)
 
-        activeBlock?.let {
-            this.activeBlockBtn.text = activeBlock.name
-            setBlockButtonOnClickListener(activeBlockBtn, activeBlock)
-        } ?: run {
-            this.activeBlockBtn.setOnClickListener {
-                inflateNewBlockPopupView()
+        lifecycleScope.launch(Dispatchers.IO) {
+            val uncompletedBlocks = dbInstance.blockDao().getBlocksByCompleted(false)
+            if (uncompletedBlocks.count() > 1) {
+                throw Exception("Too many active blocks. Should only get one")
+            }
+            if (uncompletedBlocks.isEmpty()) {
+                activeBlockBtn.setOnClickListener {
+                    inflateNewBlockPopupView()
+                }
+            }
+            else {
+                activeBlockBtn.text = uncompletedBlocks[0].name
+                setBlockButtonOnClickListener(activeBlockBtn, uncompletedBlocks[0])
             }
         }
     }
@@ -85,6 +95,7 @@ class TrainingLogsActivity : AppCompatActivity() {
      * The button create a block and opens the [BlockActivity] for that block
      */
     private fun defineNewBlockPopupViewListeners() {
+        val context = this
         createBlockBtn.setOnClickListener{
             val blockName = newBlockNameEt.text.toString().trim()
 
@@ -93,41 +104,18 @@ class TrainingLogsActivity : AppCompatActivity() {
                 Log.d(TAG, "Print a message indicating that the block name is empty")
             }
             else {
-                val block = createBlock(blockName)
+                val dbInstance = ScarletDatabase.getInstance(this)
+                val block = Block(name = blockName)
 
-                val intent = Intent(this, BlockActivity::class.java)
-                intent.putExtra("block", block)
-                startActivity(intent)
+                lifecycleScope.launch(Dispatchers.IO) {
+                    dbInstance.blockDao().insertBlock(block)
+                    val intent = Intent(context, BlockActivity::class.java)
+                    intent.putExtra("block", block)
+                    startActivity(intent)
+                }
+
             }
         }
-    }
-
-    /**
-     * Queries the database for the active block, then returns it.
-     *
-     * Throws a Exception if multiple active blocks are found.
-     *
-     * @return activeBlock
-     */
-    private fun getActiveBlock(): Block? {
-        val dbHelper = ScarletDbHelper(this)
-        val db = dbHelper.readableDatabase
-
-        val cursor = db.rawQuery("SELECT * FROM block WHERE NOT completed", null)
-
-        if (cursor.count > 1) {
-            throw Exception("Too many active blocks. Should only get one")
-        }
-
-        var activeBlock: Block? = null
-        if (cursor.moveToFirst()) {
-            activeBlock = Block(cursor)
-        }
-
-        cursor.close()
-        db.close()
-
-        return activeBlock
     }
 
     /**
@@ -136,23 +124,29 @@ class TrainingLogsActivity : AppCompatActivity() {
      * If no completed blocks are found, displays a TextView indicating so
      */
     private fun displayCompletedBlocksSection() {
-        val completedBlocks = getCompletedBlocks()
+        val dbInstance = ScarletDatabase.getInstance(this)
+        val context = this
 
-        if (completedBlocks.isEmpty()) {
-            val noCompletedBlocksTv = TextView(this)
-            noCompletedBlocksTv.text = NO_COMPLETED_BLOCK_MSG
-            addViewToConstraintLayout(noCompletedBlocksTv, R.id.completedBlocksTv)
-        } else {
-            var topToBottomTargetId = R.id.completedBlocksTv
-            for (block in completedBlocks) {
-                val blockButton = Button(this)
-                blockButton.text = block.name
-                addViewToConstraintLayout(blockButton, topToBottomTargetId)
-
-                blockButton.id = View.generateViewId()
-                topToBottomTargetId = blockButton.id
-
-                setBlockButtonOnClickListener(blockButton, block)
+        lifecycleScope.launch(Dispatchers.IO) {
+            val completedBlocks = dbInstance.blockDao().getBlocksByCompleted(true)
+            if (completedBlocks.isEmpty()) {
+                runOnUiThread {
+                    val noCompletedBlocksTv = TextView(context)
+                    noCompletedBlocksTv.text = NO_COMPLETED_BLOCK_MSG
+                    addViewToConstraintLayout(noCompletedBlocksTv, R.id.completedBlocksTv)
+                }
+            } else {
+                var topToBottomTargetId = R.id.completedBlocksTv
+                for (block in completedBlocks) {
+                    runOnUiThread {
+                        val blockButton = Button(context)
+                        blockButton.id = View.generateViewId()
+                        blockButton.text = block.name
+                        setBlockButtonOnClickListener(blockButton, block)
+                        addViewToConstraintLayout(blockButton, topToBottomTargetId)
+                        topToBottomTargetId = blockButton.id
+                    }
+                }
             }
         }
     }
@@ -191,46 +185,5 @@ class TrainingLogsActivity : AppCompatActivity() {
         }
 
         constraintLayout.addView(view)
-    }
-
-    /**
-     * @return List of completed blocks
-     */
-    private fun getCompletedBlocks(): ArrayList<Block> {
-        val dbHelper = ScarletDbHelper(this)
-        val db = dbHelper.readableDatabase
-
-        val cursor = db.rawQuery("SELECT * FROM block WHERE completed", null)
-
-        val blocks = ArrayList<Block>()
-        while (cursor.moveToNext()) {
-            blocks.add(Block(cursor))
-        }
-
-        cursor.close()
-        db.close()
-
-        return blocks
-    }
-
-    /**
-     * Creates a training block
-     *
-     * @param blockName Name of the block to create
-     *
-     * @return The created block
-     */
-    private fun createBlock(blockName: String): Block {
-        val dbHelper = ScarletDbHelper(this)
-        val db = dbHelper.writableDatabase
-
-        val statement = db.compileStatement("INSERT INTO block(name) VALUES(?)")
-        statement.bindString(1, blockName)
-
-        val block = Block(statement.executeInsert(), blockName, false)
-
-        statement.close()
-        db.close()
-        return block
     }
 }

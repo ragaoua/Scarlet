@@ -6,10 +6,12 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
 import com.example.scarlet.model.Block
 import com.example.scarlet.R
-import com.example.scarlet.ScarletDbHelper
-import com.example.scarlet.model.Session
+import com.example.scarlet.ScarletDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 private const val TAG = "BlockActivity"
 private const val NO_SESSIONS_MSG = "No sessions found"
@@ -39,47 +41,33 @@ class BlockActivity : AppCompatActivity() {
      * @param block Block whose sessions will be displayed
      */
     private fun displaySessionsSection(block: Block) {
-        val sessions = getBlockSessions(block)
+        val dbInstance = ScarletDatabase.getInstance(this)
+        val context = this
 
-        if (sessions.isEmpty()) {
-            val noSessionsTv = TextView(this)
-            noSessionsTv.text = NO_SESSIONS_MSG
-            sessionsVLL.addView(noSessionsTv)
-        }
-        else {
-            for (session in sessions) {
-                val sessionButton = Button(this)
-                sessionButton.text = session.date
-                sessionsVLL.addView(sessionButton)
+        lifecycleScope.launch(Dispatchers.IO) {
+            val sessions = dbInstance.sessionDao().getSessionsByBlockId(block.id!!)
 
-                sessionButton.setOnClickListener {
-                    val intent = Intent(this, SessionActivity::class.java)
-                    intent.putExtra("session", session)
-                    startActivity(intent)
+            if (sessions.isEmpty()) {
+                runOnUiThread {
+                    val noSessionsTv = TextView(context)
+                    noSessionsTv.text = NO_SESSIONS_MSG
+                    sessionsVLL.addView(noSessionsTv)
+                }
+            } else {
+                for (session in sessions) {
+                    runOnUiThread {
+                        val sessionButton = Button(context)
+                        sessionButton.text = session.date
+                        sessionsVLL.addView(sessionButton)
+
+                        sessionButton.setOnClickListener {
+                            val intent = Intent(context, SessionActivity::class.java)
+                            intent.putExtra("session", session)
+                            startActivity(intent)
+                        }
+                    }
                 }
             }
         }
-    }
-
-    /**
-     * @param block Block whose sessions will be returned
-     *
-     * @return List of session for the [block]
-     */
-    private fun getBlockSessions(block: Block): List<Session> {
-        val dbHelper = ScarletDbHelper(this)
-        val db = dbHelper.readableDatabase
-
-        val cursor = db.rawQuery("SELECT * FROM session WHERE block_id = ?", arrayOf(block.id.toString()))
-
-        val sessions = ArrayList<Session>()
-        while (cursor.moveToNext()) {
-            sessions.add(Session(cursor))
-        }
-
-        cursor.close()
-        db.close()
-
-        return sessions
     }
 }
