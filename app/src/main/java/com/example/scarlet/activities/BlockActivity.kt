@@ -16,7 +16,6 @@ import kotlinx.coroutines.launch
 private const val TAG = "BlockActivity"
 private const val NO_SESSIONS_MSG = "No sessions found"
 
-
 class BlockActivity : AppCompatActivity() {
     private lateinit var blockNameTv: TextView
     private lateinit var sessionsVLL: LinearLayout

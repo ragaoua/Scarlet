@@ -12,4 +12,5 @@
     <string name="create_block">Create block</string>
     <string name="new_session">New session</string>
     <string name="end_block">End block</string>
+    <string name="title_activity_main2">MainActivity2</string>
 </resources>
