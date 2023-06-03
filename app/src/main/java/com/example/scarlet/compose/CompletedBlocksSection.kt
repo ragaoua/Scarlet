@@ -1,8 +1,46 @@
 package com.example.scarlet.compose
 
+import android.content.Context
+import android.content.Intent
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.scarlet.R
+import com.example.scarlet.activities.BlockActivity
+import com.example.scarlet.viewmodel.TrainingLogViewModel
+import com.example.scarlet.viewmodel.TrainingLogViewModelFactory
 
 @Composable
-fun CompletedBlocksSection() {
-    /* TODO */
+fun CompletedBlocksSection(
+    //modifier: Modifier = Modifier,
+    context: Context,
+    factory: TrainingLogViewModelFactory,
+    trainingLogViewModel: TrainingLogViewModel = viewModel(factory = factory)
+) {
+    val completedBlocks = trainingLogViewModel.completedBlocks.collectAsState(initial = emptyList())
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = stringResource(R.string.completed_training_blocks),
+            fontSize = 20.sp
+        )
+        for (block in completedBlocks.value) {
+            Button(onClick = {
+                val intent = Intent(context, BlockActivity::class.java)
+                intent.putExtra("block", block)
+                context.startActivity(intent)
+            }) {
+                Text(block.name!!)
+            }
+        }
+    }
 }

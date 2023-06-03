@@ -7,11 +7,12 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.scarlet.model.Block
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BlockDao {
     @Query("SELECT * FROM block")
-    fun getAllBlocks(): List<Block>
+    fun getAllBlocks(): Flow<List<Block>>
 
     @Query("SELECT * FROM block WHERE id = :blockId")
     fun getBlockById(blockId: Int): Block?
@@ -26,5 +27,5 @@ interface BlockDao {
     suspend fun deleteBlock(block: Block)
 
     @Query("SELECT * FROM block WHERE COMPLETED = :completed")
-    fun getBlocksByCompleted(completed: Boolean): List<Block>
+    fun getBlocksByCompleted(completed: Boolean): Flow<List<Block>>
 }

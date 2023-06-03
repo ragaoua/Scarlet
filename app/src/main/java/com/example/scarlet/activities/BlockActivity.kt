@@ -44,7 +44,7 @@ class BlockActivity : AppCompatActivity() {
         val context = this
 
         lifecycleScope.launch(Dispatchers.IO) {
-            val sessions = dbInstance.sessionDao().getSessionsByBlockId(block.id!!)
+            val sessions = dbInstance.sessionDao.getSessionsByBlockId(block.id)
 
             if (sessions.isEmpty()) {
                 runOnUiThread {

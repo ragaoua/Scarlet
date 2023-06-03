@@ -31,9 +31,6 @@
         <activity
             android:name=".activities.BlockActivity"
             android:exported="false" />
-        <activity
-            android:name=".activities.TrainingLogsActivity"
-            android:exported="false" />
     </application>
 
 </manifest>

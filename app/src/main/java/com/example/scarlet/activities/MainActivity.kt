@@ -11,8 +11,10 @@ import com.example.scarlet.activities.ui.theme.ScarletTheme
 import com.example.scarlet.compose.HomeScreen
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             ScarletTheme {
                 // A surface container using the 'background' color from the theme

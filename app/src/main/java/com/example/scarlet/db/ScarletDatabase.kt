@@ -12,19 +12,25 @@ import com.example.scarlet.model.Session
 @Database(entities = [Block::class, Session::class], version = 1)
 abstract class ScarletDatabase : RoomDatabase() {
 
-    abstract fun blockDao(): BlockDao
-    abstract fun sessionDao(): SessionDao
+    abstract val blockDao: BlockDao
+    abstract val sessionDao: SessionDao
 
     companion object {
+        @Volatile
         private var dbInstance: ScarletDatabase? = null
 
-        fun getInstance(applicationContext: Context): ScarletDatabase {
-            if (dbInstance == null) {
-                synchronized(ScarletDatabase::class) {
-                    dbInstance = Room.databaseBuilder(applicationContext, ScarletDatabase::class.java, "scarlet.db").build()
+        fun getInstance(context: Context): ScarletDatabase {
+            synchronized(this) {
+                var dbInstance = dbInstance
+                if (dbInstance == null) {
+                    dbInstance = Room.databaseBuilder(
+                        context.applicationContext,
+                        ScarletDatabase::class.java,
+                        "scarlet.db"
+                    ).build()
                 }
+                return dbInstance
             }
-            return dbInstance!!
         }
     }
 }
