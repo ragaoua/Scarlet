@@ -1,4 +1,4 @@
-package com.example.scarlet
+package com.example.scarlet.db
 
 import android.content.Context
 import androidx.room.Database
@@ -18,10 +18,10 @@ abstract class ScarletDatabase : RoomDatabase() {
     companion object {
         private var dbInstance: ScarletDatabase? = null
 
-        fun getInstance(context: Context): ScarletDatabase {
+        fun getInstance(applicationContext: Context): ScarletDatabase {
             if (dbInstance == null) {
                 synchronized(ScarletDatabase::class) {
-                    dbInstance = Room.databaseBuilder(context.applicationContext, ScarletDatabase::class.java, "scarlet.db").build()
+                    dbInstance = Room.databaseBuilder(applicationContext, ScarletDatabase::class.java, "scarlet.db").build()
                 }
             }
             return dbInstance!!

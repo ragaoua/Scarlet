@@ -7,8 +7,9 @@ import java.util.Date
 
 @Entity
 data class Session(
+    var blockId: Int? = null,
+    var date: String = Date().toString()
+) : Serializable {
     @PrimaryKey(autoGenerate = true)
-    val id: Int? = null,
-    val blockId: Int? = null,
-    val date: String = Date().toString()
-) : Serializable
+    var id: Int? = null
+}

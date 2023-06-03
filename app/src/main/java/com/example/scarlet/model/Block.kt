@@ -6,8 +6,9 @@ import java.io.Serializable
 
 @Entity
 data class Block(
+    var name: String? = null,
+    var completed: Boolean = false
+) : Serializable {
     @PrimaryKey(autoGenerate = true)
-    val id: Int? = null,
-    val name: String,
-    val completed: Boolean = false
-) : Serializable
+    var id: Int? = null
+}

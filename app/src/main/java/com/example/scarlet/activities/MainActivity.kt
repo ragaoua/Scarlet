@@ -15,9 +15,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.example.scarlet.R
 import com.example.scarlet.activities.ui.theme.ScarletTheme
 
-class MainActivity2 : ComponentActivity() {
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -42,20 +44,20 @@ fun HomeButtons(context: Context){
     ) {
         Button(
             onClick = {
-                val intent = Intent(context, TrainingLogsActivity::class.java)
+                val intent = Intent(context, TrainingLogsActivity2::class.java)
                 context.startActivity(intent)
         }) {
-            Text("Training logs")
+            Text(stringResource(id = R.string.training_log))
         }
         Button(onClick = {
             /*TODO*/
         }) {
-            Text("Statistics")
+            Text(stringResource(id = R.string.statistics))
         }
         Button(onClick = {
             /*TODO*/
         }) {
-            Text("Competitions")
+            Text(stringResource(id = R.string.competitions))
         }
     }
 }

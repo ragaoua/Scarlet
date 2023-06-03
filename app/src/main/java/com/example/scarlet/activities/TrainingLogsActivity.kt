@@ -16,7 +16,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.lifecycleScope
 import com.example.scarlet.model.Block
 import com.example.scarlet.R
-import com.example.scarlet.ScarletDatabase
+import com.example.scarlet.db.ScarletDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
