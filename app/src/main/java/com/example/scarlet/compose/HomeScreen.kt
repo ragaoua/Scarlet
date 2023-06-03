@@ -1,4 +1,4 @@
-package com.example.scarlet.activities
+package com.example.scarlet.compose
 
 import android.content.Context
 import android.content.Intent
@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.stringResource
 import com.example.scarlet.R
+import com.example.scarlet.activities.TrainingLogActivity
 
 @Composable
 fun HomeScreen(context: Context){
@@ -19,7 +20,7 @@ fun HomeScreen(context: Context){
     ) {
         Button(
             onClick = {
-                val intent = Intent(context, TrainingLogsActivity2::class.java)
+                val intent = Intent(context, TrainingLogActivity::class.java)
                 context.startActivity(intent)
             }) {
             Text(stringResource(id = R.string.training_log))
