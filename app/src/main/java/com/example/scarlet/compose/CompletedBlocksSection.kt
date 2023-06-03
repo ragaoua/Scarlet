@@ -1,10 +1,8 @@
 package com.example.scarlet.compose
 
 import android.content.Context
-import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -14,7 +12,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.scarlet.R
-import com.example.scarlet.activities.BlockActivity
 import com.example.scarlet.viewmodel.TrainingLogViewModel
 import com.example.scarlet.viewmodel.TrainingLogViewModelFactory
 
@@ -35,13 +32,7 @@ fun CompletedBlocksSection(
             fontSize = 20.sp
         )
         for (block in completedBlocks) {
-            Button(onClick = {
-                val intent = Intent(context, BlockActivity::class.java)
-                intent.putExtra("block", block)
-                context.startActivity(intent)
-            }) {
-                Text(block.name!!)
-            }
+            BlockButton(context, block)
         }
     }
 }
