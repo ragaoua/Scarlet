@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.example.scarlet.activities.ui.theme.ScarletTheme
+import com.example.scarlet.theme.ScarletTheme
 import com.example.scarlet.compose.HomeScreen
 
 class MainActivity : ComponentActivity() {
