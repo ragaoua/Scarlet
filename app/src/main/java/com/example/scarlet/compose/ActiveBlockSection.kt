@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
@@ -23,7 +25,7 @@ fun ActiveBlockSection(
     factory: TrainingLogViewModelFactory,
     trainingLogViewModel: TrainingLogViewModel = viewModel(factory = factory)
 ) {
-    val activeBlock = trainingLogViewModel.getActiveBlock()
+    val activeBlocks by trainingLogViewModel.activeBlocks.collectAsState(initial = emptyList())
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -32,7 +34,13 @@ fun ActiveBlockSection(
             text = stringResource(R.string.active_training_block),
             fontSize = 20.sp
         )
-        if (activeBlock != null) {
+
+        if (activeBlocks.isEmpty()){
+            Text(text = "No active block")
+        }
+        else {
+            /* TODO : Tester (dans le viewmodel ?) qu'il n'y a qu'un seul bloc actif */
+            val activeBlock = activeBlocks[0]
             Button(onClick = {
                 val intent = Intent(context, BlockActivity::class.java)
                 intent.putExtra("block", activeBlock)
@@ -41,14 +49,5 @@ fun ActiveBlockSection(
                 Text(activeBlock.name!!)
             }
         }
-        else {
-            Button(onClick = {
-                /* TODO */
-            }) {
-                Text(stringResource(R.string.no_active_block_msg))
-            }
-        }
-
     }
-
 }

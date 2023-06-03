@@ -8,6 +8,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
@@ -24,7 +25,7 @@ fun CompletedBlocksSection(
     factory: TrainingLogViewModelFactory,
     trainingLogViewModel: TrainingLogViewModel = viewModel(factory = factory)
 ) {
-    val completedBlocks = trainingLogViewModel.completedBlocks.collectAsState(initial = emptyList())
+    val completedBlocks by trainingLogViewModel.completedBlocks.collectAsState(initial = emptyList())
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -33,7 +34,7 @@ fun CompletedBlocksSection(
             text = stringResource(R.string.completed_training_blocks),
             fontSize = 20.sp
         )
-        for (block in completedBlocks.value) {
+        for (block in completedBlocks) {
             Button(onClick = {
                 val intent = Intent(context, BlockActivity::class.java)
                 intent.putExtra("block", block)
