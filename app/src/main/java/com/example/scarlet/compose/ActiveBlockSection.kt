@@ -25,7 +25,8 @@ fun ActiveBlockSection(
     factory: TrainingLogViewModelFactory,
     trainingLogViewModel: TrainingLogViewModel = viewModel(factory = factory)
 ) {
-    val activeBlocks by trainingLogViewModel.activeBlocks.collectAsState(initial = emptyList())
+    val activeBlock by trainingLogViewModel.activeBlock.collectAsState(initial = null)
+
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -35,18 +36,16 @@ fun ActiveBlockSection(
             fontSize = 20.sp
         )
 
-        if (activeBlocks.isEmpty()){
+        if (activeBlock == null){
             Text(text = "No active block")
         }
         else {
-            /* TODO : Tester (dans le viewmodel ?) qu'il n'y a qu'un seul bloc actif */
-            val activeBlock = activeBlocks[0]
             Button(onClick = {
                 val intent = Intent(context, BlockActivity::class.java)
                 intent.putExtra("block", activeBlock)
                 context.startActivity(intent)
             }) {
-                Text(activeBlock.name!!)
+                Text(activeBlock!!.name!!)
             }
         }
     }
