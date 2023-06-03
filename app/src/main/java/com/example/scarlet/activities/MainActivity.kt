@@ -1,22 +1,12 @@
 package com.example.scarlet.activities
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import com.example.scarlet.R
 import com.example.scarlet.activities.ui.theme.ScarletTheme
 
 class MainActivity : ComponentActivity() {
@@ -29,43 +19,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    HomeButtons(this)
+                    HomeScreen(this)
                 }
             }
         }
     }
 }
-
-@Composable
-fun HomeButtons(context: Context){
-    Column (
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Button(
-            onClick = {
-                val intent = Intent(context, TrainingLogsActivity2::class.java)
-                context.startActivity(intent)
-        }) {
-            Text(stringResource(id = R.string.training_log))
-        }
-        Button(onClick = {
-            /*TODO*/
-        }) {
-            Text(stringResource(id = R.string.statistics))
-        }
-        Button(onClick = {
-            /*TODO*/
-        }) {
-            Text(stringResource(id = R.string.competitions))
-        }
-    }
-}
-
-//@Preview(showBackground = true)
-//@Composable
-//fun GreetingPreview() {
-//    ScarletTheme {
-//        HomeButtons(con)
-//    }
-//}
