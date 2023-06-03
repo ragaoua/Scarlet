@@ -14,4 +14,5 @@
     <string name="end_block">End block</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_training_log">TrainingLogActivity</string>
+    <string name="title_activity_show_block">ShowBlockActivity</string>
 </resources>
