@@ -1,4 +1,4 @@
-package com.example.scarlet.theme
+package com.example.scarlet.ui.theme
 
 import android.app.Activity
 import android.os.Build

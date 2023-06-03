@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import com.example.scarlet.R
-import com.example.scarlet.theme.ScarletTheme
+import com.example.scarlet.ui.theme.ScarletTheme
 import com.example.scarlet.compose.ActiveBlockSection
 import com.example.scarlet.compose.CompletedBlocksSection
 import com.example.scarlet.db.ScarletDatabase

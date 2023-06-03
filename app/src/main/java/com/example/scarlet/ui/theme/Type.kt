@@ -1,4 +1,4 @@
-package com.example.scarlet.theme
+package com.example.scarlet.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
