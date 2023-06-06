@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.scarlet.model.Session
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SessionDao {
@@ -17,7 +18,7 @@ interface SessionDao {
     fun getSessionById(sessionId: Int): Session?
 
     @Query("SELECT * FROM session WHERE blockId = :blockId")
-    fun getSessionsByBlockId(blockId: Int): List<Session>
+    fun getSessionsByBlockId(blockId: Int): Flow<List<Session>>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertSession(session: Session)

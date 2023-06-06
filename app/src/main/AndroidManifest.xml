@@ -13,7 +13,7 @@
         android:theme="@style/Theme.Scarlet"
         tools:targetApi="31">
         <activity
-            android:name=".activities.ShowBlockActivity"
+            android:name=".activities.BlockActivity"
             android:exported="false"
             android:label="@string/title_activity_show_block"
             android:theme="@style/Theme.Scarlet" />
@@ -33,9 +33,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activities.BlockActivity"
-            android:exported="false" />
     </application>
 
 </manifest>

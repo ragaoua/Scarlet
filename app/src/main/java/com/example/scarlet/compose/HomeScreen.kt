@@ -20,6 +20,7 @@ fun HomeScreen(context: Context){
     ) {
         Button(
             onClick = {
+                /* TODO : use NavController */
                 val intent = Intent(context, TrainingLogActivity::class.java)
                 context.startActivity(intent)
             }) {

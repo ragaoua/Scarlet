@@ -18,16 +18,17 @@ import com.example.scarlet.ui.theme.ScarletTheme
 import com.example.scarlet.compose.ActiveBlockSection
 import com.example.scarlet.compose.CompletedBlocksSection
 import com.example.scarlet.db.ScarletDatabase
-import com.example.scarlet.db.ScarletRepositoryImpl
+import com.example.scarlet.db.ScarletRepository
 import com.example.scarlet.viewmodel.TrainingLogViewModelFactory
 
 class TrainingLogActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val context = this
-        val blockDao = ScarletDatabase.getInstance(application).blockDao
-        val repository = ScarletRepositoryImpl(blockDao)
-        val factory = TrainingLogViewModelFactory(repository)
+        val factory = TrainingLogViewModelFactory(
+            ScarletRepository(
+                ScarletDatabase.getInstance(application)
+            )
+        )
         setContent {
             ScarletTheme {
                 // A surface container using the 'background' color from the theme
@@ -42,8 +43,8 @@ class TrainingLogActivity : ComponentActivity() {
                         Text(
                             text = stringResource(id = R.string.training_log),
                             fontSize = 48.sp)
-                        ActiveBlockSection(context, factory)
-                        CompletedBlocksSection(context, factory)
+                        ActiveBlockSection(this@TrainingLogActivity, factory)
+                        CompletedBlocksSection(this@TrainingLogActivity, factory)
                     }
                 }
             }

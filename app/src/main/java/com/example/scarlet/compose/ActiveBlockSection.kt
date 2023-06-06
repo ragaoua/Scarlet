@@ -32,9 +32,8 @@ fun ActiveBlockSection(
             text = stringResource(R.string.active_training_block),
             fontSize = 20.sp
         )
-
         activeBlock?.let { activeBlock ->
-            BlockButton(context = context, block = activeBlock)
+            BlockButton(context = context, block = activeBlock, factory = factory)
         }?: run {
             Text(text = "No active block")
         }
