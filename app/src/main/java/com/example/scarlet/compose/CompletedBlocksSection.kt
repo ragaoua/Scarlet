@@ -1,6 +1,5 @@
 package com.example.scarlet.compose
 
-import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
@@ -11,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.scarlet.R
 import com.example.scarlet.viewmodel.TrainingLogViewModel
 import com.example.scarlet.viewmodel.TrainingLogViewModelFactory
@@ -18,7 +18,7 @@ import com.example.scarlet.viewmodel.TrainingLogViewModelFactory
 @Composable
 fun CompletedBlocksSection(
     //modifier: Modifier = Modifier,
-    context: Context,
+    navController: NavController,
     factory: TrainingLogViewModelFactory,
     trainingLogViewModel: TrainingLogViewModel = viewModel(factory = factory)
 ) {
@@ -32,7 +32,10 @@ fun CompletedBlocksSection(
             fontSize = 20.sp
         )
         completedBlocks.forEach {block ->
-            BlockButton(context = context, block = block, factory = factory)
+            BlockButton(
+                navController = navController,
+                block = block,
+                factory = factory)
         }
     }
 }

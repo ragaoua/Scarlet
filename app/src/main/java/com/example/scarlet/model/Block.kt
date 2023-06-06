@@ -8,7 +8,7 @@ import java.io.Serializable
 data class Block(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    var name: String? = null,
+    var name: String = "",
     var completed: Boolean = false
 ) : Serializable {
 }

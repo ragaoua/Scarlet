@@ -15,4 +15,8 @@ class ScarletRepository(
     fun getSessionsByBlockId(blockId: Int): Flow<List<Session>> {
         return dbInstance.sessionDao.getSessionsByBlockId(blockId)
     }
+
+    suspend fun getBlockById(blockId: Int): Block? {
+        return dbInstance.blockDao.getBlockById(blockId)
+    }
 }
