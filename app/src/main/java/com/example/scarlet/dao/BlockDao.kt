@@ -15,7 +15,7 @@ interface BlockDao {
     fun getAllBlocks(): Flow<List<Block>>
 
     @Query("SELECT * FROM block WHERE id = :blockId")
-    suspend fun getBlockById(blockId: Int): Block?
+    fun getBlockById(blockId: Int): Flow<Block?>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertBlock(block: Block): Long

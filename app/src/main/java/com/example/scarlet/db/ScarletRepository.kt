@@ -1,22 +1,12 @@
 package com.example.scarlet.db
 
-import com.example.scarlet.model.Block
-import com.example.scarlet.model.Session
-import kotlinx.coroutines.flow.Flow
-
 class ScarletRepository(
     private val dbInstance: ScarletDatabase
 ) {
 
-    fun getBlocksByCompleted(completed: Boolean): Flow<List<Block>> {
-        return dbInstance.blockDao.getBlocksByCompleted(completed)
-    }
+    fun getBlocksByCompleted(completed: Boolean) = dbInstance.blockDao.getBlocksByCompleted(completed)
 
-    fun getSessionsByBlockId(blockId: Int): Flow<List<Session>> {
-        return dbInstance.sessionDao.getSessionsByBlockId(blockId)
-    }
+    fun getSessionsByBlockId(blockId: Int) = dbInstance.sessionDao.getSessionsByBlockId(blockId)
 
-    suspend fun getBlockById(blockId: Int): Block? {
-        return dbInstance.blockDao.getBlockById(blockId)
-    }
+    fun getBlockById(blockId: Int) = dbInstance.blockDao.getBlockById(blockId)
 }

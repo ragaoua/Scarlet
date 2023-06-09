@@ -20,10 +20,9 @@ fun BlockScreen(
     factory: TrainingLogViewModelFactory,
     trainingLogViewModel: TrainingLogViewModel = viewModel(factory = factory)
 ) {
-    trainingLogViewModel.setDisplayedBlockById(blockId)
-    val block by trainingLogViewModel.displayedBlock.collectAsState(initial = null)
+    val block by trainingLogViewModel.getBlockById(blockId).collectAsState(initial = null)
+    val blockSessions by trainingLogViewModel.getSessionsByBlockId(blockId).collectAsState(initial = emptyList())
     ScarletTheme {
-        // A surface container using the 'background' color from the theme
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
@@ -31,6 +30,11 @@ fun BlockScreen(
             block?.let {
                 BlockHeader(
                     blockName = block!!.name,
+                    navController = navController,
+                    factory = factory
+                )
+                BlockSessionsSection(
+                    blockSessions = blockSessions,
                     navController = navController,
                     factory = factory
                 )

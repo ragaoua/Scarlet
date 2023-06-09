@@ -18,8 +18,8 @@ class TrainingLogViewModel(
     private val _activeBlocks = repository.getBlocksByCompleted(false)
     private val _activeBlock: MutableStateFlow<Block?> = MutableStateFlow(null)
     val activeBlock = _activeBlock.asStateFlow()
-    init {
-        viewModelScope.launch {
+    private fun updateActiveBlock() {
+        viewModelScope.launch(Dispatchers.IO) {
             _activeBlocks.collect { blocks ->
                 if (blocks.isEmpty()) {
                     _activeBlock.value = null
@@ -34,11 +34,11 @@ class TrainingLogViewModel(
         }
     }
 
-    private val _displayedBlock: MutableStateFlow<Block?> = MutableStateFlow(null)
-    val displayedBlock = _displayedBlock.asStateFlow()
-    fun setDisplayedBlockById(blockId: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            _displayedBlock.value = repository.getBlockById(blockId)
-        }
+    fun getBlockById(blockId: Int) = repository.getBlockById(blockId)
+
+    fun getSessionsByBlockId(blockId: Int) = repository.getSessionsByBlockId(blockId)
+
+    init {
+        updateActiveBlock()
     }
 }
