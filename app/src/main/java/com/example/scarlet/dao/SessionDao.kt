@@ -15,7 +15,7 @@ interface SessionDao {
     fun getAllSessions(): List<Session>
 
     @Query("SELECT * FROM session WHERE id = :sessionId")
-    fun getSessionById(sessionId: Int): Session?
+    fun getSessionById(sessionId: Int): Flow<Session?>
 
     @Query("SELECT * FROM session WHERE blockId = :blockId")
     fun getSessionsByBlockId(blockId: Int): Flow<List<Session>>
