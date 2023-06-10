@@ -6,10 +6,10 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.scarlet.ui.compose.BlockScreen
-import com.example.scarlet.ui.compose.HomeScreen
-import com.example.scarlet.ui.compose.SessionScreen
-import com.example.scarlet.ui.compose.TrainingLogScreen
+import com.example.scarlet.ui.screen.BlockScreen
+import com.example.scarlet.ui.screen.HomeScreen
+import com.example.scarlet.ui.screen.SessionScreen
+import com.example.scarlet.ui.screen.TrainingLogScreen
 import com.example.scarlet.viewmodel.TrainingLogViewModelFactory
 
 @Composable

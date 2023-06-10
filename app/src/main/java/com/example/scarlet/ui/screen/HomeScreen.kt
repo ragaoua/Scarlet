@@ -1,4 +1,4 @@
-package com.example.scarlet.ui.compose
+package com.example.scarlet.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

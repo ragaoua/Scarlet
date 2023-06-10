@@ -1,4 +1,4 @@
-package com.example.scarlet.ui.compose
+package com.example.scarlet.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -37,14 +37,11 @@ fun SessionScreen(
         ) {
             session?.let {
                 SessionHeader(
-                    sessionDate = session!!.date,
-                    navController = navController,
-                    factory = factory
+                    sessionDate = session!!.date
                 )
                 ExercisesSection(
                     exercises = sessionExercises,
-                    navController = navController,
-                    factory = factory
+                    navController = navController
                 )
             }
         }
@@ -54,10 +51,7 @@ fun SessionScreen(
 
 @Composable
 fun SessionHeader(
-    sessionDate: String,
-    navController: NavController,
-    factory: TrainingLogViewModelFactory,
-    trainingLogViewModel: TrainingLogViewModel = viewModel(factory = factory)
+    sessionDate: String
 ) {
     Text(
         text = sessionDate,
@@ -68,9 +62,7 @@ fun SessionHeader(
 @Composable
 fun ExercisesSection(
     exercises: List<Exercise>,
-    navController: NavController,
-    factory: TrainingLogViewModelFactory,
-    trainingLogViewModel: TrainingLogViewModel = viewModel(factory = factory)
+    navController: NavController
 ) {
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
