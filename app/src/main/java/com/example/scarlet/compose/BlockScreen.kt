@@ -33,8 +33,8 @@ fun BlockScreen(
                     navController = navController,
                     factory = factory
                 )
-                BlockSessionsSection(
-                    blockSessions = blockSessions,
+                SessionsSection(
+                    sessions = blockSessions,
                     navController = navController,
                     factory = factory
                 )

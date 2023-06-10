@@ -11,8 +11,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BlockDao {
-    @Query("SELECT * FROM block")
-    fun getAllBlocks(): Flow<List<Block>>
 
     @Query("SELECT * FROM block WHERE id = :blockId")
     fun getBlockById(blockId: Int): Flow<Block?>
