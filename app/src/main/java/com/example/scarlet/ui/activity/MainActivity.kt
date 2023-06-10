@@ -1,11 +1,11 @@
-package com.example.scarlet.activities
+package com.example.scarlet.ui.activity
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.scarlet.Navigation
+import com.example.scarlet.ui.navigation.Navigation
 import com.example.scarlet.db.ScarletDatabase
 import com.example.scarlet.db.ScarletRepository
 import com.example.scarlet.ui.theme.ScarletTheme
@@ -24,10 +24,8 @@ class MainActivity : ComponentActivity() {
             )
         )
         setContent {
-            ScarletTheme {
-                navController = rememberNavController()
-                Navigation(navController, factory)
-            }
+            navController = rememberNavController()
+            Navigation(navController, factory)
         }
     }
 }

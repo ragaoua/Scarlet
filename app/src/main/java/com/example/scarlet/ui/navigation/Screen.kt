@@ -1,4 +1,4 @@
-package com.example.scarlet
+package com.example.scarlet.ui.navigation
 
 sealed class Screen(val route: String) {
     object HomeScreen: Screen("home_screen")

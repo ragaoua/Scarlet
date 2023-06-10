@@ -1,4 +1,4 @@
-package com.example.scarlet.compose
+package com.example.scarlet.ui.compose
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -9,7 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.scarlet.theme.ScarletTheme
+import com.example.scarlet.ui.theme.ScarletTheme
 import com.example.scarlet.viewmodel.TrainingLogViewModel
 import com.example.scarlet.viewmodel.TrainingLogViewModelFactory
 

@@ -1,8 +1,8 @@
-package com.example.scarlet.dao
+package com.example.scarlet.db.dao
 
 import androidx.room.Dao
 import androidx.room.Query
-import com.example.scarlet.model.Exercise
+import com.example.scarlet.db.model.Exercise
 import kotlinx.coroutines.flow.Flow
 
 @Dao

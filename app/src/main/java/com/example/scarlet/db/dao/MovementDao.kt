@@ -1,4 +1,4 @@
-package com.example.scarlet.dao
+package com.example.scarlet.db.dao
 
 import androidx.room.Dao
 

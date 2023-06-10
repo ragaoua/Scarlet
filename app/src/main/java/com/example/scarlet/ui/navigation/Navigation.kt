@@ -1,4 +1,4 @@
-package com.example.scarlet
+package com.example.scarlet.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -6,10 +6,10 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.scarlet.compose.BlockScreen
-import com.example.scarlet.compose.HomeScreen
-import com.example.scarlet.compose.SessionScreen
-import com.example.scarlet.compose.TrainingLogScreen
+import com.example.scarlet.ui.compose.BlockScreen
+import com.example.scarlet.ui.compose.HomeScreen
+import com.example.scarlet.ui.compose.SessionScreen
+import com.example.scarlet.ui.compose.TrainingLogScreen
 import com.example.scarlet.viewmodel.TrainingLogViewModelFactory
 
 @Composable

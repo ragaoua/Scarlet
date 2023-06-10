@@ -1,4 +1,4 @@
-package com.example.scarlet.compose
+package com.example.scarlet.ui.compose
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,9 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.scarlet.Screen
-import com.example.scarlet.model.Exercise
-import com.example.scarlet.theme.ScarletTheme
+import com.example.scarlet.ui.navigation.Screen
+import com.example.scarlet.db.model.Exercise
+import com.example.scarlet.ui.theme.ScarletTheme
 import com.example.scarlet.viewmodel.TrainingLogViewModel
 import com.example.scarlet.viewmodel.TrainingLogViewModelFactory
 

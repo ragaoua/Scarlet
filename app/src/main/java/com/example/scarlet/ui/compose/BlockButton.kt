@@ -1,12 +1,12 @@
-package com.example.scarlet.compose
+package com.example.scarlet.ui.compose
 
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.scarlet.Screen
-import com.example.scarlet.model.Block
+import com.example.scarlet.ui.navigation.Screen
+import com.example.scarlet.db.model.Block
 import com.example.scarlet.viewmodel.TrainingLogViewModel
 import com.example.scarlet.viewmodel.TrainingLogViewModelFactory
 
