@@ -15,4 +15,7 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_training_log">TrainingLogActivity</string>
     <string name="title_activity_show_block">ShowBlockActivity</string>
+    <string name="rpe">RPE</string>
+    <string name="weight">Weight</string>
+    <string name="reps">Reps</string>
 </resources>

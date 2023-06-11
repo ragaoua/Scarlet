@@ -9,6 +9,7 @@ data class Set(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val exerciseId: Int,
+    val order: Int,
     val reps: Int,
     val weight: Float,
     val rpe: Float? = null

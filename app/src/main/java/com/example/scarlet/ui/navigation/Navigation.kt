@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.scarlet.ui.screen.BlockScreen
+import com.example.scarlet.ui.screen.ExerciseScreen
 import com.example.scarlet.ui.screen.HomeScreen
 import com.example.scarlet.ui.screen.SessionScreen
 import com.example.scarlet.ui.screen.TrainingLogScreen
@@ -48,6 +49,18 @@ fun Navigation(
             )
         ) { entry ->
             SessionScreen(entry.arguments?.getInt("id")!!, navController = navController, factory = factory)
+        }
+        composable(
+            route = Screen.ExerciseScreen.route,
+            arguments = listOf(
+                navArgument("id") {
+                    type = NavType.IntType
+                    nullable = false
+                }
+            )
+        ) {entry ->
+            ExerciseScreen(entry.arguments?.getInt("id")!!, navController = navController, factory = factory)
+
         }
     }
 }

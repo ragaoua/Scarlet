@@ -70,7 +70,7 @@ fun ExercisesSection(
     ) {
         exercises.forEach { exercise ->
             Button(onClick = {
-                navController.navigate(Screen.SessionScreen.withId(exercise.id))
+                navController.navigate(Screen.ExerciseScreen.withId(exercise.id))
             }) {
                 Text(exercise.movementId.toString())
             }

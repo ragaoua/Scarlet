@@ -5,6 +5,7 @@ sealed class Screen(val route: String) {
     object TrainingLogScreen: Screen("training_log_screen")
     object BlockScreen: Screen("block_screen/{id}")
     object SessionScreen: Screen("sessionScreen/{id}")
+    object ExerciseScreen: Screen("exerciseScreen/{id}")
 
     fun withId(id: Int): String {
         return this.route.replace("{id}", id.toString())
