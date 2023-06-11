@@ -34,8 +34,7 @@ class TrainingLogViewModel(
         }
     }
 
-    fun getBlockById(blockId: Int) = repository.getBlockById(blockId)
-    fun getSessionsByBlockId(blockId: Int) = repository.getSessionsByBlockId(blockId)
+    fun getBlockWithSessionsById(blockId: Int) = repository.getBlockWithSessionsById(blockId)
 
     fun getSessionById(sessionId: Int) = repository.getSessionById(sessionId)
     fun getExercisesBySessionId(sessionId: Int) = repository.getExercisesBySessionId(sessionId)

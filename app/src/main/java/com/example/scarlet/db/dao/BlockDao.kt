@@ -5,15 +5,18 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import com.example.scarlet.db.model.Block
+import com.example.scarlet.db.model.BlockWithSessions
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BlockDao {
 
+    @Transaction
     @Query("SELECT * FROM block WHERE id = :blockId")
-    fun getBlockById(blockId: Int): Flow<Block?>
+    fun getBlockWithSessionsById(blockId: Int): Flow<BlockWithSessions?>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertBlock(block: Block): Long

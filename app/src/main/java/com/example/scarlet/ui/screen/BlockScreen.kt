@@ -31,19 +31,18 @@ fun BlockScreen(
     factory: TrainingLogViewModelFactory,
     trainingLogViewModel: TrainingLogViewModel = viewModel(factory = factory)
 ) {
-    val block by trainingLogViewModel.getBlockById(blockId).collectAsState(initial = null)
-    val blockSessions by trainingLogViewModel.getSessionsByBlockId(blockId).collectAsState(initial = emptyList())
+    val blockWithSessions by trainingLogViewModel.getBlockWithSessionsById(blockId).collectAsState(initial = null)
     ScarletTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            block?.let {
+            blockWithSessions?.let { blockWithSessions ->
                 BlockHeader(
-                    blockName = block!!.name
+                    blockName = blockWithSessions.block.name
                 )
                 SessionsSection(
-                    sessions = blockSessions,
+                    sessions = blockWithSessions.sessions,
                     navController = navController
                 )
             }
