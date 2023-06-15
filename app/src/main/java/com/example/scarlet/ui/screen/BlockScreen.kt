@@ -33,18 +33,19 @@ fun BlockScreen(
 ) {
     val trainingLogViewModel: TrainingLogViewModel = hiltViewModel()
 
-    val blockWithSessions by trainingLogViewModel.getBlockWithSessionsById(block.id).collectAsState(initial = null)
+    val sessions by trainingLogViewModel.getSessionsByBlockId(block.id).collectAsState(initial = null)
     ScarletTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            blockWithSessions?.let { blockWithSessions ->
-                BlockHeader(
-                    blockName = blockWithSessions.block.name
-                )
+            BlockHeader(
+                block = block,
+                trainingLogViewModel = trainingLogViewModel
+            )
+            sessions?.let { sessions ->
                 SessionsSection(
-                    sessions = blockWithSessions.sessions,
+                    sessions = sessions,
                     navigator = navigator
                 )
             }
@@ -54,13 +55,14 @@ fun BlockScreen(
 
 @Composable
 fun BlockHeader(
-    blockName: String
+    block: Block,
+    trainingLogViewModel: TrainingLogViewModel
 ){
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = blockName,
+            text = block.name,
             fontSize = 20.sp
         )
         Row(
@@ -72,8 +74,9 @@ fun BlockHeader(
             }) {
                 Text(text = stringResource(id = R.string.new_session))
             }
+            /* TODO : check if the block is already completed */
             Button(onClick = {
-                /* TODO */
+                trainingLogViewModel.endBlock(block)
             }) {
                 Text(text = stringResource(id = R.string.end_block))
             }
