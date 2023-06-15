@@ -20,21 +20,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.scarlet.R
 import com.example.scarlet.db.model.Exercise
 import com.example.scarlet.db.model.Set
 import com.example.scarlet.ui.theme.ScarletTheme
 import com.example.scarlet.viewmodel.TrainingLogViewModel
-import com.example.scarlet.viewmodel.TrainingLogViewModelFactory
 
 @Composable
 fun ExerciseScreen(
     exerciseId: Int,
     navController: NavController,
-    factory: TrainingLogViewModelFactory,
-    trainingLogViewModel: TrainingLogViewModel = viewModel(factory = factory)
+    trainingLogViewModel: TrainingLogViewModel
 ) {
     val exercise by trainingLogViewModel.getExerciseById(exerciseId).collectAsState(initial = null)
     val exerciseSets by trainingLogViewModel.getExerciseSetsById(exerciseId).collectAsState(initial = emptyList())

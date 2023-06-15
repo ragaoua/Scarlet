@@ -15,21 +15,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.scarlet.R
 import com.example.scarlet.db.model.Session
 import com.example.scarlet.ui.navigation.Screen
 import com.example.scarlet.ui.theme.ScarletTheme
 import com.example.scarlet.viewmodel.TrainingLogViewModel
-import com.example.scarlet.viewmodel.TrainingLogViewModelFactory
 
 @Composable
 fun BlockScreen(
     blockId: Int,
     navController: NavController,
-    factory: TrainingLogViewModelFactory,
-    trainingLogViewModel: TrainingLogViewModel = viewModel(factory = factory)
+    trainingLogViewModel: TrainingLogViewModel
 ) {
     val blockWithSessions by trainingLogViewModel.getBlockWithSessionsById(blockId).collectAsState(initial = null)
     ScarletTheme {

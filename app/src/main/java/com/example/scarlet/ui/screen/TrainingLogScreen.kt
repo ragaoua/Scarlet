@@ -14,19 +14,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.scarlet.R
 import com.example.scarlet.db.model.Block
 import com.example.scarlet.ui.navigation.Screen
 import com.example.scarlet.ui.theme.ScarletTheme
 import com.example.scarlet.viewmodel.TrainingLogViewModel
-import com.example.scarlet.viewmodel.TrainingLogViewModelFactory
 
 @Composable
 fun TrainingLogScreen(
     navController: NavController,
-    factory: TrainingLogViewModelFactory
+    trainingLogViewModel: TrainingLogViewModel
 ) {
     ScarletTheme {
         // A surface container using the 'background' color from the theme
@@ -42,8 +40,8 @@ fun TrainingLogScreen(
                     text = stringResource(id = R.string.training_log),
                     fontSize = 48.sp
                 )
-                ActiveBlockSection(navController = navController, factory = factory)
-                CompletedBlocksSection(navController = navController, factory = factory)
+                ActiveBlockSection(navController = navController, trainingLogViewModel = trainingLogViewModel)
+                CompletedBlocksSection(navController = navController, trainingLogViewModel = trainingLogViewModel)
             }
         }
     }
@@ -52,8 +50,7 @@ fun TrainingLogScreen(
 @Composable
 fun ActiveBlockSection(
     navController: NavController,
-    factory: TrainingLogViewModelFactory,
-    trainingLogViewModel: TrainingLogViewModel = viewModel(factory = factory)
+    trainingLogViewModel: TrainingLogViewModel
 ) {
     val activeBlock by trainingLogViewModel.activeBlock.collectAsState(initial = null)
     Column (
@@ -77,8 +74,7 @@ fun ActiveBlockSection(
 @Composable
 fun CompletedBlocksSection(
     navController: NavController,
-    factory: TrainingLogViewModelFactory,
-    trainingLogViewModel: TrainingLogViewModel = viewModel(factory = factory)
+    trainingLogViewModel: TrainingLogViewModel
 ) {
     val completedBlocks by trainingLogViewModel.completedBlocks.collectAsState(initial = emptyList())
     Column(

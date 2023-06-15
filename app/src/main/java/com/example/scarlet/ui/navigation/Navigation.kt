@@ -11,12 +11,12 @@ import com.example.scarlet.ui.screen.ExerciseScreen
 import com.example.scarlet.ui.screen.HomeScreen
 import com.example.scarlet.ui.screen.SessionScreen
 import com.example.scarlet.ui.screen.TrainingLogScreen
-import com.example.scarlet.viewmodel.TrainingLogViewModelFactory
+import com.example.scarlet.viewmodel.TrainingLogViewModel
 
 @Composable
 fun Navigation(
     navController: NavHostController,
-    factory: TrainingLogViewModelFactory
+    trainingLogViewModel: TrainingLogViewModel
 ) {
     NavHost(
         navController = navController,
@@ -26,7 +26,7 @@ fun Navigation(
             HomeScreen(navController = navController)
         }
         composable(route = Screen.TrainingLogScreen.route) {
-            TrainingLogScreen(navController = navController, factory = factory)
+            TrainingLogScreen(navController = navController, trainingLogViewModel = trainingLogViewModel)
         }
         composable(
             route = Screen.BlockScreen.route,
@@ -37,7 +37,7 @@ fun Navigation(
                 }
             )
         ) { entry ->
-            BlockScreen(entry.arguments?.getInt("id")!!, navController = navController, factory = factory)
+            BlockScreen(entry.arguments?.getInt("id")!!, navController = navController, trainingLogViewModel = trainingLogViewModel)
         }
         composable(
             route = Screen.SessionScreen.route,
@@ -48,7 +48,7 @@ fun Navigation(
                 }
             )
         ) { entry ->
-            SessionScreen(entry.arguments?.getInt("id")!!, navController = navController, factory = factory)
+            SessionScreen(entry.arguments?.getInt("id")!!, navController = navController, trainingLogViewModel = trainingLogViewModel)
         }
         composable(
             route = Screen.ExerciseScreen.route,
@@ -59,7 +59,7 @@ fun Navigation(
                 }
             )
         ) {entry ->
-            ExerciseScreen(entry.arguments?.getInt("id")!!, navController = navController, factory = factory)
+            ExerciseScreen(entry.arguments?.getInt("id")!!, navController = navController, trainingLogViewModel = trainingLogViewModel)
 
         }
     }

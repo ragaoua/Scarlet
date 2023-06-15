@@ -13,20 +13,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.scarlet.ui.navigation.Screen
 import com.example.scarlet.db.model.Exercise
 import com.example.scarlet.ui.theme.ScarletTheme
 import com.example.scarlet.viewmodel.TrainingLogViewModel
-import com.example.scarlet.viewmodel.TrainingLogViewModelFactory
 
 @Composable
 fun SessionScreen(
     sessionId: Int,
     navController: NavController,
-    factory: TrainingLogViewModelFactory,
-    trainingLogViewModel: TrainingLogViewModel = viewModel(factory = factory)
+    trainingLogViewModel: TrainingLogViewModel
 ) {
     val session by trainingLogViewModel.getSessionById(sessionId).collectAsState(initial = null)
     val sessionExercises by trainingLogViewModel.getExercisesBySessionId(sessionId).collectAsState(initial = emptyList())
