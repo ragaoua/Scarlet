@@ -1,8 +1,6 @@
 package com.example.scarlet.db
 
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.scarlet.db.dao.BlockDao
 import com.example.scarlet.db.dao.ExerciseDao
@@ -26,22 +24,4 @@ abstract class ScarletDatabase : RoomDatabase() {
     abstract val sessionDao: SessionDao
     abstract val exerciseDao: ExerciseDao
 
-    companion object {
-        @Volatile
-        private var dbInstance: ScarletDatabase? = null
-
-        fun getInstance(context: Context): ScarletDatabase {
-            synchronized(this) {
-                var dbInstance = dbInstance
-                if (dbInstance == null) {
-                    dbInstance = Room.databaseBuilder(
-                        context.applicationContext,
-                        ScarletDatabase::class.java,
-                        "scarlet.db"
-                    ).build()
-                }
-                return dbInstance
-            }
-        }
-    }
 }

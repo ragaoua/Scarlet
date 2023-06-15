@@ -12,17 +12,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.scarlet.db.ScarletDatabase
-import com.example.scarlet.db.ScarletRepository
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.scarlet.db.model.Exercise
 import com.example.scarlet.db.model.Session
 import com.example.scarlet.ui.screen.destinations.ExerciseScreenDestination
 import com.example.scarlet.ui.theme.ScarletTheme
 import com.example.scarlet.viewmodel.TrainingLogViewModel
-import com.example.scarlet.viewmodel.TrainingLogViewModelFactory
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -32,12 +28,7 @@ fun SessionScreen(
     navigator: DestinationsNavigator,
     session: Session
 ) {
-    val factory = TrainingLogViewModelFactory(
-        ScarletRepository(
-            ScarletDatabase.getInstance(LocalContext.current)
-        )
-    )
-    val trainingLogViewModel: TrainingLogViewModel = viewModel(factory = factory)
+    val trainingLogViewModel: TrainingLogViewModel = hiltViewModel()
 
     val sessionExercises by trainingLogViewModel.getExercisesBySessionId(session.id).collectAsState(initial = emptyList())
     ScarletTheme {

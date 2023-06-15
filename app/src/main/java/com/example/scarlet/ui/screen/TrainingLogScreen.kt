@@ -12,18 +12,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.scarlet.R
-import com.example.scarlet.db.ScarletDatabase
-import com.example.scarlet.db.ScarletRepository
 import com.example.scarlet.db.model.Block
 import com.example.scarlet.ui.screen.destinations.BlockScreenDestination
 import com.example.scarlet.ui.theme.ScarletTheme
 import com.example.scarlet.viewmodel.TrainingLogViewModel
-import com.example.scarlet.viewmodel.TrainingLogViewModelFactory
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -32,12 +28,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 fun TrainingLogScreen(
     navigator: DestinationsNavigator
 ) {
-    val factory = TrainingLogViewModelFactory(
-        ScarletRepository(
-            ScarletDatabase.getInstance(LocalContext.current)
-        )
-    )
-    val trainingLogViewModel: TrainingLogViewModel = viewModel(factory = factory)
+    val trainingLogViewModel: TrainingLogViewModel = hiltViewModel()
     ScarletTheme {
         // A surface container using the 'background' color from the theme
         Surface(

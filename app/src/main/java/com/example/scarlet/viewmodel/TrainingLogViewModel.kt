@@ -4,12 +4,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.scarlet.db.ScarletRepository
 import com.example.scarlet.db.model.Block
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class TrainingLogViewModel(
+@HiltViewModel
+class TrainingLogViewModel @Inject constructor(
     private val repository: ScarletRepository
 ) : ViewModel() {
 
@@ -36,10 +39,8 @@ class TrainingLogViewModel(
 
     fun getBlockWithSessionsById(blockId: Int) = repository.getBlockWithSessionsById(blockId)
 
-    fun getSessionById(sessionId: Int) = repository.getSessionById(sessionId)
     fun getExercisesBySessionId(sessionId: Int) = repository.getExercisesBySessionId(sessionId)
 
-    fun getExerciseById(exerciseId: Int) = repository.getExerciseById(exerciseId)
     fun getExerciseSetsById(exerciseId: Int) = repository.getExerciseSetsById(exerciseId)
 
     init {

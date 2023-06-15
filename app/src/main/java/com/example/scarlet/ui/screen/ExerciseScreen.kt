@@ -16,20 +16,16 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.scarlet.R
-import com.example.scarlet.db.ScarletDatabase
-import com.example.scarlet.db.ScarletRepository
 import com.example.scarlet.db.model.Exercise
 import com.example.scarlet.db.model.Set
 import com.example.scarlet.ui.theme.ScarletTheme
 import com.example.scarlet.viewmodel.TrainingLogViewModel
-import com.example.scarlet.viewmodel.TrainingLogViewModelFactory
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -39,12 +35,7 @@ fun ExerciseScreen(
     navigator: DestinationsNavigator,
     exercise: Exercise
 ) {
-    val factory = TrainingLogViewModelFactory(
-        ScarletRepository(
-            ScarletDatabase.getInstance(LocalContext.current)
-        )
-    )
-    val trainingLogViewModel: TrainingLogViewModel = viewModel(factory = factory)
+    val trainingLogViewModel: TrainingLogViewModel = hiltViewModel()
     val exerciseSets by trainingLogViewModel.getExerciseSetsById(exercise.id).collectAsState(initial = emptyList())
 
 //    val movement by exercise?.let {
