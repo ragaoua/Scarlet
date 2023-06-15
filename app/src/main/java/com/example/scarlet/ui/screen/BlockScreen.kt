@@ -33,18 +33,18 @@ fun BlockScreen(
 ) {
     val trainingLogViewModel: TrainingLogViewModel = hiltViewModel()
 
-    val blockWithSessions by trainingLogViewModel.getBlockWithSessionsById(block.id).collectAsState(initial = null)
+    val sessions by trainingLogViewModel.getSessionsByBlockId(block.id).collectAsState(initial = null)
     ScarletTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            blockWithSessions?.let { blockWithSessions ->
-                BlockHeader(
-                    blockName = blockWithSessions.block.name
-                )
+            BlockHeader(
+                blockName = block.name
+            )
+            sessions?.let { sessions ->
                 SessionsSection(
-                    sessions = blockWithSessions.sessions,
+                    sessions = sessions,
                     navigator = navigator
                 )
             }

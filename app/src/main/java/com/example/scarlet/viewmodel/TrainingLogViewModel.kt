@@ -37,7 +37,7 @@ class TrainingLogViewModel @Inject constructor(
         }
     }
 
-    fun getBlockWithSessionsById(blockId: Int) = repository.getBlockWithSessionsById(blockId)
+    fun getSessionsByBlockId(blockId: Int) = repository.getSessionsByBlockId(blockId)
 
     fun getExercisesBySessionId(sessionId: Int) = repository.getExercisesBySessionId(sessionId)
 
