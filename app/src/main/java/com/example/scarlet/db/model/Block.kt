@@ -4,6 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.Relation
+import java.io.Serializable
 
 @Entity
 data class Block(
@@ -11,7 +12,7 @@ data class Block(
     val id: Int,
     var name: String = "",
     var completed: Boolean = false
-)
+): Serializable
 
 data class BlockWithSessions(
     @Embedded val block: Block,

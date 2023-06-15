@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity(
     indices = [
@@ -31,4 +32,4 @@ data class Exercise(
     val sessionId: Int,
     val movementId: Int,
     val order: Int
-)
+): Serializable

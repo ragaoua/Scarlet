@@ -11,14 +11,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavController
 import com.example.scarlet.R
-import com.example.scarlet.ui.navigation.Screen
+import com.example.scarlet.ui.screen.destinations.TrainingLogScreenDestination
 import com.example.scarlet.ui.theme.ScarletTheme
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@RootNavGraph(start = true)
+@Destination
 @Composable
 fun HomeScreen(
-    navController: NavController
+    navigator: DestinationsNavigator
 ) {
     ScarletTheme {
         Surface(
@@ -31,7 +35,7 @@ fun HomeScreen(
             ) {
                 Button(
                     onClick = {
-                        navController.navigate(Screen.TrainingLogScreen.route)
+                        navigator.navigate(TrainingLogScreenDestination())
                     }) {
                     Text(stringResource(id = R.string.training_log))
                 }

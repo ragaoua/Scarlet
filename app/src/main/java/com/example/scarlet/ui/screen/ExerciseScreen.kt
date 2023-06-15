@@ -16,25 +16,36 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.scarlet.R
+import com.example.scarlet.db.ScarletDatabase
+import com.example.scarlet.db.ScarletRepository
 import com.example.scarlet.db.model.Exercise
 import com.example.scarlet.db.model.Set
 import com.example.scarlet.ui.theme.ScarletTheme
 import com.example.scarlet.viewmodel.TrainingLogViewModel
+import com.example.scarlet.viewmodel.TrainingLogViewModelFactory
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@Destination
 @Composable
 fun ExerciseScreen(
-    exerciseId: Int,
-    navController: NavController,
-    trainingLogViewModel: TrainingLogViewModel
+    navigator: DestinationsNavigator,
+    exercise: Exercise
 ) {
-    val exercise by trainingLogViewModel.getExerciseById(exerciseId).collectAsState(initial = null)
-    val exerciseSets by trainingLogViewModel.getExerciseSetsById(exerciseId).collectAsState(initial = emptyList())
+    val factory = TrainingLogViewModelFactory(
+        ScarletRepository(
+            ScarletDatabase.getInstance(LocalContext.current)
+        )
+    )
+    val trainingLogViewModel: TrainingLogViewModel = viewModel(factory = factory)
+    val exerciseSets by trainingLogViewModel.getExerciseSetsById(exercise.id).collectAsState(initial = emptyList())
 
 //    val movement by exercise?.let {
 //        trainingLogViewModel.getMovementById(it.movementId).collectAsState(initial = null) }

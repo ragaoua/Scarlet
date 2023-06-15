@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import java.io.Serializable
 import java.util.Date
 
 @Entity(
@@ -24,4 +25,4 @@ data class Session(
     val id: Int,
     val blockId: Int,
     val date: String = Date().toString()
-)
+): Serializable

@@ -12,35 +12,46 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import com.example.scarlet.ui.navigation.Screen
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.scarlet.db.ScarletDatabase
+import com.example.scarlet.db.ScarletRepository
 import com.example.scarlet.db.model.Exercise
+import com.example.scarlet.db.model.Session
+import com.example.scarlet.ui.screen.destinations.ExerciseScreenDestination
 import com.example.scarlet.ui.theme.ScarletTheme
 import com.example.scarlet.viewmodel.TrainingLogViewModel
+import com.example.scarlet.viewmodel.TrainingLogViewModelFactory
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@Destination
 @Composable
 fun SessionScreen(
-    sessionId: Int,
-    navController: NavController,
-    trainingLogViewModel: TrainingLogViewModel
+    navigator: DestinationsNavigator,
+    session: Session
 ) {
-    val session by trainingLogViewModel.getSessionById(sessionId).collectAsState(initial = null)
-    val sessionExercises by trainingLogViewModel.getExercisesBySessionId(sessionId).collectAsState(initial = emptyList())
+    val factory = TrainingLogViewModelFactory(
+        ScarletRepository(
+            ScarletDatabase.getInstance(LocalContext.current)
+        )
+    )
+    val trainingLogViewModel: TrainingLogViewModel = viewModel(factory = factory)
+
+    val sessionExercises by trainingLogViewModel.getExercisesBySessionId(session.id).collectAsState(initial = emptyList())
     ScarletTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            session?.let {
-                SessionHeader(
-                    sessionDate = session!!.date
-                )
-                ExercisesSection(
-                    exercises = sessionExercises,
-                    navController = navController
-                )
-            }
+            SessionHeader(
+                sessionDate = session.date
+            )
+            ExercisesSection(
+                exercises = sessionExercises,
+                navigator = navigator
+            )
         }
     }
 }
@@ -59,7 +70,7 @@ fun SessionHeader(
 @Composable
 fun ExercisesSection(
     exercises: List<Exercise>,
-    navController: NavController
+    navigator: DestinationsNavigator
 ) {
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -67,7 +78,7 @@ fun ExercisesSection(
     ) {
         exercises.forEach { exercise ->
             Button(onClick = {
-                navController.navigate(Screen.ExerciseScreen.withId(exercise.id))
+                navigator.navigate(ExerciseScreenDestination(exercise = exercise))
             }) {
                 Text(exercise.movementId.toString())
             }
