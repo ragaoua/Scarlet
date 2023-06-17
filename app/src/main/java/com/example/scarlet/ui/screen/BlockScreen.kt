@@ -70,7 +70,7 @@ fun BlockHeader(
             horizontalArrangement = Arrangement.Center
         ) {
             Button(onClick = {
-                /* TODO */
+                trainingLogViewModel.addSession(block)
             }) {
                 Text(text = stringResource(id = R.string.new_session))
             }

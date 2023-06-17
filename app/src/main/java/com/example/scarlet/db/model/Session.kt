@@ -5,7 +5,9 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import java.io.Serializable
+import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 @Entity(
     indices = [
@@ -22,7 +24,7 @@ import java.util.Date
 )
 data class Session(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    val id: Int = 0,
     val blockId: Int,
-    val date: String = Date().toString()
+    val date: String = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date())
 ): Serializable

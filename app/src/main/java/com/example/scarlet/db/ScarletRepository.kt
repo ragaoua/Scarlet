@@ -1,6 +1,7 @@
 package com.example.scarlet.db
 
 import com.example.scarlet.db.model.Block
+import com.example.scarlet.db.model.Session
 
 class ScarletRepository(
     private val dbInstance: ScarletDatabase
@@ -16,14 +17,14 @@ class ScarletRepository(
         dbInstance.blockDao.insertBlock(block)
     }
 
-    suspend fun updateBlock(block: Block) {
-        dbInstance.blockDao.updateBlock(block)
-    }
+    suspend fun updateBlock(block: Block) = dbInstance.blockDao.updateBlock(block)
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////// SESSION ///////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////
     fun getSessionsByBlockId(blockId: Int) = dbInstance.sessionDao.getSessionsByBlockId(blockId)
+
+    suspend fun insertSession(session: Session) = dbInstance.sessionDao.insertSession(session)
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////// EXERCISE ///////////////////////////////////////////

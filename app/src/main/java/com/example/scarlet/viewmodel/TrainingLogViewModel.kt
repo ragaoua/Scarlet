@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.scarlet.db.ScarletRepository
 import com.example.scarlet.db.model.Block
+import com.example.scarlet.db.model.Session
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -64,6 +65,11 @@ class TrainingLogViewModel @Inject constructor(
     ///////////////////////////////////////////////////////////////////////////////////////////////
     fun getSessionsByBlockId(blockId: Int) = repository.getSessionsByBlockId(blockId)
 
+    fun addSession(block: Block) {
+        viewModelScope.launch {
+            repository.insertSession(Session(blockId = block.id))
+        }
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////// EXERCISE ///////////////////////////////////////////
