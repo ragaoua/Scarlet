@@ -1,11 +1,11 @@
 package com.example.scarlet.ui.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,30 +25,28 @@ fun HomeScreen(
     navigator: DestinationsNavigator
 ) {
     ScarletTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Button(
-                    onClick = {
-                        navigator.navigate(TrainingLogScreenDestination())
-                    }) {
-                    Text(stringResource(id = R.string.training_log))
-                }
-                Button(onClick = {
-                    /*TODO*/
+            Button(
+                onClick = {
+                    navigator.navigate(TrainingLogScreenDestination())
                 }) {
-                    Text(stringResource(id = R.string.statistics))
-                }
-                Button(onClick = {
-                    /*TODO*/
-                }) {
-                    Text(stringResource(id = R.string.competitions))
-                }
+                Text(stringResource(id = R.string.training_log))
+            }
+            Button(onClick = {
+                /*TODO*/
+            }) {
+                Text(stringResource(id = R.string.statistics))
+            }
+            Button(onClick = {
+                /*TODO*/
+            }) {
+                Text(stringResource(id = R.string.competitions))
             }
         }
     }

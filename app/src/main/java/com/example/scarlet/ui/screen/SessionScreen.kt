@@ -32,9 +32,10 @@ fun SessionScreen(
 
     val sessionExercises by trainingLogViewModel.getExercisesBySessionId(session.id).collectAsState(initial = emptyList())
     ScarletTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
         ) {
             SessionHeader(
                 sessionDate = session.date

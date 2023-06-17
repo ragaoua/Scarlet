@@ -1,5 +1,6 @@
 package com.example.scarlet.ui.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,7 +8,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -37,33 +37,29 @@ fun TrainingLogScreen(
     val trainingLogViewModel: TrainingLogViewModel = hiltViewModel()
     val isAddingBlock by trainingLogViewModel.isAddingBlock.collectAsState()
     ScarletTheme {
-        // A surface container using the 'background' color from the theme
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
+        if(isAddingBlock) {
+            AddBlockDialog(
+                trainingLogViewModel = trainingLogViewModel
+            )
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if(isAddingBlock) {
-                AddBlockDialog(
-                    trainingLogViewModel = trainingLogViewModel
-                )
-            }
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = stringResource(id = R.string.training_log),
-                    fontSize = 48.sp
-                )
-                ActiveBlockSection(
-                    navigator = navigator,
-                    trainingLogViewModel = trainingLogViewModel
-                )
-                CompletedBlocksSection(
-                    navigator = navigator,
-                    trainingLogViewModel = trainingLogViewModel
-                )
-            }
+            Text(
+                text = stringResource(id = R.string.training_log),
+                fontSize = 48.sp
+            )
+            ActiveBlockSection(
+                navigator = navigator,
+                trainingLogViewModel = trainingLogViewModel
+            )
+            CompletedBlocksSection(
+                navigator = navigator,
+                trainingLogViewModel = trainingLogViewModel
+            )
         }
     }
 }
@@ -162,7 +158,6 @@ fun AddBlockDialog(
             Button(onClick = {
                 trainingLogViewModel.showAddBlockDialog(false)
                 trainingLogViewModel.insertBlock(blockName)
-
             }) {
                 Text(stringResource(R.string.create_block))
             }
