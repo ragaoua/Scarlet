@@ -2,13 +2,20 @@ package com.example.scarlet.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.scarlet.TrainingLogEvent
+import com.example.scarlet.TrainingLogEvent.CreateBlock
+import com.example.scarlet.TrainingLogEvent.HideNewBlockDialog
+import com.example.scarlet.TrainingLogEvent.ShowNewBlockDialog
 import com.example.scarlet.db.ScarletRepository
 import com.example.scarlet.db.model.Block
-import com.example.scarlet.db.model.Session
+import com.example.scarlet.ui.TrainingLogUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,72 +24,46 @@ class TrainingLogViewModel @Inject constructor(
     private val repository: ScarletRepository
 ) : ViewModel() {
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////// BLOCK ////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    val completedBlocks = repository.getBlocksByCompleted(true)
+    private val _state: MutableStateFlow<TrainingLogUiState> =
+        MutableStateFlow(TrainingLogUiState())
 
+    private val _completedBlocks = repository.getBlocksByCompleted(true)
     private val _activeBlocks = repository.getBlocksByCompleted(false)
-    private val _activeBlock: MutableStateFlow<Block?> = MutableStateFlow(null)
-    val activeBlock = _activeBlock.asStateFlow()
-    private fun updateActiveBlock() {
-        viewModelScope.launch(Dispatchers.IO) {
-            _activeBlocks.collect { blocks ->
-                if (blocks.isEmpty()) {
-                    _activeBlock.value = null
-                } else {
-                    if (blocks.size > 1) {
-                        throw Exception("Too many active blocks. Should only get one")
-                    } else {
-                        _activeBlock.value = blocks[0]
-                    }
+    val state = combine(_state, _activeBlocks, _completedBlocks) { state, activeBlocks, completedBlocks ->
+        var activeBlock: Block? = null
+        if (activeBlocks.size > 1) {
+            throw Exception("Too many active blocks. Should only get one")
+        } else if (activeBlocks.isNotEmpty()) {
+            activeBlock = activeBlocks[0]
+        }
+        state.copy(
+            completedBlocks = completedBlocks,
+            activeBlock = activeBlock
+        )
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), TrainingLogUiState())
+
+    fun onEvent(event: TrainingLogEvent){
+        when(event) {
+            ShowNewBlockDialog -> {
+                _state.update { it.copy(
+                    isAddingBlock = true
+                ) }
+            }
+            HideNewBlockDialog -> {
+                _state.update { it.copy(
+                    isAddingBlock = false
+                ) }
+            }
+            is CreateBlock -> {
+                val block = Block(name = event.blockName)
+                viewModelScope.launch(Dispatchers.IO) {
+                    repository.insertBlock(block)
                 }
+                _state.update { it.copy(
+                    isAddingBlock = false
+                ) }
             }
         }
-    }
-
-    private val _isAddingBlock: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val isAddingBlock = _isAddingBlock.asStateFlow()
-    fun showAddBlockDialog(show: Boolean) {
-        _isAddingBlock.value = show
-    }
-
-    fun insertBlock(blockName: String) {
-        viewModelScope.launch {
-            repository.insertBlock(Block(name = blockName))
-        }
-    }
-
-    fun endBlock(block: Block) {
-        viewModelScope.launch {
-            block.completed = true
-            repository.updateBlock(block)
-        }
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////// SESSION ///////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    fun getSessionsByBlockId(blockId: Int) = repository.getSessionsByBlockId(blockId)
-
-    fun addSession(block: Block) {
-        viewModelScope.launch {
-            repository.insertSession(Session(blockId = block.id))
-        }
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////// EXERCISE ///////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    fun getExercisesBySessionId(sessionId: Int) = repository.getExercisesBySessionId(sessionId)
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////// SET /////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    fun getExerciseSetsById(exerciseId: Int) = repository.getExerciseSetsById(exerciseId)
-
-    init {
-        updateActiveBlock()
     }
 
 }

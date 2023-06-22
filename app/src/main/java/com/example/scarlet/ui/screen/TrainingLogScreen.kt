@@ -22,7 +22,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.scarlet.R
+import com.example.scarlet.TrainingLogEvent
 import com.example.scarlet.db.model.Block
+import com.example.scarlet.ui.TrainingLogUiState
 import com.example.scarlet.ui.screen.destinations.BlockScreenDestination
 import com.example.scarlet.ui.theme.ScarletTheme
 import com.example.scarlet.viewmodel.TrainingLogViewModel
@@ -35,11 +37,25 @@ fun TrainingLogScreen(
     navigator: DestinationsNavigator
 ) {
     val trainingLogViewModel: TrainingLogViewModel = hiltViewModel()
-    val isAddingBlock by trainingLogViewModel.isAddingBlock.collectAsState()
+    val state by trainingLogViewModel.state.collectAsState()
+
+    Screen(
+        navigator = navigator,
+        state = state,
+        onEvent = trainingLogViewModel::onEvent
+    )
+}
+
+@Composable
+fun Screen(
+    navigator: DestinationsNavigator,
+    state: TrainingLogUiState,
+    onEvent: (TrainingLogEvent) -> Unit
+) {
     ScarletTheme {
-        if(isAddingBlock) {
-            AddBlockDialog(
-                trainingLogViewModel = trainingLogViewModel
+        if(state.isAddingBlock) {
+            NewBlockDialog(
+                onEvent = onEvent
             )
         }
         Column(
@@ -54,11 +70,12 @@ fun TrainingLogScreen(
             )
             ActiveBlockSection(
                 navigator = navigator,
-                trainingLogViewModel = trainingLogViewModel
+                state = state,
+                onEvent = onEvent
             )
             CompletedBlocksSection(
                 navigator = navigator,
-                trainingLogViewModel = trainingLogViewModel
+                state = state
             )
         }
     }
@@ -67,9 +84,9 @@ fun TrainingLogScreen(
 @Composable
 fun ActiveBlockSection(
     navigator: DestinationsNavigator,
-    trainingLogViewModel: TrainingLogViewModel
+    state: TrainingLogUiState,
+    onEvent: (TrainingLogEvent) -> Unit
 ) {
-    val activeBlock by trainingLogViewModel.activeBlock.collectAsState(initial = null)
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -78,13 +95,13 @@ fun ActiveBlockSection(
             text = stringResource(R.string.active_training_block),
             fontSize = 20.sp
         )
-        activeBlock?.let { activeBlock ->
+        state.activeBlock?.let { activeBlock ->
             BlockButton(
                 navigator = navigator,
                 block = activeBlock)
         }?: run {
             AddBlockButton(
-                trainingLogViewModel = trainingLogViewModel
+                onEvent = onEvent
             )
         }
     }
@@ -93,9 +110,8 @@ fun ActiveBlockSection(
 @Composable
 fun CompletedBlocksSection(
     navigator: DestinationsNavigator,
-    trainingLogViewModel: TrainingLogViewModel
+    state: TrainingLogUiState
 ) {
-    val completedBlocks by trainingLogViewModel.completedBlocks.collectAsState(initial = emptyList())
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -104,10 +120,11 @@ fun CompletedBlocksSection(
             text = stringResource(R.string.completed_training_blocks),
             fontSize = 20.sp
         )
-        completedBlocks.forEach { block ->
+        state.completedBlocks.forEach { block ->
             BlockButton(
                 navigator = navigator,
-                block = block)
+                block = block
+            )
         }
     }
 }
@@ -126,10 +143,10 @@ fun BlockButton(
 
 @Composable
 fun AddBlockButton(
-    trainingLogViewModel: TrainingLogViewModel
+    onEvent: (TrainingLogEvent) -> Unit
 ) {
     Button(onClick = {
-        trainingLogViewModel.showAddBlockDialog(true)
+        onEvent(TrainingLogEvent.ShowNewBlockDialog)
     }) {
         Text(text = stringResource(R.string.no_active_block_msg))
     }
@@ -137,13 +154,13 @@ fun AddBlockButton(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddBlockDialog(
-    trainingLogViewModel: TrainingLogViewModel
+fun NewBlockDialog(
+    onEvent: (TrainingLogEvent) -> Unit
 ) {
     var blockName by remember { mutableStateOf("") }
     AlertDialog(
         onDismissRequest = {
-            trainingLogViewModel.showAddBlockDialog(false)
+            onEvent(TrainingLogEvent.ShowNewBlockDialog)
         },
         title = {
             Text(stringResource(R.string.new_block))
@@ -156,15 +173,14 @@ fun AddBlockDialog(
         },
         confirmButton = {
             Button(onClick = {
-                trainingLogViewModel.showAddBlockDialog(false)
-                trainingLogViewModel.insertBlock(blockName)
+                onEvent(TrainingLogEvent.CreateBlock(blockName))
             }) {
                 Text(stringResource(R.string.create_block))
             }
         },
         dismissButton = {
             Button(onClick = {
-                trainingLogViewModel.showAddBlockDialog(false)
+                onEvent(TrainingLogEvent.HideNewBlockDialog)
             }) {
                 Text(stringResource(R.string.cancel))
             }

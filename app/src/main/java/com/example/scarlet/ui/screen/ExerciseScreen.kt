@@ -25,7 +25,7 @@ import com.example.scarlet.R
 import com.example.scarlet.db.model.Exercise
 import com.example.scarlet.db.model.Set
 import com.example.scarlet.ui.theme.ScarletTheme
-import com.example.scarlet.viewmodel.TrainingLogViewModel
+import com.example.scarlet.viewmodel.TrainingLogOldViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -35,8 +35,8 @@ fun ExerciseScreen(
     navigator: DestinationsNavigator,
     exercise: Exercise
 ) {
-    val trainingLogViewModel: TrainingLogViewModel = hiltViewModel()
-    val exerciseSets by trainingLogViewModel.getExerciseSetsById(exercise.id).collectAsState(initial = emptyList())
+    val trainingLogOldViewModel: TrainingLogOldViewModel = hiltViewModel()
+    val exerciseSets by trainingLogOldViewModel.getExerciseSetsById(exercise.id).collectAsState(initial = emptyList())
 
 //    val movement by exercise?.let {
 //        trainingLogViewModel.getMovementById(it.movementId).collectAsState(initial = null) }

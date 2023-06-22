@@ -18,7 +18,7 @@ import com.example.scarlet.db.model.Exercise
 import com.example.scarlet.db.model.Session
 import com.example.scarlet.ui.screen.destinations.ExerciseScreenDestination
 import com.example.scarlet.ui.theme.ScarletTheme
-import com.example.scarlet.viewmodel.TrainingLogViewModel
+import com.example.scarlet.viewmodel.TrainingLogOldViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -28,9 +28,9 @@ fun SessionScreen(
     navigator: DestinationsNavigator,
     session: Session
 ) {
-    val trainingLogViewModel: TrainingLogViewModel = hiltViewModel()
+    val trainingLogOldViewModel: TrainingLogOldViewModel = hiltViewModel()
 
-    val sessionExercises by trainingLogViewModel.getExercisesBySessionId(session.id).collectAsState(initial = emptyList())
+    val sessionExercises by trainingLogOldViewModel.getExercisesBySessionId(session.id).collectAsState(initial = emptyList())
     ScarletTheme {
         Column(
             modifier = Modifier

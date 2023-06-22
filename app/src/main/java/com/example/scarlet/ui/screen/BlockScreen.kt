@@ -21,7 +21,7 @@ import com.example.scarlet.db.model.Block
 import com.example.scarlet.db.model.Session
 import com.example.scarlet.ui.screen.destinations.SessionScreenDestination
 import com.example.scarlet.ui.theme.ScarletTheme
-import com.example.scarlet.viewmodel.TrainingLogViewModel
+import com.example.scarlet.viewmodel.TrainingLogOldViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -31,9 +31,9 @@ fun BlockScreen(
     navigator: DestinationsNavigator,
     block: Block
 ) {
-    val trainingLogViewModel: TrainingLogViewModel = hiltViewModel()
+    val trainingLogOldViewModel: TrainingLogOldViewModel = hiltViewModel()
 
-    val sessions by trainingLogViewModel.getSessionsByBlockId(block.id).collectAsState(initial = null)
+    val sessions by trainingLogOldViewModel.getSessionsByBlockId(block.id).collectAsState(initial = null)
     ScarletTheme {
         Column(
             modifier = Modifier
@@ -42,7 +42,7 @@ fun BlockScreen(
         ) {
             BlockHeader(
                 block = block,
-                trainingLogViewModel = trainingLogViewModel
+                trainingLogOldViewModel = trainingLogOldViewModel
             )
             sessions?.let { sessions ->
                 SessionsSection(
@@ -57,7 +57,7 @@ fun BlockScreen(
 @Composable
 fun BlockHeader(
     block: Block,
-    trainingLogViewModel: TrainingLogViewModel
+    trainingLogOldViewModel: TrainingLogOldViewModel
 ){
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
@@ -71,13 +71,13 @@ fun BlockHeader(
             horizontalArrangement = Arrangement.Center
         ) {
             Button(onClick = {
-                trainingLogViewModel.addSession(block)
+                trainingLogOldViewModel.addSession(block)
             }) {
                 Text(text = stringResource(id = R.string.new_session))
             }
             /* TODO : check if the block is already completed */
             Button(onClick = {
-                trainingLogViewModel.endBlock(block)
+                trainingLogOldViewModel.endBlock(block)
             }) {
                 Text(text = stringResource(id = R.string.end_block))
             }
