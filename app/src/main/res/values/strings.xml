@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Scarlet</string>
-    <string name="training_log">Training Log</string>
+    <string name="training_log">Training log</string>
     <string name="statistics">Statistics</string>
     <string name="competitions">Competitions</string>
     <string name="active_training_block">Active training block</string>

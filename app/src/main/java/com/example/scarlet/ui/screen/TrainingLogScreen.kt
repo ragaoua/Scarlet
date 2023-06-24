@@ -1,13 +1,25 @@
 package com.example.scarlet.ui.screen
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -19,15 +31,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.scarlet.R
-import com.example.scarlet.ui.events.TrainingLogEvent
 import com.example.scarlet.db.model.Block
-import com.example.scarlet.ui.states.TrainingLogUiState
+import com.example.scarlet.ui.events.TrainingLogEvent
 import com.example.scarlet.ui.screen.destinations.BlockScreenDestination
+import com.example.scarlet.ui.states.TrainingLogUiState
 import com.example.scarlet.ui.theme.ScarletTheme
 import com.example.scarlet.viewmodel.TrainingLogViewModel
 import com.ramcosta.composedestinations.annotation.Destination
@@ -65,10 +79,13 @@ fun Screen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(16.dp)
                 .background(MaterialTheme.colorScheme.background),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
+                modifier = Modifier
+                    .padding(top = 32.dp, bottom = 64.dp),
                 text = stringResource(id = R.string.training_log),
                 fontSize = 48.sp
             )
@@ -77,6 +94,7 @@ fun Screen(
                 state = state,
                 onEvent = onEvent
             )
+            Spacer(modifier = Modifier.height(16.dp))
             CompletedBlocksSection(
                 navigator = navigator,
                 state = state
@@ -92,19 +110,20 @@ fun ActiveBlockSection(
     onEvent: (TrainingLogEvent) -> Unit
 ) {
     Column (
+        modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(
-            text = stringResource(R.string.active_training_block),
-            fontSize = 20.sp
+        BlockSectionTitle(
+            title = stringResource(R.string.active_training_block)
         )
         state.activeBlock?.let { activeBlock ->
             BlockButton(
                 navigator = navigator,
-                block = activeBlock)
+                block = activeBlock
+            )
         }?: run {
-            AddBlockButton(
+            NewBlockButton(
                 onEvent = onEvent
             )
         }
@@ -120,9 +139,8 @@ fun CompletedBlocksSection(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(
-            text = stringResource(R.string.completed_training_blocks),
-            fontSize = 20.sp
+        BlockSectionTitle(
+            stringResource(R.string.completed_training_blocks)
         )
         state.completedBlocks.forEach { block ->
             BlockButton(
@@ -134,19 +152,59 @@ fun CompletedBlocksSection(
 }
 
 @Composable
+fun BlockSectionTitle(
+    title: String
+) {
+    Text(
+        modifier = Modifier.fillMaxWidth(),
+        text = title,
+        fontSize = 20.sp
+    )
+}
+
+@Composable
 fun BlockButton(
     navigator: DestinationsNavigator,
     block: Block
 ) {
-    Button(onClick = {
-        navigator.navigate(BlockScreenDestination(block = block))
-    }) {
-        Text(block.name)
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(10.dp))
+            .border(BorderStroke(2.dp, MaterialTheme.colorScheme.onSurface))
+            .clickable {
+                navigator.navigate(BlockScreenDestination(block = block))
+            }
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp, bottom = 8.dp, start = 8.dp, end = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column() {
+                Text(
+                    text = block.name,
+                    fontSize = 16.sp
+                )
+                Text(
+                    text = "Started on XX/XX/XXXX", /* TODO*/
+                    fontSize = 10.sp
+                )
+            }
+            Spacer(modifier = Modifier.weight(1f))
+            Icon(
+                imageVector = Icons.Default.Delete,
+                contentDescription = "Delete block" /* TODO : create resource */
+                /* TODO : add delete block functionality */
+            )
+
+        }
     }
 }
 
 @Composable
-fun AddBlockButton(
+fun NewBlockButton(
     onEvent: (TrainingLogEvent) -> Unit
 ) {
     Button(onClick = {
@@ -218,10 +276,12 @@ fun PreviewTrainingLogScreen() {
     Screen(
         navigator = EmptyDestinationsNavigator,
         state = TrainingLogUiState(
-            activeBlock = Block(name = "Block 3"),
+            activeBlock = Block(name = "Block 5"),
             completedBlocks = listOf(
                 Block(name = "Block 1"),
-                Block(name = "Block 2")
+                Block(name = "Block 2"),
+                Block(name = "Block 3"),
+                Block(name = "Block 4")
             )
         ),
         onEvent = {}
