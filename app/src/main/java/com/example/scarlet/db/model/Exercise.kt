@@ -28,8 +28,8 @@ import java.io.Serializable
 )
 data class Exercise(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
-    val sessionId: Int,
-    val movementId: Int,
-    val order: Int
+    val id: Int = 0,
+    val sessionId: Int = 0,
+    val movementId: Int = 0,
+    val order: Int = 0
 ): Serializable

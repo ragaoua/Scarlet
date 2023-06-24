@@ -25,6 +25,6 @@ import java.util.Locale
 data class Session(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val blockId: Int,
+    val blockId: Int = 0,
     val date: String = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date())
 ): Serializable
