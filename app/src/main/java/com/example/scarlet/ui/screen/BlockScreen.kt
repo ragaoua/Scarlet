@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -14,26 +15,48 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.scarlet.R
 import com.example.scarlet.db.model.Block
 import com.example.scarlet.db.model.Session
+import com.example.scarlet.events.BlockEvent
 import com.example.scarlet.ui.screen.destinations.SessionScreenDestination
+import com.example.scarlet.ui.states.BlockUiState
 import com.example.scarlet.ui.theme.ScarletTheme
-import com.example.scarlet.viewmodel.TrainingLogOldViewModel
+import com.example.scarlet.viewmodel.BlockViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 
-@Destination
+data class BlockScreenNavArgs(
+    val block: Block
+)
+
+@Destination(
+    navArgsDelegate = BlockScreenNavArgs::class
+)
 @Composable
 fun BlockScreen(
-    navigator: DestinationsNavigator,
-    block: Block
+    navigator: DestinationsNavigator
 ) {
-    val trainingLogOldViewModel: TrainingLogOldViewModel = hiltViewModel()
+    val blockViewModel: BlockViewModel = hiltViewModel()
+    val state by blockViewModel.state.collectAsState()
 
-    val sessions by trainingLogOldViewModel.getSessionsByBlockId(block.id).collectAsState(initial = null)
+    Screen(
+        navigator = navigator,
+        state = state,
+        onEvent = blockViewModel::onEvent
+    )
+}
+
+@Composable
+fun Screen(
+    navigator: DestinationsNavigator,
+    state: BlockUiState,
+    onEvent: (BlockEvent) -> Unit
+) {
     ScarletTheme {
         Column(
             modifier = Modifier
@@ -41,29 +64,28 @@ fun BlockScreen(
                 .background(MaterialTheme.colorScheme.background)
         ) {
             BlockHeader(
-                block = block,
-                trainingLogOldViewModel = trainingLogOldViewModel
+                state = state,
+                onEvent = onEvent
             )
-            sessions?.let { sessions ->
-                SessionsSection(
-                    sessions = sessions,
-                    navigator = navigator
-                )
-            }
+            SessionsSection(
+                sessions = state.sessions,
+                navigator = navigator
+            )
         }
     }
 }
 
 @Composable
 fun BlockHeader(
-    block: Block,
-    trainingLogOldViewModel: TrainingLogOldViewModel
+    state: BlockUiState,
+    onEvent: (BlockEvent) -> Unit
 ){
     Column(
+        modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = block.name,
+            text = state.block.name,
             fontSize = 20.sp
         )
         Row(
@@ -71,13 +93,13 @@ fun BlockHeader(
             horizontalArrangement = Arrangement.Center
         ) {
             Button(onClick = {
-                trainingLogOldViewModel.addSession(block)
+                onEvent(BlockEvent.AddSession)
             }) {
                 Text(text = stringResource(id = R.string.new_session))
             }
             /* TODO : check if the block is already completed */
             Button(onClick = {
-                trainingLogOldViewModel.endBlock(block)
+                onEvent(BlockEvent.EndBlock)
             }) {
                 Text(text = stringResource(id = R.string.end_block))
             }
@@ -91,6 +113,7 @@ fun SessionsSection(
     navigator: DestinationsNavigator
 ) {
     Column (
+        modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -102,4 +125,43 @@ fun SessionsSection(
             }
         }
     }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewNoSessions() {
+    Screen(
+        navigator = EmptyDestinationsNavigator,
+        state = BlockUiState(
+            block = Block(
+                name = "Block 1",
+            )
+        ),
+        onEvent = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewBlockScreen() {
+    Screen(
+        navigator = EmptyDestinationsNavigator,
+        state = BlockUiState(
+            block = Block(
+                name = "Block 1",
+            ),
+            sessions = listOf(
+                Session(
+                    date = "24-06-2023",
+                    blockId = 1
+                ),
+                Session(
+                    date = "21-06-2023",
+                    blockId = 1
+                ),
+            )
+        ),
+        onEvent = {}
+    )
 }
