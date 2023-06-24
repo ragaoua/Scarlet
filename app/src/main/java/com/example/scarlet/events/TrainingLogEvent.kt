@@ -1,4 +1,4 @@
-package com.example.scarlet
+package com.example.scarlet.events
 
 sealed interface TrainingLogEvent {
     object ShowNewBlockDialog: TrainingLogEvent

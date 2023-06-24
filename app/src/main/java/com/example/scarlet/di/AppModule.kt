@@ -16,7 +16,6 @@ object AppModule {
 
     @Provides
     @Singleton
-//    fun provideScarletDatabase(@ApplicationContext app: Context) =
     fun provideScarletDatabase(app: Application) =
         Room.databaseBuilder(
             app,

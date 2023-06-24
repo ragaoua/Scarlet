@@ -2,13 +2,13 @@ package com.example.scarlet.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.scarlet.TrainingLogEvent
-import com.example.scarlet.TrainingLogEvent.CreateBlock
-import com.example.scarlet.TrainingLogEvent.HideNewBlockDialog
-import com.example.scarlet.TrainingLogEvent.ShowNewBlockDialog
+import com.example.scarlet.events.TrainingLogEvent
+import com.example.scarlet.events.TrainingLogEvent.CreateBlock
+import com.example.scarlet.events.TrainingLogEvent.HideNewBlockDialog
+import com.example.scarlet.events.TrainingLogEvent.ShowNewBlockDialog
 import com.example.scarlet.db.ScarletRepository
 import com.example.scarlet.db.model.Block
-import com.example.scarlet.ui.TrainingLogUiState
+import com.example.scarlet.ui.states.TrainingLogUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,12 +24,11 @@ class TrainingLogViewModel @Inject constructor(
     private val repository: ScarletRepository
 ) : ViewModel() {
 
-    private val _state: MutableStateFlow<TrainingLogUiState> =
-        MutableStateFlow(TrainingLogUiState())
+    private val completedBlocks = repository.getBlocksByCompleted(true)
+    private val activeBlocks = repository.getBlocksByCompleted(false)
 
-    private val _completedBlocks = repository.getBlocksByCompleted(true)
-    private val _activeBlocks = repository.getBlocksByCompleted(false)
-    val state = combine(_state, _activeBlocks, _completedBlocks) { state, activeBlocks, completedBlocks ->
+    private val _state = MutableStateFlow(TrainingLogUiState())
+    val state = combine(_state, activeBlocks, completedBlocks) { state, activeBlocks, completedBlocks ->
         var activeBlock: Block? = null
         if (activeBlocks.size > 1) {
             throw Exception("Too many active blocks. Should only get one")

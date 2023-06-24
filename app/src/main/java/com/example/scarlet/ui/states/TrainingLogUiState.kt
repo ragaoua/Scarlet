@@ -1,4 +1,4 @@
-package com.example.scarlet.ui
+package com.example.scarlet.ui.states
 
 import com.example.scarlet.db.model.Block
 
