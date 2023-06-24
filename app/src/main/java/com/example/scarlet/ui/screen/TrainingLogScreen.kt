@@ -24,7 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.scarlet.R
-import com.example.scarlet.events.TrainingLogEvent
+import com.example.scarlet.ui.events.TrainingLogEvent
 import com.example.scarlet.db.model.Block
 import com.example.scarlet.ui.states.TrainingLogUiState
 import com.example.scarlet.ui.screen.destinations.BlockScreenDestination

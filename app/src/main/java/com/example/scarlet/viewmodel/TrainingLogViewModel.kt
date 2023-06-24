@@ -2,10 +2,10 @@ package com.example.scarlet.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.scarlet.events.TrainingLogEvent
-import com.example.scarlet.events.TrainingLogEvent.CreateBlock
-import com.example.scarlet.events.TrainingLogEvent.HideNewBlockDialog
-import com.example.scarlet.events.TrainingLogEvent.ShowNewBlockDialog
+import com.example.scarlet.ui.events.TrainingLogEvent
+import com.example.scarlet.ui.events.TrainingLogEvent.CreateBlock
+import com.example.scarlet.ui.events.TrainingLogEvent.HideNewBlockDialog
+import com.example.scarlet.ui.events.TrainingLogEvent.ShowNewBlockDialog
 import com.example.scarlet.db.ScarletRepository
 import com.example.scarlet.db.model.Block
 import com.example.scarlet.ui.states.TrainingLogUiState

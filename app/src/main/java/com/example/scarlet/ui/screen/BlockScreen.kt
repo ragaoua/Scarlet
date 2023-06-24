@@ -21,7 +21,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.scarlet.R
 import com.example.scarlet.db.model.Block
 import com.example.scarlet.db.model.Session
-import com.example.scarlet.events.BlockEvent
+import com.example.scarlet.ui.events.BlockEvent
+import com.example.scarlet.ui.navigation.BlockScreenNavArgs
 import com.example.scarlet.ui.screen.destinations.SessionScreenDestination
 import com.example.scarlet.ui.states.BlockUiState
 import com.example.scarlet.ui.theme.ScarletTheme
@@ -29,10 +30,6 @@ import com.example.scarlet.viewmodel.BlockViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
-
-data class BlockScreenNavArgs(
-    val block: Block
-)
 
 @Destination(
     navArgsDelegate = BlockScreenNavArgs::class

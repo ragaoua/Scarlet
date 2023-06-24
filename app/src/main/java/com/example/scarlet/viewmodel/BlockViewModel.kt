@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.scarlet.db.ScarletRepository
 import com.example.scarlet.db.model.Session
-import com.example.scarlet.events.BlockEvent
+import com.example.scarlet.ui.events.BlockEvent
 import com.example.scarlet.ui.screen.destinations.BlockScreenDestination
 import com.example.scarlet.ui.states.BlockUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
