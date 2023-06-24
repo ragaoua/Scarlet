@@ -119,7 +119,7 @@ fun PreviewEmptySession() {
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewScreen() {
+fun PreviewSessionScreen() {
     Screen(
         navigator = EmptyDestinationsNavigator,
         state = SessionUiState(

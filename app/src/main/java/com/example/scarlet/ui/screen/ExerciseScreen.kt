@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
@@ -17,6 +18,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -24,29 +26,37 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.scarlet.R
 import com.example.scarlet.db.model.Exercise
 import com.example.scarlet.db.model.Set
+import com.example.scarlet.ui.events.ExerciseEvent
+import com.example.scarlet.ui.navigation.ExerciseScreenNavArgs
+import com.example.scarlet.ui.states.ExerciseUiState
 import com.example.scarlet.ui.theme.ScarletTheme
-import com.example.scarlet.viewmodel.TrainingLogOldViewModel
+import com.example.scarlet.viewmodel.ExerciseViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 
-@Destination
+@Destination(
+    navArgsDelegate = ExerciseScreenNavArgs::class
+)
 @Composable
 fun ExerciseScreen(
-    navigator: DestinationsNavigator,
-    exercise: Exercise
+    navigator: DestinationsNavigator
 ) {
-    val trainingLogOldViewModel: TrainingLogOldViewModel = hiltViewModel()
-    val exerciseSets by trainingLogOldViewModel.getExerciseSetsById(exercise.id).collectAsState(initial = emptyList())
+    val exerciseViewModel: ExerciseViewModel = hiltViewModel()
+    val state by exerciseViewModel.state.collectAsState()
 
-//    val movement by exercise?.let {
-//        trainingLogViewModel.getMovementById(it.movementId).collectAsState(initial = null) }
-    DisplayExerciseScreen(exercise, exerciseSets)
+    Screen(
+        navigator = navigator,
+        state = state,
+        onEvent = exerciseViewModel::onEvent
+    )
 }
 
 @Composable
-fun DisplayExerciseScreen(
-    exercise: Exercise?,
-    sets: List<Set>
+fun Screen(
+    navigator: DestinationsNavigator,
+    state: ExerciseUiState,
+    onEvent: (ExerciseEvent) -> Unit
 ) {
     ScarletTheme {
         Column(
@@ -57,15 +67,13 @@ fun DisplayExerciseScreen(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                exercise?.let {
-                    ExerciseHeader(
-                        movement = it.movementId.toString()
-                    )
-                    SetsSection(
-                        sets = sets
-                    )
-                    //AddSetButton()
-                }
+                ExerciseHeader(
+                    state = state
+                )
+                SetsSection(
+                    state = state
+                )
+                //AddSetButton()
             }
         }
     }
@@ -73,23 +81,26 @@ fun DisplayExerciseScreen(
 
 @Composable
 fun ExerciseHeader(
-    movement: String
+    state: ExerciseUiState
 ) {
     Text(
-        text = movement,
+        modifier = Modifier.fillMaxWidth(),
+        text = state.exercise.movementId.toString(),
+        textAlign = TextAlign.Center,
         fontSize = 20.sp
     )
 }
 
 @Composable
 fun SetsSection(
-    sets: List<Set>
+    state: ExerciseUiState
 ) {
     Column (
+        modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(50.dp)
     ) {
-        sets.forEach { set ->
+        state.sets.forEach { set ->
             DisplaySet(set)
         }
     }
@@ -103,14 +114,14 @@ fun DisplaySet(
     var repsState by remember { mutableStateOf(set.reps.toString()) }
     var weightState by remember { mutableStateOf(set.weight.toString()) }
     var rpeState by remember { mutableStateOf(set.rpe?.toString()) }
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier.padding(
-            horizontal = 32.dp/*,
-            vertical = 5.dp*/)
+            horizontal = 32.dp)
     ) {
-        Text(text = "${set.order.toString()}.")
+        Text(text = "${set.order}.")
         Spacer(modifier = Modifier.width(10.dp))
         TextField(
             value = repsState,
@@ -123,7 +134,6 @@ fun DisplaySet(
             singleLine = true,
             modifier = Modifier.weight(1f)
         )
-        Spacer(modifier = Modifier.width(10.dp))
         TextField(
             value = weightState,
             label = {
@@ -135,7 +145,6 @@ fun DisplaySet(
             singleLine = true,
             modifier = Modifier.weight(1f)
         )
-        Spacer(modifier = Modifier.width(10.dp))
         TextField(
             value = rpeState ?: "" ,
             label = {
@@ -152,20 +161,38 @@ fun DisplaySet(
 
 @Composable
 fun AddSetButton() {
-    Button(onClick = {  }) {
+    Button(onClick = {
+        /* TODO */
+    }) {
         Text("+")
     }
 }
 
+@Preview(showBackground = true)
 @Composable
-@Preview
-fun Preview() {
-    val exercise = Exercise(1, 1, 1, 1)
-    val sets = listOf(
-        Set(1, 1, 1, 10, 100f, 6f),
-        Set(2, 1, 2, 20, 200f, 10f)
+fun PreviewEmptyExercise() {
+    Screen(
+        navigator = EmptyDestinationsNavigator,
+        state = ExerciseUiState(
+            exercise = Exercise()),
+        onEvent = {}
     )
-    DisplayExerciseScreen(
-        exercise = exercise,
-        sets = sets)
 }
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewExerciseScreen() {
+    Screen(
+        navigator = EmptyDestinationsNavigator,
+        state = ExerciseUiState(
+            exercise = Exercise(),
+            sets = listOf(
+                Set(1, 1, 1, 10, 100f, 6f),
+                Set(2, 1, 2, 20, 200f, 10f)
+            )),
+        onEvent = {}
+    )
+}
+
+
+

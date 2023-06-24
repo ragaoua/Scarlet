@@ -21,10 +21,10 @@ import java.io.Serializable
 )
 data class Set(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
-    val exerciseId: Int,
-    val order: Int,
-    val reps: Int,
-    val weight: Float,
+    val id: Int = 0,
+    val exerciseId: Int = 0,
+    val order: Int = 0,
+    val reps: Int = 0,
+    val weight: Float = 0f,
     val rpe: Float? = null
 ) : Serializable

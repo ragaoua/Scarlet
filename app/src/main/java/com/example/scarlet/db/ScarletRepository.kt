@@ -13,9 +13,7 @@ class ScarletRepository(
     fun getBlocksByCompleted(completed: Boolean) =
         dbInstance.blockDao.getBlocksByCompleted(completed)
 
-    suspend fun insertBlock(block: Block) {
-        dbInstance.blockDao.insertBlock(block)
-    }
+    suspend fun insertBlock(block: Block) = dbInstance.blockDao.insertBlock(block)
 
     suspend fun updateBlock(block: Block) = dbInstance.blockDao.updateBlock(block)
 
@@ -35,7 +33,7 @@ class ScarletRepository(
     ///////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////// SET /////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    fun getExerciseSetsById(exerciseId: Int) =
-        dbInstance.exerciseDao.getExerciseSetsById(exerciseId)
+    fun getSetsByExerciseId(exerciseId: Int) =
+        dbInstance.setDao.getSetsByExerciseId(exerciseId)
 
 }
