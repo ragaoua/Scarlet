@@ -85,7 +85,7 @@ fun Screen(
                 text = stringResource(id = R.string.training_log),
                 fontSize = 48.sp,
                 modifier = Modifier.padding(top = 32.dp, bottom = 32.dp)
-            ) /* TODO : make into a "screen title" function ? */
+            ) // TODO : make into a "screen title" function ?
             ActiveBlockSection(
                 navigator = navigator,
                 state = state,
@@ -156,8 +156,7 @@ fun BlockList(
 ) {
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 8.dp, bottom = 8.dp),
+            .fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         blocks.forEach { block ->
@@ -196,13 +195,18 @@ fun BlockButton(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column() {
+            Column {
                 Text(
                     text = block.name,
                     fontSize = 16.sp
                 )
                 Text(
-                    text = "Started on XX/XX/XXXX", /* TODO*/
+                    text =
+                    if (block.completed) {
+                        "XX/XX/XXXX - XX/XX/XXXX" /* TODO*/
+                    } else {
+                        "Started on XX/XX/XXXX" /* TODO : create resource */
+                    },
                     fontSize = 10.sp
                 )
             }
@@ -314,10 +318,10 @@ fun PreviewTrainingLogScreen() {
         state = TrainingLogUiState(
             activeBlock = Block(name = "Block 5"),
             completedBlocks = listOf(
-                Block(name = "Block 1"),
-                Block(name = "Block 2"),
-                Block(name = "Block 3"),
-                Block(name = "Block 4")
+                Block(name = "Block 1", completed = true),
+                Block(name = "Block 2", completed = true),
+                Block(name = "Block 3", completed = true),
+                Block(name = "Block 4", completed = true)
             )
         ),
         onEvent = {}
