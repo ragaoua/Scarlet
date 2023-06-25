@@ -1,11 +1,8 @@
 package com.example.scarlet.ui.screen
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,8 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -31,7 +29,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -39,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.scarlet.R
 import com.example.scarlet.db.model.Block
+import com.example.scarlet.ui.composables.ScarletClickableItem
 import com.example.scarlet.ui.events.TrainingLogEvent
 import com.example.scarlet.ui.screen.destinations.BlockScreenDestination
 import com.example.scarlet.ui.states.TrainingLogUiState
@@ -84,11 +82,10 @@ fun Screen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                modifier = Modifier
-                    .padding(top = 32.dp, bottom = 64.dp),
                 text = stringResource(id = R.string.training_log),
-                fontSize = 48.sp
-            )
+                fontSize = 48.sp,
+                modifier = Modifier.padding(top = 32.dp, bottom = 32.dp)
+            ) /* TODO : make into a "screen title" function ? */
             ActiveBlockSection(
                 navigator = navigator,
                 state = state,
@@ -97,7 +94,8 @@ fun Screen(
             Spacer(modifier = Modifier.height(16.dp))
             CompletedBlocksSection(
                 navigator = navigator,
-                state = state
+                state = state,
+                onEvent = onEvent
             )
         }
     }
@@ -110,17 +108,16 @@ fun ActiveBlockSection(
     onEvent: (TrainingLogEvent) -> Unit
 ) {
     Column (
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        modifier = Modifier.fillMaxWidth()
     ) {
         BlockSectionTitle(
             title = stringResource(R.string.active_training_block)
         )
         state.activeBlock?.let { activeBlock ->
-            BlockButton(
+            BlockList(
                 navigator = navigator,
-                block = activeBlock
+                blocks = listOf(activeBlock),
+                onEvent = onEvent
             )
         }?: run {
             NewBlockButton(
@@ -133,7 +130,8 @@ fun ActiveBlockSection(
 @Composable
 fun CompletedBlocksSection(
     navigator: DestinationsNavigator,
-    state: TrainingLogUiState
+    state: TrainingLogUiState,
+    onEvent: (TrainingLogEvent) -> Unit
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -142,10 +140,31 @@ fun CompletedBlocksSection(
         BlockSectionTitle(
             stringResource(R.string.completed_training_blocks)
         )
-        state.completedBlocks.forEach { block ->
+        BlockList(
+            navigator = navigator,
+            state.completedBlocks,
+            onEvent = onEvent
+        )
+    }
+}
+
+@Composable
+fun BlockList(
+    navigator: DestinationsNavigator,
+    blocks: List<Block>,
+    onEvent: (TrainingLogEvent) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp, bottom = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        blocks.forEach { block ->
             BlockButton(
                 navigator = navigator,
-                block = block
+                block = block,
+                onEvent = onEvent
             )
         }
     }
@@ -165,21 +184,16 @@ fun BlockSectionTitle(
 @Composable
 fun BlockButton(
     navigator: DestinationsNavigator,
-    block: Block
+    block: Block,
+    onEvent: (TrainingLogEvent) -> Unit
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(10.dp))
-            .border(BorderStroke(2.dp, MaterialTheme.colorScheme.onSurface))
-            .clickable {
-                navigator.navigate(BlockScreenDestination(block = block))
-            }
+    ScarletClickableItem(
+        onClick = {
+            navigator.navigate(BlockScreenDestination(block = block))
+        }
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp, bottom = 8.dp, start = 8.dp, end = 8.dp),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column() {
@@ -195,10 +209,11 @@ fun BlockButton(
             Spacer(modifier = Modifier.weight(1f))
             Icon(
                 imageVector = Icons.Default.Delete,
-                contentDescription = "Delete block" /* TODO : create resource */
-                /* TODO : add delete block functionality */
+                contentDescription = "Delete block", /* TODO : create resource */
+                modifier = Modifier.clickable {
+                    onEvent(TrainingLogEvent.DeleteBlock(block))
+                }
             )
-
         }
     }
 }
@@ -207,10 +222,31 @@ fun BlockButton(
 fun NewBlockButton(
     onEvent: (TrainingLogEvent) -> Unit
 ) {
-    Button(onClick = {
-        onEvent(TrainingLogEvent.ShowNewBlockDialog)
-    }) {
-        Text(text = stringResource(R.string.no_active_block_msg))
+    ScarletClickableItem(
+        onClick = {
+            onEvent(TrainingLogEvent.ShowNewBlockDialog)
+        }
+    ) {
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = "Add new block" /* TODO : create resource */
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Column {
+                Text(
+                    text = stringResource(R.string.no_active_block_msg),
+                    fontSize = 16.sp
+                )
+                Text(
+                    text = stringResource(R.string.start_new_block_msg),
+                    fontSize = 10.sp
+                )
+            }
+        }
     }
 }
 

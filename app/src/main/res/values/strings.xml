@@ -6,7 +6,8 @@
     <string name="active_training_block">Active training block</string>
     <string name="completed_training_blocks">Completed training blocks</string>
     <string name="app_logo">Logo</string>
-    <string name="no_active_block_msg">No active block\nClick to start a new block</string>
+    <string name="no_active_block_msg">No active block</string>
+    <string name="start_new_block_msg">Click to start a new block</string>
     <string name="new_block">New Block</string>
     <string name="block_name">Block name</string>
     <string name="create_block">Create block</string>

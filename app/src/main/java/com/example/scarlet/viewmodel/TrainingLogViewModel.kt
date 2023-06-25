@@ -62,6 +62,11 @@ class TrainingLogViewModel @Inject constructor(
                     isAddingBlock = false
                 ) }
             }
+            is TrainingLogEvent.DeleteBlock -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    repository.deleteBlock(event.block)
+                }
+            }
         }
     }
 
