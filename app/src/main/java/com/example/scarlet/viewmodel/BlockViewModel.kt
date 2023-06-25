@@ -20,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class BlockViewModel @Inject constructor(
     private val repository: ScarletRepository,
-    private val savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val block = MutableStateFlow(
@@ -40,13 +40,13 @@ class BlockViewModel @Inject constructor(
         when(event) {
             BlockEvent.AddSession -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    repository.insertSession(Session(blockId = state.value.block.id))
+                    repository.insertSession(Session(blockId = block.value.id))
                 }
             }
             BlockEvent.EndBlock -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    state.value.block.completed = true
-                    repository.updateBlock(state.value.block)
+                    block.value.completed = true
+                    repository.updateBlock(block.value)
                 }
             }
         }
