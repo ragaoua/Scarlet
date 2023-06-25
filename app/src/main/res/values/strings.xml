@@ -21,4 +21,5 @@
     <string name="rpe">RPE</string>
     <string name="weight">Weight</string>
     <string name="reps">Reps</string>
+    <string name="delete">Delete</string>
 </resources>

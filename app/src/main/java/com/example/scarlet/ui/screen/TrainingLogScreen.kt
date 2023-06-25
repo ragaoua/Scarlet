@@ -1,10 +1,7 @@
 package com.example.scarlet.ui.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,7 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.scarlet.R
 import com.example.scarlet.db.model.Block
-import com.example.scarlet.ui.composables.ScarletClickableItem
+import com.example.scarlet.ui.composables.ScarletList
 import com.example.scarlet.ui.events.TrainingLogEvent
 import com.example.scarlet.ui.screen.destinations.BlockScreenDestination
 import com.example.scarlet.ui.states.TrainingLogUiState
@@ -107,22 +103,53 @@ fun ActiveBlockSection(
     state: TrainingLogUiState,
     onEvent: (TrainingLogEvent) -> Unit
 ) {
-    Column (
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        BlockSectionTitle(
-            title = stringResource(R.string.active_training_block)
-        )
-        state.activeBlock?.let { activeBlock ->
-            BlockList(
-                navigator = navigator,
-                blocks = listOf(activeBlock),
-                onEvent = onEvent
+    state.activeBlock?.let {activeBlock ->
+        ScarletList(
+            modifier = Modifier.fillMaxWidth(),
+            title = stringResource(R.string.active_training_block),
+            items = listOf(activeBlock),
+            onItemClicked = { block ->
+                navigator.navigate(BlockScreenDestination(block))
+            },
+            onDeleteClicked = { block ->
+                onEvent(TrainingLogEvent.DeleteBlock(block))
+            }
+        ) { block ->
+            Column {
+                Text(
+                    text = block.name,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                Text(
+                    text = "Started on XX/XX/XXXX", /* TODO*/
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+        }
+    } ?: run {
+        ScarletList(
+            modifier = Modifier.fillMaxWidth(),
+            title = stringResource(R.string.active_training_block),
+            items = listOf(null),
+            onItemClicked = {
+                onEvent(TrainingLogEvent.ShowNewBlockDialog)
+            }
+        ) {
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = "Add new block" /* TODO : create resource */
             )
-        }?: run {
-            NewBlockButton(
-                onEvent = onEvent
-            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Column {
+                Text(
+                    text = stringResource(R.string.no_active_block_msg),
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                Text(
+                    text = stringResource(R.string.start_new_block_msg),
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
         }
     }
 }
@@ -133,126 +160,30 @@ fun CompletedBlocksSection(
     state: TrainingLogUiState,
     onEvent: (TrainingLogEvent) -> Unit
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        BlockSectionTitle(
-            stringResource(R.string.completed_training_blocks)
-        )
-        BlockList(
-            navigator = navigator,
-            state.completedBlocks,
-            onEvent = onEvent
-        )
-    }
-}
-
-@Composable
-fun BlockList(
-    navigator: DestinationsNavigator,
-    blocks: List<Block>,
-    onEvent: (TrainingLogEvent) -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        blocks.forEach { block ->
-            BlockButton(
-                navigator = navigator,
-                block = block,
-                onEvent = onEvent
-            )
-        }
-    }
-}
-
-@Composable
-fun BlockSectionTitle(
-    title: String
-) {
-    Text(
+    ScarletList(
         modifier = Modifier.fillMaxWidth(),
-        text = title,
-        fontSize = 20.sp
-    )
-}
-
-@Composable
-fun BlockButton(
-    navigator: DestinationsNavigator,
-    block: Block,
-    onEvent: (TrainingLogEvent) -> Unit
-) {
-    ScarletClickableItem(
-        onClick = {
-            navigator.navigate(BlockScreenDestination(block = block))
+        title = stringResource(R.string.completed_training_blocks),
+        items = state.completedBlocks,
+        onItemClicked = { block ->
+            navigator.navigate(BlockScreenDestination(block))
+        },
+        onDeleteClicked = { block ->
+            onEvent(TrainingLogEvent.DeleteBlock(block))
         }
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column {
-                Text(
-                    text = block.name,
-                    fontSize = 16.sp
-                )
-                Text(
-                    text =
-                    if (block.completed) {
-                        "XX/XX/XXXX - XX/XX/XXXX" /* TODO*/
-                    } else {
-                        "Started on XX/XX/XXXX" /* TODO : create resource */
-                    },
-                    fontSize = 10.sp
-                )
-            }
-            Spacer(modifier = Modifier.weight(1f))
-            Icon(
-                imageVector = Icons.Default.Delete,
-                contentDescription = "Delete block", /* TODO : create resource */
-                modifier = Modifier.clickable {
-                    onEvent(TrainingLogEvent.DeleteBlock(block))
-                }
+    ) { block ->
+        Column {
+            Text(
+                text = block.name,
+                style = MaterialTheme.typography.bodyLarge
+            )
+            Text(
+                text = "XX/XX/XXXX - XX/XX/XXXX", /* TODO*/
+                style = MaterialTheme.typography.bodySmall
             )
         }
     }
 }
 
-@Composable
-fun NewBlockButton(
-    onEvent: (TrainingLogEvent) -> Unit
-) {
-    ScarletClickableItem(
-        onClick = {
-            onEvent(TrainingLogEvent.ShowNewBlockDialog)
-        }
-    ) {
-        Row (
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = "Add new block" /* TODO : create resource */
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Column {
-                Text(
-                    text = stringResource(R.string.no_active_block_msg),
-                    fontSize = 16.sp
-                )
-                Text(
-                    text = stringResource(R.string.start_new_block_msg),
-                    fontSize = 10.sp
-                )
-            }
-        }
-    }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -318,10 +249,10 @@ fun PreviewTrainingLogScreen() {
         state = TrainingLogUiState(
             activeBlock = Block(name = "Block 5"),
             completedBlocks = listOf(
-                Block(name = "Block 1", completed = true),
-                Block(name = "Block 2", completed = true),
+                Block(name = "Block 4", completed = true),
                 Block(name = "Block 3", completed = true),
-                Block(name = "Block 4", completed = true)
+                Block(name = "Block 2", completed = true),
+                Block(name = "Block 1", completed = true)
             )
         ),
         onEvent = {}
