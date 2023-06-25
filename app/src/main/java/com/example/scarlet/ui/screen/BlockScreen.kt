@@ -4,8 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -16,11 +19,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.scarlet.R
 import com.example.scarlet.db.model.Block
 import com.example.scarlet.db.model.Session
+import com.example.scarlet.ui.composables.ScarletList
 import com.example.scarlet.ui.events.BlockEvent
 import com.example.scarlet.ui.navigation.BlockScreenNavArgs
 import com.example.scarlet.ui.screen.destinations.SessionScreenDestination
@@ -58,15 +63,19 @@ fun Screen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
+                .padding(16.dp)
+                .background(MaterialTheme.colorScheme.background),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             BlockHeader(
                 state = state,
                 onEvent = onEvent
             )
+            Spacer(modifier = Modifier.height(16.dp))
             SessionsSection(
+                navigator = navigator,
+                onEvent = onEvent,
                 sessions = state.sessions,
-                navigator = navigator
             )
         }
     }
@@ -83,11 +92,11 @@ fun BlockHeader(
     ) {
         Text(
             text = state.block.name,
-            fontSize = 20.sp
+            fontSize = 20.sp,
+            modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
         )
         Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
         ) {
             Button(onClick = {
                 onEvent(BlockEvent.AddSession)
@@ -106,21 +115,22 @@ fun BlockHeader(
 
 @Composable
 fun SessionsSection(
-    sessions: List<Session>,
-    navigator: DestinationsNavigator
+    navigator: DestinationsNavigator,
+    onEvent: (BlockEvent) -> Unit,
+    sessions: List<Session>
 ) {
-    Column (
+    ScarletList(
         modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        sessions.forEach { session ->
-            Button(onClick = {
-                navigator.navigate(SessionScreenDestination(session = session))
-            }) {
-                Text(session.date)
-            }
+        title = stringResource(R.string.block_sessions_list_title),
+        items = sessions,
+        onItemClicked = { session ->
+            navigator.navigate(SessionScreenDestination(session = session))
+        },
+        onDeleteClicked = { session ->
+            onEvent(BlockEvent.DeleteSession(session))
         }
+    ) { session ->
+        Text(text = session.date)
     }
 }
 

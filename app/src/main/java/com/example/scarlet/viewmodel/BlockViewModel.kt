@@ -49,6 +49,11 @@ class BlockViewModel @Inject constructor(
                     repository.updateBlock(block.value)
                 }
             }
+            is BlockEvent.DeleteSession -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    repository.deleteSession(event.session)
+                }
+            }
         }
     }
 }

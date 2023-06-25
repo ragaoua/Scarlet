@@ -22,4 +22,5 @@
     <string name="weight">Weight</string>
     <string name="reps">Reps</string>
     <string name="delete">Delete</string>
+    <string name="block_sessions_list_title">Block sessions</string>
 </resources>
