@@ -1,6 +1,7 @@
 package com.example.scarlet.feature_training_log.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,27 +22,29 @@ fun <T> ScarletList(
     onDeleteClicked: ((item: T) -> Unit)? = null,
     itemContent: @Composable (item: T) -> Unit = {}
 ) {
-    Column(
+    Box(
         modifier = modifier
     ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleMedium
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items.forEach { item ->
-                ScarletListItem(
-                    onClick = { onItemClicked(item) },
-                    onDelete =
+        Column {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleMedium
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items.forEach { item ->
+                    ScarletListItem(
+                        onClick = { onItemClicked(item) },
+                        onDelete =
                         onDeleteClicked?.let {
                             { onDeleteClicked(item) }
                         }
-                ) {
-                    itemContent(item)
+                    ) {
+                        itemContent(item)
+                    }
                 }
             }
         }

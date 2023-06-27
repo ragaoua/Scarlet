@@ -35,27 +35,32 @@ fun ScarletListItem(
 ) {
     Box(
         modifier = modifier
-            .clip(RoundedCornerShape(10.dp))
-            .border(BorderStroke(2.dp, MaterialTheme.colorScheme.onSurface))
-            .padding(8.dp)
-            .clickable {
-                onClick()
-            }
     ) {
-        Row (
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+        Box(
+            modifier = modifier
+                .clip(RoundedCornerShape(10.dp))
+                .border(BorderStroke(2.dp, MaterialTheme.colorScheme.onSurface))
+                .clickable {
+                    onClick()
+                }
         ) {
-            content()
-            onDelete?.let{ onDelete ->
-                Spacer(modifier = Modifier.weight(1f))
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = stringResource(R.string.delete),
-                    modifier = Modifier.clickable {
-                        onDelete()
-                    }
-                )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                content()
+                onDelete?.let { onDelete ->
+                    Spacer(modifier = Modifier.weight(1f))
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = stringResource(R.string.delete),
+                        modifier = Modifier.clickable {
+                            onDelete()
+                        }
+                    )
+                }
             }
         }
     }
