@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,17 +26,17 @@ fun <T> ScarletList(
     ) {
         Column {
             SectionTitle(title = title)
-            Column(
+            LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items.forEach { item ->
+                items(items) { item ->
                     ScarletListItem(
                         onClick = { onItemClicked(item) },
                         onDelete =
-                            onDeleteClicked?.let {
-                                { onDeleteClicked(item) }
-                            }
+                        onDeleteClicked?.let {
+                            { onDeleteClicked(item) }
+                        }
                     ) {
                         itemContent(item)
                     }
