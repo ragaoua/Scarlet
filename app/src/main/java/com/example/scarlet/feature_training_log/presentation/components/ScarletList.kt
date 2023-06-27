@@ -3,10 +3,7 @@ package com.example.scarlet.feature_training_log.presentation.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -26,11 +23,7 @@ fun <T> ScarletList(
         modifier = modifier
     ) {
         Column {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleMedium
-            )
-            Spacer(modifier = Modifier.height(8.dp))
+            SectionTitle(title = title)
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -39,9 +32,9 @@ fun <T> ScarletList(
                     ScarletListItem(
                         onClick = { onItemClicked(item) },
                         onDelete =
-                        onDeleteClicked?.let {
-                            { onDeleteClicked(item) }
-                        }
+                            onDeleteClicked?.let {
+                                { onDeleteClicked(item) }
+                            }
                     ) {
                         itemContent(item)
                     }
