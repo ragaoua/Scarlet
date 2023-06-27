@@ -12,7 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.Session
-import com.example.scarlet.feature_training_log.presentation.session.components.ExercisesSection
+import com.example.scarlet.feature_training_log.presentation.session.components.ExercisesList
 import com.example.scarlet.feature_training_log.presentation.session.components.SessionHeader
 import com.example.scarlet.ui.theme.ScarletTheme
 import com.ramcosta.composedestinations.annotation.Destination
@@ -51,7 +51,7 @@ fun Screen(
             SessionHeader(
                 session = state.session
             )
-            ExercisesSection(
+            ExercisesList(
                 exercises = state.exercises,
                 navigator = navigator
             )

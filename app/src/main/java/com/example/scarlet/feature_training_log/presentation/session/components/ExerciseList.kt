@@ -16,7 +16,7 @@ import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 
 
 @Composable
-fun ExercisesSection(
+fun ExercisesList(
     exercises: List<Exercise>,
     navigator: DestinationsNavigator
 ) {
@@ -38,7 +38,7 @@ fun ExercisesSection(
 @Preview(showBackground = true)
 @Composable
 fun NoExercisePreview() {
-    ExercisesSection(
+    ExercisesList(
         navigator = EmptyDestinationsNavigator,
         exercises = emptyList()
     )
@@ -47,7 +47,7 @@ fun NoExercisePreview() {
 @Preview(showBackground = true)
 @Composable
 fun ExercisesSectionPreview() {
-    ExercisesSection(
+    ExercisesList(
         navigator = EmptyDestinationsNavigator,
         exercises = listOf(
             Exercise(movementId = 1),

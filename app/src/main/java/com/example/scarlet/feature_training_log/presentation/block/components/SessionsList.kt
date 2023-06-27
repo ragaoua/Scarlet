@@ -16,7 +16,7 @@ import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 
 
 @Composable
-fun SessionsSection(
+fun SessionsList(
     navigator: DestinationsNavigator,
     sessions: List<Session>,
     onEvent: (BlockEvent) -> Unit
@@ -39,7 +39,7 @@ fun SessionsSection(
 @Preview(showBackground = true)
 @Composable
 fun NoSessionsPreview() {
-    SessionsSection(
+    SessionsList(
         navigator = EmptyDestinationsNavigator,
         sessions = emptyList(),
         onEvent = {}
@@ -49,7 +49,7 @@ fun NoSessionsPreview() {
 @Preview(showBackground = true)
 @Composable
 fun SessionsSectionPreview() {
-    SessionsSection(
+    SessionsList(
         navigator = EmptyDestinationsNavigator,
         sessions = listOf(
             Session(date = "2021-01-01"),

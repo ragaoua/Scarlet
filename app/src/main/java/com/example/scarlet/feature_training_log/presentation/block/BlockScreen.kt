@@ -18,7 +18,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.presentation.block.components.BlockHeader
-import com.example.scarlet.feature_training_log.presentation.block.components.SessionsSection
+import com.example.scarlet.feature_training_log.presentation.block.components.SessionsList
 import com.example.scarlet.ui.theme.ScarletTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -60,7 +60,7 @@ fun Screen(
                 onEvent = onEvent
             )
             Spacer(modifier = Modifier.height(16.dp))
-            SessionsSection(
+            SessionsList(
                 navigator = navigator,
                 sessions = state.sessions,
                 onEvent = onEvent
