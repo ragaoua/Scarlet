@@ -2,11 +2,11 @@ package com.example.scarlet.feature_training_log.presentation.training_log
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.scarlet.feature_training_log.data.repository.ScarletRepository
+import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.presentation.training_log.TrainingLogEvent.CreateBlock
 import com.example.scarlet.feature_training_log.presentation.training_log.TrainingLogEvent.HideNewBlockDialog
 import com.example.scarlet.feature_training_log.presentation.training_log.TrainingLogEvent.ShowNewBlockDialog
-import com.example.scarlet.feature_training_log.data.repository.ScarletRepository
-import com.example.scarlet.feature_training_log.domain.model.Block
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

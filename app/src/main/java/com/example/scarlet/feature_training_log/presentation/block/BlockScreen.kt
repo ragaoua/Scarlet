@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -23,6 +24,7 @@ import com.example.scarlet.ui.theme.ScarletTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
+import kotlinx.coroutines.flow.collectLatest
 
 @Destination(
     navArgsDelegate = BlockScreenNavArgs::class
@@ -33,6 +35,15 @@ fun BlockScreen(
 ) {
     val blockViewModel: BlockViewModel = hiltViewModel()
     val state by blockViewModel.state.collectAsState()
+    LaunchedEffect(key1 = true) {
+        blockViewModel.event.collectLatest { event ->
+            when(event) {
+                is UiEvent.NavigateUp -> {
+                    navigator.navigateUp()
+                }
+            }
+        }
+    }
 
     Screen(
         navigator = navigator,

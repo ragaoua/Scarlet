@@ -33,7 +33,7 @@ fun BlockHeader(
     ) {
         Text(
             text = block.name,
-            fontSize = 20.sp,
+            fontSize = 32.sp, /* TODO : make this a resource */
             modifier = Modifier.padding(bottom = 16.dp)
         )
         Row(

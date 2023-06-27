@@ -65,7 +65,7 @@ fun Screen(
         ) {
             Text(
                 text = stringResource(id = R.string.training_log),
-                fontSize = 48.sp,
+                fontSize = 48.sp, /* TODO : make this a resource */
                 modifier = Modifier.padding(top = 32.dp, bottom = 32.dp)
             ) // TODO : make into a "screen title" function ?
             ActiveBlockSection(
