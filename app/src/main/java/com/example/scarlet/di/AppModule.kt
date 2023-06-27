@@ -2,8 +2,8 @@ package com.example.scarlet.di
 
 import android.app.Application
 import androidx.room.Room
-import com.example.scarlet.db.ScarletDatabase
-import com.example.scarlet.db.ScarletRepository
+import com.example.scarlet.feature_training_log.data.data_source.ScarletDatabase
+import com.example.scarlet.feature_training_log.data.repository.ScarletRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
