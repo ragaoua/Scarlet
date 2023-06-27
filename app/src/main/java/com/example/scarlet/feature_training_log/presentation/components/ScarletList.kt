@@ -25,7 +25,7 @@ fun <T> ScarletList(
         modifier = modifier
     ) {
         Column {
-            SectionTitle(title = title)
+            ScarletListTitle(title = title)
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(8.dp)

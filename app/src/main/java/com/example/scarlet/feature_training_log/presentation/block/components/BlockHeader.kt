@@ -25,13 +25,16 @@ fun BlockHeader(
     onEvent: (BlockEvent) -> Unit
 ){
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp)
+        ,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = block.name,
             fontSize = 20.sp,
-            modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
+            modifier = Modifier.padding(bottom = 16.dp)
         )
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)

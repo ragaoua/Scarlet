@@ -11,7 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.presentation.components.ScarletList
-import com.example.scarlet.feature_training_log.presentation.components.SectionTitle
+import com.example.scarlet.feature_training_log.presentation.components.ScarletListTitle
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
 import com.example.scarlet.feature_training_log.presentation.training_log.TrainingLogEvent
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -50,7 +50,7 @@ fun CompletedBlocksSection(
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            SectionTitle(title = stringResource(R.string.completed_training_blocks))
+            ScarletListTitle(title = stringResource(R.string.completed_training_blocks))
             Text(
                 text = stringResource(R.string.no_completed_training_blocks),
                 style = MaterialTheme.typography.bodyMedium
