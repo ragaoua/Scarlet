@@ -24,7 +24,7 @@ data class Set(
     val id: Int = 0,
     val exerciseId: Int = 0,
     val order: Int = 0,
-    val reps: Int = 0,
-    val weight: Float = 0f,
+    val reps: Int? = null,
+    val weight: Float? = null,
     val rpe: Float? = null
 ) : Serializable
