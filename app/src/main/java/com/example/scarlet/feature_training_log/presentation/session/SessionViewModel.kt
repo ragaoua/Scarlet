@@ -22,7 +22,7 @@ class SessionViewModel @Inject constructor(
         SessionScreenDestination.argsFrom(savedStateHandle).session
     )
 
-    private val exercises = repository.getExercisesBySessionId(session.value.id)
+    private val exercises = repository.getExercisesWithMovementAndSetsBySessionId(session.value.id)
 
     val state = combine(session, exercises) { session, exercises ->
         SessionUiState(

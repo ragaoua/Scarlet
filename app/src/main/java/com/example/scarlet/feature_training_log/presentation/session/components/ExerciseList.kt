@@ -10,6 +10,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.scarlet.feature_training_log.domain.model.Exercise
+import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
+import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.presentation.destinations.ExerciseScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
@@ -17,7 +19,7 @@ import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 
 @Composable
 fun ExercisesList(
-    exercises: List<Exercise>,
+    exercises: List<ExerciseWithMovementAndSets>,
     navigator: DestinationsNavigator
 ) {
     Column (
@@ -25,11 +27,11 @@ fun ExercisesList(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        exercises.forEach { exercise ->
-            Button(onClick = {
-                navigator.navigate(ExerciseScreenDestination(exercise = exercise))
+        exercises.forEach {
+            Button( onClick = {
+                navigator.navigate(ExerciseScreenDestination(exercise = it.exercise))
             }) {
-                Text(exercise.movementId.toString())
+                Text(it.movement.name)
             }
         }
     }
@@ -50,9 +52,9 @@ fun ExercisesSectionPreview() {
     ExercisesList(
         navigator = EmptyDestinationsNavigator,
         exercises = listOf(
-            Exercise(movementId = 1),
-            Exercise(movementId = 2),
-            Exercise(movementId = 3)
+            ExerciseWithMovementAndSets(Exercise(), Movement(name="Squat"), emptyList()),
+            ExerciseWithMovementAndSets(Exercise(), Movement(name="Bench"), emptyList()),
+            ExerciseWithMovementAndSets(Exercise(), Movement(name="Deadlift"), emptyList())
         )
     )
 }

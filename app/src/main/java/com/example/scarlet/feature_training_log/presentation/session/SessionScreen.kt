@@ -11,6 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.scarlet.feature_training_log.domain.model.Exercise
+import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
+import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.presentation.session.components.ExercisesList
 import com.example.scarlet.feature_training_log.presentation.session.components.SessionHeader
@@ -80,9 +82,9 @@ fun PreviewSessionScreen() {
         state = SessionUiState(
             session = Session(date = "24-06-2023"),
             exercises = listOf(
-                Exercise(movementId = 1),
-                Exercise(movementId = 2),
-                Exercise(movementId = 3)
+                ExerciseWithMovementAndSets(Exercise(), Movement(name="Squat"), emptyList()),
+                ExerciseWithMovementAndSets(Exercise(), Movement(name="Bench"), emptyList()),
+                ExerciseWithMovementAndSets(Exercise(), Movement(name="Deadlift"), emptyList())
             )
         ),
         onEvent = {}
