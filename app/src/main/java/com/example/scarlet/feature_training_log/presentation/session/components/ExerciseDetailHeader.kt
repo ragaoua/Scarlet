@@ -1,6 +1,5 @@
 package com.example.scarlet.feature_training_log.presentation.session.components
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
@@ -16,24 +15,27 @@ fun ExerciseDetailHeader(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.SpaceEvenly
+        modifier = modifier
     ) {
         Text(
             text = stringResource(R.string.set),
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.weight(1f)
         )
         Text(
             text = stringResource(R.string.reps),
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.weight(1f)
         )
         Text(
             text = stringResource(R.string.weight),
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.weight(1f)
         )
         Text(
             text = "RPE/RIR", /* TODO make clickable to choose one of the 2 */
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.weight(1f)
         )
     }
 }

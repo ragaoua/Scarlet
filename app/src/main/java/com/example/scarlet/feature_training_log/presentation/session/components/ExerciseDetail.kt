@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,11 +15,13 @@ import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
 import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Set
+import com.example.scarlet.feature_training_log.presentation.session.SessionEvent
 
 @Composable
 fun ExerciseDetail(
     modifier: Modifier = Modifier,
-    exercise: ExerciseWithMovementAndSets
+    exercise: ExerciseWithMovementAndSets,
+    onEvent: (SessionEvent) -> Unit
 ) {
     Box(
         modifier = modifier
@@ -30,22 +30,18 @@ fun ExerciseDetail(
             modifier = Modifier
                 .fillMaxWidth()
                 .border(BorderStroke(2.dp, MaterialTheme.colorScheme.onSurface))
+                .padding(8.dp)
         ) {
             ExerciseDetailHeader(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
+                modifier = Modifier.fillMaxWidth()
             )
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-            ) {
-                items(exercise.sets) { set ->
-                    ExerciseSetRow(set)
-                }
-                /* TODO implement the "add set" button */
+            exercise.sets.forEach { set ->
+                ExerciseSetRow(set)
             }
+            AddSetButton(
+                exercise = exercise.exercise,
+                onEvent = onEvent
+            )
         }
     }
 }
@@ -59,7 +55,8 @@ fun PreviewExerciseDetail_noSets() {
             exercise = Exercise(),
             movement = Movement(),
             sets = emptyList()
-        )
+        ),
+        onEvent = {}
     )
 }
 
@@ -72,10 +69,11 @@ fun PreviewExerciseDetail_withSets() {
             exercise = Exercise(),
             movement = Movement(),
             sets = listOf(
-                Set(reps = 10, weight = 100f, rpe = 8f),
-                Set(reps = 10, weight = 100f, rpe = 8.5f),
-                Set(reps = 10, weight = 95f, rpe = 8f),
+                Set(order = 1, reps = 10, weight = 100f, rpe = 8f),
+                Set(order = 2, reps = 10, weight = 100f, rpe = 8.5f),
+                Set(order = 3, reps = 10, weight = 95f, rpe = 8f)
             )
-        )
+        ),
+        onEvent = {}
     )
 }

@@ -1,38 +1,31 @@
 package com.example.scarlet.feature_training_log.presentation.session.components
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
 import com.example.scarlet.feature_training_log.domain.model.Movement
-import com.example.scarlet.feature_training_log.presentation.destinations.ExerciseScreenDestination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
+import com.example.scarlet.feature_training_log.presentation.session.SessionEvent
 
 
 @Composable
 fun ExercisesList(
     exercises: List<ExerciseWithMovementAndSets>,
-    navigator: DestinationsNavigator
+    onEvent: (SessionEvent) -> Unit
 ) {
-    Column (
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+    LazyColumn(
+        modifier = Modifier.fillMaxWidth()
     ) {
-        exercises.forEach {
-            Button( onClick = {
-                navigator.navigate(ExerciseScreenDestination(exercise = it.exercise))
-            }) {
-                Text(it.movement.name)
-            }
+        items(exercises) { exercise ->
+            ExerciseHeader(exercise = exercise)
+            ExerciseDetail(
+                exercise = exercise,
+                onEvent = onEvent
+            )
         }
     }
 }
@@ -41,8 +34,8 @@ fun ExercisesList(
 @Composable
 fun NoExercisePreview() {
     ExercisesList(
-        navigator = EmptyDestinationsNavigator,
-        exercises = emptyList()
+        exercises = emptyList(),
+        onEvent = {}
     )
 }
 
@@ -50,11 +43,11 @@ fun NoExercisePreview() {
 @Composable
 fun ExercisesSectionPreview() {
     ExercisesList(
-        navigator = EmptyDestinationsNavigator,
         exercises = listOf(
             ExerciseWithMovementAndSets(Exercise(), Movement(name="Squat"), emptyList()),
             ExerciseWithMovementAndSets(Exercise(), Movement(name="Bench"), emptyList()),
             ExerciseWithMovementAndSets(Exercise(), Movement(name="Deadlift"), emptyList())
-        )
+        ),
+        onEvent = {}
     )
 }

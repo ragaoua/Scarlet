@@ -14,6 +14,7 @@ import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
 import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Session
+import com.example.scarlet.feature_training_log.domain.model.Set
 import com.example.scarlet.feature_training_log.presentation.session.components.ExercisesList
 import com.example.scarlet.feature_training_log.presentation.session.components.SessionHeader
 import com.example.scarlet.ui.theme.ScarletTheme
@@ -55,7 +56,7 @@ fun Screen(
             )
             ExercisesList(
                 exercises = state.exercises,
-                navigator = navigator
+                onEvent = onEvent
             )
         }
     }
@@ -82,7 +83,12 @@ fun PreviewSessionScreen() {
         state = SessionUiState(
             session = Session(date = "24-06-2023"),
             exercises = listOf(
-                ExerciseWithMovementAndSets(Exercise(), Movement(name="Squat"), emptyList()),
+                ExerciseWithMovementAndSets(Exercise(), Movement(name="Squat"), listOf(
+                    Set(reps = 3, weight = 100f),
+                    Set(reps = 5, weight = 95f, rpe = 8.5f),
+                    Set(reps = 5, weight = 95f, rpe = 8.5f),
+                    Set(reps = 5, weight = 95f, rpe = 8.5f)
+                )),
                 ExerciseWithMovementAndSets(Exercise(), Movement(name="Bench"), emptyList()),
                 ExerciseWithMovementAndSets(Exercise(), Movement(name="Deadlift"), emptyList())
             )
