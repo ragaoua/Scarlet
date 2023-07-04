@@ -1,16 +1,22 @@
 package com.example.scarlet.feature_training_log.presentation.session.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.Set
 import com.example.scarlet.feature_training_log.presentation.session.SessionEvent
 
@@ -26,7 +32,7 @@ fun ExerciseSetRow(
     ) {
         Text(
             text = "${set.order}.",
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(0.5f)
         )
 
         TextField(
@@ -72,6 +78,16 @@ fun ExerciseSetRow(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             singleLine = true,
             modifier = Modifier.weight(1f)
+        )
+
+        Icon(
+            imageVector = Icons.Default.Delete,
+            contentDescription = stringResource(R.string.delete),
+            modifier = Modifier
+                .weight(0.5f)
+                .clickable {
+                onEvent(SessionEvent.DeleteSet(set))
+            }
         )
     }
 }

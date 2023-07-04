@@ -1,6 +1,7 @@
 package com.example.scarlet.feature_training_log.presentation.session.components
 
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -20,7 +21,7 @@ fun ExerciseDetailHeader(
         Text(
             text = stringResource(R.string.set),
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(0.5f)
         )
         Text(
             text = stringResource(R.string.reps),
@@ -37,6 +38,7 @@ fun ExerciseDetailHeader(
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.weight(1f)
         )
+        Spacer(modifier = Modifier.weight(0.5f))
     }
 }
 

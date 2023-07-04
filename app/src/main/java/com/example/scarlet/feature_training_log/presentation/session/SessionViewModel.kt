@@ -23,6 +23,8 @@ class SessionViewModel @Inject constructor(
     private val _state = MutableStateFlow(SessionUiState())
     val state = _state.asStateFlow()
 
+    private val deletedSets: MutableList<Set> = mutableListOf()
+
     init {
         viewModelScope.launch {
             val session = SessionScreenDestination.argsFrom(savedStateHandle).session
@@ -62,18 +64,6 @@ class SessionViewModel @Inject constructor(
                     ) }
                 }
             }
-            SessionEvent.SaveSession -> {
-                viewModelScope.launch(Dispatchers.IO) {
-                    repository.updateSession(state.value.session)
-
-                    state.value.exercises.forEach { exercise ->
-                        repository.upsertExercise(exercise.exercise)
-                        exercise.sets.forEach {
-                            repository.upsertSet(it)
-                        }
-                    }
-                }
-            }
             is SessionEvent.NewSet -> {
                 viewModelScope.launch {
                     _state.update { it.copy(
@@ -90,6 +80,40 @@ class SessionViewModel @Inject constructor(
                             }
                         }
                     ) }
+                }
+            }
+            is SessionEvent.DeleteSet -> {
+                viewModelScope.launch {
+                    _state.update { it.copy(
+                        exercises = it.exercises.map { exercise ->
+                            if (exercise.exercise.id == event.set.exerciseId) {
+                                exercise.copy(
+                                    sets = exercise.sets.filter { set ->
+                                        set.id != event.set.id
+                                    }
+                                )
+                            } else {
+                                exercise
+                            }
+                        }
+                    ) }
+                    deletedSets.add(event.set)
+                }
+            }
+            SessionEvent.SaveSession -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    repository.updateSession(state.value.session)
+
+                    state.value.exercises.forEach { exercise ->
+                        repository.upsertExercise(exercise.exercise)
+                        exercise.sets.forEach {
+                            repository.upsertSet(it)
+                        }
+                    }
+
+                    deletedSets.forEach{
+                        repository.deleteSet(it)
+                    }
                 }
             }
             else -> { /* TODO */}

@@ -47,4 +47,6 @@ class ScarletRepository(
     ///////////////////////////////////////////////////////////////////////////////////////////////
     suspend fun upsertSet(set: Set) = dbInstance.setDao.upsertSet(set)
 
+    suspend fun deleteSet(set: Set) = dbInstance.setDao.deleteSet(set)
+
 }
