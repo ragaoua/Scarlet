@@ -7,25 +7,19 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.scarlet.feature_training_log.domain.model.Set
+import com.example.scarlet.feature_training_log.presentation.session.SessionEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExerciseSetRow(
-    set: Set
+    set: Set,
+    onEvent: (SessionEvent) -> Unit
 ) {
-    var repsState by remember { mutableStateOf(set.reps.toString()) }
-    var weightState by remember { mutableStateOf(set.weight.toString()) }
-    var rpeState by remember { mutableStateOf(set.rpe?.toString()) }
-
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
@@ -36,9 +30,14 @@ fun ExerciseSetRow(
         )
 
         TextField(
-            value = repsState,
+            value = set.reps?.toString() ?: "",
             onValueChange = {
-                repsState = it
+                onEvent(SessionEvent.UpdateSet(
+                    set = set,
+                    reps = it.toIntOrNull(),
+                    weight = set.weight,
+                    rpe = set.rpe
+                ))
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             singleLine = true,
@@ -46,9 +45,14 @@ fun ExerciseSetRow(
         )
 
         TextField(
-            value = weightState,
+            value = set.weight?.toString() ?: "",
             onValueChange = {
-                weightState = it
+                onEvent(SessionEvent.UpdateSet(
+                    set = set,
+                    reps = set.reps,
+                    weight = it.toFloatOrNull(),
+                    rpe = set.rpe
+                ))
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             singleLine = true,
@@ -56,9 +60,14 @@ fun ExerciseSetRow(
         )
 
         TextField(
-            value = rpeState ?: "",
+            value = set.rpe?.toString() ?: "",
             onValueChange = {
-                rpeState = it
+                onEvent(SessionEvent.UpdateSet(
+                    set = set,
+                    reps = set.reps,
+                    weight = set.weight,
+                    rpe = it.toFloatOrNull()
+                ))
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             singleLine = true,
@@ -72,6 +81,7 @@ fun ExerciseSetRow(
 @Composable
 fun Preview_set() {
     ExerciseSetRow(
-        set = Set(reps = 10, weight = 100f, rpe = 8f)
+        set = Set(reps = 10, weight = 100f, rpe = 8f),
+        onEvent = {}
     )
 }

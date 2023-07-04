@@ -36,7 +36,10 @@ fun ExerciseDetail(
                 modifier = Modifier.fillMaxWidth()
             )
             exercise.sets.forEach { set ->
-                ExerciseSetRow(set)
+                ExerciseSetRow(
+                    set = set,
+                    onEvent = onEvent
+                )
             }
             AddSetButton(
                 exercise = exercise.exercise,

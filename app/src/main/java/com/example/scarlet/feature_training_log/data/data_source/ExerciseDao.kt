@@ -3,6 +3,7 @@ package com.example.scarlet.feature_training_log.data.data_source
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Upsert
 import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
 import kotlinx.coroutines.flow.Flow
@@ -26,7 +27,10 @@ interface ExerciseDao {
         INNER JOIN movement ON exercise.movementId = movement.id
         WHERE exercise.sessionId = :sessionId
     """)
-    fun getExercisesWithMovementAndSetsBySessionId(sessionId: Int):
-            Flow<List<ExerciseWithMovementAndSets>>
+    suspend fun getExercisesWithMovementAndSetsBySessionId(sessionId: Int):
+            List<ExerciseWithMovementAndSets>
+
+    @Upsert
+    suspend fun upsertExercise(exercise: Exercise)
 
 }

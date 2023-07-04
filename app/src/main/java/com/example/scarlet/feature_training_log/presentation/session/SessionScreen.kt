@@ -1,5 +1,6 @@
 package com.example.scarlet.feature_training_log.presentation.session
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,7 +21,6 @@ import com.example.scarlet.feature_training_log.presentation.session.components.
 import com.example.scarlet.ui.theme.ScarletTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 
 @Destination(
     navArgsDelegate = SessionScreenNavArgs::class
@@ -32,8 +32,12 @@ fun SessionScreen(
     val sessionViewModel: SessionViewModel = hiltViewModel()
     val state by sessionViewModel.state.collectAsState()
 
+    BackHandler {
+        sessionViewModel.onEvent(SessionEvent.SaveSession)
+        navigator.popBackStack()
+    }
+
     Screen(
-        navigator = navigator,
         state = state,
         onEvent = sessionViewModel::onEvent
     )
@@ -41,7 +45,6 @@ fun SessionScreen(
 
 @Composable
 fun Screen(
-    navigator: DestinationsNavigator,
     state: SessionUiState,
     onEvent: (SessionEvent) -> Unit
 ) {
@@ -67,7 +70,6 @@ fun Screen(
 @Composable
 fun PreviewEmptySession() {
     Screen(
-        navigator = EmptyDestinationsNavigator,
         state = SessionUiState(
             session = Session(date = "24-06-2023")
         ),
@@ -79,7 +81,6 @@ fun PreviewEmptySession() {
 @Composable
 fun PreviewSessionScreen() {
     Screen(
-        navigator = EmptyDestinationsNavigator,
         state = SessionUiState(
             session = Session(date = "24-06-2023"),
             exercises = listOf(

@@ -2,7 +2,9 @@ package com.example.scarlet.feature_training_log.data.repository
 
 import com.example.scarlet.feature_training_log.data.data_source.ScarletDatabase
 import com.example.scarlet.feature_training_log.domain.model.Block
+import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.Session
+import com.example.scarlet.feature_training_log.domain.model.Set
 
 class ScarletRepository(
     private val dbInstance: ScarletDatabase
@@ -27,19 +29,22 @@ class ScarletRepository(
 
     suspend fun insertSession(session: Session) = dbInstance.sessionDao.insertSession(session)
 
+    suspend fun updateSession(session: Session) = dbInstance.sessionDao.updateSession(session)
+
     suspend fun deleteSession(session: Session) = dbInstance.sessionDao.deleteSession(session)
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////// EXERCISE ///////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    fun getExercisesWithMovementAndSetsBySessionId(sessionId: Int) =
+    suspend fun getExercisesWithMovementAndSetsBySessionId(sessionId: Int) =
         dbInstance.exerciseDao.getExercisesWithMovementAndSetsBySessionId(sessionId)
+
+    suspend fun upsertExercise(exercise: Exercise) = dbInstance.exerciseDao.upsertExercise(exercise)
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////// SET /////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    fun getSetsByExerciseId(exerciseId: Int) =
-        dbInstance.setDao.getSetsByExerciseId(exerciseId)
+    suspend fun upsertSet(set: Set) = dbInstance.setDao.upsertSet(set)
 
 }
