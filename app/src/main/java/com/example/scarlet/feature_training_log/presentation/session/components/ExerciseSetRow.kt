@@ -2,6 +2,7 @@ package com.example.scarlet.feature_training_log.presentation.session.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -12,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.scarlet.feature_training_log.domain.model.Set
 
@@ -38,6 +40,7 @@ fun ExerciseSetRow(
             onValueChange = {
                 repsState = it
             },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             singleLine = true,
             modifier = Modifier.weight(1f)
         )
@@ -47,6 +50,7 @@ fun ExerciseSetRow(
             onValueChange = {
                 weightState = it
             },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             singleLine = true,
             modifier = Modifier.weight(1f)
         )
@@ -56,6 +60,7 @@ fun ExerciseSetRow(
             onValueChange = {
                 rpeState = it
             },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             singleLine = true,
             modifier = Modifier.weight(1f)
         )
