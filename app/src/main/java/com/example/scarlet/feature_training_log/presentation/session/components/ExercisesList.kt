@@ -27,6 +27,9 @@ fun ExercisesList(
                 onEvent = onEvent
             )
         }
+        item {
+            NewExerciseButton(onEvent = onEvent)
+        }
     }
 }
 
