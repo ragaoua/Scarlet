@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.scarlet.feature_training_log.data.repository.ScarletRepository
+import com.example.scarlet.feature_training_log.domain.model.Set
 import com.example.scarlet.feature_training_log.presentation.destinations.SessionScreenDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -71,6 +72,24 @@ class SessionViewModel @Inject constructor(
                             repository.upsertSet(it)
                         }
                     }
+                }
+            }
+            is SessionEvent.NewSet -> {
+                viewModelScope.launch {
+                    _state.update { it.copy(
+                        exercises = it.exercises.map { exercise ->
+                            if (exercise.exercise.id == event.exercise.id) {
+                                exercise.copy(
+                                    sets = exercise.sets + Set(
+                                        exerciseId = event.exercise.id,
+                                        order = (exercise.sets.lastOrNull()?.order ?: 0) + 1
+                                    )
+                                )
+                            } else {
+                                exercise
+                            }
+                        }
+                    ) }
                 }
             }
             else -> { /* TODO */}
