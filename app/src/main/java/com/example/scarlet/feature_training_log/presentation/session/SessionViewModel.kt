@@ -89,7 +89,15 @@ class SessionViewModel @Inject constructor(
                             if (exercise.exercise.id == event.set.exerciseId) {
                                 exercise.copy(
                                     sets = exercise.sets.filter { set ->
-                                        set.id != event.set.id
+                                        /*
+                                        We need to test for the order of the set, and not the id, in
+                                        case the set hasn't been saved to the database yet. In that
+                                        case, the id will be 0, so if we check for the id, we would
+                                        delete all the other sets with an id of 0 (ie all the other
+                                        sets that have just been added, but not persisted to the
+                                        database yet).
+                                         */
+                                        set.order != event.set.order
                                     }
                                 )
                             } else {
