@@ -105,7 +105,10 @@ class SessionViewModel @Inject constructor(
                             }
                         }
                     ) }
-                    deletedSets.add(event.set)
+                    /* If the set has been saved to the database, we want to delete it */
+                    if (event.set.id != 0) {
+                        deletedSets.add(event.set)
+                    }
                 }
             }
             SessionEvent.SaveSession -> {
