@@ -46,6 +46,23 @@ class SessionViewModel @Inject constructor(
      */
     fun onEvent(event: SessionEvent) {
         when (event) {
+            is SessionEvent.NewExercise -> {
+                viewModelScope.launch {
+                    _state.update { it.copy(
+                        exercises = it.exercises + ExerciseWithMovementAndSets(
+                            exercise = Exercise(
+                                sessionId = it.session.id,
+                                order = it.exercises.size + 1
+                            ),
+                            movement = Movement(name = event.exerciseName),
+                            sets = emptyList()
+                        )
+                    ) }
+                }
+            }
+            is SessionEvent.DeleteExercise -> {
+                /* TODO */
+            }
             is SessionEvent.UpdateSet -> {
                 viewModelScope.launch {
                     _state.update { it.copy(
@@ -79,7 +96,7 @@ class SessionViewModel @Inject constructor(
                                 exercise.copy(
                                     sets = exercise.sets + Set(
                                         exerciseId = event.exercise.id,
-                                        order = (exercise.sets.lastOrNull()?.order ?: 0) + 1
+                                        order = exercise.sets.size + 1
                                     )
                                 )
                             } else {
