@@ -4,6 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.scarlet.feature_training_log.data.repository.ScarletRepository
+import com.example.scarlet.feature_training_log.domain.model.Exercise
+import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
+import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Set
 import com.example.scarlet.feature_training_log.presentation.destinations.SessionScreenDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -63,6 +66,24 @@ class SessionViewModel @Inject constructor(
             is SessionEvent.DeleteExercise -> {
                 /* TODO */
             }
+            is SessionEvent.NewSet -> {
+                viewModelScope.launch {
+                    _state.update { it.copy(
+                        exercises = it.exercises.map { exercise ->
+                            if (exercise.exercise.id == event.exercise.id) {
+                                exercise.copy(
+                                    sets = exercise.sets + Set(
+                                        exerciseId = event.exercise.id,
+                                        order = exercise.sets.size + 1
+                                    )
+                                )
+                            } else {
+                                exercise
+                            }
+                        }
+                    ) }
+                }
+            }
             is SessionEvent.UpdateSet -> {
                 viewModelScope.launch {
                     _state.update { it.copy(
@@ -80,24 +101,6 @@ class SessionViewModel @Inject constructor(
                                             set
                                         }
                                     }
-                                )
-                            } else {
-                                exercise
-                            }
-                        }
-                    ) }
-                }
-            }
-            is SessionEvent.NewSet -> {
-                viewModelScope.launch {
-                    _state.update { it.copy(
-                        exercises = it.exercises.map { exercise ->
-                            if (exercise.exercise.id == event.exercise.id) {
-                                exercise.copy(
-                                    sets = exercise.sets + Set(
-                                        exerciseId = event.exercise.id,
-                                        order = exercise.sets.size + 1
-                                    )
                                 )
                             } else {
                                 exercise
@@ -150,7 +153,6 @@ class SessionViewModel @Inject constructor(
                     }
                 }
             }
-            else -> { /* TODO */}
         }
     }
 }
