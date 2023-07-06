@@ -1,6 +1,8 @@
 package com.example.scarlet.feature_training_log.presentation.session.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
@@ -14,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.Set
 import com.example.scarlet.feature_training_log.presentation.session.SessionEvent
@@ -29,12 +32,15 @@ fun ExerciseSetRow(
 
     Row(
         modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text(
-            text = "${set.order}.",
-            modifier = Modifier.weight(0.5f)
-        )
+        Box(modifier = Modifier.weight(0.5f)) {
+            Text(
+                text = "${set.order}.",
+                modifier = Modifier.align(Alignment.Center)
+            )
+        }
 
         SetTextField(
             modifier = Modifier.weight(1f),
