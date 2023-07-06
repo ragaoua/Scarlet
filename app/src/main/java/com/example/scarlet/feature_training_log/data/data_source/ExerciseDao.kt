@@ -27,8 +27,8 @@ interface ExerciseDao {
         INNER JOIN movement ON exercise.movementId = movement.id
         WHERE exercise.sessionId = :sessionId
     """)
-    suspend fun getExercisesWithMovementAndSetsBySessionId(sessionId: Int):
-            List<ExerciseWithMovementAndSets>
+    fun getExercisesWithMovementAndSetsBySessionId(sessionId: Int):
+            Flow<List<ExerciseWithMovementAndSets>>
 
     @Upsert
     suspend fun upsertExercise(exercise: Exercise)

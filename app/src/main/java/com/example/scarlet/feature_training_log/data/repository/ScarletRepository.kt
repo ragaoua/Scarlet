@@ -2,7 +2,6 @@ package com.example.scarlet.feature_training_log.data.repository
 
 import com.example.scarlet.feature_training_log.data.data_source.ScarletDatabase
 import com.example.scarlet.feature_training_log.domain.model.Block
-import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.domain.model.Set
 
@@ -29,23 +28,21 @@ class ScarletRepository(
 
     suspend fun insertSession(session: Session) = dbInstance.sessionDao.insertSession(session)
 
-    suspend fun updateSession(session: Session) = dbInstance.sessionDao.updateSession(session)
-
     suspend fun deleteSession(session: Session) = dbInstance.sessionDao.deleteSession(session)
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////// EXERCISE ///////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    suspend fun getExercisesWithMovementAndSetsBySessionId(sessionId: Int) =
+    fun getExercisesWithMovementAndSetsBySessionId(sessionId: Int) =
         dbInstance.exerciseDao.getExercisesWithMovementAndSetsBySessionId(sessionId)
-
-    suspend fun upsertExercise(exercise: Exercise) = dbInstance.exerciseDao.upsertExercise(exercise)
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////// SET /////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    suspend fun upsertSet(set: Set) = dbInstance.setDao.upsertSet(set)
+   suspend fun insertSet(set: Set) = dbInstance.setDao.insertSet(set)
+
+    suspend fun updateSet(set: Set) = dbInstance.setDao.updateSet(set)
 
     suspend fun deleteSet(set: Set) = dbInstance.setDao.deleteSet(set)
 

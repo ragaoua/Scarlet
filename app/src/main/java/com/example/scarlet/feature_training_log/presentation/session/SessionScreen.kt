@@ -1,6 +1,5 @@
 package com.example.scarlet.feature_training_log.presentation.session
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,11 +30,6 @@ fun SessionScreen(
 ) {
     val sessionViewModel: SessionViewModel = hiltViewModel()
     val state by sessionViewModel.state.collectAsState()
-
-    BackHandler {
-        sessionViewModel.onEvent(SessionEvent.SaveSession)
-        navigator.popBackStack()
-    }
 
     Screen(
         state = state,
