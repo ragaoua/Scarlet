@@ -21,5 +21,6 @@ abstract class ScarletDatabase : RoomDatabase() {
     abstract val sessionDao: SessionDao
     abstract val exerciseDao: ExerciseDao
     abstract val setDao: SetDao
+    abstract val movementDao: MovementDao
 
 }

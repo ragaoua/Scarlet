@@ -31,6 +31,6 @@ interface ExerciseDao {
             Flow<List<ExerciseWithMovementAndSets>>
 
     @Upsert
-    suspend fun upsertExercise(exercise: Exercise)
+    suspend fun insertExercise(exercise: Exercise)
 
 }

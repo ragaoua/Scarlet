@@ -30,7 +30,7 @@ fun NewExerciseButton(
                 .padding(8.dp)
                 .border(BorderStroke(2.dp, MaterialTheme.colorScheme.onSurface))
                 .clickable {
-                    onEvent(SessionEvent.NewExercise("TOTO"))
+                    onEvent(SessionEvent.ShowNewExerciseDialog)
                 },
             contentAlignment = Alignment.Center
         ) {

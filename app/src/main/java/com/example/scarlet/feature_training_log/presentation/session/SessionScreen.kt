@@ -20,6 +20,7 @@ import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.domain.model.Set
 import com.example.scarlet.feature_training_log.presentation.session.components.ExercisesList
+import com.example.scarlet.feature_training_log.presentation.session.components.NewExerciseDialog
 import com.example.scarlet.feature_training_log.presentation.session.components.SessionHeader
 import com.example.scarlet.ui.theme.ScarletTheme
 import com.ramcosta.composedestinations.annotation.Destination
@@ -47,6 +48,12 @@ fun Screen(
     onEvent: (SessionEvent) -> Unit
 ) {
     ScarletTheme {
+        if(state.isAddingExercise) {
+            NewExerciseDialog(
+                state = state,
+                onEvent = onEvent
+            )
+        }
         Column(
             modifier = Modifier
                 .fillMaxSize()
