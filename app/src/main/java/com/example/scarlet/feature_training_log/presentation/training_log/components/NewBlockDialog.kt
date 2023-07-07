@@ -29,7 +29,7 @@ fun NewBlockDialog(
     var blockName by remember { mutableStateOf("") }
     AlertDialog(
         onDismissRequest = {
-            onEvent(TrainingLogEvent.ShowNewBlockDialog)
+            onEvent(TrainingLogEvent.HideNewBlockDialog)
         },
         title = {
             Text(stringResource(R.string.new_block))
@@ -69,9 +69,7 @@ fun NewBlockDialog(
 @Composable
 fun DialogPreview() {
     NewBlockDialog(
-        state = TrainingLogUiState(
-            isShowingBlockNameEmptyMsg = false
-        ),
+        state = TrainingLogUiState(),
         onEvent = {}
     )
 }
@@ -80,9 +78,7 @@ fun DialogPreview() {
 @Composable
 fun ErrorMessagePreview() {
     NewBlockDialog(
-        state = TrainingLogUiState(
-            isShowingBlockNameEmptyMsg = true
-        ),
+        state = TrainingLogUiState(isShowingBlockNameEmptyMsg = true),
         onEvent = {}
     )
 }
