@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -46,7 +46,7 @@ fun ExerciseHeader(
                 style = MaterialTheme.typography.titleLarge
             )
             Icon(
-                imageVector = Icons.Default.KeyboardArrowDown,
+                imageVector = Icons.Default.KeyboardArrowUp,
                 contentDescription = "Expand"
             ) /* TODO KeyboardArrowDown/Up depending on expand/collapse state */
         }
