@@ -1,9 +1,15 @@
 package com.example.scarlet.feature_training_log.presentation.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,25 +33,50 @@ fun HomeScreen(
 ) {
     ScarletTheme {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(64.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically)
+            verticalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterVertically)
         ) {
-            Button(onClick = {
-                navigator.navigate(TrainingLogScreenDestination())
-            }) {
-                Text(stringResource(id = R.string.training_log))
-            }
-            Button(onClick = {
-                /*TODO*/
-            }) {
-                Text(stringResource(id = R.string.statistics))
-            }
-            Button(onClick = {
-                /*TODO*/
-            }) {
-                Text(stringResource(id = R.string.competitions))
-            }
+            HomeScreenButton(
+                text = stringResource(id = R.string.training_log),
+                onClick = {
+                    navigator.navigate(TrainingLogScreenDestination())
+                }
+            )
+            HomeScreenButton(
+                text = stringResource(id = R.string.statistics),
+                onClick = { /* TODO */ }
+            )
+            HomeScreenButton (
+                text = stringResource(id = R.string.competitions),
+                onClick = { /* TODO */ }
+            )
+        }
+    }
+}
+
+@Composable
+fun HomeScreenButton(
+    text: String,
+    onClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .height(96.dp)
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Companion.BottomCenter
+        ) {
+            Text(
+                modifier = Modifier.padding(bottom = 8.dp),
+                text = text,
+                style = MaterialTheme.typography.headlineSmall
+            )
         }
     }
 }
