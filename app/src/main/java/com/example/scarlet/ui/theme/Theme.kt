@@ -59,8 +59,8 @@ private val LightColorScheme = lightColorScheme(
 
     secondary = DarkGreen40,
     onSecondary = Color.White,
-    secondaryContainer = DarkGreen90,
-    onSecondaryContainer = DarkGreen10,
+    secondaryContainer = DarkGreen80,
+    onSecondaryContainer = DarkGreen30,
 
     tertiary = Orange40,
     onTertiary = Color.White,
@@ -88,7 +88,7 @@ private val LightColorScheme = lightColorScheme(
 fun ScarletTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
