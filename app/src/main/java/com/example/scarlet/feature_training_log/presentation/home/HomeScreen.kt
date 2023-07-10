@@ -1,11 +1,9 @@
 package com.example.scarlet.feature_training_log.presentation.home
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,16 +27,13 @@ fun HomeScreen(
 ) {
     ScarletTheme {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background),
+            modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically)
         ) {
-            Button(
-                onClick = {
-                    navigator.navigate(TrainingLogScreenDestination())
-                }) {
+            Button(onClick = {
+                navigator.navigate(TrainingLogScreenDestination())
+            }) {
                 Text(stringResource(id = R.string.training_log))
             }
             Button(onClick = {
