@@ -1,9 +1,7 @@
 package com.example.scarlet.feature_training_log.presentation.training_log.components
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -16,8 +14,8 @@ import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.domain.model.BlockWithDates
-import com.example.scarlet.feature_training_log.presentation.components.ScarletList
-import com.example.scarlet.feature_training_log.presentation.components.ScarletListTitle
+import com.example.scarlet.feature_training_log.presentation.components.TitledLazyList
+import com.example.scarlet.feature_training_log.presentation.components.ScarletListItem
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
 import com.example.scarlet.feature_training_log.presentation.training_log.TrainingLogEvent
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -29,45 +27,43 @@ fun ActiveBlockSection(
     activeBlock: BlockWithDates? = null,
     onEvent: (TrainingLogEvent) -> Unit
 ) {
-    Column {
-        ScarletListTitle(title = stringResource(R.string.active_training_block))
-        Spacer(modifier = Modifier.height(8.dp))
-
-        ScarletList(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 24.dp, end = 24.dp),
-            items = listOf(activeBlock),
-            onItemClicked = { block ->
-                block?.let {
-                    navigator.navigate(BlockScreenDestination(it.block))
-                } ?: onEvent(TrainingLogEvent.ShowNewBlockDialog)
-            },
-            onDeleteClicked = { block ->
-                block?.let {
-                    onEvent(TrainingLogEvent.DeleteBlock(it.block))
+    TitledLazyList(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 24.dp, end = 24.dp),
+        title = stringResource(R.string.active_training_block),
+    ) {
+        item(activeBlock) {
+            ScarletListItem(
+                onClick = {
+                    activeBlock?.let {
+                        navigator.navigate(BlockScreenDestination(it.block))
+                    } ?: onEvent(TrainingLogEvent.ShowNewBlockDialog)
+                },
+                onDelete = {
+                    activeBlock?.let {
+                        onEvent(TrainingLogEvent.DeleteBlock(it.block))
+                    }
                 }
-            }
-        ) { it ->
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp, bottom = 8.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                val headline = it?.block?.name ?: stringResource(R.string.no_active_block)
-                val subhead = it?.let {
-                    "Started on ${it.firstSessionDate}"
-                } ?: stringResource(R.string.start_new_block)
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    val headline = activeBlock?.block?.name ?: stringResource(R.string.no_active_block)
+                    val subhead = activeBlock?.let {
+                        "Started on ${activeBlock.firstSessionDate}"
+                    } ?: stringResource(R.string.start_new_block)
 
-                Text(
-                    text = headline,
-                    style = MaterialTheme.typography.titleLarge
-                )
-                Text(
-                    text = subhead,
-                    style = MaterialTheme.typography.bodyLarge
-                )
+                    Text(
+                        text = headline,
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                    Text(
+                        text = subhead,
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                }
             }
         }
     }
