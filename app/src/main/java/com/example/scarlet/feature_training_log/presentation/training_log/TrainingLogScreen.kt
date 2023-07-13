@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.Block
+import com.example.scarlet.feature_training_log.domain.model.BlockWithDates
 import com.example.scarlet.feature_training_log.presentation.training_log.components.ActiveBlockSection
 import com.example.scarlet.feature_training_log.presentation.training_log.components.CompletedBlocksSection
 import com.example.scarlet.feature_training_log.presentation.training_log.components.NewBlockDialog
@@ -97,12 +98,23 @@ fun PreviewTrainingLogScreen() {
     Screen(
         navigator = EmptyDestinationsNavigator,
         state = TrainingLogUiState(
-            activeBlock = Block(name = "Block 5"),
+            activeBlock =
+                BlockWithDates(
+                    block = Block(name = "Block 5"),
+                    firstSessionDate = "2021-08-01",
+                    lastSessionDate = "2021-08-05"
+                ),
             completedBlocks = listOf(
-                Block(name = "Block 4", completed = true),
-                Block(name = "Block 3", completed = true),
-                Block(name = "Block 2", completed = true),
-                Block(name = "Block 1", completed = true)
+                BlockWithDates(
+                    block = Block(name = "Block 1"),
+                    firstSessionDate = "01/01/2021",
+                    lastSessionDate = "01/02/2021"
+                ),
+                BlockWithDates(
+                    block = Block(name = "Block 2"),
+                    firstSessionDate = "01/01/2021",
+                    lastSessionDate = "01/02/2021"
+                )
             )
         ),
         onEvent = {}

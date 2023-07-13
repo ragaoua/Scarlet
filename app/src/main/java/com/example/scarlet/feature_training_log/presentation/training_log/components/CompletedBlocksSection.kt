@@ -10,6 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.Block
+import com.example.scarlet.feature_training_log.domain.model.BlockWithDates
 import com.example.scarlet.feature_training_log.presentation.components.ScarletList
 import com.example.scarlet.feature_training_log.presentation.components.ScarletListTitle
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
@@ -20,7 +21,7 @@ import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 @Composable
 fun CompletedBlocksSection(
     navigator: DestinationsNavigator,
-    completedBlocks: List<Block> = emptyList(),
+    completedBlocks: List<BlockWithDates> = emptyList(),
     onEvent: (TrainingLogEvent) -> Unit
 ) {
     if (completedBlocks.isNotEmpty()) {
@@ -28,21 +29,21 @@ fun CompletedBlocksSection(
             modifier = Modifier.fillMaxWidth(),
             title = stringResource(R.string.completed_training_blocks),
             items = completedBlocks,
-            onItemClicked = { block ->
-                navigator.navigate(BlockScreenDestination(block))
+            onItemClicked = {
+                navigator.navigate(BlockScreenDestination(it.block))
             },
-            onDeleteClicked = { block ->
-                onEvent(TrainingLogEvent.DeleteBlock(block))
+            onDeleteClicked = {
+                onEvent(TrainingLogEvent.DeleteBlock(it.block))
             }
-        ) { block ->
+        ) {
             Column {
                 Text(
-                    text = block.name,
-                    style = MaterialTheme.typography.bodyLarge
+                    text = it.block.name,
+                    style = MaterialTheme.typography.titleLarge
                 )
                 Text(
-                    text = "XX/XX/XXXX - XX/XX/XXXX", /* TODO*/
-                    style = MaterialTheme.typography.bodySmall
+                    text = "${it.firstSessionDate} - ${it.lastSessionDate}",
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
         }
@@ -76,9 +77,16 @@ fun CompletedBlocksPreview() {
     CompletedBlocksSection(
         navigator = EmptyDestinationsNavigator,
         completedBlocks = listOf(
-            Block(name = "Block 1"),
-            Block(name = "Block 2"),
-            Block(name = "Block 3")
+            BlockWithDates(
+                block = Block(name = "Block 1"),
+                firstSessionDate = "01/01/2021",
+                lastSessionDate = "01/02/2021"
+            ),
+            BlockWithDates(
+                block = Block(name = "Block 2"),
+                firstSessionDate = "01/01/2021",
+                lastSessionDate = "01/02/2021"
+            )
         ),
         onEvent = {}
     )

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.scarlet.feature_training_log.data.repository.ScarletRepository
 import com.example.scarlet.feature_training_log.domain.model.Block
+import com.example.scarlet.feature_training_log.domain.model.BlockWithDates
 import com.example.scarlet.feature_training_log.presentation.training_log.TrainingLogEvent.CreateBlock
 import com.example.scarlet.feature_training_log.presentation.training_log.TrainingLogEvent.HideNewBlockDialog
 import com.example.scarlet.feature_training_log.presentation.training_log.TrainingLogEvent.ShowNewBlockDialog
@@ -22,12 +23,12 @@ class TrainingLogViewModel @Inject constructor(
     private val repository: ScarletRepository
 ) : ViewModel() {
 
-    private val completedBlocks = repository.getBlocksByCompleted(true)
-    private val activeBlocks = repository.getBlocksByCompleted(false)
+    private val completedBlocks = repository.getBlocksWithDatesByCompleted(true)
+    private val activeBlocks = repository.getBlocksWithDatesByCompleted(false)
 
     private val _state = MutableStateFlow(TrainingLogUiState())
     val state = combine(_state, activeBlocks, completedBlocks) { state, activeBlocks, completedBlocks ->
-        var activeBlock: Block? = null
+        var activeBlock: BlockWithDates? = null
         if (activeBlocks.size > 1) {
             throw Exception("Too many active blocks. Should only get one")
         } else if (activeBlocks.isNotEmpty()) {

@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.Block
+import com.example.scarlet.feature_training_log.domain.model.BlockWithDates
 import com.example.scarlet.feature_training_log.presentation.components.ScarletList
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
 import com.example.scarlet.feature_training_log.presentation.training_log.TrainingLogEvent
@@ -26,7 +27,7 @@ import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 @Composable
 fun ActiveBlockSection(
     navigator: DestinationsNavigator,
-    activeBlock: Block? = null,
+    activeBlock: BlockWithDates? = null,
     onEvent: (TrainingLogEvent) -> Unit
 ) {
     activeBlock?.let { block ->
@@ -35,10 +36,10 @@ fun ActiveBlockSection(
             title = stringResource(R.string.active_training_block),
             items = listOf(block),
             onItemClicked = {
-                navigator.navigate(BlockScreenDestination(it))
+                navigator.navigate(BlockScreenDestination(it.block))
             },
             onDeleteClicked = {
-                onEvent(TrainingLogEvent.DeleteBlock(it))
+                onEvent(TrainingLogEvent.DeleteBlock(it.block))
             },
             itemColors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.tertiaryContainer,
@@ -47,12 +48,12 @@ fun ActiveBlockSection(
         ) {
             Column {
                 Text(
-                    text = it.name,
-                    style = MaterialTheme.typography.bodyLarge
+                    text = it.block.name,
+                    style = MaterialTheme.typography.titleLarge
                 )
                 Text(
-                    text = "Started on XX/XX/XXXX", /* TODO*/
-                    style = MaterialTheme.typography.bodySmall
+                    text = "Started on ${it.firstSessionDate}",
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
         }
@@ -99,8 +100,10 @@ fun NoBlockPreview() {
 fun ActiveBlockPreview() {
     ActiveBlockSection(
         navigator = EmptyDestinationsNavigator,
-        activeBlock = Block(
-            name = "Block 1"
+        activeBlock = BlockWithDates(
+            block = Block(name = "Block 1"),
+            firstSessionDate = "01/01/2021",
+            lastSessionDate = "01/02/2021"
         ),
         onEvent = {}
     )
