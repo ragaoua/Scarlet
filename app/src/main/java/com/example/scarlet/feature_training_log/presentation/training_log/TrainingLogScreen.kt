@@ -66,7 +66,7 @@ fun Screen(
                 Spacer(modifier = Modifier.height(64.dp))
                 Text(
                     text = stringResource(id = R.string.training_log),
-                    style = MaterialTheme.typography.headlineLarge
+                    style = MaterialTheme.typography.displayMedium
                 )
 
                 Spacer(modifier = Modifier.height(32.dp))
