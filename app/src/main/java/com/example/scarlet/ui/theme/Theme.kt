@@ -38,7 +38,7 @@ private val LightColorScheme = lightColorScheme(
     surface = Secondary5,
     onSurface = Color.Black,
 
-    outline = Color.Black,
+    outline = Primary40,
     outlineVariant = Secondary90
 )
 

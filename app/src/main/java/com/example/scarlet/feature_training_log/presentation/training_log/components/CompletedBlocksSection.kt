@@ -1,9 +1,12 @@
 package com.example.scarlet.feature_training_log.presentation.training_log.components
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,7 +18,6 @@ import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.domain.model.BlockWithDates
-import com.example.scarlet.feature_training_log.presentation.components.ScarletListItem
 import com.example.scarlet.feature_training_log.presentation.components.TitledLazyList
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
 import com.example.scarlet.feature_training_log.presentation.training_log.TrainingLogEvent
@@ -28,6 +30,8 @@ fun CompletedBlocksSection(
     completedBlocks: List<BlockWithDates> = emptyList(),
     onEvent: (TrainingLogEvent) -> Unit
 ) {
+    val buttonContentPadding = PaddingValues(top = 16.dp, bottom = 16.dp, start = 8.dp, end = 8.dp)
+
     TitledLazyList(
         modifier = Modifier
             .fillMaxWidth()
@@ -36,12 +40,15 @@ fun CompletedBlocksSection(
     ) {
         if (completedBlocks.isNotEmpty()) {
             items(completedBlocks) {
-                ScarletListItem(
+                Button(
+                    contentPadding = buttonContentPadding,
+                    shape = MaterialTheme.shapes.large,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondary,
+                        contentColor = MaterialTheme.colorScheme.onSecondary
+                    ),
                     onClick = {
                         navigator.navigate(BlockScreenDestination(it.block))
-                    },
-                    onDelete = {
-                        onEvent(TrainingLogEvent.DeleteBlock(it.block))
                     }
                 ) {
                     Column(
