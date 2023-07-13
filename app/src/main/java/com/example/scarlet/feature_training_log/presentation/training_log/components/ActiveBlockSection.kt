@@ -1,16 +1,12 @@
 package com.example.scarlet.feature_training_log.presentation.training_log.components
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,57 +26,40 @@ fun ActiveBlockSection(
     activeBlock: BlockWithDates? = null,
     onEvent: (TrainingLogEvent) -> Unit
 ) {
-    activeBlock?.let { block ->
-        ScarletList(
-            modifier = Modifier.fillMaxWidth(),
-            title = stringResource(R.string.active_training_block),
-            items = listOf(block),
-            onItemClicked = {
+    ScarletList(
+        modifier = Modifier.fillMaxWidth(),
+        title = stringResource(R.string.active_training_block),
+        items = listOf(activeBlock),
+        onItemClicked = { block ->
+            block?.let {
                 navigator.navigate(BlockScreenDestination(it.block))
-            },
-            onDeleteClicked = {
+            } ?: onEvent(TrainingLogEvent.ShowNewBlockDialog)
+        },
+        onDeleteClicked = { block ->
+            block?.let {
                 onEvent(TrainingLogEvent.DeleteBlock(it.block))
-            },
-            itemColors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                contentColor = MaterialTheme.colorScheme.onTertiaryContainer
-            )
-        ) {
-            Column {
-                Text(
-                    text = it.block.name,
-                    style = MaterialTheme.typography.titleLarge
-                )
-                Text(
-                    text = "Started on ${it.firstSessionDate}",
-                    style = MaterialTheme.typography.bodyMedium
-                )
             }
         }
-    } ?: run {
-        ScarletList(
-            modifier = Modifier.fillMaxWidth(),
-            title = stringResource(R.string.active_training_block),
-            items = listOf(null),
-            onItemClicked = {
-                onEvent(TrainingLogEvent.ShowNewBlockDialog)
-            }
+    ) { it ->
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp, bottom = 8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = "Add new block" /* TODO : create resource */
+            val headline = it?.block?.name ?: stringResource(R.string.no_active_block)
+            val subhead = it?.let {
+                "Started on ${it.firstSessionDate}"
+            } ?: stringResource(R.string.start_new_block)
+
+            Text(
+                text = headline,
+                style = MaterialTheme.typography.titleLarge
             )
-            Spacer(modifier = Modifier.width(8.dp))
-            Column {
-                Text(
-                    text = stringResource(R.string.no_active_block_msg),
-                    style = MaterialTheme.typography.bodyLarge
-                )
-                Text(
-                    text = stringResource(R.string.start_new_block_msg),
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
+            Text(
+                text = subhead,
+                style = MaterialTheme.typography.bodyLarge
+            )
         }
     }
 }

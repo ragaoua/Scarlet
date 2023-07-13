@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.CardColors
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -21,7 +19,6 @@ fun <T> ScarletList(
     items: List<T>,
     onItemClicked: (item: T) -> Unit = {},
     onDeleteClicked: ((item: T) -> Unit)? = null,
-    itemColors: CardColors = CardDefaults.cardColors(),
     itemContent: @Composable (item: T) -> Unit = {}
 ) {
     Box(
@@ -36,11 +33,9 @@ fun <T> ScarletList(
                 items(items) { item ->
                     ScarletListItem(
                         onClick = { onItemClicked(item) },
-                        onDelete =
-                        onDeleteClicked?.let {
+                        onDelete = onDeleteClicked?.let {
                             { onDeleteClicked(item) }
-                        },
-                        colors = itemColors
+                         }
                     ) {
                         itemContent(item)
                     }

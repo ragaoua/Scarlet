@@ -4,7 +4,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -14,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.Block
@@ -49,34 +49,40 @@ fun Screen(
     onEvent: (TrainingLogEvent) -> Unit
 ) {
     ScarletTheme {
-        if(state.isAddingBlock) {
-            NewBlockDialog(
-                state = state,
-                onEvent = onEvent
-            )
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+        Surface (
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
         ) {
-            Text(
-                text = stringResource(id = R.string.training_log),
-                fontSize = 48.sp, /* TODO : make this a resource */
-                modifier = Modifier.padding(top = 32.dp, bottom = 32.dp)
-            ) // TODO : make into a "screen title" function ?
-            ActiveBlockSection(
-                navigator = navigator,
-                activeBlock = state.activeBlock,
-                onEvent = onEvent
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            CompletedBlocksSection(
-                navigator = navigator,
-                completedBlocks = state.completedBlocks,
-                onEvent = onEvent
-            )
+            if (state.isAddingBlock) {
+                NewBlockDialog(
+                    state = state,
+                    onEvent = onEvent
+                )
+            }
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.height(64.dp))
+                Text(
+                    text = stringResource(id = R.string.training_log),
+                    style = MaterialTheme.typography.headlineLarge
+                )
+
+                Spacer(modifier = Modifier.height(32.dp))
+                ActiveBlockSection(
+                    navigator = navigator,
+                    activeBlock = state.activeBlock,
+                    onEvent = onEvent
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+                CompletedBlocksSection(
+                    navigator = navigator,
+                    completedBlocks = state.completedBlocks,
+                    onEvent = onEvent
+                )
+            }
         }
     }
 }
