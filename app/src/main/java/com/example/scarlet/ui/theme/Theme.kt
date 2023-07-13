@@ -17,55 +17,15 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Green80,
-    onPrimary = Green20,
-    primaryContainer = Green30,
-    onPrimaryContainer = Green90,
-    inversePrimary = Green40,
-
-    secondary = DarkGreen80,
-    onSecondary = DarkGreen20,
-    secondaryContainer = DarkGreen30,
-    onSecondaryContainer = DarkGreen90,
-
-    tertiary = Orange80,
-    onTertiary = Orange20,
-    tertiaryContainer = Orange30,
-    onTertiaryContainer = Orange90,
-
-    error = Red80,
-    onError = Red20,
-    errorContainer = Red30,
-    onErrorContainer = Red90,
-
-    background = DarkGreen10,
-    onBackground = DarkGreen90,
-    surface = Green20,
-    onSurface = Green80,
-    inverseSurface = DarkGreen90,
-    inverseOnSurface = Green10,
-    surfaceVariant = DarkGreen40,
-    onSurfaceVariant = DarkGreen90,
-
-    outline = Green90
+    /* TODO */
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Green40,
+    primary = Primary40,
     onPrimary = Color.White,
-    primaryContainer = Green90,
-    onPrimaryContainer = Green10,
-    inversePrimary = Green80,
 
-    secondary = DarkGreen40,
+    secondary = Secondary50,
     onSecondary = Color.White,
-    secondaryContainer = DarkGreen80,
-    onSecondaryContainer = DarkGreen30,
-
-    tertiary = Orange40,
-    onTertiary = Color.White,
-    tertiaryContainer = Orange90,
-    onTertiaryContainer = Orange10,
 
     error = Red40,
     onError = Color.White,
@@ -73,15 +33,13 @@ private val LightColorScheme = lightColorScheme(
     onErrorContainer = Red10,
 
     background = Color.White,
-    onBackground = DarkGreen10,
-    surface = Green90,
-    onSurface = Green20,
-    inverseSurface = DarkGreen20,
-    inverseOnSurface = Green90,
-    surfaceVariant = DarkGreen90,
-    onSurfaceVariant = DarkGreen30,
+    onBackground = Color.Black,
 
-    outline = Green40
+    surface = Secondary5,
+    onSurface = Color.Black,
+
+    outline = Color.Black,
+    outlineVariant = Secondary90
 )
 
 @Composable

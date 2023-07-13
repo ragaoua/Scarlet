@@ -2,30 +2,31 @@ package com.example.scarlet.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Green10 = Color(0xFF0c2715)
-val Green20 = Color(0xFF184e2a)
-val Green30 = Color(0xFF25743f)
-val Green40 = Color(0xFF319b54)
-val Green80 = Color(0xFFb1e7c3)
-val Green90 = Color(0xFFd8f3e1)
+val Primary10 = Color(0xFFFCF8E9)
+val Primary20 = Color(0xFFF5E9BD)
+val Primary30 = Color(0xFFEEDA90)
+val Primary40 = Color(0xFFE8CB64)
+val Primary50 = Color(0xFFE1BC37)
+val Primary60 = Color(0xFFC7A21F)
+val Primary70 = Color(0xFF9A7E18)
+val Primary80 = Color(0xFF6E5A11)
+val Primary90 = Color(0xFF42360A)
 
-val DarkGreen10 = Color(0xFF151e18)
-val DarkGreen20 = Color(0xFF2a3c31)
-val DarkGreen30 = Color(0xFF405a4a)
-val DarkGreen40 = Color(0xFF557762)
-val DarkGreen80 = Color(0xFFc3d5ca)
-val DarkGreen90 = Color(0xFFe1eae4)
+val Secondary5 = Color(0xFFf0f1f5)
+val Secondary10 = Color(0xFFE1E4EA)
+val Secondary20 = Color(0xFFC3C8D5)
+val Secondary30 = Color(0xFFA5ADC0)
+val Secondary40 = Color(0xFF8791AB)
+val Secondary50 = Color(0xFF697696)
+val Secondary60 = Color(0xFF545E78)
+val Secondary70 = Color(0xFF3F475A)
+val Secondary80 = Color(0xFF343B4B)
+val Secondary90 = Color(0xFF2A2F3C)
 
-val Orange10 = Color(0xFF331400)
-val Orange20 = Color(0xFF662900)
-val Orange30 = Color(0xFF993d00)
-val Orange40 = Color(0xFFcc5200)
-val Orange80 = Color(0xFFffc299)
-val Orange90 = Color(0xFFffe0cc)
 
 val Red10 = Color(0xFF2f0406)
-val Red20 = Color(0xFF5e080c)
-val Red30 = Color(0xFF8e0b12)
 val Red40 = Color(0xFFbd0f18)
-val Red80 = Color(0xFFf7a1a5)
 val Red90 = Color(0xFFfbd0d2)
+
+
+
