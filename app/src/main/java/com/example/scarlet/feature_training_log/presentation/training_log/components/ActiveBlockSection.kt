@@ -27,9 +27,7 @@ fun ActiveBlockSection(
     onEvent: (TrainingLogEvent) -> Unit
 ) {
     ScarletList(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 24.dp, end = 24.dp),
+        modifier = Modifier.fillMaxWidth(),
         title = stringResource(R.string.active_training_block),
         items = listOf(activeBlock),
         onItemClicked = { block ->
