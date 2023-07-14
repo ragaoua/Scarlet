@@ -17,4 +17,4 @@ data class BlockWithDates(
     @Embedded val block: Block,
     val firstSessionDate: String? = null,
     val lastSessionDate: String? = null
-)
+): Serializable
