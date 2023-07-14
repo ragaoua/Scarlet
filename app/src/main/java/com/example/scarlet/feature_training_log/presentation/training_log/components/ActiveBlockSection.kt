@@ -84,39 +84,6 @@ fun ActiveBlockSection(
                     }
                 }
             }
-
-//
-//            ScarletListItem(
-//                onClick = {
-//                    activeBlock?.let {
-//                        navigator.navigate(BlockScreenDestination(it.block))
-//                    } ?: onEvent(TrainingLogEvent.ShowNewBlockDialog)
-//                },
-//                onDelete = {
-//                    activeBlock?.let {
-//                        onEvent(TrainingLogEvent.DeleteBlock(it.block))
-//                    }
-//                }
-//            ) {
-//                Column(
-//                    modifier = Modifier.fillMaxWidth(),
-//                    horizontalAlignment = Alignment.CenterHorizontally
-//                ) {
-//                    val headline = activeBlock?.block?.name ?: stringResource(R.string.no_active_block)
-//                    val subhead = activeBlock?.let {
-//                        "Started on ${activeBlock.firstSessionDate}"
-//                    } ?: stringResource(R.string.start_new_block)
-//
-//                    Text(
-//                        text = headline,
-//                        style = MaterialTheme.typography.titleLarge
-//                    )
-//                    Text(
-//                        text = subhead,
-//                        style = MaterialTheme.typography.bodyLarge
-//                    )
-//                }
-//            }
         }
     }
 }
