@@ -1,30 +1,39 @@
 <resources>
+    <!-- App related -->
     <string name="app_name">Scarlet</string>
+    <string name="app_logo">Logo</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <!-- Home Screen -->
     <string name="training_log">Training log</string>
     <string name="statistics">Statistics</string>
     <string name="competitions">Competitions</string>
+
+    <!-- Training Log -->
     <string name="active_training_block">Active training block</string>
     <string name="completed_training_blocks">Completed training blocks</string>
     <string name="no_completed_training_blocks">No completed training blocks</string>
-    <string name="app_logo">Logo</string>
     <string name="no_active_block">No active block</string>
     <string name="start_new_block">Click to start a new block</string>
     <string name="new_block">New Block</string>
-    <string name="new_exercise">New Exercise</string>
-    <string name="block_name">Block name</string>
-    <string name="create_block">Create block</string>
-    <string name="add_exercise">Add Exercise</string>
     <string name="block_name_empty">Please enter a name for the block</string>
-    <string name="cancel">Cancel</string>
+    <string name="create_block">Create block</string>
+
+    <!-- Block -->
+    <string name="block_name">Block name</string>
     <string name="new_session">New session</string>
     <string name="end_block">End block</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="title_activity_training_log">TrainingLogActivity</string>
-    <string name="title_activity_show_block">ShowBlockActivity</string>
-    <string name="set">Set</string>
-    <string name="rpe">RPE</string>
-    <string name="weight">Weight</string>
-    <string name="reps">Reps</string>
-    <string name="delete">Delete</string>
     <string name="block_sessions_list_title">Block sessions</string>
+
+    <!-- Session -->
+    <string name="add_exercise">Add Exercise</string>
+    <string name="new_exercise">New Exercise</string>
+    <string name="set">Set</string>
+    <string name="reps">Reps</string>
+    <string name="weight">Weight</string>
+    <string name="rpe">RPE</string>
+
+    <!-- Misc -->
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
 </resources>
