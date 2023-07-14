@@ -1,6 +1,7 @@
 package com.example.scarlet.feature_training_log.presentation.training_log.components
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -13,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.BlockWithSessions
+import com.example.scarlet.feature_training_log.presentation.components.DeletableItem
 import com.example.scarlet.feature_training_log.presentation.components.TitledLazyList
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
 import com.example.scarlet.feature_training_log.presentation.training_log.TrainingLogEvent
@@ -41,19 +43,23 @@ fun ActiveBlockSection(
                     onClick = {
                         navigator.navigate(BlockScreenDestination(it.block))
                     }
-//                onDelete = {
-//                    onEvent(TrainingLogEvent.DeleteBlock(it.block))
-//                } /* TODO */
                 ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
+                    DeletableItem (
+                        modifier = Modifier.fillMaxSize(),
+                        onDeleteClicked = {
+                            onEvent(TrainingLogEvent.DeleteBlock(it.block))
+                        }
                     ) {
-                        Text(
-                            text = it.block.name,
-                            style = MaterialTheme.typography.titleLarge
-                        )
-                        Text(
-                            text =
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = it.block.name,
+                                style = MaterialTheme.typography.titleLarge
+                            )
+                            Text(
+                                text =
                                 if (it.sessions.isNotEmpty()) {
                                     stringResource(
                                         id = R.string.block_started_on,
@@ -62,8 +68,9 @@ fun ActiveBlockSection(
                                 } else {
                                     stringResource(R.string.empty_block)
                                 },
-                            style = MaterialTheme.typography.bodyLarge
-                        )
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                        }
                     }
                 }
             } ?: run {
