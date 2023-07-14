@@ -25,7 +25,8 @@ class ScarletRepository(
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////// SESSION ///////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    fun getSessionsByBlockId(blockId: Int) = dbInstance.sessionDao.getSessionsByBlockId(blockId)
+    fun getSessionsWithMovementNamesByBlockId(blockId: Int) =
+        dbInstance.sessionDao.getSessionsWithMovementNamesByBlockId(blockId)
 
     suspend fun insertSession(session: Session) = dbInstance.sessionDao.insertSession(session)
 

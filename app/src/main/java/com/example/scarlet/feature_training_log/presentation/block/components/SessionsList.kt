@@ -1,5 +1,6 @@
 package com.example.scarlet.feature_training_log.presentation.block.components
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.items
@@ -8,10 +9,13 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.scarlet.R
+import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.presentation.block.BlockEvent
 import com.example.scarlet.feature_training_log.presentation.components.TitledLazyList
@@ -25,7 +29,7 @@ import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 @Composable
 fun SessionsList(
     navigator: DestinationsNavigator,
-    sessions: List<Session>,
+    sessions: Map<Session, List<Movement>>,
     onEvent: (BlockEvent) -> Unit
 ) {
     TitledLazyList(
@@ -34,7 +38,7 @@ fun SessionsList(
             .padding(TitleLazyListPadding),
         title = stringResource(R.string.block_sessions_list_title)
     ) {
-        items(sessions) { session ->
+        items(sessions.keys.toList()) { session ->
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 contentPadding = MainButtonContentPadding,
@@ -50,10 +54,20 @@ fun SessionsList(
 //                    onEvent(BlockEvent.DeleteSession(session))
 //                } /* TODO */
             ) {
-                Text(
-                    text = session.date,
-                    style = MaterialTheme.typography.titleLarge
-                )
+                Column (
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ){
+                    Text(
+                        text = session.date,
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                    Text(
+                        text = sessions[session]?.joinToString { it.name } ?: "", /* TODO display smth like "no movements" */
+                        style = MaterialTheme.typography.bodyLarge,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
             }
         }
     }
@@ -64,7 +78,7 @@ fun SessionsList(
 fun NoSessionsPreview() {
     SessionsList(
         navigator = EmptyDestinationsNavigator,
-        sessions = emptyList(),
+        sessions = emptyMap(),
         onEvent = {}
     )
 }
@@ -74,12 +88,16 @@ fun NoSessionsPreview() {
 fun SessionsSectionPreview() {
     SessionsList(
         navigator = EmptyDestinationsNavigator,
-        sessions = listOf(
-            Session(date = "2021-01-01"),
-            Session(date = "2021-01-02"),
-            Session(date = "2021-01-03"),
-            Session(date = "2021-01-04"),
-            Session(date = "2021-01-05")
+        sessions = mapOf(
+            Session(date = "2021-01-01") to emptyList(),
+            Session(date = "2021-01-02") to emptyList(),
+            Session(date = "2021-01-03") to listOf(
+                Movement(name = "Squat"),
+                Movement(name = "Bench Press"),
+                Movement(name = "Deadlift"),
+                Movement(name = "Front Squat"),
+                Movement(name = "Dips"),
+            ),
         ),
         onEvent = {}
     )
