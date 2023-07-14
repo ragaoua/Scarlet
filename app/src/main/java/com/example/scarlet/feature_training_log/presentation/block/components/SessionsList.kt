@@ -1,6 +1,7 @@
 package com.example.scarlet.feature_training_log.presentation.block.components
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.items
@@ -18,6 +19,7 @@ import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.presentation.block.BlockEvent
+import com.example.scarlet.feature_training_log.presentation.components.DeletableItem
 import com.example.scarlet.feature_training_log.presentation.components.TitledLazyList
 import com.example.scarlet.feature_training_log.presentation.destinations.SessionScreenDestination
 import com.example.scarlet.ui.theme.MainButtonContentPadding
@@ -50,23 +52,29 @@ fun SessionsList(
                 onClick = {
                     navigator.navigate(SessionScreenDestination(session = session))
                 }
-//                onDelete = {
-//                    onEvent(BlockEvent.DeleteSession(session))
-//                } /* TODO */
             ) {
-                Column (
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ){
-                    Text(
-                        text = session.date,
-                        style = MaterialTheme.typography.titleLarge
-                    )
-                    Text(
-                        text = sessions[session]?.joinToString { it.name } ?: "", /* TODO display smth like "no movements" */
-                        style = MaterialTheme.typography.bodyLarge,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
+                DeletableItem (
+                    modifier = Modifier.fillMaxSize(),
+                    onDeleteClicked = {
+                        onEvent(BlockEvent.DeleteSession(session))
+                    }
+                ) {
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = session.date,
+                            style = MaterialTheme.typography.titleLarge
+                        )
+                        Text(
+                            text = sessions[session]?.joinToString { it.name }
+                                ?: "", /* TODO display smth like "no movements" */
+                            style = MaterialTheme.typography.bodyLarge,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
                 }
             }
         }
