@@ -1,12 +1,11 @@
 package com.example.scarlet.feature_training_log.presentation.block
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -60,23 +59,26 @@ fun Screen(
     onEvent: (BlockEvent) -> Unit
 ) {
     ScarletTheme {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
         ) {
-            BlockHeader(
-                block = state.block,
-                onEvent = onEvent
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            SessionsList(
-                navigator = navigator,
-                sessions = state.sessionsWithMovement,
-                onEvent = onEvent
-            )
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.height(48.dp))
+                BlockHeader(
+                    block = state.block,
+                    onEvent = onEvent
+                )
+                Spacer(modifier = Modifier.height(64.dp))
+                SessionsList(
+                    navigator = navigator,
+                    sessions = state.sessionsWithMovement,
+                    onEvent = onEvent
+                )
+            }
         }
     }
 }
