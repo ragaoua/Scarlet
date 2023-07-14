@@ -39,6 +39,7 @@ fun CompletedBlocksSection(
         if (completedBlocks.isNotEmpty()) {
             items(completedBlocks) {
                 Button(
+                    modifier = Modifier.fillMaxWidth(),
                     contentPadding = MainButtonContentPadding,
                     shape = MaterialTheme.shapes.large,
                     colors = ButtonDefaults.buttonColors(
@@ -48,9 +49,11 @@ fun CompletedBlocksSection(
                     onClick = {
                         navigator.navigate(BlockScreenDestination(it.block))
                     }
+//                onDelete = {
+//                    onEvent(TrainingLogEvent.DeleteBlock(it.block))
+//                } /* TODO */
                 ) {
                     Column(
-                        modifier = Modifier.fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(

@@ -38,14 +38,17 @@ fun ActiveBlockSection(
         item(activeBlock) {
             activeBlock?.let {
                 Button(
+                    modifier = Modifier.fillMaxWidth(),
                     contentPadding = MainButtonContentPadding,
                     shape = MaterialTheme.shapes.large,
                     onClick = {
                         navigator.navigate(BlockScreenDestination(it.block))
                     }
+//                onDelete = {
+//                    onEvent(TrainingLogEvent.DeleteBlock(it.block))
+//                } /* TODO */
                 ) {
                     Column(
-                        modifier = Modifier.fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(

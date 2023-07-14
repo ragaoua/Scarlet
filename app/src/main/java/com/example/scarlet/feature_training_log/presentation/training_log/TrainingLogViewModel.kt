@@ -5,9 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.scarlet.feature_training_log.data.repository.ScarletRepository
 import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.domain.model.BlockWithDates
-import com.example.scarlet.feature_training_log.presentation.training_log.TrainingLogEvent.CreateBlock
-import com.example.scarlet.feature_training_log.presentation.training_log.TrainingLogEvent.HideNewBlockDialog
-import com.example.scarlet.feature_training_log.presentation.training_log.TrainingLogEvent.ShowNewBlockDialog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -42,17 +39,17 @@ class TrainingLogViewModel @Inject constructor(
 
     fun onEvent(event: TrainingLogEvent){
         when(event) {
-            ShowNewBlockDialog -> {
+            TrainingLogEvent.ShowNewBlockDialog -> {
                 _state.update { it.copy(
                     isAddingBlock = true
                 ) }
             }
-            HideNewBlockDialog -> {
+            TrainingLogEvent.HideNewBlockDialog -> {
                 _state.update { it.copy(
                     isAddingBlock = false
                 ) }
             }
-            is CreateBlock -> {
+            is TrainingLogEvent.CreateBlock -> {
                 val block = Block(name = event.blockName)
                 viewModelScope.launch(Dispatchers.IO) {
                     repository.insertBlock(block)
