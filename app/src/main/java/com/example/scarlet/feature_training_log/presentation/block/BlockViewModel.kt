@@ -70,10 +70,16 @@ class BlockViewModel @Inject constructor(
             }
             is BlockEvent.UpdateBlock -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    repository.updateBlock(event.block)
+                    if (_state.value.block != event.block && event.block.name.isNotBlank()) {
+                        repository.updateBlock(event.block)
+                        _state.update {
+                            it.copy(
+                                block = event.block
+                            )
+                        }
+                    }
                     _state.update {
                         it.copy(
-                            block = event.block,
                             isEditing = false
                         )
                     }
