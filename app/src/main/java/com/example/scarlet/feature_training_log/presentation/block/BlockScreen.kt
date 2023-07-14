@@ -38,7 +38,7 @@ fun BlockScreen(
     LaunchedEffect(key1 = true) {
         blockViewModel.event.collectLatest { event ->
             when(event) {
-                is UiEvent.NavigateUp -> {
+                is BlockViewModelUiEvent.NavigateUp -> {
                     navigator.navigateUp()
                 }
             }

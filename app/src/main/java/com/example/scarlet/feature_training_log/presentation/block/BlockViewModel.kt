@@ -39,7 +39,7 @@ class BlockViewModel @Inject constructor(
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), BlockUiState())
 
-    private val _event = MutableSharedFlow<UiEvent>()
+    private val _event = MutableSharedFlow<BlockViewModelUiEvent>()
     val event = _event.asSharedFlow()
 
     fun onEvent(event: BlockEvent) {
@@ -53,7 +53,7 @@ class BlockViewModel @Inject constructor(
                 viewModelScope.launch(Dispatchers.IO) {
                     _state.value.block.completed = true
                     repository.updateBlock(_state.value.block)
-                    _event.emit(UiEvent.NavigateUp)
+                    _event.emit(BlockViewModelUiEvent.NavigateUp)
                 }
             }
             is BlockEvent.DeleteSession -> {
