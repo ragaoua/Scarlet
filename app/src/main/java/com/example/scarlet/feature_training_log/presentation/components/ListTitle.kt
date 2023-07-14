@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ScarletListTitle(
+fun ListTitle(
     modifier: Modifier = Modifier,
     title: String
 ) {

@@ -22,7 +22,7 @@ fun TitledLazyList(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ScarletListTitle(title = title)
+        ListTitle(title = title)
         Spacer(modifier = Modifier.height(8.dp))
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
