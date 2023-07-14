@@ -48,8 +48,8 @@ class TrainingLogViewModel @Inject constructor(
                         LocalDate.parse(it.date, DateFormatter)
                     }
                 )
-            }.sortedBy {
-                LocalDate.parse(it.sessions.first().date, DateFormatter)
+            }.sortedByDescending {
+                LocalDate.parse(it.sessions.last().date, DateFormatter)
             },
             activeBlock = activeBlock
         )
