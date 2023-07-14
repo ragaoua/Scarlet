@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -20,6 +21,7 @@ import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.domain.model.BlockWithSessions
 import com.example.scarlet.feature_training_log.domain.model.Session
+import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
 import com.example.scarlet.feature_training_log.presentation.training_log.components.ActiveBlockSection
 import com.example.scarlet.feature_training_log.presentation.training_log.components.CompletedBlocksSection
 import com.example.scarlet.feature_training_log.presentation.training_log.components.NewBlockDialog
@@ -27,6 +29,7 @@ import com.example.scarlet.ui.theme.ScarletTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
+import kotlinx.coroutines.flow.collectLatest
 
 @Destination
 @Composable
@@ -35,6 +38,16 @@ fun TrainingLogScreen(
 ) {
     val trainingLogViewModel: TrainingLogViewModel = hiltViewModel()
     val state by trainingLogViewModel.state.collectAsState()
+
+    LaunchedEffect(key1 = true) {
+        trainingLogViewModel.event.collectLatest { event ->
+            when(event) {
+                is TrainingLogViewModelUiEvent.NavigateToBlockScreen -> {
+                    navigator.navigate(BlockScreenDestination(event.block))
+                }
+            }
+        }
+    }
 
     Screen(
         navigator = navigator,

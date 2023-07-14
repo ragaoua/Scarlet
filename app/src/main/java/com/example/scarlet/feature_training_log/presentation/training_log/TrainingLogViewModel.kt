@@ -8,8 +8,10 @@ import com.example.scarlet.feature_training_log.domain.model.BlockWithSessions
 import com.example.scarlet.feature_training_log.presentation.core.DateFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -57,6 +59,9 @@ class TrainingLogViewModel @Inject constructor(
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), TrainingLogUiState())
 
+    private val _event = MutableSharedFlow<TrainingLogViewModelUiEvent>()
+    val event = _event.asSharedFlow()
+
     fun onEvent(event: TrainingLogEvent){
         when(event) {
             TrainingLogEvent.ShowNewBlockDialog -> {
@@ -72,7 +77,12 @@ class TrainingLogViewModel @Inject constructor(
             is TrainingLogEvent.CreateBlock -> {
                 val block = Block(name = event.blockName)
                 viewModelScope.launch(Dispatchers.IO) {
-                    repository.insertBlock(block)
+                    val insertedBlockId = repository.insertBlock(block)
+                    _event.emit(TrainingLogViewModelUiEvent.NavigateToBlockScreen(
+                        block = block.copy(
+                            id = insertedBlockId.toInt()
+                        )
+                    ))
                 }
                 _state.update { it.copy(
                     isAddingBlock = false
