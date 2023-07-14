@@ -68,8 +68,9 @@ fun SessionsList(
                             style = MaterialTheme.typography.titleLarge
                         )
                         Text(
-                            text = sessions[session]?.joinToString { it.name }
-                                ?: "", /* TODO display smth like "no movements" */
+                            text = sessions[session]
+                                ?.joinToString { it.name }
+                                ?: stringResource(R.string.empty_session),
                             style = MaterialTheme.typography.bodyLarge,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis

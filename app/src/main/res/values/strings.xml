@@ -26,6 +26,7 @@
     <string name="block_sessions_list_title">Block sessions</string>
     <string name="empty_block">Empty block</string>
     <string name="block_started_on">Started on %1$s</string>
+    <string name="empty_session">Empty session</string>
 
     <!-- Session -->
     <string name="add_exercise">Add Exercise</string>
