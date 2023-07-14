@@ -28,7 +28,7 @@ interface SessionDao {
     fun getSessionsWithMovementNamesByBlockId(blockId: Int): Flow<Map<Session,List<Movement>>>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend fun insertSession(session: Session)
+    suspend fun insertSession(session: Session): Long
 
     @Update
     suspend fun updateSession(session: Session)

@@ -20,6 +20,7 @@ import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.presentation.block.components.BlockHeader
 import com.example.scarlet.feature_training_log.presentation.block.components.SessionsList
+import com.example.scarlet.feature_training_log.presentation.destinations.SessionScreenDestination
 import com.example.scarlet.ui.theme.ScarletTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -40,6 +41,9 @@ fun BlockScreen(
             when(event) {
                 is BlockViewModelUiEvent.NavigateUp -> {
                     navigator.navigateUp()
+                }
+                is BlockViewModelUiEvent.NavigateToSessionScreen -> {
+                    navigator.navigate(SessionScreenDestination(event.session))
                 }
             }
         }
