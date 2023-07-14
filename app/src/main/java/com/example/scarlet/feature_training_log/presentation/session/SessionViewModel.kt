@@ -57,7 +57,7 @@ class SessionViewModel @Inject constructor(
                 viewModelScope.launch(Dispatchers.IO) {
                     repository.insertExercise(
                         Exercise(
-                            sessionId = session.id,
+                            sessionId = _state.value.session.id,
                             movementId = event.movementId,
                             order = state.value.exercises.size + 1
                         )

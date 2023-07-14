@@ -75,11 +75,11 @@ class TrainingLogViewModel @Inject constructor(
                 ) }
             }
             is TrainingLogEvent.CreateBlock -> {
-                val block = Block(name = event.blockName)
                 viewModelScope.launch(Dispatchers.IO) {
-                    val insertedBlockId = repository.insertBlock(block)
+                    val insertedBlock = Block(name = event.blockName)
+                    val insertedBlockId = repository.insertBlock(insertedBlock)
                     _event.emit(TrainingLogViewModelUiEvent.NavigateToBlockScreen(
-                        block = block.copy(
+                        block = insertedBlock.copy(
                             id = insertedBlockId.toInt()
                         )
                     ))
