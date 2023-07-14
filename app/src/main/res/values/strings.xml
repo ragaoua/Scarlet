@@ -39,4 +39,5 @@
     <!-- Misc -->
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
+    <string name="edit_block_name">Edit name</string>
 </resources>

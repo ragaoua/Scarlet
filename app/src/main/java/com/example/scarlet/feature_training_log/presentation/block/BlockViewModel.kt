@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,16 +24,17 @@ class BlockViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val block = MutableStateFlow(
-        BlockScreenDestination.argsFrom(savedStateHandle).block
-    )
+    private val block = BlockScreenDestination.argsFrom(savedStateHandle).block
 
     private val sessionWithMovementNames =
-        repository.getSessionsWithMovementNamesByBlockId(block.value.id)
+        repository.getSessionsWithMovementNamesByBlockId(block.id)
 
-    val state = combine(block, sessionWithMovementNames) { block, sessions ->
-        BlockUiState(
-            block = block,
+    private val _state = MutableStateFlow(
+        BlockUiState(block = block)
+    )
+
+    val state = combine(_state, sessionWithMovementNames) { state, sessions ->
+        state.copy(
             sessionsWithMovement = sessions
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), BlockUiState())
@@ -44,19 +46,37 @@ class BlockViewModel @Inject constructor(
         when(event) {
             BlockEvent.AddSession -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    repository.insertSession(Session(blockId = block.value.id))
+                    repository.insertSession(Session(blockId = _state.value.block.id))
                 }
             }
             BlockEvent.EndBlock -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    block.value.completed = true
-                    repository.updateBlock(block.value)
+                    _state.value.block.completed = true
+                    repository.updateBlock(_state.value.block)
                     _event.emit(UiEvent.NavigateUp)
                 }
             }
             is BlockEvent.DeleteSession -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     repository.deleteSession(event.session)
+                }
+            }
+            BlockEvent.EditBlockClicked -> {
+                _state.update {
+                    it.copy(
+                        isEditing = true
+                    )
+                }
+            }
+            is BlockEvent.UpdateBlock -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    repository.updateBlock(event.block)
+                    _state.update {
+                        it.copy(
+                            block = event.block,
+                            isEditing = false
+                        )
+                    }
                 }
             }
         }

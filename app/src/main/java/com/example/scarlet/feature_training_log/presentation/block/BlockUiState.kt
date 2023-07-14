@@ -6,5 +6,6 @@ import com.example.scarlet.feature_training_log.domain.model.Session
 
 data class BlockUiState (
     val block: Block = Block(),
-    val sessionsWithMovement: Map<Session, List<Movement>> = emptyMap()
+    val sessionsWithMovement: Map<Session, List<Movement>> = emptyMap(),
+    val isEditing: Boolean = false
 )
