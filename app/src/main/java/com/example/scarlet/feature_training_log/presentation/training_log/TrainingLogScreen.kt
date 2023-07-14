@@ -18,7 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.Block
-import com.example.scarlet.feature_training_log.domain.model.BlockWithDates
+import com.example.scarlet.feature_training_log.domain.model.BlockWithSessions
+import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.presentation.training_log.components.ActiveBlockSection
 import com.example.scarlet.feature_training_log.presentation.training_log.components.CompletedBlocksSection
 import com.example.scarlet.feature_training_log.presentation.training_log.components.NewBlockDialog
@@ -105,21 +106,24 @@ fun PreviewTrainingLogScreen() {
         navigator = EmptyDestinationsNavigator,
         state = TrainingLogUiState(
             activeBlock =
-                BlockWithDates(
+                BlockWithSessions(
                     block = Block(name = "Block 5"),
-                    firstSessionDate = "2021-08-01",
-                    lastSessionDate = "2021-08-05"
+                    emptyList()
                 ),
             completedBlocks = listOf(
-                BlockWithDates(
+                BlockWithSessions(
                     block = Block(name = "Block 1"),
-                    firstSessionDate = "01/01/2021",
-                    lastSessionDate = "01/02/2021"
+                    listOf(
+                        Session(date = "01/01/2021"),
+                        Session(date = "01/02/2021")
+                    )
                 ),
-                BlockWithDates(
+                BlockWithSessions(
                     block = Block(name = "Block 2"),
-                    firstSessionDate = "01/01/2021",
-                    lastSessionDate = "01/02/2021"
+                    listOf(
+                        Session(date = "01/01/2021"),
+                        Session(date = "10/02/2021")
+                    )
                 )
             )
         ),

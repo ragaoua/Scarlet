@@ -12,22 +12,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.scarlet.R
-import com.example.scarlet.feature_training_log.domain.model.Block
-import com.example.scarlet.feature_training_log.domain.model.BlockWithDates
+import com.example.scarlet.feature_training_log.domain.model.BlockWithSessions
 import com.example.scarlet.feature_training_log.presentation.components.TitledLazyList
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
 import com.example.scarlet.feature_training_log.presentation.training_log.TrainingLogEvent
 import com.example.scarlet.ui.theme.MainButtonContentPadding
 import com.example.scarlet.ui.theme.TitleLazyListPadding
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 
 @Composable
 fun CompletedBlocksSection(
     navigator: DestinationsNavigator,
-    completedBlocks: List<BlockWithDates> = emptyList(),
+    completedBlocks: List<BlockWithSessions> = emptyList(),
     onEvent: (TrainingLogEvent) -> Unit
 ) {
     TitledLazyList(
@@ -61,7 +58,7 @@ fun CompletedBlocksSection(
                             style = MaterialTheme.typography.titleLarge
                         )
                         Text(
-                            text = "${it.firstSessionDate} - ${it.lastSessionDate}",
+                            text = "${it.sessions.first().date} - ${it.sessions.last().date}",
                             style = MaterialTheme.typography.bodyMedium
                         )
                     }
@@ -76,35 +73,4 @@ fun CompletedBlocksSection(
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun NoBlocksPreview() {
-    CompletedBlocksSection(
-        navigator = EmptyDestinationsNavigator,
-        completedBlocks = emptyList(),
-        onEvent = {}
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CompletedBlocksPreview() {
-    CompletedBlocksSection(
-        navigator = EmptyDestinationsNavigator,
-        completedBlocks = listOf(
-            BlockWithDates(
-                block = Block(name = "Block 1"),
-                firstSessionDate = "01/01/2021",
-                lastSessionDate = "01/02/2021"
-            ),
-            BlockWithDates(
-                block = Block(name = "Block 2"),
-                firstSessionDate = "01/01/2021",
-                lastSessionDate = "01/02/2021"
-            )
-        ),
-        onEvent = {}
-    )
 }

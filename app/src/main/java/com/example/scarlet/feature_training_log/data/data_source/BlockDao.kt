@@ -7,7 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.scarlet.feature_training_log.domain.model.Block
-import com.example.scarlet.feature_training_log.domain.model.BlockWithDates
+import com.example.scarlet.feature_training_log.domain.model.Session
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -23,11 +23,10 @@ interface BlockDao {
     suspend fun deleteBlock(block: Block)
 
     @Query("""
-        SELECT block.*, MIN(session.date) AS firstSessionDate, MAX(session.date) AS lastSessionDate
+        SELECT block.*, session.*
         FROM block
         LEFT JOIN session ON block.id = session.blockId
         WHERE COMPLETED = :completed
-        GROUP BY block.id, block.name, block.completed
     """)
-    fun getBlocksWithDatesByCompleted(completed: Boolean): Flow<List<BlockWithDates>>
+    fun getBlocksWithSessionsByCompleted(completed: Boolean): Flow<Map<Block, List<Session>>>
 }

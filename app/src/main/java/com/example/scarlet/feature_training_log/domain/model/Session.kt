@@ -4,10 +4,9 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.example.scarlet.feature_training_log.presentation.core.DateFormatter
 import java.io.Serializable
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.time.LocalDate
 
 @Entity(
     indices = [
@@ -26,5 +25,5 @@ data class Session(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val blockId: Int = 0,
-    val date: String = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date())
+    val date: String = LocalDate.now().format(DateFormatter),
 ): Serializable

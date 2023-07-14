@@ -4,7 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.scarlet.feature_training_log.data.repository.ScarletRepository
 import com.example.scarlet.feature_training_log.domain.model.Block
-import com.example.scarlet.feature_training_log.domain.model.BlockWithDates
+import com.example.scarlet.feature_training_log.domain.model.BlockWithSessions
+import com.example.scarlet.feature_training_log.presentation.core.DateFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,19 +22,34 @@ class TrainingLogViewModel @Inject constructor(
     private val repository: ScarletRepository
 ) : ViewModel() {
 
-    private val completedBlocks = repository.getBlocksWithDatesByCompleted(true)
-    private val activeBlocks = repository.getBlocksWithDatesByCompleted(false)
+    private val completedBlocks = repository.getBlocksWithSessionsByCompleted(true)
+    private val activeBlocks = repository.getBlocksWithSessionsByCompleted(false)
 
     private val _state = MutableStateFlow(TrainingLogUiState())
     val state = combine(_state, activeBlocks, completedBlocks) { state, activeBlocks, completedBlocks ->
-        var activeBlock: BlockWithDates? = null
+        var activeBlock: BlockWithSessions? = null
         if (activeBlocks.size > 1) {
             throw Exception("Too many active blocks. Should only get one")
         } else if (activeBlocks.isNotEmpty()) {
-            activeBlock = activeBlocks[0]
+            activeBlock = BlockWithSessions(
+                block = activeBlocks.keys.toList()[0],
+                sessions = activeBlocks.values.flatten()
+                    .sortedBy {
+                        LocalDate.parse(it.date, DateFormatter)
+                    }
+            )
         }
         state.copy(
-            completedBlocks = completedBlocks,
+            completedBlocks = completedBlocks.map {
+                BlockWithSessions(
+                    block = it.key,
+                    sessions = it.value.sortedBy {
+                        LocalDate.parse(it.date, DateFormatter)
+                    }
+                )
+            }.sortedBy {
+                LocalDate.parse(it.sessions.first().date, DateFormatter)
+            },
             activeBlock = activeBlock
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), TrainingLogUiState())

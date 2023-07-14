@@ -1,10 +1,10 @@
 package com.example.scarlet.feature_training_log.presentation.training_log
 
-import com.example.scarlet.feature_training_log.domain.model.BlockWithDates
+import com.example.scarlet.feature_training_log.domain.model.BlockWithSessions
 
 data class TrainingLogUiState (
-    val activeBlock: BlockWithDates? = null,
-    val completedBlocks: List<BlockWithDates> = emptyList(),
+    val activeBlock: BlockWithSessions? = null,
+    val completedBlocks: List<BlockWithSessions> = emptyList(),
     val isAddingBlock: Boolean = false,
     val isShowingBlockNameEmptyMsg: Boolean = false
 )

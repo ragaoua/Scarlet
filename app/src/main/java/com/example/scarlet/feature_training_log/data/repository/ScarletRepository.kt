@@ -13,8 +13,8 @@ class ScarletRepository(
     ///////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////// BLOCK ////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    fun getBlocksWithDatesByCompleted(completed: Boolean) =
-        dbInstance.blockDao.getBlocksWithDatesByCompleted(completed)
+    fun getBlocksWithSessionsByCompleted(completed: Boolean) =
+        dbInstance.blockDao.getBlocksWithSessionsByCompleted(completed)
 
     suspend fun insertBlock(block: Block) = dbInstance.blockDao.insertBlock(block)
 
