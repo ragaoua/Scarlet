@@ -1,7 +1,6 @@
 package com.example.scarlet.feature_training_log.presentation.training_log.components
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.items
@@ -14,13 +13,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.domain.model.BlockWithDates
 import com.example.scarlet.feature_training_log.presentation.components.TitledLazyList
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
 import com.example.scarlet.feature_training_log.presentation.training_log.TrainingLogEvent
+import com.example.scarlet.ui.theme.MainButtonContentPadding
+import com.example.scarlet.ui.theme.TitleLazyListPadding
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 
@@ -30,18 +30,16 @@ fun CompletedBlocksSection(
     completedBlocks: List<BlockWithDates> = emptyList(),
     onEvent: (TrainingLogEvent) -> Unit
 ) {
-    val buttonContentPadding = PaddingValues(top = 16.dp, bottom = 16.dp, start = 8.dp, end = 8.dp)
-
     TitledLazyList(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 24.dp, end = 24.dp),
+            .padding(TitleLazyListPadding),
         title = stringResource(R.string.completed_training_blocks)
     ) {
         if (completedBlocks.isNotEmpty()) {
             items(completedBlocks) {
                 Button(
-                    contentPadding = buttonContentPadding,
+                    contentPadding = MainButtonContentPadding,
                     shape = MaterialTheme.shapes.large,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.secondary,
