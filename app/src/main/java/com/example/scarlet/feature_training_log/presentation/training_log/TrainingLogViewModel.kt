@@ -30,6 +30,7 @@ class TrainingLogViewModel @Inject constructor(
         var activeBlock: BlockWithSessions? = null
         if (activeBlocks.size > 1) {
             throw Exception("Too many active blocks. Should only get one")
+            /* TODO : catch the exception and displays an error message in the UI */
         } else if (activeBlocks.isNotEmpty()) {
             activeBlock = BlockWithSessions(
                 block = activeBlocks.keys.toList()[0],

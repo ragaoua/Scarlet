@@ -58,8 +58,14 @@ fun CompletedBlocksSection(
                             style = MaterialTheme.typography.titleLarge
                         )
                         Text(
-                            text = "${it.sessions.first().date} - ${it.sessions.last().date}",
-                            style = MaterialTheme.typography.bodyMedium
+                            text =
+                                if (it.sessions.isNotEmpty()) {
+                                    "${it.sessions.first().date} - ${it.sessions.last().date}"
+                                } else {
+                                    stringResource(R.string.empty_block)
+                                },
+                            style = MaterialTheme.typography.bodyMedium,
+
                         )
                     }
                 }

@@ -53,7 +53,15 @@ fun ActiveBlockSection(
                             style = MaterialTheme.typography.titleLarge
                         )
                         Text(
-                            text = "Started on ${it.sessions.first().date}",
+                            text =
+                                if (it.sessions.isNotEmpty()) {
+                                    stringResource(
+                                        id = R.string.block_started_on,
+                                        it.sessions.first().date
+                                    )
+                                } else {
+                                    stringResource(R.string.empty_block)
+                                },
                             style = MaterialTheme.typography.bodyLarge
                         )
                     }

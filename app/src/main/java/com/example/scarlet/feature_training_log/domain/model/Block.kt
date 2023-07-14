@@ -15,4 +15,4 @@ data class Block(
 data class BlockWithSessions(
     val block: Block,
     val sessions: List<Session> = emptyList()
-)
+): Serializable
