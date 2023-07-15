@@ -32,6 +32,7 @@ import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 fun SessionsList(
     navigator: DestinationsNavigator,
     sessions: Map<Session, List<Movement>>,
+    isEditing: Boolean,
     onEvent: (BlockEvent) -> Unit
 ) {
     TitledLazyList(
@@ -52,7 +53,8 @@ fun SessionsList(
                 ),
                 onClick = {
                     navigator.navigate(SessionScreenDestination(session = session))
-                }
+                },
+                enabled = !isEditing
             ) {
                 DeletableItem (
                     modifier = Modifier.fillMaxSize(),
@@ -91,6 +93,7 @@ fun NoSessionsPreview() {
     SessionsList(
         navigator = EmptyDestinationsNavigator,
         sessions = emptyMap(),
+        isEditing = false,
         onEvent = {}
     )
 }
@@ -111,6 +114,7 @@ fun SessionsSectionPreview() {
                 Movement(name = "Dips"),
             ),
         ),
+        isEditing = false,
         onEvent = {}
     )
 }

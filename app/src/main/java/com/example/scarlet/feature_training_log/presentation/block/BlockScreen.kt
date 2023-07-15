@@ -81,6 +81,7 @@ fun Screen(
                 SessionsList(
                     navigator = navigator,
                     sessions = state.sessionsWithMovement,
+                    isEditing = state.isEditing,
                     onEvent = onEvent
                 )
             }

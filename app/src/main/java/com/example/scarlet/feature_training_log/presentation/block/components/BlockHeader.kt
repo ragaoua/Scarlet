@@ -53,7 +53,6 @@ fun BlockHeader(
 
     SideEffect {
         if(isEditing) {
-            println("ok")
             focusRequester.requestFocus()
         }
     }
@@ -123,9 +122,12 @@ fun BlockHeader(
         Spacer(modifier = Modifier.height(8.dp))
 
         Row {
-            Button(onClick = {
-                onEvent(BlockEvent.AddSession)
-            }) {
+            Button(
+                onClick = {
+                    onEvent(BlockEvent.AddSession)
+                },
+                enabled = !isEditing
+            ) {
                 Text(text = stringResource(id = R.string.new_session))
             }
             Spacer(modifier = Modifier.width(8.dp))
@@ -133,7 +135,7 @@ fun BlockHeader(
                 onClick = {
                     onEvent(BlockEvent.EndBlock)
                 },
-                enabled = !block.completed
+                enabled = !block.completed && !isEditing
             ) {
                 Text(text = stringResource(id = R.string.end_block))
             }
