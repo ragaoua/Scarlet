@@ -4,6 +4,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.material.BottomSheetScaffold
+import androidx.compose.material.BottomSheetState
+import androidx.compose.material.BottomSheetValue
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.rememberBottomSheetScaffoldState
+import androidx.compose.material.rememberBottomSheetState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -14,23 +20,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.scarlet.R
-import com.example.scarlet.feature_training_log.domain.model.Block
-import com.example.scarlet.feature_training_log.domain.model.BlockWithSessions
-import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
 import com.example.scarlet.feature_training_log.presentation.training_log.components.ActiveBlockSection
 import com.example.scarlet.feature_training_log.presentation.training_log.components.CompletedBlocksSection
-import com.example.scarlet.feature_training_log.presentation.training_log.components.NewBlockDialog
+import com.example.scarlet.feature_training_log.presentation.training_log.components.NewBlockSheet
 import com.example.scarlet.ui.theme.ScarletTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
-import kotlinx.coroutines.flow.collectLatest
 
+@OptIn(ExperimentalMaterialApi::class)
 @Destination
 @Composable
 fun TrainingLogScreen(
@@ -38,12 +39,27 @@ fun TrainingLogScreen(
 ) {
     val trainingLogViewModel: TrainingLogViewModel = hiltViewModel()
     val state by trainingLogViewModel.state.collectAsState()
+    val newBlockSheetState = rememberBottomSheetState(
+        initialValue = BottomSheetValue.Collapsed
+    )
 
-    LaunchedEffect(key1 = true) {
-        trainingLogViewModel.event.collectLatest { event ->
+    LaunchedEffect(true) {
+        trainingLogViewModel.event.collect { event ->
             when(event) {
                 is TrainingLogViewModelUiEvent.NavigateToBlockScreen -> {
                     navigator.navigate(BlockScreenDestination(event.block))
+                    newBlockSheetState.collapse()
+                }
+                TrainingLogViewModelUiEvent.ExpandNewBlockSheet -> {
+                    // The sheet shouldn't be expanded if there's already an
+                    // active block (NewBlockSheetExpanded shouldn't be true
+                    // in that case, but just in case...)
+                    if (state.activeBlock == null) {
+                        newBlockSheetState.expand()
+                    }
+                }
+                TrainingLogViewModelUiEvent.CollapseNewBlockSheet -> {
+                    newBlockSheetState.collapse()
                 }
             }
         }
@@ -52,56 +68,65 @@ fun TrainingLogScreen(
     Screen(
         navigator = navigator,
         state = state,
+        newBlockSheetState = newBlockSheetState,
         onEvent = trainingLogViewModel::onEvent
     )
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun Screen(
     navigator: DestinationsNavigator,
     state: TrainingLogUiState,
+    newBlockSheetState: BottomSheetState,
     onEvent: (TrainingLogEvent) -> Unit
 ) {
+    val scaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = newBlockSheetState
+    )
+
     ScarletTheme {
-        Surface (
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
+        BottomSheetScaffold(
+            scaffoldState = scaffoldState,
+            sheetContent = {
+                NewBlockSheet(onEvent = onEvent)
+            },
+            sheetPeekHeight = 0.dp
         ) {
-            if (state.isAddingBlock) {
-                NewBlockDialog(
-                    state = state,
-                    onEvent = onEvent
-                )
-            }
-            Column(
+            Surface (
                 modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                color = MaterialTheme.colorScheme.background
             ) {
-                Spacer(modifier = Modifier.height(64.dp))
-                Text(
-                    text = stringResource(id = R.string.training_log),
-                    style = MaterialTheme.typography.displayMedium
-                )
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Spacer(modifier = Modifier.height(64.dp))
+                    Text(
+                        text = stringResource(id = R.string.training_log),
+                        style = MaterialTheme.typography.displayMedium
+                    )
 
-                Spacer(modifier = Modifier.height(32.dp))
-                ActiveBlockSection(
-                    navigator = navigator,
-                    activeBlock = state.activeBlock,
-                    onEvent = onEvent
-                )
+                    Spacer(modifier = Modifier.height(32.dp))
+                    ActiveBlockSection(
+                        navigator = navigator,
+                        activeBlock = state.activeBlock,
+                        onEvent = onEvent
+                    )
 
-                Spacer(modifier = Modifier.height(16.dp))
-                CompletedBlocksSection(
-                    navigator = navigator,
-                    completedBlocks = state.completedBlocks,
-                    onEvent = onEvent
-                )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    CompletedBlocksSection(
+                        navigator = navigator,
+                        completedBlocks = state.completedBlocks,
+                        onEvent = onEvent
+                    )
+                }
             }
         }
     }
 }
 
-
+/*
 @Preview(showBackground = true)
 @Composable
 fun PreviewNoBlocks() {
@@ -155,3 +180,4 @@ fun PreviewNewBlockDialog() {
         onEvent = {}
     )
 }
+*/
