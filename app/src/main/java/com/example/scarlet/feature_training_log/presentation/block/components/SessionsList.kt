@@ -41,6 +41,7 @@ fun SessionsList(
         title = stringResource(R.string.block_sessions_list_title)
     ) {
         items(sessions.keys.toList()) { session ->
+            val sessionMovements = sessions[session]!!
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 contentPadding = MainButtonContentPadding,
@@ -68,9 +69,11 @@ fun SessionsList(
                             style = MaterialTheme.typography.titleLarge
                         )
                         Text(
-                            text = sessions[session]
-                                ?.joinToString { it.name }
-                                ?: stringResource(R.string.empty_session),
+                            text = if (sessionMovements.isNotEmpty()) {
+                                sessionMovements.joinToString { it.name }
+                            } else {
+                                stringResource(R.string.empty_session)
+                            },
                             style = MaterialTheme.typography.bodyLarge,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
