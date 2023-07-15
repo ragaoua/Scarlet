@@ -17,7 +17,8 @@
             android:name=".feature_training_log.presentation.MainActivity"
             android:exported="true"
             android:label="@string/title_activity_main"
-            android:theme="@style/Theme.Scarlet">
+            android:theme="@style/Theme.Scarlet"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
