@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.BottomSheetScaffold
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.BottomSheetValue
@@ -91,7 +92,11 @@ fun Screen(
             sheetContent = {
                 NewBlockSheet(onEvent = onEvent)
             },
-            sheetPeekHeight = 0.dp
+            sheetPeekHeight = 0.dp,
+            sheetShape = MaterialTheme.shapes.large.copy(
+                bottomEnd = CornerSize(0),
+                bottomStart = CornerSize(0)
+            )
         ) {
             Surface (
                 modifier = Modifier.fillMaxSize(),
