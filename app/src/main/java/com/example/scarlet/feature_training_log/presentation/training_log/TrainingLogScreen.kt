@@ -5,15 +5,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.material.BottomSheetScaffold
-import androidx.compose.material.BottomSheetState
-import androidx.compose.material.BottomSheetValue
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.rememberBottomSheetScaffoldState
-import androidx.compose.material.rememberBottomSheetState
+import androidx.compose.material3.BottomSheetScaffold
+import androidx.compose.material3.BottomSheetScaffoldState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -32,7 +30,7 @@ import com.example.scarlet.ui.theme.ScarletTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Destination
 @Composable
 fun TrainingLogScreen(
@@ -40,27 +38,25 @@ fun TrainingLogScreen(
 ) {
     val trainingLogViewModel: TrainingLogViewModel = hiltViewModel()
     val state by trainingLogViewModel.state.collectAsState()
-    val newBlockSheetState = rememberBottomSheetState(
-        initialValue = BottomSheetValue.Collapsed
-    )
+    val scaffoldState = rememberBottomSheetScaffoldState()
 
     LaunchedEffect(true) {
         trainingLogViewModel.event.collect { event ->
             when(event) {
                 is TrainingLogViewModelUiEvent.NavigateToBlockScreen -> {
                     navigator.navigate(BlockScreenDestination(event.block))
-                    newBlockSheetState.collapse()
+                    scaffoldState.bottomSheetState.partialExpand()
                 }
                 TrainingLogViewModelUiEvent.ExpandNewBlockSheet -> {
                     // The sheet shouldn't be expanded if there's already an
                     // active block (NewBlockSheetExpanded shouldn't be true
                     // in that case, but just in case...)
                     if (state.activeBlock == null) {
-                        newBlockSheetState.expand()
+                        scaffoldState.bottomSheetState.expand()
                     }
                 }
                 TrainingLogViewModelUiEvent.CollapseNewBlockSheet -> {
-                    newBlockSheetState.collapse()
+                    scaffoldState.bottomSheetState.partialExpand()
                 }
             }
         }
@@ -69,23 +65,19 @@ fun TrainingLogScreen(
     Screen(
         navigator = navigator,
         state = state,
-        newBlockSheetState = newBlockSheetState,
+        scaffoldState = scaffoldState,
         onEvent = trainingLogViewModel::onEvent
     )
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Screen(
     navigator: DestinationsNavigator,
     state: TrainingLogUiState,
-    newBlockSheetState: BottomSheetState,
+    scaffoldState: BottomSheetScaffoldState,
     onEvent: (TrainingLogEvent) -> Unit
 ) {
-    val scaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = newBlockSheetState
-    )
-
     ScarletTheme {
         BottomSheetScaffold(
             scaffoldState = scaffoldState,

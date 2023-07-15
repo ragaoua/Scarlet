@@ -40,7 +40,6 @@ fun NewBlockSheet(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(24.dp))
             Text(
                 text = stringResource(R.string.new_block),
                 style = MaterialTheme.typography.displaySmall
