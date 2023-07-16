@@ -28,6 +28,7 @@
     <string name="empty_session">Empty session</string>
 
     <!-- Session -->
+    <string name="session_exercises_list_title">Session Exercises</string>
     <string name="add_exercise">Add Exercise</string>
     <string name="new_exercise">New Exercise</string>
     <string name="set">Set</string>

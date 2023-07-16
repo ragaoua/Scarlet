@@ -1,36 +1,49 @@
 package com.example.scarlet.feature_training_log.presentation.session.components
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
 import com.example.scarlet.feature_training_log.domain.model.Movement
+import com.example.scarlet.feature_training_log.presentation.components.TitledLazyList
 import com.example.scarlet.feature_training_log.presentation.session.SessionEvent
+import com.example.scarlet.ui.theme.TitleLazyListPadding
 
 @Composable
 fun ExercisesList(
     exercises: List<ExerciseWithMovementAndSets>,
     onEvent: (SessionEvent) -> Unit
 ) {
-    LazyColumn(
+    TitledLazyList(
         modifier = Modifier
-            .fillMaxWidth(),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+            .fillMaxWidth()
+            .padding(TitleLazyListPadding),
+        title = stringResource(R.string.session_exercises_list_title)
     ) {
-        items(exercises) { exercise ->
-            ExerciseHeader(exercise = exercise)
-            ExerciseDetail(
-                exercise = exercise,
-                onEvent = onEvent
-            )
+        if(exercises.isNotEmpty()) {
+            items(exercises) { exercise ->
+                ExerciseHeader(exercise = exercise)
+                ExerciseDetail(
+                    exercise = exercise,
+                    onEvent = onEvent
+                )
+            }
+        } else {
+            item {
+                Text(
+                    text = stringResource(R.string.empty_session),
+                    style = MaterialTheme.typography.bodyMedium
+                    // TODO color = grey
+                )
+            }
         }
         item {
             NewExerciseButton(onEvent = onEvent)
