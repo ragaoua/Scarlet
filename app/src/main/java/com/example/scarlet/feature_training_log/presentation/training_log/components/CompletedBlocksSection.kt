@@ -78,10 +78,11 @@ fun CompletedBlocksSection(
                 }
             }
         } else {
-            item { /* TODO Define a key ???? */
+            item {
                 Text(
                     text = stringResource(R.string.no_completed_training_blocks),
                     style = MaterialTheme.typography.bodyMedium
+                    // TODO color = grey
                 )
             }
         }
