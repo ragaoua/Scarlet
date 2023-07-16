@@ -37,50 +37,62 @@ fun SessionsList(
             .padding(TitleLazyListPadding),
         title = stringResource(R.string.block_sessions_list_title)
     ) {
-        items(state.sessionsWithMovement.keys.toList()) { session ->
-            val sessionMovements = state.sessionsWithMovement[session]!!
-            Button(
-                modifier = Modifier.fillMaxWidth(),
-                contentPadding = MainButtonContentPadding,
-                shape = MaterialTheme.shapes.large,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.secondary,
-                    contentColor = MaterialTheme.colorScheme.onSecondary
-                ),
-                onClick = {
-                    navigator.navigate(SessionScreenDestination(
-                        session = session,
-                        block = state.block
-                    ))
-                },
-                enabled = !state.isEditing
-            ) {
-                DeletableItem (
-                    modifier = Modifier.fillMaxSize(),
-                    onDeleteClicked = {
-                        onEvent(BlockEvent.DeleteSession(session))
-                    }
+        if (state.sessionsWithMovement.isNotEmpty()) {
+            items(state.sessionsWithMovement.keys.toList()) { session ->
+                val sessionMovements = state.sessionsWithMovement[session]!!
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentPadding = MainButtonContentPadding,
+                    shape = MaterialTheme.shapes.large,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondary,
+                        contentColor = MaterialTheme.colorScheme.onSecondary
+                    ),
+                    onClick = {
+                        navigator.navigate(
+                            SessionScreenDestination(
+                                session = session,
+                                block = state.block
+                            )
+                        )
+                    },
+                    enabled = !state.isEditing
                 ) {
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                    DeletableItem(
+                        modifier = Modifier.fillMaxSize(),
+                        onDeleteClicked = {
+                            onEvent(BlockEvent.DeleteSession(session))
+                        }
                     ) {
-                        Text(
-                            text = session.date,
-                            style = MaterialTheme.typography.titleLarge
-                        )
-                        Text(
-                            text = if (sessionMovements.isNotEmpty()) {
-                                sessionMovements.joinToString { it.name }
-                            } else {
-                                stringResource(R.string.empty_session)
-                            },
-                            style = MaterialTheme.typography.bodyLarge,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = session.date,
+                                style = MaterialTheme.typography.titleLarge
+                            )
+                            Text(
+                                text = if (sessionMovements.isNotEmpty()) {
+                                    sessionMovements.joinToString { it.name }
+                                } else {
+                                    stringResource(R.string.empty_session)
+                                },
+                                style = MaterialTheme.typography.bodyLarge,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
                     }
                 }
+            }
+        } else {
+            item {
+                Text(
+                    text = stringResource(R.string.empty_block),
+                    style = MaterialTheme.typography.bodyMedium
+                    // TODO color = grey
+                )
             }
         }
     }
