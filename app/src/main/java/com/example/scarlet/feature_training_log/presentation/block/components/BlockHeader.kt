@@ -47,17 +47,14 @@ fun BlockHeader(
 ){
     val focusRequester = remember { FocusRequester() }
 
-    SideEffect {
-        if(isEditing) {
-            focusRequester.requestFocus()
-        }
-    }
-
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if(isEditing) {
+            SideEffect {
+                focusRequester.requestFocus()
+            }
             val blockName = remember(block.name) { mutableStateOf(block.name) }
 
             OutlinedTextField(
