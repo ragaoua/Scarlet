@@ -18,7 +18,8 @@
             android:exported="true"
             android:label="@string/title_activity_main"
             android:theme="@style/Theme.Scarlet"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
