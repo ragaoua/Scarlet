@@ -4,14 +4,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.material3.BottomSheetScaffold
-import androidx.compose.material3.BottomSheetScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -30,7 +27,6 @@ import com.example.scarlet.ui.theme.ScarletTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Destination
 @Composable
 fun TrainingLogScreen(
@@ -38,25 +34,12 @@ fun TrainingLogScreen(
 ) {
     val trainingLogViewModel: TrainingLogViewModel = hiltViewModel()
     val state by trainingLogViewModel.state.collectAsState()
-    val scaffoldState = rememberBottomSheetScaffoldState()
 
     LaunchedEffect(true) {
         trainingLogViewModel.event.collect { event ->
             when(event) {
                 is TrainingLogViewModelUiEvent.NavigateToBlockScreen -> {
                     navigator.navigate(BlockScreenDestination(event.block))
-                    scaffoldState.bottomSheetState.partialExpand()
-                }
-                TrainingLogViewModelUiEvent.ExpandNewBlockSheet -> {
-                    // The sheet shouldn't be expanded if there's already an
-                    // active block (NewBlockSheetExpanded shouldn't be true
-                    // in that case, but just in case...)
-                    if (state.activeBlock == null) {
-                        scaffoldState.bottomSheetState.expand()
-                    }
-                }
-                TrainingLogViewModelUiEvent.CollapseNewBlockSheet -> {
-                    scaffoldState.bottomSheetState.partialExpand()
                 }
             }
         }
@@ -65,7 +48,6 @@ fun TrainingLogScreen(
     Screen(
         navigator = navigator,
         state = state,
-        scaffoldState = scaffoldState,
         onEvent = trainingLogViewModel::onEvent
     )
 }
@@ -75,49 +57,45 @@ fun TrainingLogScreen(
 fun Screen(
     navigator: DestinationsNavigator,
     state: TrainingLogUiState,
-    scaffoldState: BottomSheetScaffoldState,
     onEvent: (TrainingLogEvent) -> Unit
 ) {
     ScarletTheme {
-        BottomSheetScaffold(
-            scaffoldState = scaffoldState,
-            sheetContent = {
-                NewBlockSheet(onEvent = onEvent)
-            },
-            sheetPeekHeight = 0.dp,
-            sheetShape = MaterialTheme.shapes.large.copy(
-                bottomEnd = CornerSize(0),
-                bottomStart = CornerSize(0)
-            )
+        Surface (
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
         ) {
-            Surface (
+            Column(
                 modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colorScheme.background
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Spacer(modifier = Modifier.height(64.dp))
-                    Text(
-                        text = stringResource(id = R.string.training_log),
-                        style = MaterialTheme.typography.displayMedium
-                    )
+                Spacer(modifier = Modifier.height(64.dp))
+                Text(
+                    text = stringResource(id = R.string.training_log),
+                    style = MaterialTheme.typography.displayMedium
+                )
 
-                    Spacer(modifier = Modifier.height(32.dp))
-                    ActiveBlockSection(
-                        navigator = navigator,
-                        activeBlock = state.activeBlock,
-                        onEvent = onEvent
-                    )
+                Spacer(modifier = Modifier.height(32.dp))
+                ActiveBlockSection(
+                    navigator = navigator,
+                    activeBlock = state.activeBlock,
+                    onEvent = onEvent
+                )
 
-                    Spacer(modifier = Modifier.height(16.dp))
-                    CompletedBlocksSection(
-                        navigator = navigator,
-                        completedBlocks = state.completedBlocks,
-                        onEvent = onEvent
-                    )
+                Spacer(modifier = Modifier.height(16.dp))
+                CompletedBlocksSection(
+                    navigator = navigator,
+                    completedBlocks = state.completedBlocks,
+                    onEvent = onEvent
+                )
+            }
+        }
+        if(state.isNewBlockSheetExpanded) {
+            ModalBottomSheet(
+                onDismissRequest = {
+                    onEvent(TrainingLogEvent.HideNewBlockSheet)
                 }
+            ) {
+                NewBlockSheet(onEvent = onEvent)
             }
         }
     }

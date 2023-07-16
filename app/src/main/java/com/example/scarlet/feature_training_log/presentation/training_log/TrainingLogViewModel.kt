@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
@@ -64,14 +65,14 @@ class TrainingLogViewModel @Inject constructor(
     fun onEvent(event: TrainingLogEvent){
         when(event) {
             TrainingLogEvent.ShowNewBlockSheet -> {
-                viewModelScope.launch {
-                    _event.emit(TrainingLogViewModelUiEvent.ExpandNewBlockSheet)
-                }
+                _state.update { it.copy(
+                    isNewBlockSheetExpanded = true
+                )}
             }
             TrainingLogEvent.HideNewBlockSheet -> {
-                viewModelScope.launch {
-                    _event.emit(TrainingLogViewModelUiEvent.CollapseNewBlockSheet)
-                }
+                _state.update { it.copy(
+                    isNewBlockSheetExpanded = false
+                )}
             }
             is TrainingLogEvent.CreateBlock -> {
                 viewModelScope.launch(Dispatchers.IO) {
@@ -83,6 +84,9 @@ class TrainingLogViewModel @Inject constructor(
                         )
                     ))
                 }
+                _state.update { it.copy(
+                    isNewBlockSheetExpanded = false
+                )}
             }
             is TrainingLogEvent.DeleteBlock -> {
                 viewModelScope.launch(Dispatchers.IO) {
