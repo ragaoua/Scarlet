@@ -10,12 +10,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -26,12 +26,9 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -42,7 +39,6 @@ import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.presentation.block.BlockEvent
 
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun BlockHeader(
     block: Block,
@@ -62,17 +58,10 @@ fun BlockHeader(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if(isEditing) {
-            val keyboardController = LocalSoftwareKeyboardController.current
             val blockName = remember(block.name) { mutableStateOf(block.name) }
 
             OutlinedTextField(
-                modifier = Modifier
-                    .focusRequester(focusRequester)
-                    .onFocusChanged {
-                        if (it.isFocused) {
-                            keyboardController?.show()
-                        }
-                    },
+                modifier = Modifier.focusRequester(focusRequester),
                 value = blockName.value,
                 onValueChange = { blockName.value = it },
                 singleLine = true,
@@ -90,7 +79,14 @@ fun BlockHeader(
                             ))
                         }
                     )
-                }
+                },
+                keyboardActions = KeyboardActions (
+                    onDone = {
+                        onEvent(BlockEvent.UpdateBlock(
+                            block.copy(name = blockName.value)
+                        ))
+                    }
+                ),
             )
         } else {
             Box {
@@ -102,7 +98,7 @@ fun BlockHeader(
                     modifier = Modifier
                         .size(editIconPadding)
                         .align(Alignment.CenterEnd)
-                        .clickable { onEvent(BlockEvent.EditBlockClicked) }
+                        .clickable { onEvent(BlockEvent.EditBlock) }
                 )
                 Text(
                     text = block.name,

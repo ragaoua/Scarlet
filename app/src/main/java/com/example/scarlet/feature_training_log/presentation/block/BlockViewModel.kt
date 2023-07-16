@@ -67,7 +67,7 @@ class BlockViewModel @Inject constructor(
                     repository.deleteSession(event.session)
                 }
             }
-            BlockEvent.EditBlockClicked -> {
+            BlockEvent.EditBlock -> {
                 _state.update {
                     it.copy(
                         isEditing = true
