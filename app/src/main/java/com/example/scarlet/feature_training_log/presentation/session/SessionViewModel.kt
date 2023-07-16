@@ -24,11 +24,15 @@ class SessionViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val session = SessionScreenDestination.argsFrom(savedStateHandle).session
+    private val sessionBlock = SessionScreenDestination.argsFrom(savedStateHandle).block
     private val exercises = repository.getExercisesWithMovementAndSetsBySessionId(session.id)
     private val movements = repository.getAllMovements()
 
     private val _state = MutableStateFlow(
-        SessionUiState(session = session)
+        SessionUiState(
+            session = session,
+            sessionBlockName = sessionBlock.name
+        )
     )
     val state = combine(_state, exercises, movements) { state, exercises, movements ->
         state.copy(

@@ -43,7 +43,10 @@ fun BlockScreen(
                     navigator.navigateUp()
                 }
                 is BlockViewModelUiEvent.NavigateToSessionScreen -> {
-                    navigator.navigate(SessionScreenDestination(event.session))
+                    navigator.navigate(SessionScreenDestination(
+                        session = event.session,
+                        block = state.block
+                    ))
                 }
             }
         }
@@ -80,8 +83,7 @@ fun Screen(
                 Spacer(modifier = Modifier.height(64.dp))
                 SessionsList(
                     navigator = navigator,
-                    sessions = state.sessionsWithMovement,
-                    isEditing = state.isEditing,
+                    state = state,
                     onEvent = onEvent
                 )
             }

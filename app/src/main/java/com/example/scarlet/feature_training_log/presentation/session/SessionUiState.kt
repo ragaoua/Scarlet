@@ -6,6 +6,7 @@ import com.example.scarlet.feature_training_log.domain.model.Session
 
 data class SessionUiState (
     val session: Session = Session(),
+    val sessionBlockName: String = "",
     val exercises: List<ExerciseWithMovementAndSets> = emptyList(),
     val movements: List<Movement> = emptyList(),
     val isAddingExercise: Boolean = false

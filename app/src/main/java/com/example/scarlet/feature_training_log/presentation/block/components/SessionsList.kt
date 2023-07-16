@@ -14,25 +14,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.scarlet.R
-import com.example.scarlet.feature_training_log.domain.model.Movement
-import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.presentation.block.BlockEvent
+import com.example.scarlet.feature_training_log.presentation.block.BlockUiState
 import com.example.scarlet.feature_training_log.presentation.components.DeletableItem
 import com.example.scarlet.feature_training_log.presentation.components.TitledLazyList
 import com.example.scarlet.feature_training_log.presentation.destinations.SessionScreenDestination
 import com.example.scarlet.ui.theme.MainButtonContentPadding
 import com.example.scarlet.ui.theme.TitleLazyListPadding
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 
 
 @Composable
 fun SessionsList(
     navigator: DestinationsNavigator,
-    sessions: Map<Session, List<Movement>>,
-    isEditing: Boolean,
+    state: BlockUiState,
     onEvent: (BlockEvent) -> Unit
 ) {
     TitledLazyList(
@@ -41,8 +37,8 @@ fun SessionsList(
             .padding(TitleLazyListPadding),
         title = stringResource(R.string.block_sessions_list_title)
     ) {
-        items(sessions.keys.toList()) { session ->
-            val sessionMovements = sessions[session]!!
+        items(state.sessionsWithMovement.keys.toList()) { session ->
+            val sessionMovements = state.sessionsWithMovement[session]!!
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 contentPadding = MainButtonContentPadding,
@@ -52,9 +48,12 @@ fun SessionsList(
                     contentColor = MaterialTheme.colorScheme.onSecondary
                 ),
                 onClick = {
-                    navigator.navigate(SessionScreenDestination(session = session))
+                    navigator.navigate(SessionScreenDestination(
+                        session = session,
+                        block = state.block
+                    ))
                 },
-                enabled = !isEditing
+                enabled = !state.isEditing
             ) {
                 DeletableItem (
                     modifier = Modifier.fillMaxSize(),
@@ -85,36 +84,4 @@ fun SessionsList(
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun NoSessionsPreview() {
-    SessionsList(
-        navigator = EmptyDestinationsNavigator,
-        sessions = emptyMap(),
-        isEditing = false,
-        onEvent = {}
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SessionsSectionPreview() {
-    SessionsList(
-        navigator = EmptyDestinationsNavigator,
-        sessions = mapOf(
-            Session(date = "2021-01-01") to emptyList(),
-            Session(date = "2021-01-02") to emptyList(),
-            Session(date = "2021-01-03") to listOf(
-                Movement(name = "Squat"),
-                Movement(name = "Bench Press"),
-                Movement(name = "Deadlift"),
-                Movement(name = "Front Squat"),
-                Movement(name = "Dips"),
-            ),
-        ),
-        isEditing = false,
-        onEvent = {}
-    )
 }

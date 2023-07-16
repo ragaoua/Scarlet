@@ -67,7 +67,7 @@ fun Screen(
             ) {
                 Spacer(modifier = Modifier.height(48.dp))
                 SessionHeader(
-                    session = state.session
+                    state = state
                 )
                 Spacer(modifier = Modifier.height(32.dp))
                 ExercisesList(
