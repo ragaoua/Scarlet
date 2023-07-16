@@ -16,7 +16,6 @@
     <string name="no_active_block">No active block</string>
     <string name="start_new_block">Click to start a new block</string>
     <string name="new_block">New Block</string>
-    <string name="block_name_empty">Please enter a name for the block</string>
     <string name="create_block">Create block</string>
 
     <!-- Block -->
