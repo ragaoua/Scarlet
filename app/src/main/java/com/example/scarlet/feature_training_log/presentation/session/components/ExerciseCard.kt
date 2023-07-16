@@ -4,7 +4,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,22 +26,19 @@ import com.example.scarlet.feature_training_log.presentation.session.SessionEven
 
 @Composable
 fun ExerciseCard(
-    modifier: Modifier = Modifier,
     exercise: ExerciseWithMovementAndSets,
     onEvent: (SessionEvent) -> Unit
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(BorderStroke(2.dp, MaterialTheme.colorScheme.onSurface))
-            .clickable {
-                /* TODO expand/collapse detail */
-            }
+    Column(
+        modifier = Modifier.border(BorderStroke(2.dp, MaterialTheme.colorScheme.onSurface))
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp),
+                .padding(8.dp)
+                .clickable {
+                    /* TODO expand/collapse detail */
+                },
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -55,19 +51,14 @@ fun ExerciseCard(
                 contentDescription = "Expand" /* localize */
             ) /* TODO KeyboardArrowDown/Up depending on expand/collapse state */
         }
-    }
-    Box(
-        modifier = modifier
-    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .border(BorderStroke(2.dp, MaterialTheme.colorScheme.onSurface))
                 .padding(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            if(exercise.sets.isNotEmpty()) {
+            if (exercise.sets.isNotEmpty()) {
                 ExerciseDetailHeader(
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -77,8 +68,7 @@ fun ExerciseCard(
                         onEvent = onEvent
                     )
                 }
-            }
-            else {
+            } else {
                 Text(text = "No sets yet") /* TODO: localize */
             }
             AddSetButton(
