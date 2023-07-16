@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
@@ -54,7 +55,8 @@ fun ExerciseSetRow(
                         set.copy(reps = reps.value.toIntOrNull())
                     ))
                 }
-            }
+            },
+            imeAction = ImeAction.Next
         )
 
         SetTextField(
@@ -69,7 +71,8 @@ fun ExerciseSetRow(
                         set.copy(weight = weight.value.toFloatOrNull())
                     ))
                 }
-            }
+            },
+            imeAction = ImeAction.Next
         )
 
         SetTextField(
@@ -84,7 +87,8 @@ fun ExerciseSetRow(
                         set.copy(rpe = rpe.value.toFloatOrNull())
                     ))
                 }
-            }
+            },
+            imeAction = ImeAction.Done
         )
 
         Icon(
