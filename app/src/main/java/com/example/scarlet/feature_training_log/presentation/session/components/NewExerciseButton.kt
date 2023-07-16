@@ -17,9 +17,8 @@ fun NewExerciseButton(
     onEvent: (SessionEvent) -> Unit
 ) {
     Button(
-        modifier = Modifier
-            .fillMaxWidth(),
-        shape = MaterialTheme.shapes.extraSmall,
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.small,
         onClick = {
             onEvent(SessionEvent.ShowNewExerciseDialog)
         }
