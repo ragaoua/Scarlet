@@ -30,8 +30,7 @@ fun ExercisesList(
     ) {
         if(exercises.isNotEmpty()) {
             items(exercises) { exercise ->
-                ExerciseHeader(exercise = exercise)
-                ExerciseDetail(
+                ExerciseCard(
                     exercise = exercise,
                     onEvent = onEvent
                 )

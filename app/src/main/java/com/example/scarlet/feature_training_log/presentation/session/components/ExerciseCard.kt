@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,10 +22,14 @@ import androidx.compose.ui.unit.dp
 import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
 import com.example.scarlet.feature_training_log.domain.model.Movement
+import com.example.scarlet.feature_training_log.domain.model.Set
+import com.example.scarlet.feature_training_log.presentation.session.SessionEvent
 
 @Composable
-fun ExerciseHeader(
-    exercise: ExerciseWithMovementAndSets
+fun ExerciseCard(
+    modifier: Modifier = Modifier,
+    exercise: ExerciseWithMovementAndSets,
+    onEvent: (SessionEvent) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -47,22 +52,71 @@ fun ExerciseHeader(
             )
             Icon(
                 imageVector = Icons.Default.KeyboardArrowUp,
-                contentDescription = "Expand"
+                contentDescription = "Expand" /* localize */
             ) /* TODO KeyboardArrowDown/Up depending on expand/collapse state */
         }
-
+    }
+    Box(
+        modifier = modifier
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(BorderStroke(2.dp, MaterialTheme.colorScheme.onSurface))
+                .padding(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            if(exercise.sets.isNotEmpty()) {
+                ExerciseDetailHeader(
+                    modifier = Modifier.fillMaxWidth()
+                )
+                exercise.sets.forEach { set ->
+                    ExerciseSetRow(
+                        set = set,
+                        onEvent = onEvent
+                    )
+                }
+            }
+            else {
+                Text(text = "No sets yet") /* TODO: localize */
+            }
+            AddSetButton(
+                exercise = exercise.exercise,
+                onEvent = onEvent
+            )
+        }
     }
 }
 
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewHeader() {
-    ExerciseHeader(
+fun PreviewExerciseDetail_noSets() {
+    ExerciseCard(
         exercise = ExerciseWithMovementAndSets(
             exercise = Exercise(),
-            movement = Movement(name = "Low-bar Squat"),
+            movement = Movement(),
             sets = emptyList()
-        )
+        ),
+        onEvent = {}
+    )
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewExerciseDetail_withSets() {
+    ExerciseCard(
+        exercise = ExerciseWithMovementAndSets(
+            exercise = Exercise(),
+            movement = Movement(),
+            sets = listOf(
+                Set(order = 1, reps = 10, weight = 100f, rpe = 8f),
+                Set(order = 2, reps = 10, weight = 100f, rpe = 8.5f),
+                Set(order = 3, reps = 10, weight = 95f, rpe = 8f)
+            )
+        ),
+        onEvent = {}
     )
 }
