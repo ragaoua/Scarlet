@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -48,26 +49,32 @@ fun Screen(
     onEvent: (SessionEvent) -> Unit
 ) {
     ScarletTheme {
-        if(state.isAddingExercise) {
-            NewExerciseDialog(
-                state = state,
-                onEvent = onEvent
-            )
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-                .padding(16.dp)
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
         ) {
-            SessionHeader(
-                session = state.session
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            ExercisesList(
-                exercises = state.exercises,
-                onEvent = onEvent
-            )
+            if (state.isAddingExercise) {
+                NewExerciseDialog(
+                    state = state,
+                    onEvent = onEvent
+                )
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(16.dp)
+            ) {
+                Spacer(modifier = Modifier.height(48.dp))
+                SessionHeader(
+                    session = state.session
+                )
+                Spacer(modifier = Modifier.height(32.dp))
+                ExercisesList(
+                    exercises = state.exercises,
+                    onEvent = onEvent
+                )
+            }
         }
     }
 }
