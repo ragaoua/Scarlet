@@ -27,7 +27,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Composable
 fun ActiveBlockSection(
     navigator: DestinationsNavigator,
-    activeBlock: BlockWithSessions? = null,
+    activeBlockWithSessions: BlockWithSessions? = null,
     onEvent: (TrainingLogEvent) -> Unit
 ) {
     TitledLazyList(
@@ -36,20 +36,20 @@ fun ActiveBlockSection(
             .padding(TitleLazyListPadding),
         title = stringResource(R.string.active_training_block),
     ) {
-        item(activeBlock) {
-            activeBlock?.let {
+        item(activeBlockWithSessions) {
+            activeBlockWithSessions?.let { activeBlockWithSessions ->
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     contentPadding = MainButtonContentPadding,
                     shape = MaterialTheme.shapes.large,
                     onClick = {
-                        navigator.navigate(BlockScreenDestination(it.block))
+                        navigator.navigate(BlockScreenDestination(activeBlockWithSessions.block))
                     }
                 ) {
                     DeletableItem (
                         modifier = Modifier.fillMaxSize(),
                         onDeleteClicked = {
-                            onEvent(TrainingLogEvent.DeleteBlock(it.block))
+                            onEvent(TrainingLogEvent.DeleteBlock(activeBlockWithSessions.block))
                         }
                     ) {
                         Column(
@@ -57,15 +57,15 @@ fun ActiveBlockSection(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = it.block.name,
+                                text = activeBlockWithSessions.block.name,
                                 style = MaterialTheme.typography.titleLarge
                             )
                             Text(
                                 text =
-                                if (it.sessions.isNotEmpty()) {
+                                if (activeBlockWithSessions.sessions.isNotEmpty()) {
                                     stringResource(
                                         id = R.string.block_started_on,
-                                        it.sessions.first().date
+                                        activeBlockWithSessions.sessions.first().date
                                     )
                                 } else {
                                     stringResource(R.string.empty_block)

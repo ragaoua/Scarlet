@@ -77,7 +77,7 @@ fun Screen(
                 Spacer(modifier = Modifier.height(32.dp))
                 ActiveBlockSection(
                     navigator = navigator,
-                    activeBlock = state.activeBlock,
+                    activeBlockWithSessions = state.activeBlock,
                     onEvent = onEvent
                 )
 
