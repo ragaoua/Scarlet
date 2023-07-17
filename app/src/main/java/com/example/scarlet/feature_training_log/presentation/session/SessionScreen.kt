@@ -6,15 +6,22 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
 import com.example.scarlet.feature_training_log.domain.model.Movement
@@ -49,31 +56,50 @@ fun Screen(
     onEvent: (SessionEvent) -> Unit
 ) {
     ScarletTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            if (state.isAddingExercise) {
-                NewExerciseDialog(
-                    state = state,
-                    onEvent = onEvent
-                )
+        Scaffold(
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = {
+                        /* TODO onEvent(SessionEvent.editSession) */
+                    },
+                    shape = MaterialTheme.shapes.extraLarge
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = stringResource(R.string.edit_session)
+                    )
+                }
+                /* TODO change the color */
             }
-            Column(
+        ) { contentPadding ->
+            Surface(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background)
-                    .padding(16.dp)
+                    .padding(contentPadding),
+                color = MaterialTheme.colorScheme.background
             ) {
-                Spacer(modifier = Modifier.height(48.dp))
-                SessionHeader(
-                    state = state
-                )
-                Spacer(modifier = Modifier.height(32.dp))
-                ExercisesList(
-                    exercises = state.exercises,
-                    onEvent = onEvent
-                )
+                if (state.isAddingExercise) {
+                    NewExerciseDialog(
+                        state = state,
+                        onEvent = onEvent
+                    )
+                }
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.background)
+                        .padding(16.dp)
+                ) {
+                    Spacer(modifier = Modifier.height(48.dp))
+                    SessionHeader(
+                        state = state
+                    )
+                    Spacer(modifier = Modifier.height(32.dp))
+                    ExercisesList(
+                        exercises = state.exercises,
+                        onEvent = onEvent
+                    )
+                }
             }
         }
     }
