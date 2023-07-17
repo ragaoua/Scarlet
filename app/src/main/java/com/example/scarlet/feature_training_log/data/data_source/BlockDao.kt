@@ -5,9 +5,10 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import com.example.scarlet.feature_training_log.domain.model.Block
-import com.example.scarlet.feature_training_log.domain.model.Session
+import com.example.scarlet.feature_training_log.domain.model.BlockWithSessions
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -22,11 +23,11 @@ interface BlockDao {
     @Delete
     suspend fun deleteBlock(block: Block)
 
+    @Transaction
     @Query("""
-        SELECT block.*, session.*
+        SELECT *
         FROM block
-        LEFT JOIN session ON block.id = session.blockId
         WHERE COMPLETED = :completed
     """)
-    fun getBlocksWithSessionsByCompleted(completed: Boolean): Flow<Map<Block, List<Session>>>
+    fun getBlocksWithSessionsByCompleted(completed: Boolean): Flow<List<BlockWithSessions>>
 }
