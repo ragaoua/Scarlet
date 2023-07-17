@@ -34,6 +34,7 @@
     <string name="add_exercise">Add Exercise</string>
     <string name="new_exercise">New Exercise</string>
     <string name="edit_session">Edit session</string>
+    <string name="no_sets_msg">Click below to add a set</string>
     <string name="add_set">Add set</string>
     <string name="set">Set</string>
     <string name="reps">Reps</string>

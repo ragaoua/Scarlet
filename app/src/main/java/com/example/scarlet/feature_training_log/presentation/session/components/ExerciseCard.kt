@@ -17,8 +17,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
 import com.example.scarlet.feature_training_log.domain.model.Movement
@@ -78,7 +80,8 @@ fun ExerciseCard(
                     )
                 }
             } else {
-                Text(text = "No sets yet") /* TODO: localize */
+                Text(text = stringResource(R.string.no_sets_msg))
+                /* TODO change color (grey) and style */
             }
             AddSetButton(
                 exercise = exercise.exercise,
