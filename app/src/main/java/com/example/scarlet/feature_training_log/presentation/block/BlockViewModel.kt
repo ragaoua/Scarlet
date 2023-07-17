@@ -26,16 +26,16 @@ class BlockViewModel @Inject constructor(
 
     private val block = BlockScreenDestination.argsFrom(savedStateHandle).block
 
-    private val sessionWithMovementNames =
-        repository.getSessionsWithMovementNamesByBlockId(block.id)
+    private val sessionWithMovements =
+        repository.getSessionsWithMovementsByBlockId(block.id)
 
     private val _state = MutableStateFlow(
         BlockUiState(block = block)
     )
 
-    val state = combine(_state, sessionWithMovementNames) { state, sessions ->
+    val state = combine(_state, sessionWithMovements) { state, sessionWithMovements ->
         state.copy(
-            sessionsWithMovement = sessions
+            sessionsWithMovements = sessionWithMovements
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), BlockUiState())
 

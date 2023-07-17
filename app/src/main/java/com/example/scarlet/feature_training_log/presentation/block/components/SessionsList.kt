@@ -37,9 +37,8 @@ fun SessionsList(
             .padding(TitleLazyListPadding),
         title = stringResource(R.string.block_sessions_list_title)
     ) {
-        if (state.sessionsWithMovement.isNotEmpty()) {
-            items(state.sessionsWithMovement.keys.toList()) { session ->
-                val sessionMovements = state.sessionsWithMovement[session]!!
+        if (state.sessionsWithMovements.isNotEmpty()) {
+            items(state.sessionsWithMovements) { sessionsWithMovements ->
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     contentPadding = MainButtonContentPadding,
@@ -51,7 +50,7 @@ fun SessionsList(
                     onClick = {
                         navigator.navigate(
                             SessionScreenDestination(
-                                session = session,
+                                session = sessionsWithMovements.session,
                                 block = state.block
                             )
                         )
@@ -61,7 +60,7 @@ fun SessionsList(
                     DeletableItem(
                         modifier = Modifier.fillMaxSize(),
                         onDeleteClicked = {
-                            onEvent(BlockEvent.DeleteSession(session))
+                            onEvent(BlockEvent.DeleteSession(sessionsWithMovements.session))
                         }
                     ) {
                         Column(
@@ -69,12 +68,12 @@ fun SessionsList(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = session.date,
+                                text = sessionsWithMovements.session.date,
                                 style = MaterialTheme.typography.titleLarge
                             )
                             Text(
-                                text = if (sessionMovements.isNotEmpty()) {
-                                    sessionMovements.joinToString { it.name }
+                                text = if (sessionsWithMovements.movements.isNotEmpty()) {
+                                    sessionsWithMovements.movements.joinToString { it.name }
                                 } else {
                                     stringResource(R.string.empty_session)
                                 },

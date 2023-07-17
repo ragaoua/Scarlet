@@ -18,6 +18,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Session
+import com.example.scarlet.feature_training_log.domain.model.SessionWithMovements
 import com.example.scarlet.feature_training_log.presentation.block.components.BlockHeader
 import com.example.scarlet.feature_training_log.presentation.block.components.SessionsList
 import com.example.scarlet.feature_training_log.presentation.destinations.SessionScreenDestination
@@ -114,18 +115,24 @@ fun PreviewBlockScreen() {
             block = Block(
                 name = "Block 1",
             ),
-            sessionsWithMovement = mapOf(
-                Session(
-                    date = "24-06-2023",
-                    blockId = 1
-                ) to emptyList(),
-                Session(
-                    date = "21-06-2023",
-                    blockId = 1
-                ) to listOf(
-                    Movement(name = "Bench Press"),
-                    Movement(name = "Comp Squat"),
-                    Movement(name = "Dips"),
+            sessionsWithMovements = listOf(
+                SessionWithMovements(
+                    Session(
+                        date = "24-06-2023",
+                        blockId = 1
+                    ),
+                    emptyList()
+                ),
+                SessionWithMovements(
+                    Session(
+                        date = "21-06-2023",
+                        blockId = 1
+                    ),
+                    listOf(
+                        Movement(name = "Bench Press"),
+                        Movement(name = "Comp Squat"),
+                        Movement(name = "Dips"),
+                    )
                 ),
             )
         ),

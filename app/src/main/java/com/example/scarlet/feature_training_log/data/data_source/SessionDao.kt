@@ -5,9 +5,10 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
-import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Session
+import com.example.scarlet.feature_training_log.domain.model.SessionWithMovements
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -18,14 +19,13 @@ interface SessionDao {
     @Query("SELECT * FROM session WHERE id = :sessionId")
     fun getSessionById(sessionId: Int): Flow<Session?>
 
+    @Transaction
     @Query("""
-        SELECT session.*, movement.*
+        SELECT session.*
         FROM session
-        LEFT JOIN exercise ON exercise.sessionId = session.id
-        LEFT JOIN movement ON movement.id = exercise.movementId
         WHERE blockId = :blockId
     """)
-    fun getSessionsWithMovementNamesByBlockId(blockId: Int): Flow<Map<Session,List<Movement>>>
+    fun getSessionsWithMovementsByBlockId(blockId: Int): Flow<List<SessionWithMovements>>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertSession(session: Session): Long
