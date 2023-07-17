@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -30,7 +31,11 @@ fun ExerciseCard(
     onEvent: (SessionEvent) -> Unit
 ) {
     Column(
-        modifier = Modifier.border(BorderStroke(2.dp, MaterialTheme.colorScheme.onSurface))
+        modifier = Modifier
+            .border(
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface),
+                shape = MaterialTheme.shapes.medium
+            )
     ) {
         Row(
             modifier = Modifier
@@ -51,6 +56,10 @@ fun ExerciseCard(
                 contentDescription = "Expand" /* localize */
             ) /* TODO KeyboardArrowDown/Up depending on expand/collapse state */
         }
+        Divider(
+            modifier = Modifier.fillMaxWidth(),
+            thickness = 1.dp
+        )
         Column(
             modifier = Modifier
                 .fillMaxWidth()
