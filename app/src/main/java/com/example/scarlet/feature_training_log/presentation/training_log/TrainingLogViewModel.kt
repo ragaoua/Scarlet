@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.scarlet.feature_training_log.data.repository.ScarletRepository
 import com.example.scarlet.feature_training_log.domain.model.Block
-import com.example.scarlet.feature_training_log.presentation.core.DateFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -15,7 +14,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,7 +36,7 @@ class TrainingLogViewModel @Inject constructor(
                     activeBlocks.firstOrNull()?.copy(
                         sessions = activeBlocks.first().sessions
                             .sortedBy {
-                                LocalDate.parse(it.date, DateFormatter)
+                                it.date
                             }
                     )
                 },
@@ -46,13 +44,11 @@ class TrainingLogViewModel @Inject constructor(
                 completedBlocks.map { completedBlock ->
                     completedBlock.copy(
                         sessions = completedBlock.sessions.sortedBy {
-                            LocalDate.parse(it.date, DateFormatter)
+                            it.date
                         }
                     )
                 }.sortedByDescending {
-                    it.sessions.lastOrNull()?.let { lastSession ->
-                        LocalDate.parse(lastSession.date, DateFormatter)
-                    }
+                    it.sessions.lastOrNull()?.date
                 }
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), TrainingLogUiState())

@@ -2,6 +2,7 @@ package com.example.scarlet.feature_training_log.data.data_source
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.Movement
@@ -15,6 +16,7 @@ import com.example.scarlet.feature_training_log.domain.model.Set
         Movement::class,
         Set::class],
     version = 1)
+@TypeConverters(DateConverter::class)
 abstract class ScarletDatabase : RoomDatabase() {
 
     abstract val blockDao: BlockDao

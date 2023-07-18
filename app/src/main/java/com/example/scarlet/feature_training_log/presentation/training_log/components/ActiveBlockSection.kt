@@ -18,6 +18,7 @@ import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.BlockWithSessions
 import com.example.scarlet.feature_training_log.presentation.components.DeletableItem
 import com.example.scarlet.feature_training_log.presentation.components.TitledLazyList
+import com.example.scarlet.feature_training_log.presentation.core.DateUtils
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
 import com.example.scarlet.feature_training_log.presentation.training_log.TrainingLogEvent
 import com.example.scarlet.ui.theme.MainButtonContentPadding
@@ -65,7 +66,7 @@ fun ActiveBlockSection(
                                 if (activeBlockWithSessions.sessions.isNotEmpty()) {
                                     stringResource(
                                         id = R.string.block_started_on,
-                                        activeBlockWithSessions.sessions.first().date
+                                        DateUtils.formatDate(activeBlockWithSessions.sessions.first().date)
                                     )
                                 } else {
                                     stringResource(R.string.empty_block)

@@ -19,6 +19,7 @@ import com.example.scarlet.feature_training_log.presentation.block.BlockEvent
 import com.example.scarlet.feature_training_log.presentation.block.BlockUiState
 import com.example.scarlet.feature_training_log.presentation.components.DeletableItem
 import com.example.scarlet.feature_training_log.presentation.components.TitledLazyList
+import com.example.scarlet.feature_training_log.presentation.core.DateUtils
 import com.example.scarlet.feature_training_log.presentation.destinations.SessionScreenDestination
 import com.example.scarlet.ui.theme.MainButtonContentPadding
 import com.example.scarlet.ui.theme.TitleLazyListPadding
@@ -68,7 +69,7 @@ fun SessionsList(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = sessionsWithMovements.session.date,
+                                text = DateUtils.formatDate(sessionsWithMovements.session.date),
                                 style = MaterialTheme.typography.titleLarge
                             )
                             Text(

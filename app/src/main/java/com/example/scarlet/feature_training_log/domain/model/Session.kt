@@ -7,9 +7,8 @@ import androidx.room.Index
 import androidx.room.Junction
 import androidx.room.PrimaryKey
 import androidx.room.Relation
-import com.example.scarlet.feature_training_log.presentation.core.DateFormatter
 import java.io.Serializable
-import java.time.LocalDate
+import java.util.Date
 
 @Entity(
     indices = [
@@ -28,7 +27,7 @@ data class Session(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val blockId: Int = 0,
-    val date: String = LocalDate.now().format(DateFormatter),
+    val date: Date = Date(System.currentTimeMillis()),
 ): Serializable
 
 data class SessionWithMovements(

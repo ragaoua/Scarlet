@@ -17,6 +17,7 @@ import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.BlockWithSessions
 import com.example.scarlet.feature_training_log.presentation.components.DeletableItem
 import com.example.scarlet.feature_training_log.presentation.components.TitledLazyList
+import com.example.scarlet.feature_training_log.presentation.core.DateUtils
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
 import com.example.scarlet.feature_training_log.presentation.training_log.TrainingLogEvent
 import com.example.scarlet.ui.theme.MainButtonContentPadding
@@ -66,7 +67,8 @@ fun CompletedBlocksSection(
                             Text(
                                 text =
                                 if (it.sessions.isNotEmpty()) {
-                                    "${it.sessions.first().date} - ${it.sessions.last().date}"
+                                    DateUtils.formatDate(it.sessions.first().date) + " - " +
+                                            DateUtils.formatDate(it.sessions.last().date)
                                 } else {
                                     stringResource(R.string.empty_block)
                                 },

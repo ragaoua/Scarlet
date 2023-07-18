@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
+import com.example.scarlet.feature_training_log.presentation.core.DateUtils
 import com.example.scarlet.feature_training_log.presentation.session.SessionEvent
 import com.example.scarlet.feature_training_log.presentation.session.SessionUiState
 
@@ -98,7 +99,7 @@ fun SessionHeader(
                     .clickable { onEvent(SessionEvent.OpenDatePickerDialog) }
             )
             Text(
-                text = state.session.date,
+                text = DateUtils.formatDate(state.session.date),
                 style = MaterialTheme.typography.headlineLarge,
                 modifier = Modifier
                     .padding(horizontal = editIconPadding + 4.dp)

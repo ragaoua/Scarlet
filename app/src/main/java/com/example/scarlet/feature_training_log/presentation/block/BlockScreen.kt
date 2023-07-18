@@ -27,6 +27,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest
+import java.util.Date
 
 @Destination(
     navArgsDelegate = BlockScreenNavArgs::class
@@ -118,14 +119,14 @@ fun PreviewBlockScreen() {
             sessionsWithMovements = listOf(
                 SessionWithMovements(
                     Session(
-                        date = "24-06-2023",
+                        date = Date(System.currentTimeMillis()),
                         blockId = 1
                     ),
                     emptyList()
                 ),
                 SessionWithMovements(
                     Session(
-                        date = "21-06-2023",
+                        date = Date(System.currentTimeMillis()),
                         blockId = 1
                     ),
                     listOf(

@@ -34,6 +34,7 @@ import com.example.scarlet.feature_training_log.presentation.session.components.
 import com.example.scarlet.ui.theme.ScarletTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import java.util.Date
 
 @Destination(
     navArgsDelegate = SessionScreenNavArgs::class
@@ -126,7 +127,9 @@ fun Screen(
 fun PreviewEmptySession() {
     Screen(
         state = SessionUiState(
-            session = Session(date = "24-06-2023")
+            session = Session(
+                date = Date(System.currentTimeMillis())
+            )
         ),
         onEvent = {}
     )
@@ -137,7 +140,9 @@ fun PreviewEmptySession() {
 fun PreviewSessionScreen() {
     Screen(
         state = SessionUiState(
-            session = Session(date = "24-06-2023"),
+            session = Session(
+                date = Date(System.currentTimeMillis())
+            ),
             exercises = listOf(
                 ExerciseWithMovementAndSets(Exercise(), Movement(name="Squat"), listOf(
                     Set(reps = 3, weight = 100f),
