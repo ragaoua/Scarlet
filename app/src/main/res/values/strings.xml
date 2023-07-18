@@ -35,6 +35,7 @@
     <string name="new_exercise">New Exercise</string>
     <string name="edit_session">Edit session</string>
     <string name="edit_session_date">Edit session date</string>
+    <string name="save_session">Save session</string>
     <string name="no_sets_msg">Click below to add a set</string>
     <string name="add_set">Add set</string>
     <string name="set">Set</string>

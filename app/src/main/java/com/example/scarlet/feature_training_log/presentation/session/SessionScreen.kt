@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -60,14 +61,27 @@ fun Screen(
             floatingActionButton = {
                 FloatingActionButton(
                     onClick = {
-                        /* TODO onEvent(SessionEvent.editSession) */
+                        if (state.isInEditMode) {
+                            onEvent(SessionEvent.SaveSession(
+                                state.session
+                            )) // TODO save changes
+                        } else {
+                            onEvent(SessionEvent.EditSession)
+                        }
                     },
                     shape = MaterialTheme.shapes.extraLarge
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Edit,
-                        contentDescription = stringResource(R.string.edit_session)
-                    )
+                    if (state.isInEditMode) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = stringResource(R.string.save_session)
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = stringResource(R.string.edit_session)
+                        )
+                    }
                 }
                 /* TODO change the color */
             }

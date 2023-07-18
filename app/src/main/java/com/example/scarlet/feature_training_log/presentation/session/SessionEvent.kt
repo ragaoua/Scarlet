@@ -10,6 +10,8 @@ sealed interface SessionEvent {
     object CloseDatePickerDialog : SessionEvent
     data class SaveSession(val session: Session) : SessionEvent
 
+    object EditSession : SessionEvent
+
     object ShowNewExerciseDialog : SessionEvent
     object HideNewExerciseDialog : SessionEvent
     data class NewExercise(val movementId: Int) : SessionEvent

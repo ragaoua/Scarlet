@@ -23,11 +23,12 @@ class TrainingLogViewModel @Inject constructor(
     private val repository: ScarletRepository
 ) : ViewModel() {
 
-    private val completedBlocks = repository.getBlocksWithSessionsByCompleted(true)
-    private val activeBlocks = repository.getBlocksWithSessionsByCompleted(false)
-
     private val _state = MutableStateFlow(TrainingLogUiState())
-    val state = combine(_state, activeBlocks, completedBlocks) { state, activeBlocks, completedBlocks ->
+    val state = combine(
+        _state,
+        repository.getBlocksWithSessionsByCompleted(false),
+        repository.getBlocksWithSessionsByCompleted(true)
+    ) { state, activeBlocks, completedBlocks ->
         state.copy(
             activeBlock =
                 if (activeBlocks.size > 1) {
