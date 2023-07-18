@@ -47,6 +47,24 @@ class SessionViewModel @Inject constructor(
 
     fun onEvent(event: SessionEvent) {
         when (event) {
+            SessionEvent.OpenDatePickerDialog -> {
+                _state.update {
+                    it.copy(isDatePickerDialogOpen = true)
+                }
+            }
+            SessionEvent.CloseDatePickerDialog -> {
+                _state.update {
+                    it.copy(isDatePickerDialogOpen = false)
+                }
+            }
+            is SessionEvent.SaveSession -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    repository.updateSession(event.session)
+                    _state.update {
+                        it.copy(isDatePickerDialogOpen = false)
+                    }
+                }
+            }
             SessionEvent.ShowNewExerciseDialog -> {
                 _state.update {
                     it.copy(isAddingExercise = true)
