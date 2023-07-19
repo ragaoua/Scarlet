@@ -11,8 +11,8 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun SecondaryActionButton(
-    modifier: Modifier = Modifier,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
     content: @Composable RowScope.() -> Unit
 ) {
     // Overriding the defaultMinSize and contentPadding to make the button smaller
@@ -20,7 +20,12 @@ fun SecondaryActionButton(
     OutlinedButton(
         modifier = modifier
             .defaultMinSize(minHeight = 1.dp, minWidth = 1.dp),
-        contentPadding = PaddingValues(0.dp),
+        contentPadding = PaddingValues(
+            start = 8.dp, // default
+            top = 0.dp,
+            end = 8.dp, // default
+            bottom = 0.dp
+        ),
         shape = MaterialTheme.shapes.extraSmall,
         onClick = onClick,
         content = content
