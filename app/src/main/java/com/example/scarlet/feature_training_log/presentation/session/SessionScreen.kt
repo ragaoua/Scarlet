@@ -90,12 +90,6 @@ fun Screen(
                     .padding(contentPadding),
                 color = MaterialTheme.colorScheme.background
             ) {
-                if (state.isMovementSelectionSheetOpen) {
-                    MovementSelectionSheet(
-                        state = state,
-                        onEvent = onEvent
-                    )
-                }
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -119,7 +113,7 @@ fun Screen(
             ModalBottomSheet(
                 onDismissRequest = {
                     onEvent(SessionEvent.CollapseMovementSelectionSheet)
-                }
+                },
             ) {
                 MovementSelectionSheet(
                     state = state,
