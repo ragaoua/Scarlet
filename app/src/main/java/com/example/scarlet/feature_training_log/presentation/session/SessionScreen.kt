@@ -62,13 +62,7 @@ fun Screen(
             floatingActionButton = {
                 FloatingActionButton(
                     onClick = {
-                        if (state.isInEditMode) {
-                            onEvent(SessionEvent.SaveSession(
-                                state.session
-                            )) // TODO save changes
-                        } else {
-                            onEvent(SessionEvent.EditSession)
-                        }
+                        onEvent(SessionEvent.ToggleEditMode) // TODO save changes
                     },
                     shape = MaterialTheme.shapes.extraLarge
                 ) {

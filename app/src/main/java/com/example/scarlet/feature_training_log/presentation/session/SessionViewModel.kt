@@ -57,17 +57,21 @@ class SessionViewModel @Inject constructor(
                     it.copy(isDatePickerDialogOpen = false)
                 }
             }
-            SessionEvent.EditSession -> {
+            SessionEvent.ToggleEditMode -> {
                 _state.update {
-                    it.copy(isInEditMode = true)
+                    it.copy(isInEditMode = !it.isInEditMode)
                 }
             }
-            is SessionEvent.SaveSession -> {
+            is SessionEvent.UpdateSessionDate -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    repository.updateSession(event.session)
                     _state.update { it.copy(
-                        isDatePickerDialogOpen = false,
-                        isInEditMode = false
+                        session = it.session.copy (
+                            date = event.date
+                        )
+                    )}
+                    repository.updateSession(_state.value.session)
+                    _state.update { it.copy(
+                        isDatePickerDialogOpen = false
                     )}
                 }
             }

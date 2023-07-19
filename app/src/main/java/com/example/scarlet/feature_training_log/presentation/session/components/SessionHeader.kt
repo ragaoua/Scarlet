@@ -31,6 +31,7 @@ import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.presentation.core.DateUtils
 import com.example.scarlet.feature_training_log.presentation.session.SessionEvent
 import com.example.scarlet.feature_training_log.presentation.session.SessionUiState
+import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,18 +45,17 @@ fun SessionHeader(
     ) {
         if(state.isDatePickerDialogOpen) {
             val datePickerState = rememberDatePickerState(
-                // TODO selectedDateMillis = state.session.date
+                initialSelectedDateMillis = state.session.date.time
             )
             DatePickerDialog(
                 onDismissRequest = { onEvent(SessionEvent.CloseDatePickerDialog) },
                 confirmButton = {
                     Button(
                         onClick = {
-                            onEvent(SessionEvent.SaveSession(
-                                state.session.copy(
-                                    // TODO date = datePickerState.date.toString()
-                                )
-                            ))
+                            datePickerState.selectedDateMillis?.let { dateMillis ->
+                                onEvent(SessionEvent.UpdateSessionDate(Date(dateMillis)))
+                            }
+
                         },
                         enabled = datePickerState.selectedDateMillis != null
                     ) {
