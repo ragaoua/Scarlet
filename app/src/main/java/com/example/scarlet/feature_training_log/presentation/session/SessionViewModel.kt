@@ -36,7 +36,7 @@ class SessionViewModel @Inject constructor(
     )
     val state = combine(_state, exercises, movements) { state, exercises, movements ->
         state.copy(
-            exercises = exercises,
+            exercises = exercises.sortedBy { it.exercise.order },
             movements = movements
         )
     }.stateIn(
