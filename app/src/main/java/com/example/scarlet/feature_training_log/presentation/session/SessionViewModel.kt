@@ -75,14 +75,14 @@ class SessionViewModel @Inject constructor(
                     )}
                 }
             }
-            SessionEvent.ShowNewExerciseDialog -> {
+            SessionEvent.ExpandMovementSelectionSheet -> {
                 _state.update {
-                    it.copy(isAddingExercise = true)
+                    it.copy(isMovementSelectionSheetOpen = true)
                 }
             }
-            SessionEvent.HideNewExerciseDialog -> {
+            SessionEvent.CollapseMovementSelectionSheet -> {
                 _state.update {
-                    it.copy(isAddingExercise = false)
+                    it.copy(isMovementSelectionSheetOpen = false)
                 }
             }
             is SessionEvent.NewExercise -> {
@@ -96,7 +96,7 @@ class SessionViewModel @Inject constructor(
                     )
                 }
                 _state.update {
-                    it.copy(isAddingExercise = false)
+                    it.copy(isMovementSelectionSheetOpen = false)
                 }
             }
             is SessionEvent.DeleteExercise -> {

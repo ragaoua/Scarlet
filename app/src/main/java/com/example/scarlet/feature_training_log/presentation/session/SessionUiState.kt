@@ -9,7 +9,7 @@ data class SessionUiState (
     val sessionBlockName: String = "",
     val exercises: List<ExerciseWithMovementAndSets> = emptyList(),
     val movements: List<Movement> = emptyList(),
-    val isAddingExercise: Boolean = false,
+    val isMovementSelectionSheetOpen: Boolean = false,
     val isDatePickerDialogOpen: Boolean = false,
     val isInEditMode: Boolean = false
 )

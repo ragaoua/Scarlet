@@ -3,6 +3,10 @@ package com.example.scarlet.feature_training_log.presentation.session.components
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -45,7 +49,18 @@ fun ExercisesList(
             }
         }
         item {
-            NewExerciseButton(onEvent = onEvent)
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.small,
+                onClick = {
+                    onEvent(SessionEvent.ExpandMovementSelectionSheet)
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = stringResource(R.string.new_exercise)
+                )
+            }
         }
     }
 }

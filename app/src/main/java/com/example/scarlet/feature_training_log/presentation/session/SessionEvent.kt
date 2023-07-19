@@ -12,8 +12,8 @@ sealed interface SessionEvent {
 
     object ToggleEditMode : SessionEvent
 
-    object ShowNewExerciseDialog : SessionEvent
-    object HideNewExerciseDialog : SessionEvent
+    object ExpandMovementSelectionSheet : SessionEvent
+    object CollapseMovementSelectionSheet : SessionEvent
     data class NewExercise(val movementId: Int) : SessionEvent
     data class DeleteExercise(val exercise: Exercise) : SessionEvent
 
