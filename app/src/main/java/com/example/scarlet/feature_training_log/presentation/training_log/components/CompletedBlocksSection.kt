@@ -15,8 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.BlockWithSessions
-import com.example.scarlet.feature_training_log.presentation.components.DeletableItem
-import com.example.scarlet.feature_training_log.presentation.components.TitledLazyList
+import com.example.scarlet.feature_training_log.presentation.core.components.DeletableItem
+import com.example.scarlet.feature_training_log.presentation.core.components.TitledLazyList
 import com.example.scarlet.feature_training_log.presentation.core.DateUtils
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
 import com.example.scarlet.feature_training_log.presentation.training_log.TrainingLogEvent

@@ -12,7 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.Exercise
-import com.example.scarlet.feature_training_log.presentation.components.SecondaryActionButton
+import com.example.scarlet.feature_training_log.presentation.core.components.SecondaryActionButton
 import com.example.scarlet.feature_training_log.presentation.session.SessionEvent
 
 @Composable

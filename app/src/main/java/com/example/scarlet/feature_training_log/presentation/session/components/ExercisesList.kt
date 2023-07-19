@@ -17,7 +17,7 @@ import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
 import com.example.scarlet.feature_training_log.domain.model.Movement
-import com.example.scarlet.feature_training_log.presentation.components.TitledLazyList
+import com.example.scarlet.feature_training_log.presentation.core.components.TitledLazyList
 import com.example.scarlet.feature_training_log.presentation.session.SessionEvent
 import com.example.scarlet.ui.theme.TitleLazyListPadding
 

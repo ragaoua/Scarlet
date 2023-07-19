@@ -1,4 +1,4 @@
-package com.example.scarlet.feature_training_log.presentation.components
+package com.example.scarlet.feature_training_log.presentation.core.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
