@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -43,9 +45,14 @@ fun NewBlockSheet(
         ) {
             Text(
                 text = stringResource(R.string.new_block),
-                style = MaterialTheme.typography.displaySmall
+                style = MaterialTheme.typography.headlineMedium
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(4.dp))
+            Divider(
+                modifier = Modifier.width(64.dp),
+                thickness = 1.dp
+            )
+            Spacer(modifier = Modifier.height(32.dp))
 
             var blockName by remember { mutableStateOf("") }
             OutlinedTextField(
