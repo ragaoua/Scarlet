@@ -35,7 +35,7 @@ class BlockViewModel @Inject constructor(
 
     val state = combine(_state, sessionWithMovements) { state, sessionWithMovements ->
         state.copy(
-            sessionsWithMovements = sessionWithMovements
+            sessionsWithMovements = sessionWithMovements // TODO : order by exercise order
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), BlockUiState())
 
