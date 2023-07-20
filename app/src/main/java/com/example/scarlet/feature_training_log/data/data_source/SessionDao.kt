@@ -13,11 +13,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SessionDao {
-    @Query("SELECT * FROM session")
-    fun getAllSessions(): List<Session>
-
-    @Query("SELECT * FROM session WHERE id = :sessionId")
-    fun getSessionById(sessionId: Int): Flow<Session?>
 
     @Transaction
     @Query("""
