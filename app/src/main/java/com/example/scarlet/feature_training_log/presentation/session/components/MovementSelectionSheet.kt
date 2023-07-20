@@ -17,6 +17,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -64,21 +65,44 @@ fun MovementSelectionSheet(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        LazyColumn {
-            items(state.movements){ movement ->
-                Text(
-                    text = movement.name,
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(2.dp)
-                        .clickable {
-                            onEvent(SessionEvent.NewExercise(movement.id))
-                        }
-                        .border(1.dp, MaterialTheme.colorScheme.onSurfaceVariant)
-                        .padding(8.dp)
-                )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp)
+        ) {
+            LazyColumn(
+                modifier = Modifier.weight(1f)
+            ) {
+                items(state.movements) { movement ->
+                    Text(
+                        text = movement.name,
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(2.dp)
+                            .clickable {
+                                onEvent(SessionEvent.NewExercise(movement.id))
+                            }
+                            .border(1.dp, MaterialTheme.colorScheme.onSurfaceVariant)
+                            .padding(8.dp)
+                    )
+                }
             }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            TextField(
+                value = state.movementNameFilter,
+                onValueChange = {
+                    onEvent(SessionEvent.FilterMovementsByName(it))
+                },
+                placeholder = {
+                    Text(stringResource(R.string.filter_by_name))
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            )
         }
     }
 }

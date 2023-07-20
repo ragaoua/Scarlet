@@ -10,6 +10,8 @@ sealed interface SessionEvent {
     object CloseDatePickerDialog : SessionEvent
     data class UpdateSessionDate(val date: Date) : SessionEvent
 
+    data class FilterMovementsByName(val nameFilter: String) : SessionEvent
+
     object ToggleEditMode : SessionEvent
 
     object ExpandMovementSelectionSheet : SessionEvent

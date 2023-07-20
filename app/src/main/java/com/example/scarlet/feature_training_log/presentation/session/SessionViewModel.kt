@@ -37,7 +37,12 @@ class SessionViewModel @Inject constructor(
     val state = combine(_state, exercises, movements) { state, exercises, movements ->
         state.copy(
             exercises = exercises.sortedBy { it.exercise.order },
-            movements = movements
+            movements = movements.filter {
+                it.name.contains(
+                    other = state.movementNameFilter,
+                    ignoreCase = true
+                )
+            }
         )
     }.stateIn(
         scope = viewModelScope,
@@ -130,6 +135,11 @@ class SessionViewModel @Inject constructor(
                         }.forEach {
                             repository.updateSet(it.copy(order = it.order - 1))
                         }
+                }
+            }
+            is SessionEvent.FilterMovementsByName -> {
+                _state.update {
+                    it.copy(movementNameFilter = event.nameFilter)
                 }
             }
         }
