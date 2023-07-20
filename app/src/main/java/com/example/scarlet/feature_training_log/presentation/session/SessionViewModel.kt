@@ -3,7 +3,7 @@ package com.example.scarlet.feature_training_log.presentation.session
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.scarlet.feature_training_log.data.repository.ScarletRepository
+import com.example.scarlet.feature_training_log.domain.repository.ScarletRepository
 import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.Set
 import com.example.scarlet.feature_training_log.presentation.destinations.SessionScreenDestination

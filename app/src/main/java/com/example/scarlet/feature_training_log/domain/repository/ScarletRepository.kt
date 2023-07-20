@@ -1,61 +1,64 @@
-package com.example.scarlet.feature_training_log.data.repository
+package com.example.scarlet.feature_training_log.domain.repository
 
-import com.example.scarlet.feature_training_log.data.data_source.ScarletDatabase
 import com.example.scarlet.feature_training_log.domain.model.Block
+import com.example.scarlet.feature_training_log.domain.model.BlockWithSessions
 import com.example.scarlet.feature_training_log.domain.model.Exercise
+import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
+import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Session
+import com.example.scarlet.feature_training_log.domain.model.SessionWithMovements
 import com.example.scarlet.feature_training_log.domain.model.Set
+import kotlinx.coroutines.flow.Flow
 
-class ScarletRepository(
-    private val dbInstance: ScarletDatabase
-) {
+interface ScarletRepository {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////// BLOCK ////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    fun getBlocksWithSessionsByCompleted(completed: Boolean) =
-        dbInstance.blockDao.getBlocksWithSessionsByCompleted(completed)
 
-    suspend fun insertBlock(block: Block) = dbInstance.blockDao.insertBlock(block)
+    suspend fun insertBlock(block: Block): Long
 
-    suspend fun updateBlock(block: Block) = dbInstance.blockDao.updateBlock(block)
+    suspend fun updateBlock(block: Block)
 
-    suspend fun deleteBlock(block: Block) = dbInstance.blockDao.deleteBlock(block)
+    suspend fun deleteBlock(block: Block)
+
+    fun getBlocksWithSessionsByCompleted(completed: Boolean): Flow<List<BlockWithSessions>>
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////// SESSION ///////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    fun getSessionsWithMovementsByBlockId(blockId: Int) =
-        dbInstance.sessionDao.getSessionsWithMovementsByBlockId(blockId)
 
-    suspend fun insertSession(session: Session) = dbInstance.sessionDao.insertSession(session)
+    suspend fun insertSession(session: Session): Long
 
-    suspend fun deleteSession(session: Session) = dbInstance.sessionDao.deleteSession(session)
+    suspend fun updateSession(session: Session)
 
-    suspend fun updateSession(session: Session) = dbInstance.sessionDao.updateSession(session)
+    suspend fun deleteSession(session: Session)
+
+    fun getSessionsWithMovementsByBlockId(blockId: Int): Flow<List<SessionWithMovements>>
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////// EXERCISE ///////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    suspend fun insertExercise(exercise: Exercise) = dbInstance.exerciseDao.insertExercise(exercise)
+    suspend fun insertExercise(exercise: Exercise)
 
-    fun getExercisesWithMovementAndSetsBySessionId(sessionId: Int) =
-        dbInstance.exerciseDao.getExercisesWithMovementAndSetsBySessionId(sessionId)
+    fun getExercisesWithMovementAndSetsBySessionId(sessionId: Int):
+            Flow<List<ExerciseWithMovementAndSets>>
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////// SET /////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    suspend fun insertSet(set: Set) = dbInstance.setDao.insertSet(set)
 
-    suspend fun updateSet(set: Set) = dbInstance.setDao.updateSet(set)
+    suspend fun insertSet(set: Set)
 
-    suspend fun deleteSet(set: Set) = dbInstance.setDao.deleteSet(set)
+    suspend fun updateSet(set: Set)
+
+    suspend fun deleteSet(set: Set)
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////// MOVEMENT ///////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    fun getAllMovements() = dbInstance.movementDao.getAllMovements()
+    fun getAllMovements(): Flow<List<Movement>>
 
 }

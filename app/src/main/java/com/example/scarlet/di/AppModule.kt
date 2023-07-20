@@ -3,7 +3,8 @@ package com.example.scarlet.di
 import android.app.Application
 import androidx.room.Room
 import com.example.scarlet.feature_training_log.data.data_source.ScarletDatabase
-import com.example.scarlet.feature_training_log.data.repository.ScarletRepository
+import com.example.scarlet.feature_training_log.data.repository.ScarletRepositoryImpl
+import com.example.scarlet.feature_training_log.domain.repository.ScarletRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,6 +26,6 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideScarletRepository(database: ScarletDatabase) =
-        ScarletRepository(database)
+    fun provideScarletRepository(database: ScarletDatabase): ScarletRepository =
+        ScarletRepositoryImpl(database)
 }

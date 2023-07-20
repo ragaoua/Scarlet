@@ -3,7 +3,7 @@ package com.example.scarlet.feature_training_log.presentation.block
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.scarlet.feature_training_log.data.repository.ScarletRepository
+import com.example.scarlet.feature_training_log.domain.repository.ScarletRepository
 import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
