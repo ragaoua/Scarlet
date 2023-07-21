@@ -1,4 +1,4 @@
-package com.example.scarlet.di
+package com.example.scarlet.core.di
 
 import android.app.Application
 import androidx.room.Room
