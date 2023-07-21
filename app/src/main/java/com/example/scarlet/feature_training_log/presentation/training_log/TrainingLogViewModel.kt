@@ -2,7 +2,6 @@ package com.example.scarlet.feature_training_log.presentation.training_log
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.scarlet.core.util.Resource
 import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.domain.use_case.training_log.GetActiveBlockUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.training_log.TrainingLogUseCases
@@ -32,9 +31,19 @@ class TrainingLogViewModel @Inject constructor(
         useCases.getActiveBlock(),
         useCases.getCompletedBlocks()
     ) { state, activeBlockResource, completedBlockResource ->
-        if(activeBlockResource is Resource.Error<*,*>) {
-            handleActiveBlockResourceErrors(activeBlockResource)
+        when(activeBlockResource.error) {
+            is GetActiveBlockUseCase.Errors.TooManyActiveBlocks -> {
+                /*
+                 * TODO : Emit a UI event that will be handled by the UI layer
+                 * Idea : Show a dialog that will ask the user to delete one of the active
+                 *        blocks ?
+                 * Idea : automatically correct by updating the database and setting completed
+                 *        to true for all but the last active block ? In that case, show a
+                 *        dialog to inform the user of the operation afterwards
+                 */
+            }
         }
+
         state.copy(
             activeBlock = activeBlockResource.data,
             completedBlocks = completedBlockResource.data ?: emptyList()
@@ -75,21 +84,6 @@ class TrainingLogViewModel @Inject constructor(
                 viewModelScope.launch(Dispatchers.IO) {
                     useCases.deleteBlock(event.block)
                 }
-            }
-        }
-    }
-
-    private fun handleActiveBlockResourceErrors(activeBlockResource: Resource.Error<*, *>) {
-        when(activeBlockResource.error) {
-            is GetActiveBlockUseCase.Errors.TooManyActiveBlocks -> {
-                /*
-                 * TODO : Emit a UI event that will be handled by the UI layer
-                 * Idea : Show a dialog that will ask the user to delete one of the active
-                 *        blocks ?
-                 * Idea : automatically correct by updating the database and setting completed
-                 *        to true for all but the last active block ? In that case, show a
-                 *        dialog to inform the user of the operation afterwards
-                 */
             }
         }
     }
