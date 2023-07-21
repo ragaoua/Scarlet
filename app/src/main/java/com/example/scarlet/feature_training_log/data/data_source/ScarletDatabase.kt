@@ -3,18 +3,23 @@ package com.example.scarlet.feature_training_log.data.data_source
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.example.scarlet.feature_training_log.domain.model.Block
-import com.example.scarlet.feature_training_log.domain.model.Exercise
-import com.example.scarlet.feature_training_log.domain.model.Movement
-import com.example.scarlet.feature_training_log.domain.model.Session
-import com.example.scarlet.feature_training_log.domain.model.Set
+import com.example.scarlet.feature_training_log.data.data_source.dao.BlockDao
+import com.example.scarlet.feature_training_log.data.data_source.dao.ExerciseDao
+import com.example.scarlet.feature_training_log.data.data_source.dao.MovementDao
+import com.example.scarlet.feature_training_log.data.data_source.dao.SessionDao
+import com.example.scarlet.feature_training_log.data.data_source.dao.SetDao
+import com.example.scarlet.feature_training_log.data.data_source.entity.BlockEntity
+import com.example.scarlet.feature_training_log.data.data_source.entity.ExerciseEntity
+import com.example.scarlet.feature_training_log.data.data_source.entity.MovementEntity
+import com.example.scarlet.feature_training_log.data.data_source.entity.SessionEntity
+import com.example.scarlet.feature_training_log.data.data_source.entity.SetEntity
 
 @Database(
-    entities = [Block::class,
-        Session::class,
-        Exercise::class,
-        Movement::class,
-        Set::class],
+    entities = [BlockEntity::class,
+        SessionEntity::class,
+        ExerciseEntity::class,
+        MovementEntity::class,
+        SetEntity::class],
     version = 1)
 @TypeConverters(DateConverter::class)
 abstract class ScarletDatabase : RoomDatabase() {

@@ -1,11 +1,11 @@
-package com.example.scarlet.feature_training_log.data.data_source
+package com.example.scarlet.feature_training_log.data.data_source.dao
 
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
-import com.example.scarlet.feature_training_log.domain.model.Exercise
-import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
+import com.example.scarlet.feature_training_log.data.data_source.entity.ExerciseEntity
+import com.example.scarlet.feature_training_log.data.data_source.entity.ExerciseWithMovementAndSetsEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -25,9 +25,9 @@ interface ExerciseDao {
         WHERE exercise.sessionId = :sessionId
     """)
     fun getExercisesWithMovementAndSetsBySessionId(sessionId: Int):
-            Flow<List<ExerciseWithMovementAndSets>>
+            Flow<List<ExerciseWithMovementAndSetsEntity>>
 
     @Upsert
-    suspend fun insertExercise(exercise: Exercise)
+    suspend fun insertExercise(exercise: ExerciseEntity)
 
 }
