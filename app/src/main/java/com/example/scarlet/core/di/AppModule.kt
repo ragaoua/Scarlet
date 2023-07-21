@@ -5,6 +5,11 @@ import androidx.room.Room
 import com.example.scarlet.feature_training_log.data.data_source.ScarletDatabase
 import com.example.scarlet.feature_training_log.data.repository.ScarletRepositoryImpl
 import com.example.scarlet.feature_training_log.domain.repository.ScarletRepository
+import com.example.scarlet.feature_training_log.domain.use_case.block.BlockUseCases
+import com.example.scarlet.feature_training_log.domain.use_case.block.DeleteSessionUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.block.GetSessionsWithMovementsByBlockIdUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.block.InsertSessionUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.block.UpdateBlockUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.training_log.DeleteBlockUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.training_log.GetActiveBlockUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.training_log.GetCompletedBlocksUseCase
@@ -42,5 +47,15 @@ object AppModule {
             getCompletedBlocks = GetCompletedBlocksUseCase(repository),
             deleteBlock = DeleteBlockUseCase(repository),
             insertBlock = InsertBlockUseCase(repository)
+        )
+
+    @Provides
+    @Singleton
+    fun provideBlockUseCases(repository: ScarletRepository) =
+        BlockUseCases(
+            getSessionsWithMovementsByBlockId = GetSessionsWithMovementsByBlockIdUseCase(repository),
+            insertSession = InsertSessionUseCase(repository),
+            updateBlock = UpdateBlockUseCase(repository),
+            deleteSession = DeleteSessionUseCase(repository)
         )
 }

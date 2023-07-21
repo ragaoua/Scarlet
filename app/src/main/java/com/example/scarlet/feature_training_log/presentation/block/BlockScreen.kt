@@ -39,14 +39,14 @@ fun BlockScreen(
     val blockViewModel: BlockViewModel = hiltViewModel()
     val state by blockViewModel.state.collectAsState()
     LaunchedEffect(key1 = true) {
-        blockViewModel.event.collectLatest { event ->
-            when(event) {
-                is BlockViewModelUiEvent.NavigateUp -> {
+        blockViewModel.channel.collectLatest { action ->
+            when(action) {
+                is BlockViewModel.UiAction.NavigateUp -> {
                     navigator.navigateUp()
                 }
-                is BlockViewModelUiEvent.NavigateToSessionScreen -> {
+                is BlockViewModel.UiAction.NavigateToSessionScreen -> {
                     navigator.navigate(SessionScreenDestination(
-                        session = event.session,
+                        session = action.session,
                         block = state.block
                     ))
                 }
