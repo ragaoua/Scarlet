@@ -8,7 +8,15 @@ class InsertSetUseCase(
     private val repository: ScarletRepository
 ) {
 
-    suspend operator fun invoke(set: Set): Resource<Long> {
+    suspend operator fun invoke(
+        exerciseId: Int,
+        exerciseSets: List<Set>
+    ): Resource<Long> {
+        val set = Set(
+            exerciseId = exerciseId,
+            order = exerciseSets.count() + 1
+        )
+
         return Resource.Success(
             repository.insertSet(set)
         )

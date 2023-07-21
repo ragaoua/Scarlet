@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.scarlet.feature_training_log.domain.model.Exercise
-import com.example.scarlet.feature_training_log.domain.model.Set
 import com.example.scarlet.feature_training_log.domain.use_case.session.SessionUseCases
 import com.example.scarlet.feature_training_log.presentation.destinations.SessionScreenDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -107,15 +106,13 @@ class SessionViewModel @Inject constructor(
             }
             is SessionEvent.NewSet -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    // TODO find a way to define the order of the set in the use case
-                    val newSetOrder = state.value.exercises
-                        .flatMap { it.sets }
-                        .count { it.exerciseId == event.exercise.id } + 1
-                    val newSet = Set(
+                    val exerciseSets = state.value.exercises
+                        .find { it.exercise.id == event.exercise.id }
+                        ?.sets ?: emptyList()
+                    useCases.insertSet(
                         exerciseId = event.exercise.id,
-                        order = newSetOrder
+                        exerciseSets = exerciseSets
                     )
-                    useCases.insertSet(newSet)
                 }
             }
             is SessionEvent.UpdateSet -> {
@@ -125,16 +122,12 @@ class SessionViewModel @Inject constructor(
             }
             is SessionEvent.DeleteSet -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    useCases.deleteSet(event.set)
-                    /* Update the order of the other sets if necessary */
-                    // TODO find a way to do that in the use case
-                    state.value.exercises
-                        .flatMap { it.sets }
-                        .filter {
-                            it.exerciseId == event.set.exerciseId && it.order > event.set.order
-                        }.forEach {
-                            useCases.updateSet(it.copy(order = it.order - 1))
-                        }
+                    useCases.deleteSet(
+                        set = event.set,
+                        exerciseSets = state.value.exercises
+                            .find { it.exercise.id == event.set.exerciseId }
+                            ?.sets ?: emptyList()
+                    )
                 }
             }
             is SessionEvent.FilterMovementsByName -> {
