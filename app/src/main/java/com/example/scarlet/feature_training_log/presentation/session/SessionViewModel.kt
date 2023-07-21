@@ -3,9 +3,9 @@ package com.example.scarlet.feature_training_log.presentation.session
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.scarlet.feature_training_log.domain.repository.ScarletRepository
 import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.Set
+import com.example.scarlet.feature_training_log.domain.use_case.session.SessionUseCases
 import com.example.scarlet.feature_training_log.presentation.destinations.SessionScreenDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -19,14 +19,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SessionViewModel @Inject constructor(
-    private val repository: ScarletRepository,
+    private val useCases: SessionUseCases,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val session = SessionScreenDestination.argsFrom(savedStateHandle).session
     private val sessionBlock = SessionScreenDestination.argsFrom(savedStateHandle).block
-    private val exercises = repository.getExercisesWithMovementAndSetsBySessionId(session.id)
-    private val movements = repository.getAllMovements()
 
     private val _state = MutableStateFlow(
         SessionUiState(
@@ -34,38 +32,38 @@ class SessionViewModel @Inject constructor(
             sessionBlockName = sessionBlock.name
         )
     )
-    val state = combine(_state, exercises, movements) { state, exercises, movements ->
+    val state = combine(
+        _state,
+        useCases.getExercisesWithMovementAndSetsBySessionId(session.id),
+        useCases.getAllMovements()
+    ) { state, exercises, movements ->
         state.copy(
-            exercises = exercises.sortedBy { it.exercise.order },
-            movements = movements.filter {
+            exercises = exercises.data ?: emptyList(),
+            movements = movements.data?.filter {
                 it.name.contains(
                     other = state.movementNameFilter,
                     ignoreCase = true
-                )
-            }
+                ) // TODO apply the filter in the use case
+            } ?: emptyList()
         )
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(),
-        initialValue = SessionUiState(session = session)
-    )
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), SessionUiState(session = session))
 
     fun onEvent(event: SessionEvent) {
         when (event) {
             SessionEvent.OpenDatePickerDialog -> {
-                _state.update {
-                    it.copy(isDatePickerDialogOpen = true)
-                }
+                _state.update { it.copy(
+                    isDatePickerDialogOpen = true
+                )}
             }
             SessionEvent.CloseDatePickerDialog -> {
-                _state.update {
-                    it.copy(isDatePickerDialogOpen = false)
-                }
+                _state.update { it.copy(
+                    isDatePickerDialogOpen = false
+                )}
             }
             SessionEvent.ToggleEditMode -> {
-                _state.update {
-                    it.copy(isInEditMode = !it.isInEditMode)
-                }
+                _state.update { it.copy(
+                    isInEditMode = !it.isInEditMode
+                )}
             }
             is SessionEvent.UpdateSessionDate -> {
                 viewModelScope.launch(Dispatchers.IO) {
@@ -74,25 +72,25 @@ class SessionViewModel @Inject constructor(
                             date = event.date
                         )
                     )}
-                    repository.updateSession(_state.value.session)
+                    useCases.updateSession(_state.value.session)
                     _state.update { it.copy(
                         isDatePickerDialogOpen = false
                     )}
                 }
             }
             SessionEvent.ExpandMovementSelectionSheet -> {
-                _state.update {
-                    it.copy(isMovementSelectionSheetOpen = true)
-                }
+                _state.update { it.copy(
+                    isMovementSelectionSheetOpen = true
+                )}
             }
             SessionEvent.CollapseMovementSelectionSheet -> {
-                _state.update {
-                    it.copy(isMovementSelectionSheetOpen = false)
-                }
+                _state.update { it.copy(
+                    isMovementSelectionSheetOpen = false
+                )}
             }
             is SessionEvent.NewExercise -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    repository.insertExercise(
+                    useCases.insertExercise(
                         Exercise(
                             sessionId = _state.value.session.id,
                             movementId = event.movementId,
@@ -100,15 +98,16 @@ class SessionViewModel @Inject constructor(
                         )
                     )
                 }
-                _state.update {
-                    it.copy(isMovementSelectionSheetOpen = false)
-                }
+                _state.update { it.copy(
+                    isMovementSelectionSheetOpen = false
+                )}
             }
             is SessionEvent.DeleteExercise -> {
                 /* TODO */
             }
             is SessionEvent.NewSet -> {
                 viewModelScope.launch(Dispatchers.IO) {
+                    // TODO find a way to define the order of the set in the use case
                     val newSetOrder = state.value.exercises
                         .flatMap { it.sets }
                         .count { it.exerciseId == event.exercise.id } + 1
@@ -116,31 +115,32 @@ class SessionViewModel @Inject constructor(
                         exerciseId = event.exercise.id,
                         order = newSetOrder
                     )
-                    repository.insertSet(newSet)
+                    useCases.insertSet(newSet)
                 }
             }
             is SessionEvent.UpdateSet -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    repository.updateSet(event.set)
+                    useCases.updateSet(event.set)
                 }
             }
             is SessionEvent.DeleteSet -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    repository.deleteSet(event.set)
+                    useCases.deleteSet(event.set)
                     /* Update the order of the other sets if necessary */
+                    // TODO find a way to do that in the use case
                     state.value.exercises
                         .flatMap { it.sets }
                         .filter {
                             it.exerciseId == event.set.exerciseId && it.order > event.set.order
                         }.forEach {
-                            repository.updateSet(it.copy(order = it.order - 1))
+                            useCases.updateSet(it.copy(order = it.order - 1))
                         }
                 }
             }
             is SessionEvent.FilterMovementsByName -> {
-                _state.update {
-                    it.copy(movementNameFilter = event.nameFilter)
-                }
+                _state.update { it.copy(
+                    movementNameFilter = event.nameFilter
+                )}
             }
         }
     }

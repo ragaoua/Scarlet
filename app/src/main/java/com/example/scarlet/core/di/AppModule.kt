@@ -10,6 +10,14 @@ import com.example.scarlet.feature_training_log.domain.use_case.block.DeleteSess
 import com.example.scarlet.feature_training_log.domain.use_case.block.GetSessionsWithMovementsByBlockIdUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.block.InsertSessionUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.block.UpdateBlockUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.session.DeleteSetUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.session.GetAllMovementsUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.session.GetExercisesWithMovementAndSetsBySessionIdUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.session.InsertExerciseUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.session.InsertSetUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.session.SessionUseCases
+import com.example.scarlet.feature_training_log.domain.use_case.session.UpdateSessionUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.session.UpdateSetUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.training_log.DeleteBlockUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.training_log.GetActiveBlockUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.training_log.GetCompletedBlocksUseCase
@@ -57,5 +65,19 @@ object AppModule {
             insertSession = InsertSessionUseCase(repository),
             updateBlock = UpdateBlockUseCase(repository),
             deleteSession = DeleteSessionUseCase(repository)
+        )
+
+    @Provides
+    @Singleton
+    fun provideSessionUseCases(repository: ScarletRepository) =
+        SessionUseCases(
+            getExercisesWithMovementAndSetsBySessionId =
+                GetExercisesWithMovementAndSetsBySessionIdUseCase(repository),
+            getAllMovements = GetAllMovementsUseCase(repository),
+            updateSession = UpdateSessionUseCase(repository),
+            insertExercise = InsertExerciseUseCase(repository),
+            insertSet = InsertSetUseCase(repository),
+            updateSet = UpdateSetUseCase(repository),
+            deleteSet = DeleteSetUseCase(repository)
         )
 }

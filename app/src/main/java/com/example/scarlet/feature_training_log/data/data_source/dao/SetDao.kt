@@ -11,7 +11,7 @@ import com.example.scarlet.feature_training_log.data.data_source.entity.SetEntit
 interface SetDao {
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend fun insertSet(set: SetEntity)
+    suspend fun insertSet(set: SetEntity): Long
 
     @Update
     suspend fun updateSet(set: SetEntity)
