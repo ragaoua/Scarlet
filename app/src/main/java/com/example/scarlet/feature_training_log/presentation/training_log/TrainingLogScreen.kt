@@ -42,10 +42,10 @@ fun TrainingLogScreen(
     val state by trainingLogViewModel.state.collectAsState()
 
     LaunchedEffect(true) {
-        trainingLogViewModel.event.collect { event ->
-            when(event) {
-                is TrainingLogViewModelUiEvent.NavigateToBlockScreen -> {
-                    navigator.navigate(BlockScreenDestination(event.block))
+        trainingLogViewModel.channel.collect { action ->
+            when(action) {
+                is TrainingLogViewModel.UiAction.NavigateToBlockScreen -> {
+                    navigator.navigate(BlockScreenDestination(action.block))
                 }
             }
         }

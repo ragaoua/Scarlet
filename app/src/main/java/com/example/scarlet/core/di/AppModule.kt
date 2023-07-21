@@ -5,8 +5,10 @@ import androidx.room.Room
 import com.example.scarlet.feature_training_log.data.data_source.ScarletDatabase
 import com.example.scarlet.feature_training_log.data.repository.ScarletRepositoryImpl
 import com.example.scarlet.feature_training_log.domain.repository.ScarletRepository
+import com.example.scarlet.feature_training_log.domain.use_case.training_log.DeleteBlockUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.training_log.GetActiveBlockUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.training_log.GetCompletedBlocksUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.training_log.InsertBlockUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.training_log.TrainingLogUseCases
 import dagger.Module
 import dagger.Provides
@@ -37,6 +39,8 @@ object AppModule {
     fun provideTrainingLogUseCases(repository: ScarletRepository) =
         TrainingLogUseCases(
             getActiveBlock = GetActiveBlockUseCase(repository),
-            getCompletedBlocks = GetCompletedBlocksUseCase(repository)
+            getCompletedBlocks = GetCompletedBlocksUseCase(repository),
+            deleteBlock = DeleteBlockUseCase(repository),
+            insertBlock = InsertBlockUseCase(repository)
         )
 }
