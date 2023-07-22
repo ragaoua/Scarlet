@@ -11,7 +11,7 @@ import com.example.scarlet.feature_training_log.domain.use_case.block.GetSession
 import com.example.scarlet.feature_training_log.domain.use_case.block.InsertSessionUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.block.UpdateBlockUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.session.DeleteSetUseCase
-import com.example.scarlet.feature_training_log.domain.use_case.session.GetAllMovementsUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.session.GetMovementsFilteredByNameUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.session.GetExercisesWithMovementAndSetsBySessionIdUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.session.InsertExerciseUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.session.InsertSetUseCase
@@ -73,7 +73,7 @@ object AppModule {
         SessionUseCases(
             getExercisesWithMovementAndSetsBySessionId =
                 GetExercisesWithMovementAndSetsBySessionIdUseCase(repository),
-            getAllMovements = GetAllMovementsUseCase(repository),
+            getMovementsFilteredByName = GetMovementsFilteredByNameUseCase(repository),
             updateSession = UpdateSessionUseCase(repository),
             insertExercise = InsertExerciseUseCase(repository),
             insertSet = InsertSetUseCase(repository),

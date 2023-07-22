@@ -25,6 +25,8 @@ class SessionViewModel @Inject constructor(
     private val session = SessionScreenDestination.argsFrom(savedStateHandle).session
     private val sessionBlock = SessionScreenDestination.argsFrom(savedStateHandle).block
 
+    private val movementNameFilter = MutableStateFlow("")
+
     private val _state = MutableStateFlow(
         SessionUiState(
             session = session,
@@ -34,18 +36,16 @@ class SessionViewModel @Inject constructor(
     val state = combine(
         _state,
         useCases.getExercisesWithMovementAndSetsBySessionId(session.id),
-        useCases.getAllMovements()
-    ) { state, exercises, movements ->
+        useCases.getMovementsFilteredByName(movementNameFilter),
+        movementNameFilter
+    ) { state, exercises, movements, movementNameFilter ->
         state.copy(
             exercises = exercises.data ?: emptyList(),
-            movements = movements.data?.filter {
-                it.name.contains(
-                    other = state.movementNameFilter,
-                    ignoreCase = true
-                ) // TODO apply the filter in the use case
-            } ?: emptyList()
+            movements = movements.data ?: emptyList(),
+            movementNameFilter = movementNameFilter
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), SessionUiState(session = session))
+
 
     fun onEvent(event: SessionEvent) {
         when (event) {
@@ -131,9 +131,9 @@ class SessionViewModel @Inject constructor(
                 }
             }
             is SessionEvent.FilterMovementsByName -> {
-                _state.update { it.copy(
-                    movementNameFilter = event.nameFilter
-                )}
+                movementNameFilter.update {
+                    event.nameFilter
+                }
             }
         }
     }
