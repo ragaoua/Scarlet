@@ -53,7 +53,7 @@ fun ExercisesList(
                 modifier = Modifier.fillMaxWidth(),
                 shape = MaterialTheme.shapes.small,
                 onClick = {
-                    onEvent(SessionEvent.ExpandMovementSelectionSheet)
+                    onEvent(SessionEvent.ToggleMovementSelectionSheet)
                 }
             ) {
                 Icon(

@@ -43,7 +43,7 @@ fun MovementSelectionModalBottomSheet(
 ) {
     ModalBottomSheet(
         onDismissRequest = {
-            onEvent(SessionEvent.CollapseMovementSelectionSheet)
+            onEvent(SessionEvent.ToggleMovementSelectionSheet)
         },
         sheetState = rememberModalBottomSheetState(
              skipPartiallyExpanded = true

@@ -9,12 +9,11 @@ sealed interface SessionEvent {
     object ToggleDatePickerDialog : SessionEvent
     data class UpdateSessionDate(val date: Date) : SessionEvent
 
-    data class FilterMovementsByName(val nameFilter: String) : SessionEvent
-
     object ToggleEditMode : SessionEvent
 
-    object ExpandMovementSelectionSheet : SessionEvent
-    object CollapseMovementSelectionSheet : SessionEvent
+    object ToggleMovementSelectionSheet : SessionEvent
+    data class FilterMovementsByName(val nameFilter: String) : SessionEvent
+
     data class NewExercise(val movementId: Int) : SessionEvent
     data class DeleteExercise(val exercise: Exercise) : SessionEvent
 

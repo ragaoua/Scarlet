@@ -70,16 +70,16 @@ class SessionViewModel @Inject constructor(
                     )}
                 }
             }
-            SessionEvent.ExpandMovementSelectionSheet -> {
-                _state.update { it.copy(
-                    isMovementSelectionSheetOpen = true
-                )}
-                updateMovementNameFilter("")
-            }
-            SessionEvent.CollapseMovementSelectionSheet -> {
-                _state.update { it.copy(
-                    isMovementSelectionSheetOpen = false
-                )}
+            SessionEvent.ToggleMovementSelectionSheet -> {
+                _state.update {
+                    it.copy(
+                        isMovementSelectionSheetOpen = !it.isMovementSelectionSheetOpen
+                    ).also { updatedState ->
+                        if(updatedState.isMovementSelectionSheetOpen) {
+                            updateMovementNameFilter("")
+                        }
+                    }
+                }
             }
             is SessionEvent.NewExercise -> {
                 viewModelScope.launch(Dispatchers.IO) {
