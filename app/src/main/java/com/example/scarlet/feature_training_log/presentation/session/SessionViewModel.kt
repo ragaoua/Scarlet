@@ -3,6 +3,7 @@ package com.example.scarlet.feature_training_log.presentation.session
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.scarlet.core.util.Resource
 import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.use_case.session.SessionUseCases
 import com.example.scarlet.feature_training_log.presentation.destinations.SessionScreenDestination
@@ -91,8 +92,8 @@ class SessionViewModel @Inject constructor(
             }
             is SessionEvent.AddMovement -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    useCases.insertMovement(event.name)
-                        .also { insertedMovementIdResource ->
+                    when (val insertedMovementIdResource = useCases.insertMovement(event.name)) {
+                        is Resource.Success -> {
                             useCases.insertExercise(
                                 Exercise(
                                     sessionId = _state.value.session.id,
@@ -100,11 +101,17 @@ class SessionViewModel @Inject constructor(
                                     order = state.value.exercises.size + 1
                                 )
                             )
+                            _state.update {
+                                it.copy(
+                                    isNewMovementSheetOpen = false,
+                                    isMovementSelectionSheetOpen = false
+                                )
+                            }
                         }
-                    _state.update { it.copy(
-                        isNewMovementSheetOpen = false,
-                        isMovementSelectionSheetOpen = false
-                    )}
+                        else -> {
+                            /* TODO */
+                        }
+                    }
                 }
             }
             is SessionEvent.AddExercise -> {

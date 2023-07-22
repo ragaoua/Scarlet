@@ -3,18 +3,32 @@ package com.example.scarlet.feature_training_log.domain.use_case.session
 import com.example.scarlet.core.util.Resource
 import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.repository.ScarletRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 
 class InsertMovementUseCase(
     private val repository: ScarletRepository
 ) {
 
-    suspend operator fun invoke(movementName: String): Resource<Long> {
-        val movement = Movement(
-            name = movementName
-        )
+    private var movements: Flow<List<Movement>>? = null
 
-        return Resource.Success(
-            repository.insertMovement(movement)
-        )
+    suspend operator fun invoke(movementName: String): Resource<Long> {
+        return (movements ?: run { repository.getAllMovements() })
+            .also{ movements = it }
+            .map { movements ->
+                if (movements.any { it.name == movementName }) {
+                    Resource.Error(Error.MovementAlreadyExists)
+                } else {
+                    Resource.Success(
+                        repository.insertMovement(Movement(name = movementName))
+                    )
+                }
+            }
+            .first()
+    }
+
+    sealed interface Error {
+        object MovementAlreadyExists : Error
     }
 }
