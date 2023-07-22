@@ -75,7 +75,7 @@ fun SessionHeader(
         }
         Text(
             text = state.sessionBlockName,
-            style = MaterialTheme.typography.headlineSmall,
+            style = MaterialTheme.typography.titleMedium,
             // TODO : color = grey
         )
         Spacer(modifier = Modifier.height(4.dp))
@@ -100,7 +100,7 @@ fun SessionHeader(
             )
             Text(
                 text = DateUtils.formatDate(state.session.date),
-                style = MaterialTheme.typography.headlineLarge,
+                style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier
                     .padding(horizontal = editIconPadding + 4.dp)
                     .align(Alignment.Center)

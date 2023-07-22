@@ -93,7 +93,7 @@ fun Screen(
                         .background(MaterialTheme.colorScheme.background)
                         .padding(16.dp)
                 ) {
-                    Spacer(modifier = Modifier.height(48.dp))
+                    Spacer(modifier = Modifier.height(32.dp))
                     SessionHeader(
                         state = state,
                         onEvent = onEvent
