@@ -13,7 +13,10 @@ class GetMovementsFilteredByNameUseCase(
     private var movements: Flow<List<Movement>>? = null
 
     operator fun invoke(nameFilter: String): Flow<Resource<List<Movement>>> {
-        return (this.movements ?: run { repository.getAllMovements() })
+        return (movements ?: run { repository.getAllMovements() })
+            .also{
+                movements = it
+            }
             .map { movementList ->
                 Resource.Success(
                     movementList
