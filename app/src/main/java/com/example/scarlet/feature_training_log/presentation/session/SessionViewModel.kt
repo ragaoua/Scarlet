@@ -84,6 +84,11 @@ class SessionViewModel @Inject constructor(
             is SessionEvent.FilterMovementsByName -> {
                 updateMovementNameFilter(event.nameFilter)
             }
+            SessionEvent.ToggleNewMovementSheet -> {
+                _state.update { it.copy(
+                    isNewMovementSheetOpen = !it.isNewMovementSheetOpen
+                )}
+            }
             is SessionEvent.AddExercise -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     useCases.insertExercise(

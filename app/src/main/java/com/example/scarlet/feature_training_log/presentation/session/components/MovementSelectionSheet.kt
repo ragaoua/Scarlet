@@ -66,7 +66,7 @@ fun MovementSelectionSheet(
             Spacer(modifier = Modifier.height(4.dp))
             SecondaryActionButton(
                 onClick = {
-                    // TODO
+                    onEvent(SessionEvent.ToggleNewMovementSheet)
                 }
             ) {
                 Icon(
@@ -121,6 +121,22 @@ fun MovementSelectionSheet(
                         .fillMaxWidth()
                         .padding(8.dp)
                 )
+            }
+        }
+    }
+    if(state.isNewMovementSheetOpen) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                onEvent(SessionEvent.ToggleMovementSelectionSheet)
+            }
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(text = "Placeholder for new movement sheet")
             }
         }
     }
