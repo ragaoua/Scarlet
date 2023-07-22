@@ -8,11 +8,12 @@ import com.example.scarlet.feature_training_log.domain.use_case.session.SessionU
 import com.example.scarlet.feature_training_log.presentation.destinations.SessionScreenDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -27,24 +28,20 @@ class SessionViewModel @Inject constructor(
     private val session = SessionScreenDestination.argsFrom(savedStateHandle).session
     private val sessionBlock = SessionScreenDestination.argsFrom(savedStateHandle).block
 
+    private var filterMovementsJob: Job? = null
+
     private val _state = MutableStateFlow(
         SessionUiState(
             session = session,
             sessionBlockName = sessionBlock.name
         )
     )
-    private val movementNameFilter = _state.asStateFlow()
-        .map { it.movementNameFilter }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), "")
-
     val state = combine(
         _state,
-        useCases.getExercisesWithMovementAndSetsBySessionId(session.id),
-        useCases.getMovementsFilteredByName(movementNameFilter)
-    ) { state, exercises, movements ->
+        useCases.getExercisesWithMovementAndSetsBySessionId(session.id)
+    ) { state, exercises ->
         state.copy(
-            exercises = exercises.data ?: emptyList(),
-            movements = movements.data ?: emptyList()
+            exercises = exercises.data ?: emptyList()
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), SessionUiState(session = session))
 
@@ -82,6 +79,7 @@ class SessionViewModel @Inject constructor(
                 _state.update { it.copy(
                     isMovementSelectionSheetOpen = true
                 )}
+                updateMovementNameFilter("")
             }
             SessionEvent.CollapseMovementSelectionSheet -> {
                 _state.update { it.copy(
@@ -132,10 +130,19 @@ class SessionViewModel @Inject constructor(
                 }
             }
             is SessionEvent.FilterMovementsByName -> {
-                _state.update { it.copy(
-                    movementNameFilter = event.nameFilter
-                )}
+                updateMovementNameFilter(event.nameFilter)
             }
         }
+    }
+
+    private fun updateMovementNameFilter(nameFilter: String) {
+        filterMovementsJob?.cancel()
+        filterMovementsJob = useCases.getMovementsFilteredByName(nameFilter)
+            .onEach { movements ->
+                _state.update { it.copy(
+                    movements = movements.data ?: emptyList(),
+                    movementNameFilter = nameFilter
+                )}
+            }.launchIn(viewModelScope)
     }
 }
