@@ -98,7 +98,7 @@ fun Screen(
         if(state.isNewBlockSheetExpanded) {
             ModalBottomSheet(
                 onDismissRequest = {
-                    onEvent(TrainingLogEvent.HideNewBlockSheet)
+                    onEvent(TrainingLogEvent.ToggleNewBlockSheet)
                 }
             ) {
                 NewBlockSheet(onEvent = onEvent)

@@ -52,14 +52,9 @@ class TrainingLogViewModel @Inject constructor(
 
     fun onEvent(event: TrainingLogEvent){
         when(event) {
-            TrainingLogEvent.ShowNewBlockSheet -> {
+            TrainingLogEvent.ToggleNewBlockSheet -> {
                 _state.update { it.copy(
-                    isNewBlockSheetExpanded = true
-                )}
-            }
-            TrainingLogEvent.HideNewBlockSheet -> {
-                _state.update { it.copy(
-                    isNewBlockSheetExpanded = false
+                    isNewBlockSheetExpanded = !it.isNewBlockSheetExpanded
                 )}
             }
             is TrainingLogEvent.CreateBlock -> {

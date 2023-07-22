@@ -16,9 +16,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.BlockWithSessions
+import com.example.scarlet.feature_training_log.presentation.core.DateUtils
 import com.example.scarlet.feature_training_log.presentation.core.components.DeletableItem
 import com.example.scarlet.feature_training_log.presentation.core.components.TitledLazyList
-import com.example.scarlet.feature_training_log.presentation.core.DateUtils
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
 import com.example.scarlet.feature_training_log.presentation.training_log.TrainingLogEvent
 import com.example.scarlet.ui.theme.MainButtonContentPadding
@@ -84,7 +84,7 @@ fun ActiveBlockSection(
                         width = 4.dp
                     ),
                     onClick = {
-                        onEvent(TrainingLogEvent.ShowNewBlockSheet)
+                        onEvent(TrainingLogEvent.ToggleNewBlockSheet)
                     }
                 ) {
                     Column(
