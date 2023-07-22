@@ -140,8 +140,7 @@ class SessionViewModel @Inject constructor(
         filterMovementsJob = useCases.getMovementsFilteredByName(nameFilter)
             .onEach { movements ->
                 _state.update { it.copy(
-                    movements = movements.data ?: emptyList(),
-                    movementNameFilter = nameFilter
+                    movements = movements.data ?: emptyList()
                 )}
             }.launchIn(viewModelScope)
     }

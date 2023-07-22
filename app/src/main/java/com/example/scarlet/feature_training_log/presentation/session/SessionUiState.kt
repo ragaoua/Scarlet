@@ -11,6 +11,5 @@ data class SessionUiState (
     val movements: List<Movement> = emptyList(),
     val isMovementSelectionSheetOpen: Boolean = false,
     val isDatePickerDialogOpen: Boolean = false,
-    val isInEditMode: Boolean = false,
-    val movementNameFilter: String = ""
+    val isInEditMode: Boolean = false
 )
