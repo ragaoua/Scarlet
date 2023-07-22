@@ -29,7 +29,7 @@ import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.domain.model.Set
 import com.example.scarlet.feature_training_log.presentation.session.components.ExercisesList
-import com.example.scarlet.feature_training_log.presentation.session.components.MovementSelectionModalBottomSheet
+import com.example.scarlet.feature_training_log.presentation.session.components.MovementSelectionSheet
 import com.example.scarlet.feature_training_log.presentation.session.components.SessionHeader
 import com.example.scarlet.ui.theme.ScarletTheme
 import com.ramcosta.composedestinations.annotation.Destination
@@ -107,7 +107,7 @@ fun Screen(
             }
         }
         if(state.isMovementSelectionSheetOpen) {
-            MovementSelectionModalBottomSheet(
+            MovementSelectionSheet(
                 state = state,
                 onEvent = onEvent
             )

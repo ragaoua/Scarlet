@@ -37,7 +37,7 @@ import com.example.scarlet.feature_training_log.presentation.session.SessionUiSt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MovementSelectionModalBottomSheet(
+fun MovementSelectionSheet(
     state: SessionUiState,
     onEvent: (SessionEvent) -> Unit
 ) {
