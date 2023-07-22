@@ -101,7 +101,7 @@ fun ExerciseCard(
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp),
                 onClick = {
-                    onEvent(SessionEvent.NewSet(exercise.exercise))
+                    onEvent(SessionEvent.AddSet(exercise.exercise))
                 }
             ) {
                 Icon(

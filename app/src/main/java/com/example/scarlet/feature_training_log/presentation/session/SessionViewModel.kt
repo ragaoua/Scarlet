@@ -52,11 +52,6 @@ class SessionViewModel @Inject constructor(
                     isDatePickerDialogOpen = !it.isDatePickerDialogOpen
                 )}
             }
-            SessionEvent.ToggleEditMode -> {
-                _state.update { it.copy(
-                    isInEditMode = !it.isInEditMode
-                )}
-            }
             is SessionEvent.UpdateSessionDate -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     _state.update { it.copy(
@@ -81,7 +76,13 @@ class SessionViewModel @Inject constructor(
                     }
                 }
             }
-            is SessionEvent.NewExercise -> {
+            is SessionEvent.FilterMovementsByName -> {
+                updateMovementNameFilter(event.nameFilter)
+            }
+            SessionEvent.ToggleNewMovementSheet -> {
+                TODO()
+            }
+            is SessionEvent.AddExercise -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     useCases.insertExercise(
                         Exercise(
@@ -98,7 +99,7 @@ class SessionViewModel @Inject constructor(
             is SessionEvent.DeleteExercise -> {
                 /* TODO */
             }
-            is SessionEvent.NewSet -> {
+            is SessionEvent.AddSet -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     val exerciseSets = state.value.exercises
                         .find { it.exercise.id == event.exercise.id }
@@ -123,9 +124,6 @@ class SessionViewModel @Inject constructor(
                             ?.sets ?: emptyList()
                     )
                 }
-            }
-            is SessionEvent.FilterMovementsByName -> {
-                updateMovementNameFilter(event.nameFilter)
             }
         }
     }

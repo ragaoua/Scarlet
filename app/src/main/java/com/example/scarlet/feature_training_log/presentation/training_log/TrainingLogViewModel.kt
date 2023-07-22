@@ -57,7 +57,7 @@ class TrainingLogViewModel @Inject constructor(
                     isNewBlockSheetExpanded = !it.isNewBlockSheetExpanded
                 )}
             }
-            is TrainingLogEvent.CreateBlock -> {
+            is TrainingLogEvent.AddBlock -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     val insertedBlock = Block(name = event.blockName)
                     useCases.insertBlock(insertedBlock)

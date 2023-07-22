@@ -14,10 +14,10 @@ sealed interface SessionEvent {
     object ToggleMovementSelectionSheet : SessionEvent
     data class FilterMovementsByName(val nameFilter: String) : SessionEvent
 
-    data class NewExercise(val movementId: Int) : SessionEvent
+    data class AddExercise(val movementId: Int) : SessionEvent
     data class DeleteExercise(val exercise: Exercise) : SessionEvent
 
-    data class NewSet(val exercise: Exercise) : SessionEvent
+    data class AddSet(val exercise: Exercise) : SessionEvent
     data class UpdateSet(val set: Set) : SessionEvent
     data class DeleteSet(val set: Set) : SessionEvent
 }

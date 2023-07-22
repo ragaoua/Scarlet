@@ -79,7 +79,7 @@ fun Screen(
                 Spacer(modifier = Modifier.height(48.dp))
                 BlockHeader(
                     block = state.block,
-                    isEditing = state.isEditing,
+                    isEditing = state.isInEditMode,
                     onEvent = onEvent
                 )
                 Spacer(modifier = Modifier.height(64.dp))

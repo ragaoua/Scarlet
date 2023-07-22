@@ -85,7 +85,7 @@ class BlockViewModel @Inject constructor(
             }
             BlockEvent.EditBlock -> {
                 _state.update { it.copy(
-                    isEditing = true
+                    isInEditMode = true
                 )}
             }
             is BlockEvent.UpdateBlock -> {
@@ -98,7 +98,7 @@ class BlockViewModel @Inject constructor(
                             else -> {
                                 _state.update { it.copy(
                                     block = event.block,
-                                    isEditing = false
+                                    isInEditMode = false
                                 )}
                             }
                         }

@@ -17,9 +17,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.presentation.block.BlockEvent
 import com.example.scarlet.feature_training_log.presentation.block.BlockUiState
+import com.example.scarlet.feature_training_log.presentation.core.DateUtils
 import com.example.scarlet.feature_training_log.presentation.core.components.DeletableItem
 import com.example.scarlet.feature_training_log.presentation.core.components.TitledLazyList
-import com.example.scarlet.feature_training_log.presentation.core.DateUtils
 import com.example.scarlet.feature_training_log.presentation.destinations.SessionScreenDestination
 import com.example.scarlet.ui.theme.MainButtonContentPadding
 import com.example.scarlet.ui.theme.TitleLazyListPadding
@@ -56,7 +56,7 @@ fun SessionsList(
                             )
                         )
                     },
-                    enabled = !state.isEditing
+                    enabled = !state.isInEditMode
                 ) {
                     DeletableItem(
                         modifier = Modifier.fillMaxSize(),

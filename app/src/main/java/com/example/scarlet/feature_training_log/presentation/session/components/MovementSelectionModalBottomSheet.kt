@@ -97,7 +97,7 @@ fun MovementSelectionModalBottomSheet(
                                 .fillMaxWidth()
                                 .padding(2.dp)
                                 .clickable {
-                                    onEvent(SessionEvent.NewExercise(movement.id))
+                                    onEvent(SessionEvent.AddExercise(movement.id))
                                 }
                                 .border(1.dp, MaterialTheme.colorScheme.onSurfaceVariant)
                                 .padding(8.dp)

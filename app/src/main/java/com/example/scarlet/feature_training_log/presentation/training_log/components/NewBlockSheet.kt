@@ -72,7 +72,7 @@ fun NewBlockSheet(
 
             Button(
                 onClick = {
-                    onEvent(TrainingLogEvent.CreateBlock(blockName))
+                    onEvent(TrainingLogEvent.AddBlock(blockName))
                 },
                 modifier = Modifier.align(Alignment.End),
                 enabled = blockName.isNotBlank()
