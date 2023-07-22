@@ -19,11 +19,12 @@ import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovemen
 import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.presentation.core.components.TitledLazyList
 import com.example.scarlet.feature_training_log.presentation.session.SessionEvent
+import com.example.scarlet.feature_training_log.presentation.session.SessionUiState
 import com.example.scarlet.ui.theme.TitleLazyListPadding
 
 @Composable
 fun ExercisesList(
-    exercises: List<ExerciseWithMovementAndSets>,
+    state: SessionUiState,
     onEvent: (SessionEvent) -> Unit
 ) {
     TitledLazyList(
@@ -32,10 +33,11 @@ fun ExercisesList(
             .padding(TitleLazyListPadding),
         title = stringResource(R.string.session_exercises_list_title)
     ) {
-        if(exercises.isNotEmpty()) {
-            items(exercises) { exercise ->
+        if(state.exercises.isNotEmpty()) {
+            items(state.exercises) { exercise ->
                 ExerciseCard(
                     exercise = exercise,
+                    isInEditMode = state.isInEditMode,
                     onEvent = onEvent
                 )
             }
@@ -69,7 +71,9 @@ fun ExercisesList(
 @Composable
 fun NoExercisePreview() {
     ExercisesList(
-        exercises = emptyList(),
+        state = SessionUiState(
+            exercises = emptyList(),
+        ),
         onEvent = {}
     )
 }
@@ -78,10 +82,12 @@ fun NoExercisePreview() {
 @Composable
 fun ExercisesSectionPreview() {
     ExercisesList(
-        exercises = listOf(
-            ExerciseWithMovementAndSets(Exercise(), Movement(name="Squat"), emptyList()),
-            ExerciseWithMovementAndSets(Exercise(), Movement(name="Bench"), emptyList()),
-            ExerciseWithMovementAndSets(Exercise(), Movement(name="Deadlift"), emptyList())
+        state = SessionUiState(
+            exercises = listOf(
+                ExerciseWithMovementAndSets(Exercise(), Movement(name="Squat"), emptyList()),
+                ExerciseWithMovementAndSets(Exercise(), Movement(name="Bench"), emptyList()),
+                ExerciseWithMovementAndSets(Exercise(), Movement(name="Deadlift"), emptyList())
+            )
         ),
         onEvent = {}
     )

@@ -100,7 +100,7 @@ fun Screen(
                     )
                     Spacer(modifier = Modifier.height(32.dp))
                     ExercisesList(
-                        exercises = state.exercises,
+                        state = state,
                         onEvent = onEvent
                     )
                 }

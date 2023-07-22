@@ -65,6 +65,11 @@ class SessionViewModel @Inject constructor(
                     )}
                 }
             }
+            SessionEvent.ToggleEditMode -> {
+                _state.update { it.copy(
+                    isInEditMode = !it.isInEditMode
+                )}
+            }
             SessionEvent.ToggleMovementSelectionSheet -> {
                 _state.update {
                     it.copy(
@@ -78,9 +83,6 @@ class SessionViewModel @Inject constructor(
             }
             is SessionEvent.FilterMovementsByName -> {
                 updateMovementNameFilter(event.nameFilter)
-            }
-            SessionEvent.ToggleNewMovementSheet -> {
-                TODO()
             }
             is SessionEvent.AddExercise -> {
                 viewModelScope.launch(Dispatchers.IO) {

@@ -32,6 +32,7 @@ import com.example.scarlet.feature_training_log.presentation.session.SessionEven
 @Composable
 fun ExerciseCard(
     exercise: ExerciseWithMovementAndSets,
+    isInEditMode: Boolean,
     onEvent: (SessionEvent) -> Unit
 ) {
     Column(
@@ -63,51 +64,53 @@ fun ExerciseCard(
                 contentDescription = "Expand" /* localize */
             ) /* TODO KeyboardArrowDown/Up depending on expand/collapse state */
         }
-        Divider(
-            modifier = Modifier.fillMaxWidth(),
-            thickness = 1.dp
-        )
 
         /*************************************************************************
          * EXERCISE DETAIL
          *************************************************************************/
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            if (exercise.sets.isNotEmpty()) {
-                ExerciseDetailHeader(
-                    modifier = Modifier.fillMaxWidth()
-                )
-                exercise.sets.forEach { set ->
-                    ExerciseSetRow(
-                        set = set,
-                        onEvent = onEvent
-                    )
-                }
-            } else {
-                Text(text = stringResource(R.string.no_sets_msg))
-                /* TODO change color (grey) and style */
-            }
-
-            /*************************************************************************
-             * "ADD SET" BUTTON
-             *************************************************************************/
-            SecondaryActionButton(
+        if (!isInEditMode) {
+            Divider(
+                modifier = Modifier.fillMaxWidth(),
+                thickness = 1.dp
+            )
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 8.dp),
-                onClick = {
-                    onEvent(SessionEvent.AddSet(exercise.exercise))
-                }
+                    .padding(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = stringResource(R.string.add_set)
-                )
+                if (exercise.sets.isNotEmpty()) {
+                    ExerciseDetailHeader(
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    exercise.sets.forEach { set ->
+                        ExerciseSetRow(
+                            set = set,
+                            onEvent = onEvent
+                        )
+                    }
+                } else {
+                    Text(text = stringResource(R.string.no_sets_msg))
+                    /* TODO change color (grey) and style */
+                }
+
+                /*************************************************************************
+                 * "ADD SET" BUTTON
+                 *************************************************************************/
+                SecondaryActionButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp),
+                    onClick = {
+                        onEvent(SessionEvent.AddSet(exercise.exercise))
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = stringResource(R.string.add_set)
+                    )
+                }
             }
         }
     }
@@ -123,6 +126,7 @@ fun PreviewExerciseDetail_noSets() {
             movement = Movement(),
             sets = emptyList()
         ),
+        isInEditMode = false,
         onEvent = {}
     )
 }
@@ -141,6 +145,7 @@ fun PreviewExerciseDetail_withSets() {
                 Set(order = 3, reps = 10, weight = 95f, rpe = 8f)
             )
         ),
+        isInEditMode = false,
         onEvent = {}
     )
 }
