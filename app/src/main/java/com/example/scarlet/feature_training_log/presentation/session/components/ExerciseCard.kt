@@ -10,12 +10,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -45,11 +50,12 @@ fun ExerciseCard(
         /*************************************************************************
          * EXERCISE HEADER
          *************************************************************************/
+        var isExerciseDetailExpanded by remember { mutableStateOf(true) }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable {
-                    /* TODO expand/collapse detail */
+                    isExerciseDetailExpanded = !isExerciseDetailExpanded
                 }
                 .padding(8.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -60,15 +66,26 @@ fun ExerciseCard(
                 style = MaterialTheme.typography.titleLarge
             )
             Icon(
-                imageVector = Icons.Default.KeyboardArrowUp,
-                contentDescription = "Expand" /* localize */
-            ) /* TODO KeyboardArrowDown/Up depending on expand/collapse state */
+                imageVector =
+                    if(isExerciseDetailExpanded) {
+                        Icons.Default.KeyboardArrowUp
+                    } else {
+                        Icons.Default.KeyboardArrowDown
+                    },
+                contentDescription = stringResource(
+                    if(isExerciseDetailExpanded) {
+                        R.string.collapse_details
+                    } else {
+                        R.string.expand_details
+                    }
+                )
+            )
         }
 
         /*************************************************************************
          * EXERCISE DETAIL
          *************************************************************************/
-        if (!isInEditMode) {
+        if (!isInEditMode && isExerciseDetailExpanded) {
             Divider(
                 modifier = Modifier.fillMaxWidth(),
                 thickness = 1.dp

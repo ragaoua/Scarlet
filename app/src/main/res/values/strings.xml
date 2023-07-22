@@ -48,10 +48,12 @@
     <string name="filter_by_name">Filter by name</string>
     <string name="new_movement">New movement</string>
     <string name="movement_name">Movement name</string>
+    <string name="create_movement">Create movement</string>
+    <string name="collapse_details">Collapse exercise details</string>
+    <string name="expand_details">Expand exercise details</string>
 
     <!-- Misc -->
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
-    <string name="create_movement">Create movement</string>
 </resources>
