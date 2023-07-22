@@ -9,11 +9,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -31,7 +29,7 @@ import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.domain.model.Set
 import com.example.scarlet.feature_training_log.presentation.session.components.ExercisesList
-import com.example.scarlet.feature_training_log.presentation.session.components.MovementSelectionSheet
+import com.example.scarlet.feature_training_log.presentation.session.components.MovementSelectionModalBottomSheet
 import com.example.scarlet.feature_training_log.presentation.session.components.SessionHeader
 import com.example.scarlet.ui.theme.ScarletTheme
 import com.ramcosta.composedestinations.annotation.Destination
@@ -54,7 +52,6 @@ fun SessionScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Screen(
     state: SessionUiState,
@@ -110,16 +107,10 @@ fun Screen(
             }
         }
         if(state.isMovementSelectionSheetOpen) {
-            ModalBottomSheet(
-                onDismissRequest = {
-                    onEvent(SessionEvent.CollapseMovementSelectionSheet)
-                },
-            ) {
-                MovementSelectionSheet(
-                    state = state,
-                    onEvent = onEvent
-                )
-            }
+            MovementSelectionModalBottomSheet(
+                state = state,
+                onEvent = onEvent
+            )
         }
     }
 }
