@@ -1,5 +1,6 @@
 package com.example.scarlet.feature_training_log.presentation.session.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -85,48 +86,50 @@ fun ExerciseCard(
         /*************************************************************************
          * EXERCISE DETAIL
          *************************************************************************/
-        if (!isInEditMode && isExerciseDetailExpanded) {
-            Divider(
-                modifier = Modifier.fillMaxWidth(),
-                thickness = 1.dp
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                if (exercise.sets.isNotEmpty()) {
-                    ExerciseDetailHeader(
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    exercise.sets.forEach { set ->
-                        ExerciseSetRow(
-                            set = set,
-                            onEvent = onEvent
-                        )
-                    }
-                } else {
-                    Text(text = stringResource(R.string.no_sets_msg))
-                    /* TODO change color (grey) and style */
-                }
-
-                /*************************************************************************
-                 * "ADD SET" BUTTON
-                 *************************************************************************/
-                SecondaryActionButton(
+        if (!isInEditMode) {
+            AnimatedVisibility(visible = isExerciseDetailExpanded) {
+                Divider(
+                    modifier = Modifier.fillMaxWidth(),
+                    thickness = 1.dp
+                )
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 8.dp),
-                    onClick = {
-                        onEvent(SessionEvent.AddSet(exercise.exercise))
-                    }
+                        .padding(8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = stringResource(R.string.add_set)
-                    )
+                    if (exercise.sets.isNotEmpty()) {
+                        ExerciseDetailHeader(
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        exercise.sets.forEach { set ->
+                            ExerciseSetRow(
+                                set = set,
+                                onEvent = onEvent
+                            )
+                        }
+                    } else {
+                        Text(text = stringResource(R.string.no_sets_msg))
+                        /* TODO change color (grey) and style */
+                    }
+
+                    /*************************************************************************
+                     * "ADD SET" BUTTON
+                     *************************************************************************/
+                    SecondaryActionButton(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 8.dp),
+                        onClick = {
+                            onEvent(SessionEvent.AddSet(exercise.exercise))
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = stringResource(R.string.add_set)
+                        )
+                    }
                 }
             }
         }
