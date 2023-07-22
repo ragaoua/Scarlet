@@ -17,7 +17,9 @@ class InsertMovementUseCase(
         return (movements ?: run { repository.getAllMovements() })
             .also{ movements = it }
             .map { movements ->
-                if (movements.any { it.name == movementName }) {
+                if (movements.any { movement ->
+                    movement.name.equals(movementName, ignoreCase = true)
+                }) {
                     Resource.Error(Error.MovementAlreadyExists)
                 } else {
                     Resource.Success(
