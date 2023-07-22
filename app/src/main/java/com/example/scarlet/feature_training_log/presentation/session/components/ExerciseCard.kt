@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -25,6 +26,7 @@ import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
 import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Set
+import com.example.scarlet.feature_training_log.presentation.core.components.SecondaryActionButton
 import com.example.scarlet.feature_training_log.presentation.session.SessionEvent
 
 @Composable
@@ -39,6 +41,9 @@ fun ExerciseCard(
                 shape = MaterialTheme.shapes.medium
             )
     ) {
+        /*************************************************************************
+         * EXERCISE HEADER
+         *************************************************************************/
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -62,6 +67,10 @@ fun ExerciseCard(
             modifier = Modifier.fillMaxWidth(),
             thickness = 1.dp
         )
+
+        /*************************************************************************
+         * EXERCISE DETAIL
+         *************************************************************************/
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -83,10 +92,23 @@ fun ExerciseCard(
                 Text(text = stringResource(R.string.no_sets_msg))
                 /* TODO change color (grey) and style */
             }
-            AddSetButton(
-                exercise = exercise.exercise,
-                onEvent = onEvent
-            )
+
+            /*************************************************************************
+             * "ADD SET" BUTTON
+             *************************************************************************/
+            SecondaryActionButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp),
+                onClick = {
+                    onEvent(SessionEvent.NewSet(exercise.exercise))
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = stringResource(R.string.add_set)
+                )
+            }
         }
     }
 }
