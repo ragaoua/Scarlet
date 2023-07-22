@@ -10,7 +10,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -25,27 +27,26 @@ class SessionViewModel @Inject constructor(
     private val session = SessionScreenDestination.argsFrom(savedStateHandle).session
     private val sessionBlock = SessionScreenDestination.argsFrom(savedStateHandle).block
 
-    private val movementNameFilter = MutableStateFlow("")
-
     private val _state = MutableStateFlow(
         SessionUiState(
             session = session,
             sessionBlockName = sessionBlock.name
         )
     )
+    private val movementNameFilter = _state.asStateFlow()
+        .map { it.movementNameFilter }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), "")
+
     val state = combine(
         _state,
         useCases.getExercisesWithMovementAndSetsBySessionId(session.id),
-        useCases.getMovementsFilteredByName(movementNameFilter),
-        movementNameFilter
-    ) { state, exercises, movements, movementNameFilter ->
+        useCases.getMovementsFilteredByName(movementNameFilter)
+    ) { state, exercises, movements ->
         state.copy(
             exercises = exercises.data ?: emptyList(),
-            movements = movements.data ?: emptyList(),
-            movementNameFilter = movementNameFilter
+            movements = movements.data ?: emptyList()
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), SessionUiState(session = session))
-
 
     fun onEvent(event: SessionEvent) {
         when (event) {
@@ -131,9 +132,9 @@ class SessionViewModel @Inject constructor(
                 }
             }
             is SessionEvent.FilterMovementsByName -> {
-                movementNameFilter.update {
-                    event.nameFilter
-                }
+                _state.update { it.copy(
+                    movementNameFilter = event.nameFilter
+                )}
             }
         }
     }
