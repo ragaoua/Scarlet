@@ -26,7 +26,6 @@ import com.example.scarlet.ui.theme.ScarletTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
-import kotlinx.coroutines.flow.collectLatest
 import java.util.Date
 
 @Destination(
@@ -39,7 +38,7 @@ fun BlockScreen(
     val blockViewModel: BlockViewModel = hiltViewModel()
     val state by blockViewModel.state.collectAsState()
     LaunchedEffect(key1 = true) {
-        blockViewModel.channel.collectLatest { action ->
+        blockViewModel.channel.collect { action ->
             when(action) {
                 is BlockViewModel.UiAction.NavigateUp -> {
                     navigator.navigateUp()
