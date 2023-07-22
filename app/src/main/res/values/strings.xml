@@ -45,10 +45,13 @@
     <string name="select_movement">Select a new movement</string>
     <string name="add_new_movement_btn_msg">… or add a new one !</string>
     <string name="add_new_movement">Add a new movement</string>
+    <string name="filter_by_name">Filter by name</string>
+    <string name="new_movement">New movement</string>
+    <string name="movement_name">Movement name</string>
 
     <!-- Misc -->
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
-    <string name="filter_by_name">Filter by name</string>
+    <string name="create_movement">Create movement</string>
 </resources>

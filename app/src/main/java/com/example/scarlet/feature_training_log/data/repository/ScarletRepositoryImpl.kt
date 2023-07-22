@@ -3,10 +3,12 @@ package com.example.scarlet.feature_training_log.data.repository
 import com.example.scarlet.feature_training_log.data.data_source.ScarletDatabase
 import com.example.scarlet.feature_training_log.data.data_source.entity.BlockEntity
 import com.example.scarlet.feature_training_log.data.data_source.entity.ExerciseEntity
+import com.example.scarlet.feature_training_log.data.data_source.entity.MovementEntity
 import com.example.scarlet.feature_training_log.data.data_source.entity.SessionEntity
 import com.example.scarlet.feature_training_log.data.data_source.entity.SetEntity
 import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.domain.model.Exercise
+import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.domain.model.Set
 import com.example.scarlet.feature_training_log.domain.repository.ScarletRepository
@@ -86,6 +88,9 @@ class ScarletRepositoryImpl(
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////// MOVEMENT ///////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
+    override suspend fun insertMovement(movement: Movement) =
+        dbInstance.movementDao.insertMovement(MovementEntity(movement))
+
     override fun getAllMovements() =
         dbInstance.movementDao.getAllMovements()
             .map { entityList ->

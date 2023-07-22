@@ -125,19 +125,6 @@ fun MovementSelectionSheet(
         }
     }
     if(state.isNewMovementSheetOpen) {
-        ModalBottomSheet(
-            onDismissRequest = {
-                onEvent(SessionEvent.ToggleMovementSelectionSheet)
-            }
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(text = "Placeholder for new movement sheet")
-            }
-        }
+        NewMovementSheet(onEvent = onEvent)
     }
 }

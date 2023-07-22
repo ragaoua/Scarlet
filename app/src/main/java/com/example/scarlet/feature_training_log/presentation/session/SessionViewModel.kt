@@ -89,6 +89,24 @@ class SessionViewModel @Inject constructor(
                     isNewMovementSheetOpen = !it.isNewMovementSheetOpen
                 )}
             }
+            is SessionEvent.AddMovement -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    useCases.insertMovement(event.name)
+                        .also { insertedMovementIdResource ->
+                            useCases.insertExercise(
+                                Exercise(
+                                    sessionId = _state.value.session.id,
+                                    movementId = insertedMovementIdResource.data!!.toInt(),
+                                    order = state.value.exercises.size + 1
+                                )
+                            )
+                        }
+                    _state.update { it.copy(
+                        isNewMovementSheetOpen = false,
+                        isMovementSelectionSheetOpen = false
+                    )}
+                }
+            }
             is SessionEvent.AddExercise -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     useCases.insertExercise(
