@@ -48,7 +48,7 @@ fun SessionHeader(
                 initialSelectedDateMillis = state.session.date.time
             )
             DatePickerDialog(
-                onDismissRequest = { onEvent(SessionEvent.CloseDatePickerDialog) },
+                onDismissRequest = { onEvent(SessionEvent.ToggleDatePickerDialog) },
                 confirmButton = {
                     Button(
                         onClick = {
@@ -64,7 +64,7 @@ fun SessionHeader(
                 },
                 dismissButton = {
                     Button(
-                        onClick = { onEvent(SessionEvent.CloseDatePickerDialog) }
+                        onClick = { onEvent(SessionEvent.ToggleDatePickerDialog) }
                     ) {
                         Text(text = stringResource(R.string.cancel))
                     }
@@ -96,7 +96,7 @@ fun SessionHeader(
                 modifier = Modifier
                     .size(editIconPadding)
                     .align(Alignment.CenterEnd)
-                    .clickable { onEvent(SessionEvent.OpenDatePickerDialog) }
+                    .clickable { onEvent(SessionEvent.ToggleDatePickerDialog) }
             )
             Text(
                 text = DateUtils.formatDate(state.session.date),

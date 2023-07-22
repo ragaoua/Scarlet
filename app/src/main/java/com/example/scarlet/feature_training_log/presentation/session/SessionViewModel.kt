@@ -47,14 +47,9 @@ class SessionViewModel @Inject constructor(
 
     fun onEvent(event: SessionEvent) {
         when (event) {
-            SessionEvent.OpenDatePickerDialog -> {
+            SessionEvent.ToggleDatePickerDialog -> {
                 _state.update { it.copy(
-                    isDatePickerDialogOpen = true
-                )}
-            }
-            SessionEvent.CloseDatePickerDialog -> {
-                _state.update { it.copy(
-                    isDatePickerDialogOpen = false
+                    isDatePickerDialogOpen = !it.isDatePickerDialogOpen
                 )}
             }
             SessionEvent.ToggleEditMode -> {

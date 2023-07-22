@@ -6,8 +6,7 @@ import java.util.Date
 
 sealed interface SessionEvent {
 
-    object OpenDatePickerDialog : SessionEvent
-    object CloseDatePickerDialog : SessionEvent
+    object ToggleDatePickerDialog : SessionEvent
     data class UpdateSessionDate(val date: Date) : SessionEvent
 
     data class FilterMovementsByName(val nameFilter: String) : SessionEvent
