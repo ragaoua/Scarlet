@@ -14,9 +14,7 @@ class GetMovementsFilteredByNameUseCase(
 
     operator fun invoke(nameFilter: String): Flow<Resource<List<Movement>>> {
         return (movements ?: run { repository.getAllMovements() })
-            .also{
-                movements = it
-            }
+            .also{ movements = it }
             .map { movementList ->
                 Resource.Success(
                     movementList
