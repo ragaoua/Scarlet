@@ -117,6 +117,7 @@ fun MovementSelectionSheet(
                     placeholder = {
                         Text(stringResource(R.string.filter_by_name))
                     },
+                    singleLine = true,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
