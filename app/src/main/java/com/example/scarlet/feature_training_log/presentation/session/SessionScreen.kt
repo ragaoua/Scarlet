@@ -91,7 +91,6 @@ fun Screen(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.background)
-                        .padding(16.dp)
                 ) {
                     Spacer(modifier = Modifier.height(32.dp))
                     SessionHeader(

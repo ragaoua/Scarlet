@@ -48,10 +48,10 @@ fun ExerciseCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp)
                 .clickable {
                     /* TODO expand/collapse detail */
-                },
+                }
+                .padding(8.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
