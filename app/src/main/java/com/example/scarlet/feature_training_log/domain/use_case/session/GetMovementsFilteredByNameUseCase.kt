@@ -16,7 +16,9 @@ class GetMovementsFilteredByNameUseCase(
         return (this.movements ?: run { repository.getAllMovements() })
             .map { movementList ->
                 Resource.Success(
-                    movementList.filter { it.name.contains(nameFilter, ignoreCase = true) }
+                    movementList
+                        .filter { it.name.contains(nameFilter, ignoreCase = true) }
+                        .sortedBy { it.name }
                 )
             }
     }
