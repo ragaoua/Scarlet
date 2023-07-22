@@ -33,16 +33,15 @@ import com.example.scarlet.feature_training_log.presentation.training_log.Traini
 fun NewBlockSheet(
     onEvent: (TrainingLogEvent) -> Unit
 ) {
-    val focusRequester = remember { FocusRequester() }
-    SideEffect {
-        focusRequester.requestFocus()
-    }
-
     ModalBottomSheet(
         onDismissRequest = {
             onEvent(TrainingLogEvent.ToggleNewBlockSheet)
         }
     ) {
+        val focusRequester = remember { FocusRequester() }
+        SideEffect {
+            focusRequester.requestFocus()
+        }
         Box(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center
