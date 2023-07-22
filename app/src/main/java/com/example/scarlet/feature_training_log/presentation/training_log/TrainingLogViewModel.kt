@@ -32,7 +32,7 @@ class TrainingLogViewModel @Inject constructor(
         useCases.getCompletedBlocks()
     ) { state, activeBlockResource, completedBlockResource ->
         when(activeBlockResource.error) {
-            is GetActiveBlockUseCase.Errors.TooManyActiveBlocks -> {
+            is GetActiveBlockUseCase.Error.TooManyActiveBlocks -> {
                 /*
                  * TODO : Emit a UI event that will be handled by the UI layer
                  * Idea : Show a dialog that will ask the user to delete one of the active

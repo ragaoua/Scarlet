@@ -14,7 +14,7 @@ class GetActiveBlockUseCase(
         return repository.getBlocksWithSessionsByCompleted(false)
             .map { activeBlocks ->
                 if (activeBlocks.size > 1) {
-                    Resource.Error(Errors.TooManyActiveBlocks)
+                    Resource.Error(Error.TooManyActiveBlocks)
                 } else {
                     Resource.Success(activeBlocks.firstOrNull()?.copy(
                         sessions = activeBlocks.first().sessions
@@ -26,8 +26,8 @@ class GetActiveBlockUseCase(
             }
     }
 
-    sealed interface Errors {
-        object TooManyActiveBlocks: Errors
+    sealed interface Error {
+        object TooManyActiveBlocks: Error
     }
 
 }
