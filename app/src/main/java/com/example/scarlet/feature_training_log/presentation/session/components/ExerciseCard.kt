@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Divider
@@ -51,14 +53,17 @@ fun ExerciseCard(
         /*************************************************************************
          * EXERCISE HEADER
          *************************************************************************/
-        var isExerciseDetailExpanded by remember { mutableStateOf(true) }
+        var isExerciseDetailExpanded by remember(isInEditMode) { mutableStateOf(!isInEditMode) }
+        var rowModifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+        if (!isInEditMode) {
+            rowModifier = rowModifier.clickable {
+                isExerciseDetailExpanded = !isExerciseDetailExpanded
+            }
+        }
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable {
-                    isExerciseDetailExpanded = !isExerciseDetailExpanded
-                }
-                .padding(8.dp),
+            modifier = rowModifier,
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -66,70 +71,83 @@ fun ExerciseCard(
                 text = exercise.movement.name,
                 style = MaterialTheme.typography.titleLarge
             )
-            Icon(
-                imageVector =
-                    if(isExerciseDetailExpanded) {
-                        Icons.Default.KeyboardArrowUp
-                    } else {
-                        Icons.Default.KeyboardArrowDown
-                    },
-                contentDescription = stringResource(
-                    if(isExerciseDetailExpanded) {
-                        R.string.collapse_details
-                    } else {
-                        R.string.expand_details
-                    }
-                )
-            )
+            if(isInEditMode) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        modifier = Modifier,
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = stringResource(R.string.select_movement)
+                    )
+                    Icon(
+                        modifier = Modifier.clickable {
+                            onEvent(SessionEvent.DeleteExercise(exercise.exercise))
+                        },
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = stringResource(R.string.delete)
+                    )
+                }
+            } else {
+                if (isExerciseDetailExpanded) {
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowUp,
+                        contentDescription = stringResource(R.string.collapse_details)
+                    )
+                } else {
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowDown,
+                        contentDescription = stringResource(R.string.expand_details)
+                    )
+                }
+            }
         }
 
         /*************************************************************************
          * EXERCISE DETAIL
          *************************************************************************/
-        if (!isInEditMode) {
-            AnimatedVisibility(visible = isExerciseDetailExpanded) {
-                Divider(
-                    modifier = Modifier.fillMaxWidth(),
-                    thickness = 1.dp
-                )
-                Column(
+        AnimatedVisibility(visible = isExerciseDetailExpanded) {
+            Divider(
+                modifier = Modifier.fillMaxWidth(),
+                thickness = 1.dp
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                if (exercise.sets.isNotEmpty()) {
+                    ExerciseDetailHeader(
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    exercise.sets.forEach { set ->
+                        ExerciseSetRow(
+                            set = set,
+                            onEvent = onEvent
+                        )
+                    }
+                } else {
+                    Text(text = stringResource(R.string.no_sets_msg))
+                    /* TODO change color (grey) and style */
+                }
+
+                /*************************************************************************
+                 * "ADD SET" BUTTON
+                 *************************************************************************/
+                SecondaryActionButton(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                        .padding(horizontal = 8.dp),
+                    onClick = {
+                        onEvent(SessionEvent.AddSet(exercise.exercise))
+                    }
                 ) {
-                    if (exercise.sets.isNotEmpty()) {
-                        ExerciseDetailHeader(
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                        exercise.sets.forEach { set ->
-                            ExerciseSetRow(
-                                set = set,
-                                onEvent = onEvent
-                            )
-                        }
-                    } else {
-                        Text(text = stringResource(R.string.no_sets_msg))
-                        /* TODO change color (grey) and style */
-                    }
-
-                    /*************************************************************************
-                     * "ADD SET" BUTTON
-                     *************************************************************************/
-                    SecondaryActionButton(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 8.dp),
-                        onClick = {
-                            onEvent(SessionEvent.AddSet(exercise.exercise))
-                        }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = stringResource(R.string.add_set)
-                        )
-                    }
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = stringResource(R.string.add_set)
+                    )
                 }
             }
         }

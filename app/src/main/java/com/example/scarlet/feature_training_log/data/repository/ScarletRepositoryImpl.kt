@@ -74,6 +74,14 @@ class ScarletRepositoryImpl(
                 }
             }
 
+    override suspend fun deleteExercise(exercise: Exercise) {
+        dbInstance.exerciseDao.deleteExercise(ExerciseEntity(exercise))
+    }
+
+    override suspend fun updateExercise(exercise: Exercise) {
+        dbInstance.exerciseDao.updateExercise(ExerciseEntity(exercise))
+    }
+
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////// SET /////////////////////////////////////////////
