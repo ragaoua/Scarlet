@@ -11,12 +11,13 @@ sealed interface SessionEvent {
 
     object ToggleEditMode : SessionEvent
 
-    object ToggleMovementSelectionSheet : SessionEvent
+    data class ShowMovementSelectionSheet(val exercise: Exercise? = null) : SessionEvent
+    object HideMovementSelectionSheet : SessionEvent
     data class FilterMovementsByName(val nameFilter: String) : SessionEvent
     object ToggleNewMovementSheet : SessionEvent
     data class AddMovement(val name: String) : SessionEvent
 
-    data class AddExercise(val movementId: Int) : SessionEvent
+    data class SelectMovement(val movementId: Int) : SessionEvent
     data class DeleteExercise(val exercise: Exercise) : SessionEvent
 
     data class AddSet(val exercise: Exercise) : SessionEvent

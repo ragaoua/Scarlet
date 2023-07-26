@@ -10,4 +10,5 @@ data class SessionUseCases(
     val deleteSet: DeleteSetUseCase,
     val insertMovement: InsertMovementUseCase,
     val deleteExercise: DeleteExerciseUseCase,
+    val updateExercise: UpdateExerciseUseCase
 )

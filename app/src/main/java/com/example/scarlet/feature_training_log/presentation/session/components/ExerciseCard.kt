@@ -76,7 +76,9 @@ fun ExerciseCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        modifier = Modifier,
+                        modifier = Modifier.clickable {
+                            onEvent(SessionEvent.ShowMovementSelectionSheet(exercise.exercise))
+                        },
                         imageVector = Icons.Default.Edit,
                         contentDescription = stringResource(R.string.select_movement)
                     )

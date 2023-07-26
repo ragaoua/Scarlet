@@ -71,16 +71,18 @@ class SessionViewModel @Inject constructor(
                     isInEditMode = !it.isInEditMode
                 )}
             }
-            SessionEvent.ToggleMovementSelectionSheet -> {
-                _state.update {
-                    it.copy(
-                        isMovementSelectionSheetOpen = !it.isMovementSelectionSheetOpen
-                    ).also { updatedState ->
-                        if(updatedState.isMovementSelectionSheetOpen) {
-                            updateMovementNameFilter("")
-                        }
-                    }
-                }
+            is SessionEvent.ShowMovementSelectionSheet -> {
+                updateMovementNameFilter("")
+                _state.update { it.copy(
+                    isMovementSelectionSheetOpen = true,
+                    exerciseToEdit = event.exercise
+                )}
+            }
+            SessionEvent.HideMovementSelectionSheet -> {
+                _state.update { it.copy(
+                    isMovementSelectionSheetOpen = false,
+                    exerciseToEdit = null
+                )}
             }
             is SessionEvent.FilterMovementsByName -> {
                 updateMovementNameFilter(event.nameFilter)
@@ -92,41 +94,57 @@ class SessionViewModel @Inject constructor(
             }
             is SessionEvent.AddMovement -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    when (val insertedMovementIdResource = useCases.insertMovement(event.name)) {
+                    val insertedMovementIdResource = useCases.insertMovement(event.name)
+                    when (insertedMovementIdResource) {
                         is Resource.Success -> {
-                            useCases.insertExercise(
-                                Exercise(
-                                    sessionId = _state.value.session.id,
-                                    movementId = insertedMovementIdResource.data!!.toInt(),
-                                    order = _state.value.exercises.size + 1
+                            _state.value.exerciseToEdit?.let { exercise ->
+                                useCases.updateExercise(
+                                    exercise = exercise.copy(
+                                        movementId = insertedMovementIdResource.data!!.toInt(),
+                                    )
                                 )
-                            )
-                            _state.update {
-                                it.copy(
-                                    isNewMovementSheetOpen = false,
-                                    isMovementSelectionSheetOpen = false
+                            } ?: run {
+                                useCases.insertExercise(
+                                    Exercise(
+                                        sessionId = _state.value.session.id,
+                                        movementId = insertedMovementIdResource.data!!.toInt(),
+                                        order = _state.value.exercises.size + 1
+                                    )
                                 )
                             }
-                        }
-                        else -> {
+                            _state.update { it.copy(
+                                isNewMovementSheetOpen = false,
+                                isMovementSelectionSheetOpen = false,
+                                exerciseToEdit = null
+                            )}
+                        } else -> {
                             /* TODO */
                         }
                     }
                 }
             }
-            is SessionEvent.AddExercise -> {
+            is SessionEvent.SelectMovement -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    useCases.insertExercise(
-                        Exercise(
-                            sessionId = _state.value.session.id,
-                            movementId = event.movementId,
-                            order = _state.value.exercises.size + 1
+                    _state.value.exerciseToEdit?.let { exercise ->
+                        useCases.updateExercise(
+                            exercise = exercise.copy(
+                                movementId = event.movementId
+                            )
                         )
-                    )
+                    } ?: run {
+                        useCases.insertExercise(
+                            Exercise(
+                                sessionId = _state.value.session.id,
+                                movementId = event.movementId,
+                                order = _state.value.exercises.size + 1
+                            )
+                        )
+                    }
+                    _state.update { it.copy(
+                        isMovementSelectionSheetOpen = false,
+                        exerciseToEdit = null
+                    )}
                 }
-                _state.update { it.copy(
-                    isMovementSelectionSheetOpen = false
-                )}
             }
             is SessionEvent.DeleteExercise -> {
                 viewModelScope.launch(Dispatchers.IO) {

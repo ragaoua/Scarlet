@@ -43,7 +43,7 @@ fun MovementSelectionSheet(
 ) {
     ModalBottomSheet(
         onDismissRequest = {
-            onEvent(SessionEvent.ToggleMovementSelectionSheet)
+            onEvent(SessionEvent.HideMovementSelectionSheet)
         },
         sheetState = rememberModalBottomSheetState(
              skipPartiallyExpanded = true
@@ -97,7 +97,7 @@ fun MovementSelectionSheet(
                                 .fillMaxWidth()
                                 .padding(2.dp)
                                 .clickable {
-                                    onEvent(SessionEvent.AddExercise(movement.id))
+                                    onEvent(SessionEvent.SelectMovement(movement.id))
                                 }
                                 .border(1.dp, MaterialTheme.colorScheme.onSurfaceVariant)
                                 .padding(8.dp)
