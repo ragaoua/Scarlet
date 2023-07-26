@@ -50,18 +50,20 @@ fun ExercisesList(
                 )
             }
         }
-        item {
-            Button(
-                modifier = Modifier.fillMaxWidth(),
-                shape = MaterialTheme.shapes.small,
-                onClick = {
-                    onEvent(SessionEvent.ShowMovementSelectionSheet())
+        if (!state.isInEditMode) {
+            item {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.small,
+                    onClick = {
+                        onEvent(SessionEvent.ShowMovementSelectionSheet())
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = stringResource(R.string.new_exercise)
+                    )
                 }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = stringResource(R.string.new_exercise)
-                )
             }
         }
     }
