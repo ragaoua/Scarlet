@@ -15,7 +15,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
@@ -27,9 +29,15 @@ fun ExerciseSetRow(
     set: Set,
     onEvent: (SessionEvent) -> Unit
 ) {
-    val reps = remember(key1 = set.reps) { mutableStateOf(set.reps?.toString() ?: "") }
-    val weight = remember(key1 = set.weight) { mutableStateOf(set.weight?.toString() ?: "") }
-    val rpe = remember(key1 = set.rpe) { mutableStateOf(set.rpe?.toString() ?: "") }
+    val reps = remember(key1 = set.reps) { mutableStateOf(
+        TextFieldValue(set.reps?.toString() ?: "")
+    )}
+    val weight = remember(key1 = set.weight) { mutableStateOf(
+        TextFieldValue(set.weight?.toString() ?: "")
+    )}
+    val rpe = remember(key1 = set.rpe) { mutableStateOf(
+        TextFieldValue(set.rpe?.toString() ?: "")
+    )}
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -46,13 +54,16 @@ fun ExerciseSetRow(
         SetTextField(
             modifier = Modifier.weight(1f),
             value = reps.value,
-            onValueChange = {
-                reps.value = it
-            },
+            onValueChange = { reps.value = it },
             onFocusChanged = {
-                if (!it.isFocused && reps.value != (set.reps?.toString() ?: "")) {
+                if(it.isFocused) {
+                    reps.value = reps.value.copy(
+                        selection = TextRange(0, reps.value.text.length)
+                    )
+                }
+                else if (reps.value.text != (set.reps?.toString() ?: "")) {
                     onEvent(SessionEvent.UpdateSet(
-                        set.copy(reps = reps.value.toIntOrNull())
+                        set.copy(reps = reps.value.text.toIntOrNull())
                     ))
                 }
             },
@@ -62,13 +73,16 @@ fun ExerciseSetRow(
         SetTextField(
             modifier = Modifier.weight(1f),
             value = weight.value,
-            onValueChange = {
-                weight.value = it
-            },
+            onValueChange = { weight.value = it },
             onFocusChanged = {
-                if (!it.isFocused && weight.value != (set.weight?.toString() ?: "")) {
+                if(it.isFocused) {
+                    weight.value = weight.value.copy(
+                        selection = TextRange(0, weight.value.text.length)
+                    )
+                }
+                else if (weight.value.text != (set.weight?.toString() ?: "")) {
                     onEvent(SessionEvent.UpdateSet(
-                        set.copy(weight = weight.value.toFloatOrNull())
+                        set.copy(weight = weight.value.text.toFloatOrNull())
                     ))
                 }
             },
@@ -78,13 +92,16 @@ fun ExerciseSetRow(
         SetTextField(
             modifier = Modifier.weight(1f),
             value = rpe.value,
-            onValueChange = {
-                rpe.value = it
-            },
+            onValueChange = { rpe.value = it },
             onFocusChanged = {
-                if (!it.isFocused && rpe.value != (set.rpe?.toString() ?: "")) {
+                if(it.isFocused) {
+                    rpe.value = rpe.value.copy(
+                        selection = TextRange(0, rpe.value.text.length)
+                    )
+                }
+                else if (rpe.value.text != (set.rpe?.toString() ?: "")) {
                     onEvent(SessionEvent.UpdateSet(
-                        set.copy(rpe = rpe.value.toFloatOrNull())
+                        set.copy(rpe = rpe.value.text.toFloatOrNull())
                     ))
                 }
             },
