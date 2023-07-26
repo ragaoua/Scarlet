@@ -7,10 +7,14 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -19,11 +23,14 @@ import androidx.compose.ui.text.style.TextAlign
 @Composable
 fun SetTextField(
     modifier: Modifier = Modifier,
-    value: TextFieldValue,
-    onValueChange: (TextFieldValue) -> Unit,
-    onFocusChanged: (FocusState) -> Unit,
+    originalValue: String,
+    updateSet: (String) -> Unit,
     imeAction: ImeAction
 ) {
+    var tfValue by remember(originalValue) { mutableStateOf(
+        TextFieldValue(originalValue)
+    )}
+
     val focusManager = LocalFocusManager.current
     Box(
         modifier = modifier
@@ -31,9 +38,20 @@ fun SetTextField(
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .onFocusChanged(onFocusChanged),
-            value = value,
-            onValueChange = onValueChange,
+                .onFocusChanged {
+                    if(it.isFocused) {
+                        tfValue = tfValue.copy(
+                            selection = TextRange(0, tfValue.text.length)
+                        )
+                    } else {
+                        tfValue = tfValue.copy(selection = TextRange(0, 0))
+                        if (tfValue.text != originalValue) {
+                            updateSet(tfValue.text)
+                        }
+                    }
+                },
+            value = tfValue,
+            onValueChange = { tfValue = it },
             textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center),
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(
