@@ -17,11 +17,9 @@ class DeleteSetUseCase(
         repository.deleteSet(set)
 
         // Update the order of the other sets if necessary
-        exerciseSets.filter {
-            it.order > set.order
-        }.forEach {
-            repository.updateSet(it.copy(order = it.order - 1))
-        }
+        exerciseSets
+            .filter { it.order > set.order }
+            .forEach { repository.updateSet(it.copy(order = it.order - 1)) }
 
         return Resource.Success()
     }
