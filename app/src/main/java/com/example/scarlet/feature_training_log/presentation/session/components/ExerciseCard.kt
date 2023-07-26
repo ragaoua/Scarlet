@@ -26,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,6 +46,7 @@ fun ExerciseCard(
 ) {
     Column(
         modifier = Modifier
+            .clip(MaterialTheme.shapes.medium)
             .border(
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface),
                 shape = MaterialTheme.shapes.medium
@@ -54,16 +56,14 @@ fun ExerciseCard(
          * EXERCISE HEADER
          *************************************************************************/
         var isExerciseDetailExpanded by remember(isInEditMode) { mutableStateOf(!isInEditMode) }
-        var rowModifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-        if (!isInEditMode) {
-            rowModifier = rowModifier.clickable {
-                isExerciseDetailExpanded = !isExerciseDetailExpanded
-            }
-        }
+
         Row(
-            modifier = rowModifier,
+            modifier =
+                if (!isInEditMode) {
+                    Modifier.clickable { isExerciseDetailExpanded = !isExerciseDetailExpanded }
+                } else { Modifier }
+                    .fillMaxWidth()
+                    .padding(8.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
