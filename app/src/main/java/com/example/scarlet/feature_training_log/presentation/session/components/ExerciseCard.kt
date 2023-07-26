@@ -127,6 +127,7 @@ fun ExerciseCard(
                     exercise.sets.forEach { set ->
                         ExerciseSetRow(
                             set = set,
+                            isLastSet = set == exercise.sets.last(),
                             onEvent = onEvent
                         )
                     }

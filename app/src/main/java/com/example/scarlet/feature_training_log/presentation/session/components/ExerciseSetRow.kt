@@ -18,7 +18,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.Set
@@ -27,6 +26,7 @@ import com.example.scarlet.feature_training_log.presentation.session.SessionEven
 @Composable
 fun ExerciseSetRow(
     set: Set,
+    isLastSet: Boolean,
     onEvent: (SessionEvent) -> Unit
 ) {
     val reps = remember(key1 = set.reps) { mutableStateOf(
@@ -105,7 +105,7 @@ fun ExerciseSetRow(
                     ))
                 }
             },
-            imeAction = ImeAction.Done
+            imeAction = if (isLastSet) ImeAction.Done else ImeAction.Next
         )
 
         Icon(
@@ -118,14 +118,4 @@ fun ExerciseSetRow(
                 }
         )
     }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun Preview_set() {
-    ExerciseSetRow(
-        set = Set(reps = 10, weight = 100f, rpe = 8f),
-        onEvent = {}
-    )
 }
