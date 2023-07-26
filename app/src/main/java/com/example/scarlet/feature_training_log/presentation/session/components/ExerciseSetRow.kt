@@ -54,17 +54,25 @@ fun ExerciseSetRow(
         SetTextField(
             modifier = Modifier.weight(1f),
             value = reps.value,
-            onValueChange = { reps.value = it },
+            onValueChange = {
+                if (reps.value.text == it.text) {
+                    reps.value = it.copy(selection = reps.value.selection)
+                } else {
+                    reps.value = it
+                }
+            },
             onFocusChanged = {
                 if(it.isFocused) {
                     reps.value = reps.value.copy(
                         selection = TextRange(0, reps.value.text.length)
                     )
-                }
-                else if (reps.value.text != (set.reps?.toString() ?: "")) {
-                    onEvent(SessionEvent.UpdateSet(
-                        set.copy(reps = reps.value.text.toIntOrNull())
-                    ))
+                } else {
+                    reps.value = reps.value.copy(selection = TextRange(0, 0))
+                    if (reps.value.text != (set.reps?.toString() ?: "")) {
+                        onEvent(SessionEvent.UpdateSet(
+                            set.copy(reps = reps.value.text.toIntOrNull())
+                        ))
+                    }
                 }
             },
             imeAction = ImeAction.Next
@@ -73,17 +81,25 @@ fun ExerciseSetRow(
         SetTextField(
             modifier = Modifier.weight(1f),
             value = weight.value,
-            onValueChange = { weight.value = it },
+            onValueChange = {
+                if (weight.value.text == it.text) {
+                    weight.value = it.copy(selection = weight.value.selection)
+                } else {
+                    weight.value = it
+                }
+            },
             onFocusChanged = {
                 if(it.isFocused) {
                     weight.value = weight.value.copy(
                         selection = TextRange(0, weight.value.text.length)
                     )
-                }
-                else if (weight.value.text != (set.weight?.toString() ?: "")) {
-                    onEvent(SessionEvent.UpdateSet(
-                        set.copy(weight = weight.value.text.toFloatOrNull())
-                    ))
+                } else {
+                    weight.value = weight.value.copy(selection = TextRange(0, 0))
+                    if (weight.value.text != (set.weight?.toString() ?: "")) {
+                        onEvent(SessionEvent.UpdateSet(
+                            set.copy(weight = weight.value.text.toFloatOrNull())
+                        ))
+                    }
                 }
             },
             imeAction = ImeAction.Next
@@ -92,17 +108,25 @@ fun ExerciseSetRow(
         SetTextField(
             modifier = Modifier.weight(1f),
             value = rpe.value,
-            onValueChange = { rpe.value = it },
+            onValueChange = {
+                if (rpe.value.text == it.text) {
+                    rpe.value = it.copy(selection = rpe.value.selection)
+                } else {
+                    rpe.value = it
+                }
+            },
             onFocusChanged = {
                 if(it.isFocused) {
                     rpe.value = rpe.value.copy(
                         selection = TextRange(0, rpe.value.text.length)
                     )
-                }
-                else if (rpe.value.text != (set.rpe?.toString() ?: "")) {
-                    onEvent(SessionEvent.UpdateSet(
-                        set.copy(rpe = rpe.value.text.toFloatOrNull())
-                    ))
+                } else {
+                    rpe.value = rpe.value.copy(selection = TextRange(0, 0))
+                    if (rpe.value.text != (set.rpe?.toString() ?: "")) {
+                        onEvent(SessionEvent.UpdateSet(
+                            set.copy(rpe = rpe.value.text.toFloatOrNull())
+                        ))
+                    }
                 }
             },
             imeAction = if (isLastSet) ImeAction.Done else ImeAction.Next
