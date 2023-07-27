@@ -36,6 +36,7 @@ private val LightColorScheme = lightColorScheme(
     surfaceVariant = Secondary10,
     onSurfaceVariant = Color.Black,
 
+    outline = Primary40,
     outlineVariant = Secondary90
 )
 
@@ -59,6 +60,7 @@ private val DarkColorScheme = darkColorScheme(
     surfaceVariant = Secondary80,
     onSurfaceVariant = Color.White,
 
+    outline = Primary50,
     outlineVariant = Color.White
 )
 
