@@ -19,6 +19,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
@@ -63,7 +64,7 @@ fun SessionHeader(
                     }
                 },
                 dismissButton = {
-                    Button(
+                    OutlinedButton(
                         onClick = { onEvent(SessionEvent.ToggleDatePickerDialog) }
                     ) {
                         Text(text = stringResource(R.string.cancel))
