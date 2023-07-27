@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
@@ -32,15 +33,34 @@ private val LightColorScheme = lightColorScheme(
 
     surface = Secondary5,
     onSurface = Color.Black,
+    surfaceVariant = Secondary10,
+    onSurfaceVariant = Color.Black,
 
-    outline = Primary40,
     outlineVariant = Secondary90
 )
 
-/* TODO */
-private val DarkColorScheme = LightColorScheme/*darkColorScheme(
+private val DarkColorScheme = darkColorScheme(
+    primary = Primary50,
+    onPrimary = Color.White,
 
-)*/
+    secondary = Secondary80,
+    onSecondary = Color.White,
+
+    error = Red40,
+    onError = Color.White,
+    errorContainer = Red10,
+    onErrorContainer = Red90,
+
+    background = Secondary90,
+    onBackground = Color.White,
+
+    surface = Secondary85,
+    onSurface = Color.White,
+    surfaceVariant = Secondary80,
+    onSurfaceVariant = Color.White,
+
+    outlineVariant = Color.White
+)
 
 @Composable
 fun ScarletTheme(

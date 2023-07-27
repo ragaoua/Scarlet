@@ -49,7 +49,10 @@ fun SetTextField(
             onValueChange = { tfValue = it },
             singleLine = true,
             cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
-            textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center),
+            textStyle = LocalTextStyle.current.copy(
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center
+            ),
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Decimal,
                 imeAction = imeAction
@@ -69,7 +72,7 @@ fun SetTextField(
             modifier = modifier
                 .fillMaxWidth()
                 .background(
-                    color = MaterialTheme.colorScheme.surface
+                    color = MaterialTheme.colorScheme.surfaceVariant
                 )
                 .bottomBorder(
                     strokeWidth = 1.dp,

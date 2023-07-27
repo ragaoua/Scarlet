@@ -2,6 +2,7 @@ package com.example.scarlet.feature_training_log.presentation.session.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -48,6 +49,7 @@ fun ExerciseCard(
     Column(
         modifier = Modifier
             .clip(MaterialTheme.shapes.medium)
+            .background(MaterialTheme.colorScheme.surface)
             .border(
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface),
                 shape = MaterialTheme.shapes.medium

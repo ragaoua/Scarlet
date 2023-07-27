@@ -20,8 +20,9 @@ val Secondary40 = Color(0xFF8791AB)
 val Secondary50 = Color(0xFF697696)
 val Secondary60 = Color(0xFF545E78)
 val Secondary70 = Color(0xFF3F475A)
-val Secondary80 = Color(0xFF343B4B)
-val Secondary90 = Color(0xFF2A2F3C)
+val Secondary80 = Color(0xFF2A2F3C)
+val Secondary85 = Color(0xFF1F242D)
+val Secondary90 = Color(0xFF15181E)
 
 
 val Red10 = Color(0xFF2f0406)
