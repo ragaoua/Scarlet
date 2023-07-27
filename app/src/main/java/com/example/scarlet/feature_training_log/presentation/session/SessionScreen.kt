@@ -62,7 +62,7 @@ fun Screen(
             floatingActionButton = {
                 FloatingActionButton(
                     onClick = {
-                        onEvent(SessionEvent.ToggleEditMode) // TODO save changes
+                        onEvent(SessionEvent.ToggleEditMode)
                     },
                     shape = MaterialTheme.shapes.extraLarge
                 ) {
@@ -78,7 +78,6 @@ fun Screen(
                         )
                     }
                 }
-                /* TODO change the color */
             }
         ) { contentPadding ->
             Surface(

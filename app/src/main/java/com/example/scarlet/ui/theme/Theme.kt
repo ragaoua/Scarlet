@@ -20,6 +20,9 @@ private val LightColorScheme = lightColorScheme(
     primary = Primary40,
     onPrimary = Color.White,
 
+    primaryContainer = Primary50,
+    onPrimaryContainer = Color.White,
+
     secondary = Secondary50,
     onSecondary = Color.White,
 
@@ -43,6 +46,9 @@ private val LightColorScheme = lightColorScheme(
 private val DarkColorScheme = darkColorScheme(
     primary = Primary50,
     onPrimary = Color.White,
+
+    primaryContainer = Primary60,
+    onPrimaryContainer = Color.White,
 
     secondary = Secondary80,
     onSecondary = Color.White,
