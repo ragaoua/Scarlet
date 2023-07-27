@@ -125,7 +125,7 @@ fun ExerciseCard(
                     ExerciseDetailHeader(
                         modifier = Modifier.fillMaxWidth()
                     )
-                    Spacer(modifier = Modifier) // Useful to double the space between header and sets
+                    Spacer(modifier = Modifier) // Doubles the space between header and sets
                     exercise.sets.forEach { set ->
                         ExerciseSetRow(
                             set = set,
