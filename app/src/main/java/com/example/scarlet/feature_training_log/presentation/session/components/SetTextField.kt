@@ -1,6 +1,6 @@
 package com.example.scarlet.feature_training_log.presentation.session.components
 
-import androidx.compose.foundation.border
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -27,6 +27,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.scarlet.feature_training_log.presentation.core.bottomBorder
 
 @Composable
 fun SetTextField(
@@ -67,8 +68,11 @@ fun SetTextField(
             },
             modifier = modifier
                 .fillMaxWidth()
-                .border(
-                    width = 1.dp,
+                .background(
+                    color = MaterialTheme.colorScheme.surface
+                )
+                .bottomBorder(
+                    strokeWidth = 1.dp,
                     color = MaterialTheme.colorScheme.primary
                 )
                 .onFocusChanged {
