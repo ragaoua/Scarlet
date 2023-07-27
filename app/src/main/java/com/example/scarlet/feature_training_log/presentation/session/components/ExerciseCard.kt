@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -118,12 +119,13 @@ fun ExerciseCard(
                     .fillMaxWidth()
                     .padding(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 if (exercise.sets.isNotEmpty()) {
                     ExerciseDetailHeader(
                         modifier = Modifier.fillMaxWidth()
                     )
+                    Spacer(modifier = Modifier) // Useful to double the space between header and sets
                     exercise.sets.forEach { set ->
                         ExerciseSetRow(
                             set = set,
