@@ -44,7 +44,7 @@ class BlockViewModel @Inject constructor(
         when(event) {
             BlockEvent.AddSession -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    val insertedSession = Session(blockId = _state.value.block.id)
+                    val insertedSession = Session(blockId = state.value.block.id)
                     useCases.insertSession(insertedSession)
                         .also { insertedSessionResource ->
                             insertedSessionResource.data?.let { insertedSessionId ->
@@ -59,7 +59,7 @@ class BlockViewModel @Inject constructor(
             }
             BlockEvent.EndBlock -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    _state.value.block.copy(
+                    state.value.block.copy(
                         completed = true
                     ).also { updatedBlock ->
                         useCases.updateBlock(updatedBlock).also { resource ->

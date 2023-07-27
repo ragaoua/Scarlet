@@ -60,7 +60,7 @@ class SessionViewModel @Inject constructor(
                             date = event.date
                         )
                     )}
-                    useCases.updateSession(_state.value.session)
+                    useCases.updateSession(state.value.session)
                     _state.update { it.copy(
                         isDatePickerDialogOpen = false
                     )}
@@ -97,7 +97,7 @@ class SessionViewModel @Inject constructor(
                     val insertedMovementIdResource = useCases.insertMovement(event.name)
                     when (insertedMovementIdResource) {
                         is Resource.Success -> {
-                            _state.value.exerciseToEdit?.let { exercise ->
+                            state.value.exerciseToEdit?.let { exercise ->
                                 useCases.updateExercise(
                                     exercise = exercise.copy(
                                         movementId = insertedMovementIdResource.data!!.toInt(),
@@ -106,9 +106,9 @@ class SessionViewModel @Inject constructor(
                             } ?: run {
                                 useCases.insertExercise(
                                     Exercise(
-                                        sessionId = _state.value.session.id,
+                                        sessionId = state.value.session.id,
                                         movementId = insertedMovementIdResource.data!!.toInt(),
-                                        order = _state.value.exercises.size + 1
+                                        order = state.value.exercises.size + 1
                                     )
                                 )
                             }
@@ -125,7 +125,7 @@ class SessionViewModel @Inject constructor(
             }
             is SessionEvent.SelectMovement -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    _state.value.exerciseToEdit?.let { exercise ->
+                    state.value.exerciseToEdit?.let { exercise ->
                         useCases.updateExercise(
                             exercise = exercise.copy(
                                 movementId = event.movementId
@@ -134,9 +134,9 @@ class SessionViewModel @Inject constructor(
                     } ?: run {
                         useCases.insertExercise(
                             Exercise(
-                                sessionId = _state.value.session.id,
+                                sessionId = state.value.session.id,
                                 movementId = event.movementId,
-                                order = _state.value.exercises.size + 1
+                                order = state.value.exercises.size + 1
                             )
                         )
                     }
@@ -148,7 +148,7 @@ class SessionViewModel @Inject constructor(
             }
             is SessionEvent.DeleteExercise -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    val sessionExercises = _state.value.exercises.map { it.exercise }
+                    val sessionExercises = state.value.exercises.map { it.exercise }
                     useCases.deleteExercise(
                         exercise = event.exercise,
                         sessionExercises = sessionExercises
@@ -157,7 +157,7 @@ class SessionViewModel @Inject constructor(
             }
             is SessionEvent.AddSet -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    val exerciseSets = _state.value.exercises
+                    val exerciseSets = state.value.exercises
                         .find { it.exercise.id == event.exercise.id }
                         ?.sets ?: emptyList()
                     useCases.insertSet(
@@ -175,7 +175,7 @@ class SessionViewModel @Inject constructor(
                 viewModelScope.launch(Dispatchers.IO) {
                     useCases.deleteSet(
                         set = event.set,
-                        exerciseSets = _state.value.exercises
+                        exerciseSets = state.value.exercises
                             .find { it.exercise.id == event.set.exerciseId }
                             ?.sets ?: emptyList()
                     )
