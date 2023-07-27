@@ -11,10 +11,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,14 +31,11 @@ class BlockViewModel @Inject constructor(
     private val block = BlockScreenDestination.argsFrom(savedStateHandle).block
 
     private val _state = MutableStateFlow(BlockUiState(block = block))
-    val state = combine(
-        _state,
-        useCases.getSessionsWithMovementsByBlockId(block.id)
-    ) { state, sessionWithMovements ->
-        state.copy(
-            sessionsWithMovements = sessionWithMovements.data ?: emptyList()
-        )
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), BlockUiState())
+    val state = _state.asStateFlow()
+
+    init {
+        initBlockSessionsCollection()
+    }
 
     fun onEvent(event: BlockEvent) {
         when(event) {
@@ -106,6 +103,15 @@ class BlockViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun initBlockSessionsCollection() {
+        useCases.getSessionsWithMovementsByBlockId(block.id)
+            .onEach { resource ->
+                _state.update { it.copy(
+                    sessionsWithMovements = resource.data ?: emptyList()
+                )}
+            }.launchIn(viewModelScope)
     }
 
     sealed interface UiAction {

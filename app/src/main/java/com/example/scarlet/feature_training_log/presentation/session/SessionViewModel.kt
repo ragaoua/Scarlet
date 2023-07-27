@@ -11,11 +11,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -37,14 +35,11 @@ class SessionViewModel @Inject constructor(
             sessionBlockName = sessionBlock.name
         )
     )
-    val state = combine(
-        _state,
-        useCases.getExercisesWithMovementAndSetsBySessionId(session.id)
-    ) { state, exercises ->
-        state.copy(
-            exercises = exercises.data ?: emptyList()
-        )
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), SessionUiState(session = session))
+    val state = _state.asStateFlow()
+
+    init {
+        initSessionExercisesCollection()
+    }
 
     fun onEvent(event: SessionEvent) {
         when (event) {
@@ -182,6 +177,15 @@ class SessionViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun initSessionExercisesCollection() {
+        useCases.getExercisesWithMovementAndSetsBySessionId(session.id)
+            .onEach { exercises ->
+                _state.update { it.copy(
+                    exercises = exercises.data ?: emptyList()
+                )}
+            }.launchIn(viewModelScope)
     }
 
     private fun updateMovementNameFilter(nameFilter: String) {
