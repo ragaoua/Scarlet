@@ -42,11 +42,11 @@ class ScarletRepositoryImpl(
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////// SESSION ///////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    override fun getSessionsWithMovementsByBlockId(blockId: Int) =
+    override fun getSessionsWithExercisesWithMovementNameByBlockId(blockId: Int) =
         dbInstance.sessionDao.getSessionsWithMovementsByBlockId(blockId)
             .map { entityList ->
                 entityList.map { entity ->
-                    entity.toSessionWithMovements()
+                    entity.toSessionWithExercisesWithMovementName()
                 }
             }
 

@@ -10,16 +10,22 @@ import com.example.scarlet.feature_training_log.data.data_source.dao.SessionDao
 import com.example.scarlet.feature_training_log.data.data_source.dao.SetDao
 import com.example.scarlet.feature_training_log.data.data_source.entity.BlockEntity
 import com.example.scarlet.feature_training_log.data.data_source.entity.ExerciseEntity
+import com.example.scarlet.feature_training_log.data.data_source.entity.ExerciseWithMovementNameEntity
 import com.example.scarlet.feature_training_log.data.data_source.entity.MovementEntity
 import com.example.scarlet.feature_training_log.data.data_source.entity.SessionEntity
 import com.example.scarlet.feature_training_log.data.data_source.entity.SetEntity
 
 @Database(
-    entities = [BlockEntity::class,
+    entities = [
+        BlockEntity::class,
         SessionEntity::class,
         ExerciseEntity::class,
         MovementEntity::class,
-        SetEntity::class],
+        SetEntity::class
+    ],
+    views = [
+        ExerciseWithMovementNameEntity::class
+    ],
     version = 1)
 @TypeConverters(DateConverter::class)
 abstract class ScarletDatabase : RoomDatabase() {

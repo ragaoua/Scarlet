@@ -15,3 +15,8 @@ data class ExerciseWithMovementAndSets(
     val movement: Movement,
     val sets: List<Set>
 )
+
+data class ExerciseWithMovementName(
+    val exercise: Exercise,
+    val movementName: String
+)

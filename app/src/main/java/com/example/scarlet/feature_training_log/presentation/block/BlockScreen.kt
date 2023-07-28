@@ -16,9 +16,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.scarlet.feature_training_log.domain.model.Block
-import com.example.scarlet.feature_training_log.domain.model.Movement
+import com.example.scarlet.feature_training_log.domain.model.Exercise
+import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementName
 import com.example.scarlet.feature_training_log.domain.model.Session
-import com.example.scarlet.feature_training_log.domain.model.SessionWithMovements
+import com.example.scarlet.feature_training_log.domain.model.SessionWithExercisesWithMovementName
 import com.example.scarlet.feature_training_log.presentation.block.components.BlockHeader
 import com.example.scarlet.feature_training_log.presentation.block.components.SessionsList
 import com.example.scarlet.feature_training_log.presentation.destinations.SessionScreenDestination
@@ -115,23 +116,29 @@ fun PreviewBlockScreen() {
             block = Block(
                 name = "Block 1",
             ),
-            sessionsWithMovements = listOf(
-                SessionWithMovements(
+            sessions = listOf(
+                SessionWithExercisesWithMovementName(
                     Session(
                         date = Date(System.currentTimeMillis()),
                         blockId = 1
                     ),
                     emptyList()
                 ),
-                SessionWithMovements(
+                SessionWithExercisesWithMovementName(
                     Session(
                         date = Date(System.currentTimeMillis()),
                         blockId = 1
                     ),
                     listOf(
-                        Movement(name = "Bench Press"),
-                        Movement(name = "Comp Squat"),
-                        Movement(name = "Dips"),
+                        ExerciseWithMovementName(
+                            Exercise(order = 1),
+                            movementName = "Bench Press"),
+                        ExerciseWithMovementName(
+                            Exercise(order = 2),
+                            movementName = "Comp Squat"),
+                        ExerciseWithMovementName(
+                            Exercise(order = 2),
+                            movementName = "Dips"),
                     )
                 ),
             )

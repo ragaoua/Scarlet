@@ -109,7 +109,7 @@ class BlockViewModel @Inject constructor(
         useCases.getSessionsWithMovementsByBlockId(block.id)
             .onEach { resource ->
                 _state.update { it.copy(
-                    sessionsWithMovements = resource.data ?: emptyList()
+                    sessions = resource.data ?: emptyList()
                 )}
             }.launchIn(viewModelScope)
     }

@@ -6,7 +6,7 @@ import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
 import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Session
-import com.example.scarlet.feature_training_log.domain.model.SessionWithMovements
+import com.example.scarlet.feature_training_log.domain.model.SessionWithExercisesWithMovementName
 import com.example.scarlet.feature_training_log.domain.model.Set
 import kotlinx.coroutines.flow.Flow
 
@@ -34,7 +34,8 @@ interface ScarletRepository {
 
     suspend fun deleteSession(session: Session)
 
-    fun getSessionsWithMovementsByBlockId(blockId: Int): Flow<List<SessionWithMovements>>
+    fun getSessionsWithExercisesWithMovementNameByBlockId(blockId: Int):
+            Flow<List<SessionWithExercisesWithMovementName>>
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////// EXERCISE ///////////////////////////////////////////

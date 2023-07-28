@@ -8,7 +8,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import com.example.scarlet.feature_training_log.data.data_source.entity.SessionEntity
-import com.example.scarlet.feature_training_log.data.data_source.entity.SessionWithMovementsEntity
+import com.example.scarlet.feature_training_log.data.data_source.entity.SessionWithExercisesWithMovementNameEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -20,7 +20,7 @@ interface SessionDao {
         FROM session
         WHERE blockId = :blockId
     """)
-    fun getSessionsWithMovementsByBlockId(blockId: Int): Flow<List<SessionWithMovementsEntity>>
+    fun getSessionsWithMovementsByBlockId(blockId: Int): Flow<List<SessionWithExercisesWithMovementNameEntity>>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertSession(session: SessionEntity): Long

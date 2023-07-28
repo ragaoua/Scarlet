@@ -1,5 +1,6 @@
 package com.example.scarlet.feature_training_log.data.data_source.entity
 
+import androidx.room.DatabaseView
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
@@ -8,6 +9,7 @@ import androidx.room.PrimaryKey
 import androidx.room.Relation
 import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
+import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementName
 
 @Entity(
     tableName = "exercise",
@@ -71,5 +73,23 @@ data class ExerciseWithMovementAndSetsEntity(
         exercise = exercise.toExercise(),
         movement = movement.toMovement(),
         sets = sets.map { it.toSet() }
+    )
+}
+
+@DatabaseView(
+    """
+        SELECT exercise.*, movement.name as movementName
+        FROM exercise
+        INNER JOIN movement ON exercise.movementId = movement.id
+    """
+)
+data class ExerciseWithMovementNameEntity(
+    @Embedded
+    val exercise: ExerciseEntity,
+    val movementName: String
+) {
+    fun toExerciseWithMovementName() = ExerciseWithMovementName(
+        exercise = exercise.toExercise(),
+        movementName = movementName
     )
 }

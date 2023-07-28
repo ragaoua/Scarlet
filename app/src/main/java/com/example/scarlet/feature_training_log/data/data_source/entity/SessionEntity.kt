@@ -4,11 +4,10 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
-import androidx.room.Junction
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 import com.example.scarlet.feature_training_log.domain.model.Session
-import com.example.scarlet.feature_training_log.domain.model.SessionWithMovements
+import com.example.scarlet.feature_training_log.domain.model.SessionWithExercisesWithMovementName
 import java.util.Date
 
 @Entity(
@@ -45,24 +44,18 @@ data class SessionEntity(
     )
 }
 
-data class SessionWithMovementsEntity(
+data class SessionWithExercisesWithMovementNameEntity(
     @Embedded
     val session: SessionEntity,
     @Relation(
         parentColumn = "id",
-        entity = MovementEntity::class,
-        entityColumn = "id",
-        associateBy = Junction(
-            value = ExerciseEntity::class,
-            parentColumn = "sessionId",
-            entityColumn = "movementId"
-        )
+        entityColumn = "sessionId"
     )
-    val movements: List<MovementEntity>
+    val exercisesWithMovementName: List<ExerciseWithMovementNameEntity>
 ) {
 
-    fun toSessionWithMovements() = SessionWithMovements(
+    fun toSessionWithExercisesWithMovementName() = SessionWithExercisesWithMovementName(
         session = session.toSession(),
-        movements = movements.map { it.toMovement() }
+        exercises = exercisesWithMovementName.map { it.toExerciseWithMovementName() }
     )
 }

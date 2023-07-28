@@ -38,8 +38,8 @@ fun SessionsList(
             .padding(TitleLazyListPadding),
         title = stringResource(R.string.block_sessions_list_title)
     ) {
-        if (state.sessionsWithMovements.isNotEmpty()) {
-            items(state.sessionsWithMovements) { sessionsWithMovements ->
+        if (state.sessions.isNotEmpty()) {
+            items(state.sessions) { sessionWithExercisesWithMovementName ->
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     contentPadding = MainButtonContentPadding,
@@ -51,7 +51,7 @@ fun SessionsList(
                     onClick = {
                         navigator.navigate(
                             SessionScreenDestination(
-                                session = sessionsWithMovements.session,
+                                session = sessionWithExercisesWithMovementName.session,
                                 block = state.block
                             )
                         )
@@ -61,7 +61,9 @@ fun SessionsList(
                     DeletableItem(
                         modifier = Modifier.fillMaxSize(),
                         onDeleteClicked = {
-                            onEvent(BlockEvent.DeleteSession(sessionsWithMovements.session))
+                            onEvent(BlockEvent.DeleteSession(
+                                sessionWithExercisesWithMovementName.session
+                            ))
                         }
                     ) {
                         Column(
@@ -69,12 +71,18 @@ fun SessionsList(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = DateUtils.formatDate(sessionsWithMovements.session.date),
+                                text = DateUtils.formatDate(
+                                    sessionWithExercisesWithMovementName.session.date
+                                ),
                                 style = MaterialTheme.typography.titleLarge
                             )
                             Text(
-                                text = if (sessionsWithMovements.movements.isNotEmpty()) {
-                                    sessionsWithMovements.movements.joinToString { it.name }
+                                text = if (
+                                    sessionWithExercisesWithMovementName.exercises.isNotEmpty()
+                                ) {
+                                    sessionWithExercisesWithMovementName.exercises.joinToString {
+                                        it.movementName
+                                    }
                                 } else {
                                     stringResource(R.string.empty_session)
                                 },
