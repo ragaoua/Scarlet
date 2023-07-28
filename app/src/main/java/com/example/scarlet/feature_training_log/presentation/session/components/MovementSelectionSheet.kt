@@ -41,6 +41,8 @@ fun MovementSelectionSheet(
     state: SessionUiState,
     onEvent: (SessionEvent) -> Unit
 ) {
+    var movementNameFilter by remember { mutableStateOf("")}
+
     ModalBottomSheet(
         onDismissRequest = {
             onEvent(SessionEvent.HideMovementSelectionSheet)
@@ -107,7 +109,6 @@ fun MovementSelectionSheet(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                var movementNameFilter by remember { mutableStateOf("")}
                 OutlinedTextField(
                     value = movementNameFilter,
                     onValueChange = {
@@ -126,6 +127,9 @@ fun MovementSelectionSheet(
         }
     }
     if(state.isNewMovementSheetOpen) {
-        NewMovementSheet(onEvent = onEvent)
+        NewMovementSheet(
+            onEvent = onEvent,
+            movementNameFilter = movementNameFilter
+        )
     }
 }

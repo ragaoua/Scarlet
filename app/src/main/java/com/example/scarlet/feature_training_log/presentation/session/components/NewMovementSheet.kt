@@ -31,7 +31,8 @@ import com.example.scarlet.feature_training_log.presentation.session.SessionEven
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewMovementSheet(
-    onEvent: (SessionEvent) -> Unit
+    onEvent: (SessionEvent) -> Unit,
+    movementNameFilter: String = ""
 ) {
     ModalBottomSheet(
         onDismissRequest = {
@@ -60,7 +61,7 @@ fun NewMovementSheet(
                 )
                 Spacer(modifier = Modifier.height(32.dp))
 
-                var movementName by remember { mutableStateOf("") }
+                var movementName by remember{ mutableStateOf(movementNameFilter) }
                 OutlinedTextField(
                     modifier = Modifier.focusRequester(focusRequester),
                     value = movementName,
