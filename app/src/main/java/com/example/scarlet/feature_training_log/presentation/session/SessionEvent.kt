@@ -2,6 +2,7 @@ package com.example.scarlet.feature_training_log.presentation.session
 
 import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.Set
+import com.example.scarlet.feature_training_log.presentation.session.util.SetFieldType
 import java.util.Date
 
 sealed interface SessionEvent {
@@ -23,4 +24,6 @@ sealed interface SessionEvent {
     data class AddSet(val exercise: Exercise) : SessionEvent
     data class UpdateSet(val set: Set) : SessionEvent
     data class DeleteSet(val set: Set) : SessionEvent
+
+    data class CopyPreviousSet(val set: Set, val fieldToCopy: SetFieldType) : SessionEvent
 }

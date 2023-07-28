@@ -34,7 +34,8 @@ fun SetTextField(
     modifier: Modifier = Modifier,
     originalValue: String,
     updateSet: (String) -> Unit,
-    imeAction: ImeAction
+    imeAction: ImeAction,
+    onCopyPreviousSet: (() -> Unit)? = null
 ) {
     var tfValue by remember(originalValue) { mutableStateOf(
         TextFieldValue(originalValue)
@@ -51,7 +52,7 @@ fun SetTextField(
             cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
             textStyle = LocalTextStyle.current.copy(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Right
             ),
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Decimal,
@@ -62,11 +63,27 @@ fun SetTextField(
             ),
             decorationBox = { innerTextField ->
                 Column(
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(vertical = 4.dp)
                 ) {
-                    Spacer(modifier = Modifier.height(4.dp))
-                    innerTextField()
-                    Spacer(modifier = Modifier.height(4.dp))
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        onCopyPreviousSet?.let {
+                            Icon(
+                                imageVector = Icons.Default.KeyboardArrowUp, // TODO replace with ???
+                                contentDescription = stringResource(R.string.copy_previous_set_value),
+                                modifier = Modifier.clickable(onClick = onCopyPreviousSet)
+                            )
+                        } ?: Spacer(modifier = Modifier.width(24.dp))
+                        Box(modifier = modifier.weight(1f)) {
+                            innerTextField()
+                        }
+                        Spacer(modifier = Modifier.width(4.dp))
+                    }
                 }
             },
             modifier = modifier

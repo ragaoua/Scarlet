@@ -18,10 +18,12 @@ import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.Set
 import com.example.scarlet.feature_training_log.presentation.session.SessionEvent
+import com.example.scarlet.feature_training_log.presentation.session.util.SetFieldType
 
 @Composable
 fun ExerciseSetRow(
     set: Set,
+    isFirstSet: Boolean,
     isLastSet: Boolean,
     onEvent: (SessionEvent) -> Unit
 ) {
@@ -45,7 +47,13 @@ fun ExerciseSetRow(
                     set.copy(reps = text.toIntOrNull())
                 ))
             },
-            imeAction = ImeAction.Next
+            imeAction = ImeAction.Next,
+            onCopyPreviousSet = if (isFirstSet) null else { {
+                onEvent(SessionEvent.CopyPreviousSet(
+                    set = set,
+                    fieldToCopy = SetFieldType.REPS)
+                )
+            } }
         )
 
         SetTextField(
@@ -56,7 +64,13 @@ fun ExerciseSetRow(
                     set.copy(weight = text.toFloatOrNull())
                 ))
             },
-            imeAction = ImeAction.Next
+            imeAction = ImeAction.Next,
+            onCopyPreviousSet = if (isFirstSet) null else { {
+                onEvent(SessionEvent.CopyPreviousSet(
+                    set = set,
+                    fieldToCopy = SetFieldType.WEIGHT)
+                )
+            } }
         )
 
         SetTextField(
@@ -67,7 +81,13 @@ fun ExerciseSetRow(
                     set.copy(rpe = text.toFloatOrNull())
                 ))
             },
-            imeAction = if (isLastSet) ImeAction.Done else ImeAction.Next
+            imeAction = if (isLastSet) ImeAction.Done else ImeAction.Next,
+            onCopyPreviousSet = if (isFirstSet) null else { {
+                onEvent(SessionEvent.CopyPreviousSet(
+                    set = set,
+                    fieldToCopy = SetFieldType.RPE)
+                )
+            } }
         )
 
         Icon(
