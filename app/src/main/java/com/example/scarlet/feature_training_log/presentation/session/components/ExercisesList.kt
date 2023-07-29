@@ -12,11 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.scarlet.R
-import com.example.scarlet.feature_training_log.domain.model.Exercise
-import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
-import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.presentation.core.components.TitledLazyList
 import com.example.scarlet.feature_training_log.presentation.session.SessionEvent
 import com.example.scarlet.feature_training_log.presentation.session.SessionUiState
@@ -67,30 +63,4 @@ fun ExercisesList(
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun NoExercisePreview() {
-    ExercisesList(
-        state = SessionUiState(
-            exercises = emptyList(),
-        ),
-        onEvent = {}
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ExercisesSectionPreview() {
-    ExercisesList(
-        state = SessionUiState(
-            exercises = listOf(
-                ExerciseWithMovementAndSets(Exercise(), Movement(name="Squat"), emptyList()),
-                ExerciseWithMovementAndSets(Exercise(), Movement(name="Bench"), emptyList()),
-                ExerciseWithMovementAndSets(Exercise(), Movement(name="Deadlift"), emptyList())
-            )
-        ),
-        onEvent = {}
-    )
 }

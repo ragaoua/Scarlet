@@ -30,13 +30,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
-import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
-import com.example.scarlet.feature_training_log.domain.model.Movement
-import com.example.scarlet.feature_training_log.domain.model.Set
 import com.example.scarlet.feature_training_log.presentation.core.components.SecondaryActionButton
 import com.example.scarlet.feature_training_log.presentation.session.SessionEvent
 
@@ -160,38 +156,4 @@ fun ExerciseCard(
             }
         }
     }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewExerciseDetail_noSets() {
-    ExerciseCard(
-        exercise = ExerciseWithMovementAndSets(
-            exercise = Exercise(),
-            movement = Movement(),
-            sets = emptyList()
-        ),
-        isInEditMode = false,
-        onEvent = {}
-    )
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewExerciseDetail_withSets() {
-    ExerciseCard(
-        exercise = ExerciseWithMovementAndSets(
-            exercise = Exercise(),
-            movement = Movement(),
-            sets = listOf(
-                Set(order = 1, reps = 10, weight = 100f, rpe = 8f),
-                Set(order = 2, reps = 10, weight = 100f, rpe = 8.5f),
-                Set(order = 3, reps = 10, weight = 95f, rpe = 8f)
-            )
-        ),
-        isInEditMode = false,
-        onEvent = {}
-    )
 }

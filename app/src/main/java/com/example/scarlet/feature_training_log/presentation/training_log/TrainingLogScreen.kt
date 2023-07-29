@@ -14,13 +14,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.scarlet.R
-import com.example.scarlet.feature_training_log.domain.model.Block
-import com.example.scarlet.feature_training_log.domain.model.BlockWithSessions
-import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
 import com.example.scarlet.feature_training_log.presentation.training_log.components.ActiveBlockSection
 import com.example.scarlet.feature_training_log.presentation.training_log.components.CompletedBlocksSection
@@ -28,8 +24,6 @@ import com.example.scarlet.feature_training_log.presentation.training_log.compon
 import com.example.scarlet.ui.theme.ScarletTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
-import java.util.Date
 
 @Destination
 @Composable
@@ -96,59 +90,4 @@ fun Screen(
             NewBlockSheet(onEvent = onEvent)
         }
     }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewNoBlocks() {
-    Screen(
-        navigator = EmptyDestinationsNavigator,
-        state = TrainingLogUiState(),
-        onEvent = {}
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewTrainingLogScreen() {
-    Screen(
-        navigator = EmptyDestinationsNavigator,
-        state = TrainingLogUiState(
-            activeBlock =
-                BlockWithSessions(
-                    block = Block(name = "Block 5"),
-                    emptyList()
-                ),
-            completedBlocks = listOf(
-                BlockWithSessions(
-                    block = Block(name = "Block 1"),
-                    listOf(
-                        Session(date = Date(System.currentTimeMillis())),
-                        Session(date = Date(System.currentTimeMillis()))
-                    )
-                ),
-                BlockWithSessions(
-                    block = Block(name = "Block 2"),
-                    listOf(
-                        Session(date = Date(System.currentTimeMillis())),
-                        Session(date = Date(System.currentTimeMillis()))
-                    )
-                )
-            )
-        ),
-        onEvent = {}
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewNewBlockDialog() {
-    Screen(
-        navigator = EmptyDestinationsNavigator,
-        state = TrainingLogUiState(
-            isNewBlockSheetExpanded = true
-        ),
-        onEvent = {}
-    )
 }

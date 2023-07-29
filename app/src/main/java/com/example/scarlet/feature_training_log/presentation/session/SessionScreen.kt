@@ -19,22 +19,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.scarlet.R
-import com.example.scarlet.feature_training_log.domain.model.Exercise
-import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
-import com.example.scarlet.feature_training_log.domain.model.Movement
-import com.example.scarlet.feature_training_log.domain.model.Session
-import com.example.scarlet.feature_training_log.domain.model.Set
 import com.example.scarlet.feature_training_log.presentation.session.components.ExercisesList
 import com.example.scarlet.feature_training_log.presentation.session.components.MovementSelectionSheet
 import com.example.scarlet.feature_training_log.presentation.session.components.SessionHeader
 import com.example.scarlet.ui.theme.ScarletTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import java.util.Date
 
 @Destination(
     navArgsDelegate = SessionScreenNavArgs::class
@@ -111,41 +104,4 @@ fun Screen(
             )
         }
     }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewEmptySession() {
-    Screen(
-        state = SessionUiState(
-            session = Session(
-                date = Date(System.currentTimeMillis())
-            )
-        ),
-        onEvent = {}
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewSessionScreen() {
-    Screen(
-        state = SessionUiState(
-            session = Session(
-                date = Date(System.currentTimeMillis())
-            ),
-            exercises = listOf(
-                ExerciseWithMovementAndSets(Exercise(), Movement(name="Squat"), listOf(
-                    Set(reps = 3, weight = 100f),
-                    Set(reps = 5, weight = 95f, rpe = 8.5f),
-                    Set(reps = 5, weight = 95f, rpe = 8.5f),
-                    Set(reps = 5, weight = 95f, rpe = 8.5f)
-                )),
-                ExerciseWithMovementAndSets(Exercise(), Movement(name="Bench"), emptyList()),
-                ExerciseWithMovementAndSets(Exercise(), Movement(name="Deadlift"), emptyList())
-            )
-        ),
-        onEvent = {}
-    )
 }

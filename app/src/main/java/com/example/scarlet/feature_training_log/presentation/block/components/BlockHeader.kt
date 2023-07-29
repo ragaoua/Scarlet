@@ -32,7 +32,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.Block
@@ -134,14 +133,4 @@ fun BlockHeader(
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun HeaderPreview() {
-    BlockHeader(
-        block = Block(name = "Block 1"),
-        isEditing = false,
-        onEvent = {}
-    )
 }
