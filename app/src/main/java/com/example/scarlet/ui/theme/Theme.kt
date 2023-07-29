@@ -16,7 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
-private val LightColorScheme = lightColorScheme(
+private val lightColorScheme = lightColorScheme(
     primary = Primary40,
     onPrimary = Color.White,
 
@@ -43,14 +43,14 @@ private val LightColorScheme = lightColorScheme(
     outlineVariant = Secondary90
 )
 
-private val DarkColorScheme = darkColorScheme(
+private val darkColorScheme = darkColorScheme(
     primary = Primary50,
     onPrimary = Color.White,
 
     primaryContainer = Primary60,
     onPrimaryContainer = Color.White,
 
-    secondary = Secondary80,
+    secondary = Secondary70,
     onSecondary = Color.White,
 
     error = Red40,
@@ -58,12 +58,12 @@ private val DarkColorScheme = darkColorScheme(
     errorContainer = Red10,
     onErrorContainer = Red90,
 
-    background = Secondary90,
+    background = Secondary85,
     onBackground = Color.White,
 
-    surface = Secondary85,
+    surface = Secondary80,
     onSurface = Color.White,
-    surfaceVariant = Secondary80,
+    surfaceVariant = Secondary75,
     onSurfaceVariant = Color.White,
 
     outline = Primary50,
@@ -83,8 +83,8 @@ fun ScarletTheme(
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        darkTheme -> darkColorScheme
+        else -> lightColorScheme
     }
     val view = LocalView.current
     if (!view.isInEditMode) {
