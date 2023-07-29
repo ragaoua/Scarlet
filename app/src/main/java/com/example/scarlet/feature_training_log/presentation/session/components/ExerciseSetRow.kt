@@ -42,6 +42,13 @@ fun ExerciseSetRow(
         SetTextField(
             modifier = Modifier.weight(1f),
             originalValue = set.reps?.toString() ?: "",
+            onValueChangeCheck = { text ->
+                if (text.isBlank()) true else {
+                    text.toIntOrNull()?.let { reps ->
+                        reps < 1000
+                    } ?: false // TODO : validate in a use case
+                }
+            },
             updateSet = { text ->
                 onEvent(SessionEvent.UpdateSet(
                     set.copy(reps = text.toIntOrNull())
@@ -59,6 +66,13 @@ fun ExerciseSetRow(
         SetTextField(
             modifier = Modifier.weight(1f),
             originalValue = set.weight?.toString() ?: "",
+            onValueChangeCheck = { text ->
+                if (text.isBlank()) true else {
+                    text.toFloatOrNull()?.let { weight ->
+                        weight < 1000
+                    } ?: false // TODO : validate in a use case
+                }
+            },
             updateSet = { text ->
                 onEvent(SessionEvent.UpdateSet(
                     set.copy(weight = text.toFloatOrNull())
@@ -76,6 +90,13 @@ fun ExerciseSetRow(
         SetTextField(
             modifier = Modifier.weight(1f),
             originalValue = set.rpe?.toString() ?: "",
+            onValueChangeCheck = { text ->
+                if (text.isBlank()) true else {
+                    text.toFloatOrNull()?.let { rpe ->
+                        rpe <= 10
+                    } ?: false // TODO : validate in a use case
+                }
+            },
             updateSet = { text ->
                 onEvent(SessionEvent.UpdateSet(
                     set.copy(rpe = text.toFloatOrNull())

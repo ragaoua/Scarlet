@@ -42,6 +42,7 @@ import com.example.scarlet.feature_training_log.presentation.core.bottomBorder
 fun SetTextField(
     modifier: Modifier = Modifier,
     originalValue: String,
+    onValueChangeCheck: (String) -> Boolean = { true },
     updateSet: (String) -> Unit,
     imeAction: ImeAction,
     onCopyPreviousSet: (() -> Unit)? = null
@@ -56,7 +57,11 @@ fun SetTextField(
     ) {
         BasicTextField(
             value = tfValue,
-            onValueChange = { tfValue = it },
+            onValueChange = {
+                if (onValueChangeCheck(it.text)) {
+                    tfValue = it
+                }
+            },
             singleLine = true,
             cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
             textStyle = LocalTextStyle.current.copy(
