@@ -1,10 +1,10 @@
 package com.example.scarlet.feature_training_log.presentation.session.components
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.Set
 import com.example.scarlet.feature_training_log.presentation.session.SessionEvent
+import com.example.scarlet.feature_training_log.presentation.session.util.SetFieldRatio
 import com.example.scarlet.feature_training_log.presentation.session.util.SetFieldType
 
 @Composable
@@ -29,10 +30,9 @@ fun ExerciseSetRow(
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Box(modifier = Modifier.weight(0.5f)) {
+        Box(modifier = Modifier.weight(SetFieldRatio.SET)) {
             Text(
                 text = "${set.order}.",
                 modifier = Modifier.align(Alignment.Center)
@@ -40,7 +40,9 @@ fun ExerciseSetRow(
         }
 
         SetTextField(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .padding(horizontal = 2.dp)
+                .weight(SetFieldRatio.REPS),
             originalValue = set.reps?.toString() ?: "",
             onValueChangeCheck = { text ->
                 if (text.isBlank()) true else {
@@ -64,7 +66,9 @@ fun ExerciseSetRow(
         )
 
         SetTextField(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .padding(horizontal = 2.dp)
+                .weight(SetFieldRatio.WEIGHT),
             originalValue = set.weight?.toString() ?: "",
             onValueChangeCheck = { text ->
                 if (text.isBlank()) true else {
@@ -88,7 +92,9 @@ fun ExerciseSetRow(
         )
 
         SetTextField(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .padding(horizontal = 2.dp)
+                .weight(SetFieldRatio.RPE),
             originalValue = set.rpe?.toString() ?: "",
             onValueChangeCheck = { text ->
                 if (text.isBlank()) true else {
@@ -115,7 +121,7 @@ fun ExerciseSetRow(
             imageVector = Icons.Default.Delete,
             contentDescription = stringResource(R.string.delete),
             modifier = Modifier
-                .weight(0.5f)
+                .weight(SetFieldRatio.OTHER)
                 .clickable {
                     onEvent(SessionEvent.DeleteSet(set))
                 }

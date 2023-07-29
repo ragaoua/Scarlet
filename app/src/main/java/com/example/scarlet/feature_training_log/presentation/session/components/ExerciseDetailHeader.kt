@@ -1,6 +1,5 @@
 package com.example.scarlet.feature_training_log.presentation.session.components
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,46 +9,48 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
+import com.example.scarlet.feature_training_log.presentation.session.util.SetFieldRatio
 
 @Composable
 fun ExerciseDetailHeader(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
+        modifier = modifier
     ) {
-        Box(modifier = Modifier.weight(0.5f)) {
+        Box(modifier = Modifier.weight(SetFieldRatio.SET)) {
             Text(
                 text = stringResource(R.string.set),
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.align(Alignment.Center)
-
             )
         }
-        Box(modifier = Modifier.weight(1f)) {
+
+        Box(modifier = Modifier.weight(SetFieldRatio.REPS)) {
             Text(
                 text = stringResource(R.string.reps),
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.align(Alignment.Center)
             )
         }
-        Box(modifier = Modifier.weight(1f)) {
+
+        Box(modifier = Modifier.weight(SetFieldRatio.WEIGHT)) {
             Text(
                 text = stringResource(R.string.weight),
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.align(Alignment.Center)
             )
         }
-        Box(modifier = Modifier.weight(1f)) {
+
+        Box(modifier = Modifier.weight(SetFieldRatio.RPE)) {
             Text(
-                text = "RPE/RIR", /* TODO make clickable to choose one of the 2 */
+                text = "RPE/RIR", // TODO localize + replace with a switch
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.align(Alignment.Center)
             )
         }
-        Spacer(modifier = Modifier.weight(0.5f))
+
+        Spacer(modifier = Modifier.weight(SetFieldRatio.OTHER))
     }
 }
