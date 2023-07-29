@@ -28,20 +28,21 @@ import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.presentation.training_log.TrainingLogEvent
 
+/**
+ * Bottom sheet that allows the user to create a new block.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewBlockSheet(
     onEvent: (TrainingLogEvent) -> Unit
 ) {
     ModalBottomSheet(
-        onDismissRequest = {
-            onEvent(TrainingLogEvent.ToggleNewBlockSheet)
-        }
+        onDismissRequest = { onEvent(TrainingLogEvent.ToggleNewBlockSheet) }
     ) {
+        // Used to automatically focus the text field when the sheet is shown
         val focusRequester = remember { FocusRequester() }
-        SideEffect {
-            focusRequester.requestFocus()
-        }
+        SideEffect { focusRequester.requestFocus() }
+
         Box(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center
@@ -49,6 +50,9 @@ fun NewBlockSheet(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                /*************************************************************************
+                 * Sheet title
+                 *************************************************************************/
                 Text(
                     text = stringResource(R.string.new_block),
                     style = MaterialTheme.typography.headlineMedium
@@ -58,8 +62,12 @@ fun NewBlockSheet(
                     modifier = Modifier.width(64.dp),
                     thickness = 1.dp
                 )
+
                 Spacer(modifier = Modifier.height(32.dp))
 
+                /*************************************************************************
+                 * Block name text field
+                 *************************************************************************/
                 var blockName by remember { mutableStateOf("") }
                 OutlinedTextField(
                     modifier = Modifier.focusRequester(focusRequester),
@@ -76,6 +84,10 @@ fun NewBlockSheet(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
+
+                /*************************************************************************
+                 * Validation button
+                 *************************************************************************/
                 Button(
                     onClick = {
                         onEvent(TrainingLogEvent.AddBlock(blockName))
