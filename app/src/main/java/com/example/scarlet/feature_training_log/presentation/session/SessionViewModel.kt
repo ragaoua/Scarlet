@@ -181,8 +181,10 @@ class SessionViewModel @Inject constructor(
                 viewModelScope.launch(Dispatchers.IO) {
                     state.value.exercises
                         .flatMap { it.sets }
-                        .find { it.order == event.set.order - 1 }
-                        ?.let { previousSet ->
+                        .find {
+                            it.exerciseId == event.set.exerciseId &&
+                                    it.order == event.set.order - 1
+                        }?.let { previousSet ->
                             useCases.updateSet(
                                 when(event.fieldToCopy) {
                                     SetFieldType.REPS -> event.set.copy(
