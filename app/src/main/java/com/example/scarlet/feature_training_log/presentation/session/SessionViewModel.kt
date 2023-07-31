@@ -83,11 +83,6 @@ class SessionViewModel @Inject constructor(
             is SessionEvent.FilterMovementsByName -> {
                 updateMovementNameFilter(event.nameFilter)
             }
-            SessionEvent.ToggleNewMovementSheet -> {
-                _state.update { it.copy(
-                    isNewMovementSheetOpen = !it.isNewMovementSheetOpen
-                )}
-            }
             is SessionEvent.AddMovement -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     val insertedMovementIdResource = useCases.insertMovement(event.name)
@@ -109,7 +104,6 @@ class SessionViewModel @Inject constructor(
                                 )
                             }
                             _state.update { it.copy(
-                                isNewMovementSheetOpen = false,
                                 isMovementSelectionSheetOpen = false,
                                 exerciseToEdit = null
                             )}

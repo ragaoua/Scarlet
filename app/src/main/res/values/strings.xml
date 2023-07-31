@@ -44,9 +44,9 @@
     <string name="rpe">RPE</string>
     <string name="rir">RIR</string>
     <string name="select_movement">Select a new movement</string>
-    <string name="add_new_movement_btn_msg">… or add a new one !</string>
+    <string name="add_new_movement_btn_msg">Add \"%1$s\"</string>
     <string name="add_new_movement">Add a new movement</string>
-    <string name="filter_by_name">Filter by name</string>
+    <string name="enter_movement">Enter a movement name</string>
     <string name="new_movement">New movement</string>
     <string name="movement_name">Movement name</string>
     <string name="create_movement">Create movement</string>
@@ -58,4 +58,6 @@
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
     <string name="copy_previous_set_value">Copy the value of the previous set for this field</string>
+    <string name="no_movements_found">No movements found</string>
+    <string name="enter_movement_name">Enter a movement name below to add it to the list</string>
 </resources>

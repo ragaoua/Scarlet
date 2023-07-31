@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.presentation.core.components.SecondaryActionButton
@@ -54,7 +55,7 @@ fun MovementSelectionSheet(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(vertical = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -65,32 +66,48 @@ fun MovementSelectionSheet(
             Divider(
                 modifier = Modifier.width(96.dp)
             )
-            Spacer(modifier = Modifier.height(4.dp))
-            SecondaryActionButton(
-                onClick = {
-                    onEvent(SessionEvent.ToggleNewMovementSheet)
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = stringResource(R.string.add_new_movement)
-                )
-                Text(
-                    text = stringResource(R.string.add_new_movement_btn_msg),
-                    style = MaterialTheme.typography.titleLarge // TODO : check if OK
-                )
-            }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(8.dp)
+            LazyColumn(
+                modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                LazyColumn(
-                    modifier = Modifier.weight(1f)
-                ) {
+                if(state.movements.isEmpty()) {
+                    item {
+                        Text(
+                            text = stringResource(R.string.no_movements_found),
+                            textAlign = TextAlign.Center
+                        )
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        if(movementNameFilter.isBlank()) {
+                            Text(
+                                text = stringResource(R.string.enter_movement_name),
+                                textAlign = TextAlign.Center
+                            )
+                        } else {
+                            SecondaryActionButton(
+                                onClick = {
+                                    onEvent(SessionEvent.AddMovement(movementNameFilter))
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Add,
+                                    contentDescription = stringResource(R.string.add_new_movement)
+                                )
+                                Text(
+                                    text = stringResource(
+                                        R.string.add_new_movement_btn_msg,
+                                        movementNameFilter
+                                    ),
+                                    style = MaterialTheme.typography.titleLarge
+                                )
+                            }
+                        }
+                    }
+                } else {
                     items(state.movements) { movement ->
                         Text(
                             text = movement.name,
@@ -106,30 +123,24 @@ fun MovementSelectionSheet(
                         )
                     }
                 }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                OutlinedTextField(
-                    value = movementNameFilter,
-                    onValueChange = {
-                        movementNameFilter = it
-                        onEvent(SessionEvent.FilterMovementsByName(movementNameFilter))
-                    },
-                    placeholder = {
-                        Text(stringResource(R.string.filter_by_name))
-                    },
-                    singleLine = true,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                )
             }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OutlinedTextField(
+                value = movementNameFilter,
+                onValueChange = {
+                    movementNameFilter = it
+                    onEvent(SessionEvent.FilterMovementsByName(movementNameFilter))
+                },
+                placeholder = {
+                    Text(stringResource(R.string.enter_movement))
+                },
+                singleLine = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            )
         }
-    }
-    if(state.isNewMovementSheetOpen) {
-        NewMovementSheet(
-            onEvent = onEvent,
-            movementNameFilter = movementNameFilter
-        )
     }
 }

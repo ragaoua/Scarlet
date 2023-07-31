@@ -13,6 +13,5 @@ data class SessionUiState (
     val isMovementSelectionSheetOpen: Boolean = false,
     val isDatePickerDialogOpen: Boolean = false,
     val isInEditMode: Boolean = false,
-    val isNewMovementSheetOpen: Boolean = false,
     val exerciseToEdit: Exercise? = null
 )
