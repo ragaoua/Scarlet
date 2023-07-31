@@ -10,6 +10,7 @@ import com.example.scarlet.feature_training_log.domain.use_case.block.DeleteSess
 import com.example.scarlet.feature_training_log.domain.use_case.block.GetSessionsWithMovementsByBlockIdUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.block.InsertSessionUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.block.UpdateBlockUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.session.CopyPreviousSetFieldUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.session.DeleteExerciseUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.session.DeleteSetUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.session.GetExercisesWithMovementAndSetsBySessionIdUseCase
@@ -84,6 +85,7 @@ object AppModule {
             deleteSet = DeleteSetUseCase(repository),
             insertMovement = InsertMovementUseCase(repository),
             deleteExercise = DeleteExerciseUseCase(repository),
-            updateExercise = UpdateExerciseUseCase(repository)
+            updateExercise = UpdateExerciseUseCase(repository),
+            copyPreviousSetField = CopyPreviousSetFieldUseCase(repository)
         )
 }

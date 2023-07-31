@@ -7,7 +7,6 @@ import com.example.scarlet.core.util.Resource
 import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.use_case.session.SessionUseCases
 import com.example.scarlet.feature_training_log.presentation.destinations.SessionScreenDestination
-import com.example.scarlet.feature_training_log.presentation.session.util.SetFieldType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -173,28 +172,11 @@ class SessionViewModel @Inject constructor(
             }
             is SessionEvent.CopyPreviousSet -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    state.value.exercises
-                        .flatMap { it.sets }
-                        .find {
-                            it.exerciseId == event.set.exerciseId &&
-                                    it.order == event.set.order - 1
-                        }?.let { previousSet ->
-                            useCases.updateSet(
-                                when(event.fieldToCopy) {
-                                    SetFieldType.REPS -> event.set.copy(
-                                        reps = previousSet.reps
-                                    )
-                                    SetFieldType.WEIGHT -> event.set.copy(
-                                        weight = previousSet.weight
-                                    )
-                                    SetFieldType.RPE -> event.set.copy(
-                                        rpe = previousSet.rpe
-                                    )
-                                }
-                            )
-                    } ?: run {
-                        /* TODO : should we display an error here ? */
-                    }
+                    useCases.copyPreviousSetField(
+                        set = event.set,
+                        sessionExercises = state.value.exercises,
+                        fieldToCopy = event.fieldToCopy
+                    )
                 }
             }
         }
