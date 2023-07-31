@@ -48,7 +48,8 @@ fun ExerciseDetailHeader(
             LabeledSwitch(
                 modifier = Modifier.align(Alignment.Center),
                 lText = stringResource(R.string.rpe),
-                rText = stringResource(R.string.rir)
+                rText = stringResource(R.string.rir),
+                onValueChange = { /* TODO */ }
             )
         }
 
