@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.scarlet.R
+import com.example.scarlet.feature_training_log.presentation.core.components.LabeledSwitch
 import com.example.scarlet.feature_training_log.presentation.session.util.SetFieldRatio
 
 @Composable
@@ -44,10 +45,10 @@ fun ExerciseDetailHeader(
         }
 
         Box(modifier = Modifier.weight(SetFieldRatio.RPE)) {
-            Text(
-                text = "RPE/RIR", // TODO localize + replace with a switch
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.align(Alignment.Center)
+            LabeledSwitch(
+                modifier = Modifier.align(Alignment.Center),
+                lText = stringResource(R.string.rpe),
+                rText = stringResource(R.string.rir)
             )
         }
 

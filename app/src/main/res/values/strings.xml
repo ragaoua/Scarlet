@@ -42,6 +42,7 @@
     <string name="reps">Reps</string>
     <string name="weight">Weight</string>
     <string name="rpe">RPE</string>
+    <string name="rir">RIR</string>
     <string name="select_movement">Select a new movement</string>
     <string name="add_new_movement_btn_msg">… or add a new one !</string>
     <string name="add_new_movement">Add a new movement</string>
