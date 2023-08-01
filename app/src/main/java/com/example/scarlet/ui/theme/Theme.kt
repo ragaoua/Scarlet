@@ -58,12 +58,12 @@ private val darkColorScheme = darkColorScheme(
     errorContainer = Red10,
     onErrorContainer = Red90,
 
-    background = Secondary85,
+    background = Secondary80,
     onBackground = Color.White,
 
-    surface = Secondary80,
+    surface = Secondary75,
     onSurface = Color.White,
-    surfaceVariant = Secondary75,
+    surfaceVariant = Secondary70,
     onSurfaceVariant = Color.White,
 
     outline = Primary50,

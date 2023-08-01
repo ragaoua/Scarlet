@@ -31,33 +31,36 @@
 
     <!-- Session -->
     <string name="session_exercises_list_title">Session Exercises</string>
-    <string name="add_exercise">Add Exercise</string>
-    <string name="new_exercise">New Exercise</string>
     <string name="edit_session">Edit session</string>
     <string name="edit_session_date">Edit session date</string>
     <string name="save_session">Save session</string>
-    <string name="no_sets_msg">Click below to add a set</string>
-    <string name="add_set">Add set</string>
+
+    <!-- Exercise -->
+    <string name="add_exercise">Add Exercise</string>
+    <string name="new_exercise">New Exercise</string>
     <string name="set">Set</string>
     <string name="reps">Reps</string>
     <string name="weight">Weight</string>
     <string name="rpe">RPE</string>
     <string name="rir">RIR</string>
-    <string name="select_movement">Select a new movement</string>
-    <string name="add_new_movement_btn_msg">Add \"%1$s\"</string>
-    <string name="add_new_movement">Add a new movement</string>
-    <string name="enter_movement">Enter a movement name</string>
-    <string name="new_movement">New movement</string>
-    <string name="movement_name">Movement name</string>
-    <string name="create_movement">Create movement</string>
     <string name="collapse_details">Collapse exercise details</string>
     <string name="expand_details">Expand exercise details</string>
+
+    <!-- Set -->
+    <string name="no_sets_msg">Click below to add a set</string>
+    <string name="add_set">Add set</string>
+    <string name="copy_previous_set_value">Copy the value of the previous set for this field</string>
+
+    <!-- Movement -->
+    <string name="select_movement">Select a new movement</string>
+    <string name="no_movements_found">No movements found</string>
+    <string name="enter_movement_name">Enter a movement name below to add it to the list</string>
+    <string name="add_new_movement_btn_msg">Add \"%1$s\"</string>
+    <string name="enter_movement">Enter a movement name</string>
+    <string name="create_movement">Create movement</string>
 
     <!-- Misc -->
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
-    <string name="copy_previous_set_value">Copy the value of the previous set for this field</string>
-    <string name="no_movements_found">No movements found</string>
-    <string name="enter_movement_name">Enter a movement name below to add it to the list</string>
 </resources>

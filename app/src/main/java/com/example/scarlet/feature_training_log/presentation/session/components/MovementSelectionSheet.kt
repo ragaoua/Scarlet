@@ -95,7 +95,10 @@ fun MovementSelectionSheet(
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Add,
-                                    contentDescription = stringResource(R.string.add_new_movement)
+                                    contentDescription = stringResource(
+                                        R.string.add_new_movement_btn_msg,
+                                        movementNameFilter
+                                    )
                                 )
                                 Text(
                                     text = stringResource(

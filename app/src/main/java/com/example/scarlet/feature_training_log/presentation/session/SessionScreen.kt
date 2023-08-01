@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.presentation.session.components.ExercisesList
+import com.example.scarlet.feature_training_log.presentation.session.components.LoadCalculationDialog
 import com.example.scarlet.feature_training_log.presentation.session.components.MovementSelectionSheet
 import com.example.scarlet.feature_training_log.presentation.session.components.SessionHeader
 import com.example.scarlet.ui.theme.ScarletTheme
@@ -100,6 +101,12 @@ fun Screen(
         if(state.isMovementSelectionSheetOpen) {
             MovementSelectionSheet(
                 state = state,
+                onEvent = onEvent
+            )
+        }
+        state.loadCalculationDialogState?.let {
+            LoadCalculationDialog(
+                dialogState = it,
                 onEvent = onEvent
             )
         }

@@ -57,12 +57,14 @@ fun ExerciseSetRow(
                 ))
             },
             imeAction = ImeAction.Next,
-            onCopyPreviousSet = if (isFirstSet) null else { {
-                onEvent(SessionEvent.CopyPreviousSet(
-                    set = set,
-                    fieldToCopy = SetFieldType.REPS)
-                )
-            } }
+            onIconClicked = if (isFirstSet) null else {
+                {
+                    onEvent(SessionEvent.CopyPreviousSet(
+                        set = set,
+                        fieldToCopy = SetFieldType.REPS
+                    ))
+                }
+            }
         )
 
         SetTextField(
@@ -83,12 +85,17 @@ fun ExerciseSetRow(
                 ))
             },
             imeAction = ImeAction.Next,
-            onCopyPreviousSet = if (isFirstSet) null else { {
-                onEvent(SessionEvent.CopyPreviousSet(
-                    set = set,
-                    fieldToCopy = SetFieldType.WEIGHT)
-                )
-            } }
+            onIconClicked = if (isFirstSet) null else {
+                {
+                    onEvent(SessionEvent.CopyPreviousSet(
+                        set = set,
+                        fieldToCopy = SetFieldType.WEIGHT
+                    ))
+                }
+            },
+            onIconLongClicked = {
+                onEvent(SessionEvent.ShowLoadCalculationDialog(set))
+            }
         )
 
         SetTextField(
@@ -109,12 +116,14 @@ fun ExerciseSetRow(
                 ))
             },
             imeAction = if (isLastSet) ImeAction.Done else ImeAction.Next,
-            onCopyPreviousSet = if (isFirstSet) null else { {
-                onEvent(SessionEvent.CopyPreviousSet(
-                    set = set,
-                    fieldToCopy = SetFieldType.RPE)
-                )
-            } }
+            onIconClicked = if (isFirstSet) null else {
+                {
+                    onEvent(SessionEvent.CopyPreviousSet(
+                        set = set,
+                        fieldToCopy = SetFieldType.RPE
+                    ))
+                }
+            }
         )
 
         Icon(

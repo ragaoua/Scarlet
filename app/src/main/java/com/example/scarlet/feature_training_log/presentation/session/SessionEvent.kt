@@ -25,4 +25,8 @@ sealed interface SessionEvent {
     data class DeleteSet(val set: Set) : SessionEvent
 
     data class CopyPreviousSet(val set: Set, val fieldToCopy: SetFieldType) : SessionEvent
+
+    data class ShowLoadCalculationDialog(val set: Set) : SessionEvent
+    object HideLoadCalculationDialog : SessionEvent
+    data class CalculateLoad(val percentage: String) : SessionEvent
 }

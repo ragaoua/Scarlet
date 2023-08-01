@@ -179,6 +179,43 @@ class SessionViewModel @Inject constructor(
                     )
                 }
             }
+            is SessionEvent.ShowLoadCalculationDialog -> {
+                val previousSet = state.value.exercises
+                    .find { it.exercise.id == event.set.exerciseId }
+                    ?.sets
+                    ?.find { it.order == event.set.order - 1 }
+                    ?: run {
+                        /* TODO Send an error to the UI */
+                        return
+                    }
+                _state.update { it.copy(
+                    loadCalculationDialogState = SessionUiState.LoadCalculationDialogState(
+                        set = event.set,
+                        previousSet = previousSet
+                    )
+                )}
+            }
+            is SessionEvent.CalculateLoad -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    state.value.loadCalculationDialogState?.let { dialog ->
+                        useCases.updateLoadBasedOnPreviousSet(
+                            set = dialog.set,
+                            previousSet = dialog.previousSet,
+                            loadPercentage = event.percentage
+                        )
+                    } ?: run {
+                        /* TODO display an error */
+                    }
+                    _state.update { it.copy(
+                        loadCalculationDialogState = null
+                    )}
+                }
+            }
+            is SessionEvent.HideLoadCalculationDialog -> {
+                _state.update { it.copy(
+                    loadCalculationDialogState = null
+                )}
+            }
         }
     }
 

@@ -1,10 +1,10 @@
 package com.example.scarlet.feature_training_log.presentation.session.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.presentation.core.bottomBorder
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SetTextField(
     modifier: Modifier = Modifier,
@@ -46,7 +47,8 @@ fun SetTextField(
     onValueChangeCheck: (String) -> Boolean = { true },
     updateSet: (String) -> Unit,
     imeAction: ImeAction,
-    onCopyPreviousSet: (() -> Unit)? = null
+    onIconClicked: (() -> Unit)? = null,
+    onIconLongClicked: (() -> Unit)? = null
 ) {
     var tfValue by remember(originalValue) { mutableStateOf(
         TextFieldValue(originalValue)
@@ -77,29 +79,27 @@ fun SetTextField(
                 onDone = { focusManager.clearFocus() }
             ),
             decorationBox = { innerTextField ->
-                Column(
+                Row(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(vertical = 4.dp)
+                        .padding(vertical = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        onCopyPreviousSet?.let {
-                            Icon(
-                                imageVector = Icons.Default.KeyboardArrowUp, // TODO replace with ???
-                                contentDescription = stringResource(R.string.copy_previous_set_value),
-                                modifier = Modifier.clickable(onClick = onCopyPreviousSet)
+                    onIconClicked?.let {
+                        Icon(
+                            imageVector = Icons.Default.KeyboardArrowUp, // TODO replace with ???
+                            contentDescription = stringResource(R.string.copy_previous_set_value),
+                            modifier = Modifier.combinedClickable(
+                                onClick = onIconClicked,
+                                onLongClick = onIconLongClicked
                             )
-                        } ?: Spacer(modifier = Modifier.width(24.dp))
-                        Box(modifier = modifier.weight(1f)) {
-                            innerTextField()
-                        }
-                        Spacer(modifier = Modifier.width(4.dp))
+                        )
+                    } ?: Spacer(modifier = Modifier.width(24.dp))
+                    Box(modifier = modifier.weight(1f)) {
+                        innerTextField()
                     }
+                    Spacer(modifier = Modifier.width(4.dp))
                 }
             },
             modifier = modifier
