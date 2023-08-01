@@ -100,7 +100,7 @@ fun Screen(
         }
         if(state.isMovementSelectionSheetOpen) {
             MovementSelectionSheet(
-                state = state,
+                movements = state.movements,
                 onEvent = onEvent
             )
         }

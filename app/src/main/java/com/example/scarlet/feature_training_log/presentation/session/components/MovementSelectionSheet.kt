@@ -32,14 +32,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
+import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.presentation.core.components.SecondaryActionButton
 import com.example.scarlet.feature_training_log.presentation.session.SessionEvent
-import com.example.scarlet.feature_training_log.presentation.session.SessionUiState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MovementSelectionSheet(
-    state: SessionUiState,
+    movements: List<Movement>,
     onEvent: (SessionEvent) -> Unit
 ) {
     var movementNameFilter by remember { mutableStateOf("")}
@@ -73,7 +73,7 @@ fun MovementSelectionSheet(
                 modifier = Modifier.weight(1f),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                if(state.movements.isEmpty()) {
+                if(movements.isEmpty()) {
                     item {
                         Text(
                             text = stringResource(R.string.no_movements_found),
@@ -111,7 +111,7 @@ fun MovementSelectionSheet(
                         }
                     }
                 } else {
-                    items(state.movements) { movement ->
+                    items(movements) { movement ->
                         Text(
                             text = movement.name,
                             style = MaterialTheme.typography.titleMedium,
