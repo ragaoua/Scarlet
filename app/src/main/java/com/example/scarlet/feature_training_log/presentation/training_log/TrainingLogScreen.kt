@@ -9,13 +9,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
 import com.example.scarlet.feature_training_log.presentation.training_log.components.ActiveBlockSection
@@ -31,7 +31,7 @@ fun TrainingLogScreen(
     navigator: DestinationsNavigator
 ) {
     val trainingLogViewModel: TrainingLogViewModel = hiltViewModel()
-    val state by trainingLogViewModel.state.collectAsState()
+    val state by trainingLogViewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
         trainingLogViewModel.channel.collect { action ->
