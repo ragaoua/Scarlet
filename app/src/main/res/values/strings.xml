@@ -28,6 +28,10 @@
     <string name="empty_session">Empty session</string>
     <string name="edit_block_name">Edit name</string>
     <string name="save_block_name">Save name</string>
+    <!-- Block : Errors -->
+    <string name="error_too_many_active_blocks">Error : Too many active blocks</string>
+    <string name="error_block_name_is_empty">Error : The block name is empty</string>
+    <string name="error_block_name_already_used">Error : This block\'s name is already used</string>
 
     <!-- Session -->
     <string name="session_exercises_list_title">Session Exercises</string>
@@ -50,6 +54,9 @@
     <string name="no_sets_msg">Click below to add a set</string>
     <string name="add_set">Add set</string>
     <string name="copy_previous_set_value">Copy the value of the previous set for this field</string>
+    <!-- Set : Errors -->
+    <string name="error_no_previous_set">Error : No previous set found</string>
+    <string name="error_invalid_percentage">Error : percentage format is invalid</string>
 
     <!-- Movement -->
     <string name="select_movement">Select a new movement</string>
@@ -58,6 +65,8 @@
     <string name="add_new_movement_btn_msg">Add \"%1$s\"</string>
     <string name="enter_movement">Enter a movement name</string>
     <string name="create_movement">Create movement</string>
+    <!-- Movement : Errors -->
+    <string name="error_movement_already_exists">Error : This movement already exists</string>
 
     <!-- Misc -->
     <string name="save">Save</string>

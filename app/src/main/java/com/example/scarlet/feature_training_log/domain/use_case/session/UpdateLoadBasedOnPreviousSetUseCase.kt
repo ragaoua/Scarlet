@@ -1,5 +1,6 @@
 package com.example.scarlet.feature_training_log.domain.use_case.session
 
+import com.example.scarlet.R
 import com.example.scarlet.core.util.Resource
 import com.example.scarlet.core.util.SimpleResource
 import com.example.scarlet.feature_training_log.domain.model.Set
@@ -15,12 +16,12 @@ class UpdateLoadBasedOnPreviousSetUseCase(
         loadPercentage: String
     ): SimpleResource {
 
-        previousSet ?: return Resource.Error(Errors.NoPreviousSetFound)
+        previousSet ?: return Resource.Error(R.string.error_no_previous_set)
 
         val percentageInFloat = try {
             loadPercentage.toFloat() / 100
         } catch(e: NumberFormatException) {
-            return Resource.Error(Errors.InvalidPercentageFormat)
+            return Resource.Error(R.string.error_invalid_percentage)
         }
 
         repository.updateSet(
@@ -33,10 +34,5 @@ class UpdateLoadBasedOnPreviousSetUseCase(
         ) // TODO : check if the weight is not null before displaying the dialog
 
         return Resource.Success()
-    }
-
-    sealed interface Errors {
-        object NoPreviousSetFound: Errors
-        object InvalidPercentageFormat: Errors
     }
 }

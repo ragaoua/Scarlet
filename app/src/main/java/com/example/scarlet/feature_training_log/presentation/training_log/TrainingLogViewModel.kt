@@ -2,9 +2,7 @@ package com.example.scarlet.feature_training_log.presentation.training_log
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.Block
-import com.example.scarlet.feature_training_log.domain.use_case.training_log.GetActiveBlockUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.training_log.TrainingLogUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -69,14 +67,13 @@ class TrainingLogViewModel @Inject constructor(
     private fun initBlocksCollection() {
         useCases.getActiveBlock()
             .onEach { resource ->
-                when(resource.error) {
-                    is GetActiveBlockUseCase.Error.TooManyActiveBlocks -> {
-                        _uiActions.emit(UiAction.ShowErrorByResourceId(R.string.training_log))
-                    }
+                resource.errorResId?.let { errorResId ->
+                    _uiActions.emit(UiAction.ShowErrorByResourceId(errorResId))
+                } ?: run {
+                    _state.update { it.copy(
+                        activeBlock = resource.data
+                    )}
                 }
-                _state.update { it.copy(
-                    activeBlock = resource.data
-                )}
             }.launchIn(viewModelScope)
 
         useCases.getCompletedBlocks()

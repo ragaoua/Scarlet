@@ -1,5 +1,6 @@
 package com.example.scarlet.feature_training_log.domain.use_case.session
 
+import com.example.scarlet.R
 import com.example.scarlet.core.util.Resource
 import com.example.scarlet.core.util.SimpleResource
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
@@ -22,7 +23,7 @@ class CopyPreviousSetFieldUseCase(
                 .find { it.exercise.id == set.exerciseId }
                 ?.sets
                 ?.find { it.order == set.order - 1 }
-                ?: return Resource.Error(Errors.NoPreviousSetFound)
+                ?: return Resource.Error(R.string.error_no_previous_set)
 
         repository.updateSet(
             when (fieldToCopy) {
@@ -33,9 +34,5 @@ class CopyPreviousSetFieldUseCase(
         )
 
         return Resource.Success()
-    }
-
-    sealed interface Errors {
-        object NoPreviousSetFound: Errors
     }
 }

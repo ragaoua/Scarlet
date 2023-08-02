@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.domain.use_case.block.BlockUseCases
-import com.example.scarlet.feature_training_log.domain.use_case.block.UpdateBlockUseCase
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -60,15 +59,12 @@ class BlockViewModel @Inject constructor(
                         completed = true
                     ).also { updatedBlock ->
                         useCases.updateBlock(updatedBlock).also { resource ->
-                            when(resource.error) {
-                                is UpdateBlockUseCase.Errors.BlockNameIsEmpty -> {
-                                    // TODO: Handle this error
-                                }
-                                else -> {
-                                    _state.update { it.copy(
-                                        block = updatedBlock
-                                    )}
-                                }
+                            resource.errorResId?.let { errorResId ->
+                                // TODO: Handle this error
+                            } ?: run {
+                                _state.update { it.copy(
+                                    block = updatedBlock
+                                )}
                             }
                         }
                     }
@@ -88,16 +84,13 @@ class BlockViewModel @Inject constructor(
             is BlockEvent.UpdateBlock -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     useCases.updateBlock(event.block).also { resource ->
-                        when(resource.error) {
-                            is UpdateBlockUseCase.Errors.BlockNameIsEmpty -> {
-                                // TODO: Handle this error
-                            }
-                            else -> {
-                                _state.update { it.copy(
-                                    block = event.block,
-                                    isInEditMode = false
-                                )}
-                            }
+                        resource.errorResId?.let { errorResId ->
+                            // TODO: Handle this error
+                        } ?: run {
+                            _state.update { it.copy(
+                                block = event.block,
+                                isInEditMode = false
+                            )}
                         }
                     }
                 }
