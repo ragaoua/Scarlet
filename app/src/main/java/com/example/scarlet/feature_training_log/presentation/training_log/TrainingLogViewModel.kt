@@ -2,17 +2,18 @@ package com.example.scarlet.feature_training_log.presentation.training_log
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.domain.use_case.training_log.GetActiveBlockUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.training_log.TrainingLogUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -22,8 +23,8 @@ class TrainingLogViewModel @Inject constructor(
     private val useCases: TrainingLogUseCases
 ) : ViewModel() {
 
-    private val _channel = Channel<UiAction>()
-    val channel = _channel.receiveAsFlow()
+    private val _uiActions = MutableSharedFlow<UiAction>()
+    val uiActions = _uiActions.asSharedFlow()
 
     private val _state = MutableStateFlow(TrainingLogUiState())
     val state = _state.asStateFlow()
@@ -45,7 +46,7 @@ class TrainingLogViewModel @Inject constructor(
                     useCases.insertBlock(insertedBlock)
                         .also { resource ->
                             resource.data?.let { insertBlockId ->
-                                _channel.send(UiAction.NavigateToBlockScreen(
+                                _uiActions.emit(UiAction.NavigateToBlockScreen(
                                     block = insertedBlock.copy(
                                         id = insertBlockId.toInt()
                                     )
@@ -70,14 +71,7 @@ class TrainingLogViewModel @Inject constructor(
             .onEach { resource ->
                 when(resource.error) {
                     is GetActiveBlockUseCase.Error.TooManyActiveBlocks -> {
-                        /*
-                         * TODO : Emit a UI event that will be handled by the UI layer
-                         * Idea : Show a dialog that will ask the user to delete one of the active
-                         *        blocks ?
-                         * Idea : automatically correct by updating the database and setting completed
-                         *        to true for all but the last active block ? In that case, show a
-                         *        dialog to inform the user of the operation afterwards
-                         */
+                        _uiActions.emit(UiAction.ShowErrorByResourceId(R.string.training_log))
                     }
                 }
                 _state.update { it.copy(
@@ -95,6 +89,7 @@ class TrainingLogViewModel @Inject constructor(
 
     sealed interface UiAction {
         data class NavigateToBlockScreen(val block: Block): UiAction
+        class ShowErrorByResourceId(val resId: Int, vararg val args: Any): UiAction
     }
 
 }
