@@ -2,6 +2,7 @@ package com.example.scarlet.feature_training_log.domain.use_case.session
 
 import com.example.scarlet.R
 import com.example.scarlet.core.util.Resource
+import com.example.scarlet.core.util.StringResource
 import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.repository.ScarletRepository
 import kotlinx.coroutines.flow.Flow
@@ -21,7 +22,9 @@ class InsertMovementUseCase(
                 if (movements.any { movement ->
                     movement.name.equals(movementName, ignoreCase = true)
                 }) {
-                    Resource.Error(R.string.error_movement_already_exists)
+                    Resource.Error(
+                        StringResource(R.string.error_movement_already_exists)
+                    )
                 } else {
                     Resource.Success(
                         repository.insertMovement(Movement(name = movementName))

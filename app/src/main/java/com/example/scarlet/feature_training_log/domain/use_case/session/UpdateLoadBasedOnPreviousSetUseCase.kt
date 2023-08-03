@@ -3,6 +3,7 @@ package com.example.scarlet.feature_training_log.domain.use_case.session
 import com.example.scarlet.R
 import com.example.scarlet.core.util.Resource
 import com.example.scarlet.core.util.SimpleResource
+import com.example.scarlet.core.util.StringResource
 import com.example.scarlet.feature_training_log.domain.model.Set
 import com.example.scarlet.feature_training_log.domain.repository.ScarletRepository
 
@@ -16,12 +17,16 @@ class UpdateLoadBasedOnPreviousSetUseCase(
         loadPercentage: String
     ): SimpleResource {
 
-        previousSet ?: return Resource.Error(R.string.error_no_previous_set)
+        previousSet ?: return Resource.Error(
+            StringResource(R.string.error_no_previous_set)
+        )
 
         val percentageInFloat = try {
             loadPercentage.toFloat() / 100
         } catch(e: NumberFormatException) {
-            return Resource.Error(R.string.error_invalid_percentage)
+            return Resource.Error(
+                StringResource(R.string.error_invalid_percentage)
+            )
         }
 
         repository.updateSet(

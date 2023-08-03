@@ -2,6 +2,7 @@ package com.example.scarlet.feature_training_log.presentation.training_log
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.scarlet.core.util.StringResource
 import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.domain.use_case.training_log.TrainingLogUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -67,8 +68,8 @@ class TrainingLogViewModel @Inject constructor(
     private fun initBlocksCollection() {
         useCases.getActiveBlock()
             .onEach { resource ->
-                resource.errorResId?.let { errorResId ->
-                    _uiActions.emit(UiAction.ShowErrorByResourceId(errorResId))
+                resource.error?.let { error ->
+                    _uiActions.emit(UiAction.ShowError(error))
                 } ?: run {
                     _state.update { it.copy(
                         activeBlock = resource.data
@@ -86,7 +87,7 @@ class TrainingLogViewModel @Inject constructor(
 
     sealed interface UiAction {
         data class NavigateToBlockScreen(val block: Block): UiAction
-        class ShowErrorByResourceId(val resId: Int, vararg val args: Any): UiAction
+        class ShowError(val error: StringResource): UiAction
     }
 
 }

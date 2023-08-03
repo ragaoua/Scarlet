@@ -59,7 +59,7 @@ class BlockViewModel @Inject constructor(
                         completed = true
                     ).also { updatedBlock ->
                         useCases.updateBlock(updatedBlock).also { resource ->
-                            resource.errorResId?.let { errorResId ->
+                            resource.error?.let { error ->
                                 // TODO: Handle this error
                             } ?: run {
                                 _state.update { it.copy(
@@ -84,7 +84,7 @@ class BlockViewModel @Inject constructor(
             is BlockEvent.UpdateBlock -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     useCases.updateBlock(event.block).also { resource ->
-                        resource.errorResId?.let { errorResId ->
+                        resource.error?.let { error ->
                             // TODO: Handle this error
                         } ?: run {
                             _state.update { it.copy(

@@ -72,8 +72,10 @@ fun Screen(
     LaunchedEffect(true) {
         uiActions.collect { action ->
             when(action) {
-                is TrainingLogViewModel.UiAction.ShowErrorByResourceId -> {
-                    snackbarHostState.showSnackbar(context.getString(action.resId, action.args))
+                is TrainingLogViewModel.UiAction.ShowError -> {
+                    snackbarHostState.showSnackbar(
+                        message = context.getString(action.error.resId, action.error.args)
+                    )
                 }
                 else -> Unit
             }
