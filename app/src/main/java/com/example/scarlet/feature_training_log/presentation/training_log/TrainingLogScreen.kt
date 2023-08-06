@@ -118,7 +118,10 @@ fun Screen(
             }
         }
         if(state.isNewBlockSheetExpanded) {
-            NewBlockSheet(onEvent = onEvent)
+            NewBlockSheet(
+                state = state,
+                onEvent = onEvent
+            )
         }
     }
 }

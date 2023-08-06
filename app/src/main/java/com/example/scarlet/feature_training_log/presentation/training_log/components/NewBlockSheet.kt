@@ -18,6 +18,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.presentation.training_log.TrainingLogEvent
+import com.example.scarlet.feature_training_log.presentation.training_log.TrainingLogUiState
 
 /**
  * Bottom sheet that allows the user to create a new block.
@@ -34,6 +36,7 @@ import com.example.scarlet.feature_training_log.presentation.training_log.Traini
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewBlockSheet(
+    state: TrainingLogUiState,
     onEvent: (TrainingLogEvent) -> Unit
 ) {
     ModalBottomSheet(
@@ -68,7 +71,7 @@ fun NewBlockSheet(
                 /*************************************************************************
                  * Block name text field
                  *************************************************************************/
-                var blockName by remember { mutableStateOf("") }
+                var blockName by rememberSaveable { mutableStateOf("") }
                 OutlinedTextField(
                     modifier = Modifier.focusRequester(focusRequester),
                     value = blockName,
@@ -78,6 +81,10 @@ fun NewBlockSheet(
                             text = stringResource(R.string.block_name),
                             /* TODO set color */
                         )
+                    },
+                    isError = state.newBlockSheetTextFieldError != null,
+                    supportingText = state.newBlockSheetTextFieldError?.let { error ->
+                        { Text(stringResource(error.resId, *error.args)) }
                     },
                     singleLine = true
                 )
@@ -92,8 +99,7 @@ fun NewBlockSheet(
                     onClick = {
                         onEvent(TrainingLogEvent.AddBlock(blockName))
                     },
-                    modifier = Modifier.align(Alignment.End),
-                    enabled = blockName.isNotBlank()
+                    modifier = Modifier.align(Alignment.End)
                 ) {
                     Text(stringResource(R.string.create_block))
                 }

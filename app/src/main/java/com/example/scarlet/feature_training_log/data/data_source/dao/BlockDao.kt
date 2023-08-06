@@ -30,4 +30,11 @@ interface BlockDao {
         WHERE COMPLETED = :completed
     """)
     fun getBlocksWithSessionsByCompleted(completed: Boolean): Flow<List<BlockWithSessionsEntity>>
+
+    @Query("""
+        SELECT *
+        FROM block
+        WHERE NAME = :name
+    """)
+    suspend fun getBlockByName(name: String): BlockEntity?
 }

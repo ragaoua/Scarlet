@@ -36,7 +36,8 @@ class TrainingLogViewModel @Inject constructor(
         when(event) {
             TrainingLogEvent.ToggleNewBlockSheet -> {
                 _state.update { it.copy(
-                    isNewBlockSheetExpanded = !it.isNewBlockSheetExpanded
+                    isNewBlockSheetExpanded = !it.isNewBlockSheetExpanded,
+                    newBlockSheetTextFieldError = null
                 )}
             }
             is TrainingLogEvent.AddBlock -> {
@@ -44,17 +45,23 @@ class TrainingLogViewModel @Inject constructor(
                     val insertedBlock = Block(name = event.blockName)
                     useCases.insertBlock(insertedBlock)
                         .also { resource ->
-                            resource.data?.let { insertBlockId ->
+                            resource.error?.let { error ->
+                                _state.update { it.copy (
+                                    newBlockSheetTextFieldError = error
+                                )}
+                            }
+                            resource.data?.let { insertedBlockId ->
                                 _uiActions.emit(UiAction.NavigateToBlockScreen(
                                     block = insertedBlock.copy(
-                                        id = insertBlockId.toInt()
+                                        id = insertedBlockId.toInt()
                                     )
                                 ))
+                                _state.update { it.copy(
+                                    isNewBlockSheetExpanded = false,
+                                    newBlockSheetTextFieldError = null
+                                )}
                             }
                         }
-                    _state.update { it.copy(
-                        isNewBlockSheetExpanded = false
-                    )}
                 }
             }
             is TrainingLogEvent.DeleteBlock -> {

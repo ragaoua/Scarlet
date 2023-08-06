@@ -30,8 +30,8 @@
     <string name="save_block_name">Save name</string>
     <!-- Block : Errors -->
     <string name="error_too_many_active_blocks">Error : Too many active blocks</string>
-    <string name="error_block_name_is_empty">Error : The block name is empty</string>
-    <string name="error_block_name_already_used">Error : This block\'s name is already used</string>
+    <string name="error_block_name_is_empty">The block name can\'t be empty</string>
+    <string name="block_with_name_already_exists">Block with name \"%1$s\" already exists</string>
 
     <!-- Session -->
     <string name="session_exercises_list_title">Session Exercises</string>

@@ -21,14 +21,6 @@ class ScarletRepositoryImpl(
     ///////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////// BLOCK ////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    override fun getBlocksWithSessionsByCompleted(completed: Boolean) =
-        dbInstance.blockDao.getBlocksWithSessionsByCompleted(completed)
-            .map { entityList ->
-                entityList.map { entity ->
-                    entity.toBlockWithSessions()
-                }
-            }
-
     override suspend fun insertBlock(block: Block) =
         dbInstance.blockDao.insertBlock(BlockEntity(block))
 
@@ -38,18 +30,20 @@ class ScarletRepositoryImpl(
     override suspend fun deleteBlock(block: Block) =
         dbInstance.blockDao.deleteBlock(BlockEntity(block))
 
+    override fun getBlocksWithSessionsByCompleted(completed: Boolean) =
+        dbInstance.blockDao.getBlocksWithSessionsByCompleted(completed)
+            .map { entityList ->
+                entityList.map { entity ->
+                    entity.toBlockWithSessions()
+                }
+            }
+
+    override suspend fun getBlockByName(name: String): Block? =
+        dbInstance.blockDao.getBlockByName(name)?.toBlock()
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////// SESSION ///////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    override fun getSessionsWithExercisesWithMovementNameByBlockId(blockId: Int) =
-        dbInstance.sessionDao.getSessionsWithMovementsByBlockId(blockId)
-            .map { entityList ->
-                entityList.map { entity ->
-                    entity.toSessionWithExercisesWithMovementName()
-                }
-            }
-
     override suspend fun insertSession(session: Session) =
         dbInstance.sessionDao.insertSession(SessionEntity(session))
 
@@ -59,12 +53,27 @@ class ScarletRepositoryImpl(
     override suspend fun updateSession(session: Session) =
         dbInstance.sessionDao.updateSession(SessionEntity(session))
 
+    override fun getSessionsWithExercisesWithMovementNameByBlockId(blockId: Int) =
+        dbInstance.sessionDao.getSessionsWithMovementsByBlockId(blockId)
+            .map { entityList ->
+                entityList.map { entity ->
+                    entity.toSessionWithExercisesWithMovementName()
+                }
+            }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////// EXERCISE ///////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
     override suspend fun insertExercise(exercise: Exercise) =
         dbInstance.exerciseDao.insertExercise(ExerciseEntity(exercise))
+
+    override suspend fun updateExercise(exercise: Exercise) {
+        dbInstance.exerciseDao.updateExercise(ExerciseEntity(exercise))
+    }
+
+    override suspend fun deleteExercise(exercise: Exercise) {
+        dbInstance.exerciseDao.deleteExercise(ExerciseEntity(exercise))
+    }
 
     override fun getExercisesWithMovementAndSetsBySessionId(sessionId: Int) =
         dbInstance.exerciseDao.getExercisesWithMovementAndSetsBySessionId(sessionId)
@@ -73,15 +82,6 @@ class ScarletRepositoryImpl(
                     entity.toExerciseWithMovementAndSets()
                 }
             }
-
-    override suspend fun deleteExercise(exercise: Exercise) {
-        dbInstance.exerciseDao.deleteExercise(ExerciseEntity(exercise))
-    }
-
-    override suspend fun updateExercise(exercise: Exercise) {
-        dbInstance.exerciseDao.updateExercise(ExerciseEntity(exercise))
-    }
-
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////// SET /////////////////////////////////////////////
