@@ -1,7 +1,6 @@
 <resources>
     <!-- App related -->
     <string name="app_name">Scarlet</string>
-    <string name="app_logo">Logo</string>
     <string name="title_activity_main">MainActivity</string>
 
     <!-- Home Screen -->
@@ -40,7 +39,6 @@
     <string name="save_session">Save session</string>
 
     <!-- Exercise -->
-    <string name="add_exercise">Add Exercise</string>
     <string name="new_exercise">New Exercise</string>
     <string name="set">Set</string>
     <string name="reps">Reps</string>
@@ -64,7 +62,6 @@
     <string name="enter_movement_name">Enter a movement name below to add it to the list</string>
     <string name="add_new_movement_btn_msg">Add \"%1$s\"</string>
     <string name="enter_movement">Enter a movement name</string>
-    <string name="create_movement">Create movement</string>
     <!-- Movement : Errors -->
     <string name="error_movement_already_exists">Error : This movement already exists</string>
 
