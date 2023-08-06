@@ -13,15 +13,14 @@ class GetCompletedBlocksUseCase(
         return repository.getBlocksWithSessionsByCompleted(true)
             .map { blocksWithSession ->
                 Resource.Success(
-                    blocksWithSession.map { blockWithSessions ->
-                        blockWithSessions.copy(
-                            sessions = blockWithSessions.sessions.sortedBy {
-                                it.date
-                            }
-                        )
-                    }.sortedByDescending {
-                        it.sessions.lastOrNull()?.date
-                    }
+                    blocksWithSession
+                        .sortedByDescending { it.sessions.lastOrNull()?.date }
+                        .map { blockWithSessions ->
+                            blockWithSessions.copy(
+                                sessions = blockWithSessions.sessions
+                                    .sortedBy { it.date }
+                            )
+                        }
                 )
             }
     }
