@@ -84,32 +84,38 @@ class SessionViewModel @Inject constructor(
             }
             is SessionEvent.AddMovement -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    val insertedMovementIdResource = useCases.insertMovement(event.name)
-                    when (insertedMovementIdResource) {
-                        is Resource.Success -> {
-                            state.value.exerciseToEdit?.let { exercise ->
-                                useCases.updateExercise(
-                                    exercise = exercise.copy(
-                                        movementId = insertedMovementIdResource.data!!.toInt(),
-                                    )
-                                )
-                            } ?: run {
-                                useCases.insertExercise(
-                                    Exercise(
-                                        sessionId = state.value.session.id,
-                                        movementId = insertedMovementIdResource.data!!.toInt(),
-                                        order = state.value.exercises.size + 1
-                                    )
-                                )
+                    useCases.insertMovement(event.name)
+                        .also { insertedMovementIdResource ->
+                            when (insertedMovementIdResource) {
+                                is Resource.Success -> {
+                                    state.value.exerciseToEdit?.let { exercise ->
+                                        useCases.updateExercise(
+                                            exercise = exercise.copy(
+                                                movementId = insertedMovementIdResource.data!!.toInt(),
+                                            )
+                                        )
+                                    } ?: run {
+                                        useCases.insertExercise(
+                                            Exercise(
+                                                sessionId = state.value.session.id,
+                                                movementId = insertedMovementIdResource.data!!.toInt(),
+                                                order = state.value.exercises.size + 1
+                                            )
+                                        )
+                                    }
+                                    _state.update {
+                                        it.copy(
+                                            isMovementSelectionSheetOpen = false,
+                                            exerciseToEdit = null
+                                        )
+                                    }
+                                }
+
+                                else -> {
+                                    /* TODO */
+                                }
                             }
-                            _state.update { it.copy(
-                                isMovementSelectionSheetOpen = false,
-                                exerciseToEdit = null
-                            )}
-                        } else -> {
-                            /* TODO */
                         }
-                    }
                 }
             }
             is SessionEvent.SelectMovement -> {

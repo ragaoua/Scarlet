@@ -11,7 +11,7 @@ class GetCompletedBlocksUseCase(
 ) {
     operator fun invoke(): Flow<Resource<List<BlockWithSessions>>> {
         return repository.getBlocksWithSessionsByCompleted(true)
-            .map {  blocksWithSession ->
+            .map { blocksWithSession ->
                 Resource.Success(
                     blocksWithSession.map { blockWithSessions ->
                         blockWithSessions.copy(
