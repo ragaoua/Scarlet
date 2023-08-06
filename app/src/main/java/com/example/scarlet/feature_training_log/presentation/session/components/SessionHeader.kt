@@ -15,8 +15,8 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -80,10 +80,7 @@ fun SessionHeader(
             // TODO : color = grey
         )
         Spacer(modifier = Modifier.height(4.dp))
-        Divider(
-            modifier = Modifier.width(64.dp),
-            thickness = 1.dp
-        )
+        HorizontalDivider(modifier = Modifier.width(64.dp))
         Spacer(modifier = Modifier
             .height(8.dp)
             .background(Color.Black))
