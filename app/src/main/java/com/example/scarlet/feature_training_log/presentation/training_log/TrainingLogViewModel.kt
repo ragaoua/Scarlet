@@ -69,7 +69,7 @@ class TrainingLogViewModel @Inject constructor(
         useCases.getActiveBlock()
             .onEach { resource ->
                 resource.error?.let { error ->
-                    _uiActions.emit(UiAction.ShowError(error))
+                    _uiActions.emit(UiAction.ShowSnackbarWithError(error))
                 } ?: run {
                     _state.update { it.copy(
                         activeBlock = resource.data
@@ -87,7 +87,7 @@ class TrainingLogViewModel @Inject constructor(
 
     sealed interface UiAction {
         data class NavigateToBlockScreen(val block: Block): UiAction
-        class ShowError(val error: StringResource): UiAction
+        class ShowSnackbarWithError(val error: StringResource): UiAction
     }
 
 }
