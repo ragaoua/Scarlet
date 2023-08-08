@@ -41,12 +41,12 @@ class BlockViewModel @Inject constructor(
         when(event) {
             BlockEvent.AddSession -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    val insertedSession = Session(blockId = state.value.block.id)
-                    useCases.insertSession(insertedSession)
+                    val session = Session(blockId = state.value.block.id)
+                    useCases.insertSession(session)
                         .also { resource ->
                             resource.data?.let { insertedSessionId ->
                                 _uiActions.emit(UiAction.NavigateToSessionScreen(
-                                    insertedSession.copy(
+                                    session.copy(
                                         id = insertedSessionId.toInt()
                                     )
                                 ))

@@ -13,9 +13,7 @@ class UpdateBlockUseCase(
 
     suspend operator fun invoke(block: Block): SimpleResource {
         if (block.name.isBlank()) {
-            return Resource.Error(
-                StringResource(R.string.error_block_name_is_empty)
-            )
+            return Resource.Error(StringResource(R.string.error_block_name_is_empty))
         }
 
         repository.updateBlock(block)

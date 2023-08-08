@@ -42,8 +42,8 @@ class TrainingLogViewModel @Inject constructor(
             }
             is TrainingLogEvent.AddBlock -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    val insertedBlock = Block(name = event.blockName)
-                    useCases.insertBlock(insertedBlock)
+                    val block = Block(name = event.blockName)
+                    useCases.insertBlock(block)
                         .also { resource ->
                             resource.error?.let { error ->
                                 _state.update { it.copy (
@@ -52,7 +52,7 @@ class TrainingLogViewModel @Inject constructor(
                             }
                             resource.data?.let { insertedBlockId ->
                                 _uiActions.emit(UiAction.NavigateToBlockScreen(
-                                    block = insertedBlock.copy(
+                                    block = block.copy(
                                         id = insertedBlockId.toInt()
                                     )
                                 ))
