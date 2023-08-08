@@ -17,8 +17,7 @@ class InsertSetUseCase(
             order = exerciseSets.count() + 1
         )
 
-        return Resource.Success(
-            repository.insertSet(set)
-        )
+        return repository.insertSet(set)
+            .let { Resource.Success(it) }
     }
 }

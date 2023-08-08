@@ -9,8 +9,7 @@ class InsertExerciseUseCase(
 ) {
 
     suspend operator fun invoke(exercise: Exercise): Resource<Long> {
-        return Resource.Success(
-            repository.insertExercise(exercise)
-        )
+        return repository.insertExercise(exercise)
+            .let { Resource.Success(it) }
     }
 }

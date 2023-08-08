@@ -11,17 +11,15 @@ class GetSessionsWithMovementsByBlockIdUseCase(
 ) {
     operator fun invoke(blockId: Int): Flow<Resource<List<SessionWithExercisesWithMovementName>>> {
         return repository.getSessionsWithExercisesWithMovementNameByBlockId(blockId)
-            .map { Resource.Success(
-                it.sortedByDescending { sessionWithExercisesWithMovementNames ->
-                    sessionWithExercisesWithMovementNames.session.date
-                }.map { sessionWithExercisesWithMovementNames ->
+            .map { list ->
+                list.map { sessionWithExercisesWithMovementNames ->
                     sessionWithExercisesWithMovementNames.copy(
                         exercises = sessionWithExercisesWithMovementNames.exercises
-                            .sortedBy { exerciseWithMovementName ->
-                                exerciseWithMovementName.exercise.order
-                            }
+                            .sortedBy { it.exercise.order }
                     )
-                }
-            )}
+                }.sortedByDescending { sessionWithExercisesWithMovementNames ->
+                    sessionWithExercisesWithMovementNames.session.date
+                }.let { Resource.Success(it) }
+            }
     }
 }

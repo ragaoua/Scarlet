@@ -17,18 +17,13 @@ class InsertMovementUseCase(
 
     suspend operator fun invoke(movementName: String): Resource<Long> {
         return (movements ?: run { repository.getAllMovements() })
-            .also{ movements = it }
+            .also { movements = it }
             .map { movements ->
-                if (movements.any { movement ->
-                    movement.name.equals(movementName, ignoreCase = true)
-                }) {
-                    Resource.Error(
-                        StringResource(R.string.error_movement_already_exists)
-                    )
+                if (movements.any { it.name.equals(movementName, ignoreCase = true) }) {
+                    Resource.Error(StringResource(R.string.error_movement_already_exists))
                 } else {
-                    Resource.Success(
-                        repository.insertMovement(Movement(name = movementName))
-                    )
+                    repository.insertMovement(Movement(name = movementName))
+                        .let { Resource.Success(it) }
                 }
             }
             .first()

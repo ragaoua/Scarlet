@@ -17,16 +17,12 @@ class UpdateLoadBasedOnPreviousSetUseCase(
         loadPercentage: String
     ): SimpleResource {
 
-        previousSet ?: return Resource.Error(
-            StringResource(R.string.error_no_previous_set)
-        )
+        previousSet ?: return Resource.Error(StringResource(R.string.error_no_previous_set))
 
         val percentageInFloat = try {
             loadPercentage.toFloat() / 100
         } catch(e: NumberFormatException) {
-            return Resource.Error(
-                StringResource(R.string.error_invalid_percentage)
-            )
+            return Resource.Error(StringResource(R.string.error_invalid_percentage))
         }
 
         repository.updateSet(

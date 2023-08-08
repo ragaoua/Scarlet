@@ -13,9 +13,9 @@ class GetExercisesWithMovementAndSetsBySessionIdUseCase(
     operator fun invoke(sessionId: Int): Flow<Resource<List<ExerciseWithMovementAndSets>>> {
         return repository.getExercisesWithMovementAndSetsBySessionId(sessionId)
             .map { exercisesWithMovementAndSets ->
-                Resource.Success(
-                    exercisesWithMovementAndSets.sortedBy { it.exercise.order }
-                )
+                exercisesWithMovementAndSets
+                    .sortedBy { it.exercise.order }
+                    .let { Resource.Success(it) }
             }
     }
 }

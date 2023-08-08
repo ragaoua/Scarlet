@@ -12,16 +12,15 @@ class GetCompletedBlocksUseCase(
     operator fun invoke(): Flow<Resource<List<BlockWithSessions>>> {
         return repository.getBlocksWithSessionsByCompleted(true)
             .map { blocksWithSession ->
-                Resource.Success(
-                    blocksWithSession
-                        .sortedByDescending { it.sessions.lastOrNull()?.date }
-                        .map { blockWithSessions ->
-                            blockWithSessions.copy(
-                                sessions = blockWithSessions.sessions
-                                    .sortedBy { it.date }
-                            )
-                        }
-                )
+                blocksWithSession
+                    .sortedByDescending { it.sessions.lastOrNull()?.date }
+                    .map { blockWithSessions ->
+                        blockWithSessions.copy(
+                            sessions = blockWithSessions.sessions
+                                .sortedBy { it.date }
+                        )
+                    }
+                    .let { Resource.Success(it) }
             }
     }
 }

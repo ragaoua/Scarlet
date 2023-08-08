@@ -3,7 +3,6 @@ package com.example.scarlet.feature_training_log.presentation.session
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.scarlet.core.util.Resource
 import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.use_case.session.SessionUseCases
 import com.example.scarlet.feature_training_log.presentation.destinations.SessionScreenDestination
@@ -24,13 +23,11 @@ class SessionViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val session = SessionScreenDestination.argsFrom(savedStateHandle).session
-
     private var filterMovementsJob: Job? = null
 
     private val _state = MutableStateFlow(
         SessionUiState(
-            session = session,
+            session = SessionScreenDestination.argsFrom(savedStateHandle).session,
             sessionBlockName = SessionScreenDestination.argsFrom(savedStateHandle).block.name
         )
     )
@@ -49,13 +46,11 @@ class SessionViewModel @Inject constructor(
             }
             is SessionEvent.UpdateSessionDate -> {
                 viewModelScope.launch(Dispatchers.IO) {
+                    useCases.updateSession(state.value.session)
                     _state.update { it.copy(
                         session = it.session.copy (
                             date = event.date
-                        )
-                    )}
-                    useCases.updateSession(state.value.session)
-                    _state.update { it.copy(
+                        ),
                         isDatePickerDialogOpen = false
                     )}
                 }
@@ -83,38 +78,34 @@ class SessionViewModel @Inject constructor(
             }
             is SessionEvent.AddMovement -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    useCases.insertMovement(event.name)
-                        .also { insertedMovementIdResource ->
-                            when (insertedMovementIdResource) {
-                                is Resource.Success -> {
-                                    state.value.exerciseToEdit?.let { exercise ->
-                                        useCases.updateExercise(
-                                            exercise = exercise.copy(
-                                                movementId = insertedMovementIdResource.data!!.toInt(),
-                                            )
-                                        )
-                                    } ?: run {
-                                        useCases.insertExercise(
-                                            Exercise(
-                                                sessionId = state.value.session.id,
-                                                movementId = insertedMovementIdResource.data!!.toInt(),
-                                                order = state.value.exercises.size + 1
-                                            )
-                                        )
-                                    }
-                                    _state.update {
-                                        it.copy(
-                                            isMovementSelectionSheetOpen = false,
-                                            exerciseToEdit = null
-                                        )
-                                    }
-                                }
-
-                                else -> {
-                                    /* TODO */
-                                }
+                    useCases.insertMovement(event.name).also { resource ->
+                        resource.error?.let {
+                            /* TODO */
+                        }
+                        resource.data?.let { insertedMovementId ->
+                            state.value.exerciseToEdit?.let { exercise ->
+                                useCases.updateExercise(
+                                    exercise = exercise.copy(
+                                        movementId = insertedMovementId.toInt(),
+                                    )
+                                )
+                            } ?: run {
+                                useCases.insertExercise(
+                                    Exercise(
+                                        sessionId = state.value.session.id,
+                                        movementId = insertedMovementId.toInt(),
+                                        order = state.value.exercises.size + 1
+                                    )
+                                )
+                            }
+                            _state.update {
+                                it.copy(
+                                    isMovementSelectionSheetOpen = false,
+                                    exerciseToEdit = null
+                                )
                             }
                         }
+                    }
                 }
             }
             is SessionEvent.SelectMovement -> {
@@ -225,7 +216,7 @@ class SessionViewModel @Inject constructor(
     }
 
     private fun initSessionExercisesCollection() {
-        useCases.getExercisesWithMovementAndSetsBySessionId(session.id)
+        useCases.getExercisesWithMovementAndSetsBySessionId(state.value.session.id)
             .onEach { exercises ->
                 _state.update { it.copy(
                     exercises = exercises.data ?: emptyList()

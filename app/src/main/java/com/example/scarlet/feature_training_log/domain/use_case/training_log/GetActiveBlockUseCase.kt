@@ -18,12 +18,10 @@ class GetActiveBlockUseCase(
                 if (activeBlocks.size > 1) {
                     Resource.Error(StringResource(R.string.error_too_many_active_blocks))
                 } else {
-                    Resource.Success(
-                        activeBlocks.firstOrNull()?.copy(
-                            sessions = activeBlocks.first().sessions
-                                .sortedBy { it.date }
-                        )
-                    )
+                    val activeBlock = activeBlocks.firstOrNull()
+                    activeBlock?.copy(
+                        sessions = activeBlock.sessions.sortedBy { it.date }
+                    ).let { Resource.Success(it) }
                 }
             }
     }

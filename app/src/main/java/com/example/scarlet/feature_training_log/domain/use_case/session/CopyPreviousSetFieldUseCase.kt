@@ -19,14 +19,11 @@ class CopyPreviousSetFieldUseCase(
         fieldToCopy: SetFieldType
     ): SimpleResource {
 
-        val previousSet =
-            sessionExercises
-                .find { it.exercise.id == set.exerciseId }
-                ?.sets
-                ?.find { it.order == set.order - 1 }
-                ?: return Resource.Error(
-                    StringResource(R.string.error_no_previous_set)
-                )
+        val previousSet = sessionExercises
+            .find { it.exercise.id == set.exerciseId }
+            ?.sets
+            ?.find { it.order == set.order - 1 }
+            ?: return Resource.Error(StringResource(R.string.error_no_previous_set))
 
         repository.updateSet(
             when (fieldToCopy) {

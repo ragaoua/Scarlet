@@ -10,6 +10,13 @@ class InsertBlockUseCase(
     private val repository: ScarletRepository
 ) {
 
+    /**
+     * Insert a block after checking that its name isn't blank or used already
+     *
+     * @param block the block to be inserted
+     *
+     * @return resource with an error or data (id of the inserted block)
+     */
     suspend operator fun invoke(block: Block): Resource<Long> {
         if (block.name.isBlank()) {
             return Resource.Error(StringResource(R.string.error_block_name_is_empty))
