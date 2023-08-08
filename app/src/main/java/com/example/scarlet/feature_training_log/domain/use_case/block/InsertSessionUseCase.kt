@@ -9,8 +9,9 @@ class InsertSessionUseCase(
 ) {
 
     suspend operator fun invoke(session: Session): Resource<Long> {
-        return Resource.Success(
-            repository.insertSession(session)
-        )
+        repository.insertSession(session)
+            .also { insertedSessionId ->
+                return Resource.Success(insertedSessionId)
+            }
     }
 }

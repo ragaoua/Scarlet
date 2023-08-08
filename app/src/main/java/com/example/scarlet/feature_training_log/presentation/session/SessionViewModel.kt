@@ -25,14 +25,13 @@ class SessionViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val session = SessionScreenDestination.argsFrom(savedStateHandle).session
-    private val sessionBlock = SessionScreenDestination.argsFrom(savedStateHandle).block
 
     private var filterMovementsJob: Job? = null
 
     private val _state = MutableStateFlow(
         SessionUiState(
             session = session,
-            sessionBlockName = sessionBlock.name
+            sessionBlockName = SessionScreenDestination.argsFrom(savedStateHandle).block.name
         )
     )
     val state = _state.asStateFlow()

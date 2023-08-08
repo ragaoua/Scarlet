@@ -84,17 +84,16 @@ class BlockViewModel @Inject constructor(
             }
             is BlockEvent.UpdateBlock -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    useCases.updateBlock(event.block)
-                        .also { resource ->
-                            resource.error?.let { error ->
-                                _uiActions.emit(UiAction.ShowSnackbarWithError(error))
-                            } ?: run {
-                                _state.update { it.copy(
-                                    block = event.block,
-                                    isInEditMode = false
-                                )}
-                            }
+                    useCases.updateBlock(event.block).also { resource ->
+                        resource.error?.let { error ->
+                            _uiActions.emit(UiAction.ShowSnackbarWithError(error))
+                        } ?: run {
+                            _state.update { it.copy(
+                                block = event.block,
+                                isInEditMode = false
+                            )}
                         }
+                    }
                 }
             }
         }
