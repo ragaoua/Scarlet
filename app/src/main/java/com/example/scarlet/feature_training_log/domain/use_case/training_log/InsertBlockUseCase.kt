@@ -12,14 +12,12 @@ class InsertBlockUseCase(
 
     suspend operator fun invoke(block: Block): Resource<Long> {
         if (block.name.isBlank()) {
-            return Resource.Error(
-                StringResource(resId = R.string.error_block_name_is_empty)
-            )
+            return Resource.Error(StringResource(R.string.error_block_name_is_empty))
         }
 
         repository.getBlockByName(block.name)?.let { existingBlock ->
             return Resource.Error(
-                StringResource(resId = R.string.block_with_name_already_exists, existingBlock.name)
+                StringResource(R.string.block_with_name_already_exists, existingBlock.name)
             )
         }
 

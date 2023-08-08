@@ -16,16 +16,14 @@ class GetActiveBlockUseCase(
         return repository.getBlocksWithSessionsByCompleted(false)
             .map { activeBlocks ->
                 if (activeBlocks.size > 1) {
-                    Resource.Error(
-                        StringResource(R.string.error_too_many_active_blocks)
-                    )
+                    Resource.Error(StringResource(R.string.error_too_many_active_blocks))
                 } else {
-                    Resource.Success(activeBlocks.firstOrNull()?.copy(
-                        sessions = activeBlocks.first().sessions
-                            .sortedBy {
-                                it.date
-                            }
-                    ))
+                    Resource.Success(
+                        activeBlocks.firstOrNull()?.copy(
+                            sessions = activeBlocks.first().sessions
+                                .sortedBy { it.date }
+                        )
+                    )
                 }
             }
     }
