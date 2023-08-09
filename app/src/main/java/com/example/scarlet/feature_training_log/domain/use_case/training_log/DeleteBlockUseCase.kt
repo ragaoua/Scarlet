@@ -7,6 +7,11 @@ class DeleteBlockUseCase(
     private val repository: ScarletRepository
 ) {
 
+    /**
+     * Delete a block
+     *
+     * @param block block to be deleted
+     */
     suspend operator fun invoke(block: Block) {
         repository.deleteBlock(block)
     }

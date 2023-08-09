@@ -7,6 +7,11 @@ class UpdateExerciseUseCase(
     private val repository: ScarletRepository
 ) {
 
+    /**
+     * Update an exercise
+     *
+     * @param exercise exercise to be updated
+     */
     suspend operator fun invoke(exercise: Exercise) {
         repository.updateExercise(exercise)
     }

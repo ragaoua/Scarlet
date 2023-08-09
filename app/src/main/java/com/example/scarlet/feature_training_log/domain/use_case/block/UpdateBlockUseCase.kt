@@ -11,6 +11,13 @@ class UpdateBlockUseCase(
     private val repository: ScarletRepository
 ) {
 
+    /**
+     * Update a block after checking that the name isn't blank
+     *
+     * @param block block to be updated
+     *
+     * @return a resource with an error if found, or a simple resource with no data
+     */
     suspend operator fun invoke(block: Block): SimpleResource {
         if (block.name.isBlank()) {
             return Resource.Error(StringResource(R.string.error_block_name_is_empty))

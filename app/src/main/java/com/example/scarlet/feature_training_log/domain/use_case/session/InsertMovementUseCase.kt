@@ -15,6 +15,13 @@ class InsertMovementUseCase(
 
     private var movements: Flow<List<Movement>>? = null
 
+    /**
+     * Insert a movement after checking it doesn't already exist.
+     *
+     * @param movementName name of the movement to be inserted
+     *
+     * @return a resource with an error or data (id of the inserted movement)
+     */
     suspend operator fun invoke(movementName: String): Resource<Long> {
         return (movements ?: run { repository.getAllMovements() })
             .also { movements = it }

@@ -8,6 +8,14 @@ class InsertSetUseCase(
     private val repository: ScarletRepository
 ) {
 
+    /**
+     * Insert a set.
+     *
+     * @param exerciseId id of the set's exercise
+     * @param exerciseSets list of that exercise's sets (to determine the set order)
+     *
+     * @return a resource with data (id of the inserted set)
+     */
     suspend operator fun invoke(
         exerciseId: Int,
         exerciseSets: List<Set>

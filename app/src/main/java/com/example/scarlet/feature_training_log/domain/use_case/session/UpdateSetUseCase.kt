@@ -7,6 +7,11 @@ class UpdateSetUseCase(
     private val repository: ScarletRepository
 ) {
 
+    /**
+     * Update a set
+     *
+     * @param set set to be updated
+     */
     suspend operator fun invoke(set: Set) {
         repository.updateSet(set)
     }

@@ -7,6 +7,12 @@ class DeleteSetUseCase(
     private val repository: ScarletRepository
 ) {
 
+    /**
+     * Delete a set, then update the order of the subsequent sets for the same exercise
+     *
+     * @param set set to be deleted
+     * @param exerciseSets list of that exercise's sets
+     */
     suspend operator fun invoke(
         set: Set,
         exerciseSets: List<Set>

@@ -7,6 +7,11 @@ class DeleteSessionUseCase(
     private val repository: ScarletRepository
 ) {
 
+    /**
+     * Delete a session
+     *
+     * @param session session to be deleted
+     */
     suspend operator fun invoke(session: Session) {
         repository.deleteSession(session)
     }

@@ -10,6 +10,13 @@ class GetExercisesWithMovementAndSetsBySessionIdUseCase(
     private val repository: ScarletRepository
 ) {
 
+    /**
+     * Retrieve a list of exercises for a given session
+     *
+     * @param sessionId id of the exercises' session
+     *
+     * @return a flow of resource with data (the list of exercises)
+     */
     operator fun invoke(sessionId: Int): Flow<Resource<List<ExerciseWithMovementAndSets>>> {
         return repository.getExercisesWithMovementAndSetsBySessionId(sessionId)
             .map { exercisesWithMovementAndSets ->

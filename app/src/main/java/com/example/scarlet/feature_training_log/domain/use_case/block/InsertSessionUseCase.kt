@@ -8,6 +8,13 @@ class InsertSessionUseCase(
     private val repository: ScarletRepository
 ) {
 
+    /**
+     * Insert a session
+     *
+     * @param session session to be inserted
+     *
+     * @return resource with data (the inserted session's id)
+     */
     suspend operator fun invoke(session: Session): Resource<Long> {
         return repository.insertSession(session)
             .let { Resource.Success(it) }

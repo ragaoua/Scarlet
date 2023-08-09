@@ -9,17 +9,28 @@ import com.example.scarlet.feature_training_log.domain.model.Set
 import com.example.scarlet.feature_training_log.domain.repository.ScarletRepository
 import com.example.scarlet.feature_training_log.presentation.session.util.SetFieldType
 
-class CopyPreviousSetFieldUseCase(
+class CopyPrecedingSetFieldUseCase(
     private val repository: ScarletRepository
 ) {
 
+    /**
+     * Update a set field with data from the previous set,
+     * after checking that the previous set exists
+     *
+     * @param set the set to be updated
+     * @param sessionExercises list of that exercise's sets
+     * @param fieldToCopy field to be copied
+     *
+     * @return a resource with an error if the set isn't preceded by another one,
+     * or a simple resource with no data
+     */
     suspend operator fun invoke(
         set: Set,
         sessionExercises: List<ExerciseWithMovementAndSets>,
         fieldToCopy: SetFieldType
     ): SimpleResource {
 
-        val previousSet = sessionExercises
+        val precedingSet = sessionExercises
             .find { it.exercise.id == set.exerciseId }
             ?.sets
             ?.find { it.order == set.order - 1 }
@@ -27,9 +38,9 @@ class CopyPreviousSetFieldUseCase(
 
         repository.updateSet(
             when (fieldToCopy) {
-                SetFieldType.REPS -> set.copy(reps = previousSet.reps)
-                SetFieldType.WEIGHT -> set.copy(weight = previousSet.weight)
-                SetFieldType.RPE -> set.copy(rpe = previousSet.rpe)
+                SetFieldType.REPS -> set.copy(reps = precedingSet.reps)
+                SetFieldType.WEIGHT -> set.copy(weight = precedingSet.weight)
+                SetFieldType.RPE -> set.copy(rpe = precedingSet.rpe)
             }
         )
 

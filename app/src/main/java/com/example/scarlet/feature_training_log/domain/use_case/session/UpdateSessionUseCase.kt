@@ -7,6 +7,11 @@ class UpdateSessionUseCase(
     private val repository: ScarletRepository
 ) {
 
+    /**
+     * Update a session
+     *
+     * @param session session to be updated
+     */
     suspend operator fun invoke(session: Session) {
         repository.updateSession(session)
     }

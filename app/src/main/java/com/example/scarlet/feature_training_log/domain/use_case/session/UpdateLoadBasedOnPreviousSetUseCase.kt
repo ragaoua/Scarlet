@@ -11,13 +11,23 @@ class UpdateLoadBasedOnPreviousSetUseCase(
     private val repository: ScarletRepository
 ) {
 
+    /**
+     * Update a set's load based on a percentage of the preceding set.
+     * Checks that the preceding set exists and that the percentage format is correct
+     *
+     * @param set the set to be updated
+     * @param precedingSet the preceding set
+     * @param loadPercentage percentage to apply to the preceding set's load
+     *
+     * @return a resource with an error, or a simple resource with no data
+     */
     suspend operator fun invoke(
         set: Set,
-        previousSet: Set?,
+        precedingSet: Set?,
         loadPercentage: String
     ): SimpleResource {
 
-        previousSet ?: return Resource.Error(StringResource(R.string.error_no_previous_set))
+        precedingSet ?: return Resource.Error(StringResource(R.string.error_no_previous_set))
 
         val percentageInFloat = try {
             loadPercentage.toFloat() / 100
@@ -27,7 +37,7 @@ class UpdateLoadBasedOnPreviousSetUseCase(
 
         repository.updateSet(
             set.copy(
-                weight = previousSet.weight?.times(percentageInFloat)
+                weight = precedingSet.weight?.times(percentageInFloat)
                 // TODO Round to .#
                 // TODO Check value doesn't exceed 1000
                 // TODO check percentage value is not > 100

@@ -9,6 +9,14 @@ import kotlinx.coroutines.flow.map
 class GetSessionsWithMovementsByBlockIdUseCase(
     private val repository: ScarletRepository
 ) {
+
+    /**
+     * Retrieve a list of sessions for a given block
+     *
+     * @param blockId id of the sessions' block
+     *
+     * @return a flow of resources with data (the list of sessions)
+     */
     operator fun invoke(blockId: Int): Flow<Resource<List<SessionWithExercisesWithMovementName>>> {
         return repository.getSessionsWithExercisesWithMovementNameByBlockId(blockId)
             .map { list ->

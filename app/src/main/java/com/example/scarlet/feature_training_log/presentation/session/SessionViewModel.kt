@@ -168,7 +168,7 @@ class SessionViewModel @Inject constructor(
             }
             is SessionEvent.CopyPreviousSet -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    useCases.copyPreviousSetField(
+                    useCases.copyPrecedingSetField(
                         set = event.set,
                         sessionExercises = state.value.exercises,
                         fieldToCopy = event.fieldToCopy
@@ -196,7 +196,7 @@ class SessionViewModel @Inject constructor(
                     state.value.loadCalculationDialogState?.let { dialog ->
                         useCases.updateLoadBasedOnPreviousSet(
                             set = dialog.set,
-                            previousSet = dialog.previousSet,
+                            precedingSet = dialog.previousSet,
                             loadPercentage = event.percentage
                         )
                     } ?: run {

@@ -13,9 +13,9 @@ class InsertBlockUseCase(
     /**
      * Insert a block after checking that its name isn't blank or used already
      *
-     * @param block the block to be inserted
+     * @param block block to be inserted
      *
-     * @return resource with an error or data (id of the inserted block)
+     * @return resource with an error or data (the inserted block's id)
      */
     suspend operator fun invoke(block: Block): Resource<Long> {
         if (block.name.isBlank()) {

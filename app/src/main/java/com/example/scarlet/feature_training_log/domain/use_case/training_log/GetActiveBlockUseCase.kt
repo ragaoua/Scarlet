@@ -12,6 +12,11 @@ class GetActiveBlockUseCase(
     private val repository: ScarletRepository
 ) {
 
+    /**
+     * Retrieve the active block (completed is false)
+     *
+     * @return a flow of resources with an error or data (the active block)
+     */
     operator fun invoke(): Flow<Resource<BlockWithSessions?>> {
         return repository.getBlocksWithSessionsByCompleted(false)
             .map { activeBlocks ->

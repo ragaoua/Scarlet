@@ -9,6 +9,12 @@ import kotlinx.coroutines.flow.map
 class GetCompletedBlocksUseCase(
     private val repository: ScarletRepository
 ) {
+
+    /**
+     * Retrieve a list of completed block (completed is true)
+     *
+     * @return a flow of resources with an error or data (list of completed blocks)
+     */
     operator fun invoke(): Flow<Resource<List<BlockWithSessions>>> {
         return repository.getBlocksWithSessionsByCompleted(true)
             .map { blocksWithSession ->

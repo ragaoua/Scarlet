@@ -8,6 +8,13 @@ class InsertExerciseUseCase(
     private val repository: ScarletRepository
 ) {
 
+    /**
+     * Insert an exercise
+     *
+     * @param exercise exercise to be inserted
+     *
+     * @return a resource with data (id of the inserted exercise)
+     */
     suspend operator fun invoke(exercise: Exercise): Resource<Long> {
         return repository.insertExercise(exercise)
             .let { Resource.Success(it) }
