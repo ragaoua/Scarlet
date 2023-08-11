@@ -53,7 +53,7 @@ class TrainingLogViewModel @Inject constructor(
                             resource.data?.let { insertedBlockId ->
                                 _uiActions.emit(UiAction.NavigateToBlockScreen(
                                     block = block.copy(
-                                        id = insertedBlockId.toInt()
+                                        id = insertedBlockId
                                     )
                                 ))
                                 _state.update { it.copy(

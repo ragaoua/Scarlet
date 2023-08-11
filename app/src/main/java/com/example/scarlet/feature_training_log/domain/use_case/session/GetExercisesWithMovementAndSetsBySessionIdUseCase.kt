@@ -17,7 +17,7 @@ class GetExercisesWithMovementAndSetsBySessionIdUseCase(
      *
      * @return a flow of resource with data (the list of exercises)
      */
-    operator fun invoke(sessionId: Int): Flow<Resource<List<ExerciseWithMovementAndSets>>> {
+    operator fun invoke(sessionId: Long): Flow<Resource<List<ExerciseWithMovementAndSets>>> {
         return repository.getExercisesWithMovementAndSetsBySessionId(sessionId)
             .map { exercisesWithMovementAndSets ->
                 exercisesWithMovementAndSets

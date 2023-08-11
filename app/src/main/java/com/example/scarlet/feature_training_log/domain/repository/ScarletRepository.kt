@@ -29,7 +29,7 @@ interface ScarletRepository {
     suspend fun updateSession(session: Session)
     suspend fun deleteSession(session: Session)
 
-    fun getSessionsWithExercisesWithMovementNameByBlockId(blockId: Int):
+    fun getSessionsWithExercisesWithMovementNameByBlockId(blockId: Long):
             Flow<List<SessionWithExercisesWithMovementName>>
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -39,7 +39,7 @@ interface ScarletRepository {
     suspend fun updateExercise(exercise: Exercise)
     suspend fun deleteExercise(exercise: Exercise)
 
-    fun getExercisesWithMovementAndSetsBySessionId(sessionId: Int):
+    fun getExercisesWithMovementAndSetsBySessionId(sessionId: Long):
             Flow<List<ExerciseWithMovementAndSets>>
 
     ///////////////////////////////////////////////////////////////////////////////////////////////

@@ -3,9 +3,9 @@ package com.example.scarlet.feature_training_log.domain.model
 import java.io.Serializable
 
 data class Exercise(
-    val id: Int = 0,
-    val sessionId: Int = 0,
-    val movementId: Int = 0,
+    val id: Long = 0,
+    val sessionId: Long = 0,
+    val movementId: Long = 0,
     val order: Int = 0
 ): Serializable
 

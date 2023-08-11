@@ -26,8 +26,8 @@ import java.util.Date
 )
 data class SessionEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
-    val blockId: Int = 0,
+    val id: Long = 0,
+    val blockId: Long = 0,
     val date: Date = Date(System.currentTimeMillis()),
 ) {
 

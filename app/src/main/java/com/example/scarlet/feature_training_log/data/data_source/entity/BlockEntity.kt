@@ -16,7 +16,7 @@ import com.example.scarlet.feature_training_log.domain.model.BlockWithSessions
 )
 data class BlockEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val id: Long = 0,
     val name: String = "",
     val completed: Boolean = false
 ) {

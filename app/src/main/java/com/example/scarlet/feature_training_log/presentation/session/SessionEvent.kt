@@ -17,7 +17,7 @@ sealed interface SessionEvent {
     data class FilterMovementsByName(val nameFilter: String) : SessionEvent
     data class AddMovement(val name: String) : SessionEvent
 
-    data class SelectMovement(val movementId: Int) : SessionEvent
+    data class SelectMovement(val movementId: Long) : SessionEvent
     data class DeleteExercise(val exercise: Exercise) : SessionEvent
 
     data class AddSet(val exercise: Exercise) : SessionEvent

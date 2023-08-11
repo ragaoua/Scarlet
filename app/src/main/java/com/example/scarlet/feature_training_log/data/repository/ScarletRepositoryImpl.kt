@@ -53,7 +53,7 @@ class ScarletRepositoryImpl(
     override suspend fun updateSession(session: Session) =
         dbInstance.sessionDao.updateSession(SessionEntity(session))
 
-    override fun getSessionsWithExercisesWithMovementNameByBlockId(blockId: Int) =
+    override fun getSessionsWithExercisesWithMovementNameByBlockId(blockId: Long) =
         dbInstance.sessionDao.getSessionsWithMovementsByBlockId(blockId)
             .map { entityList ->
                 entityList.map { entity ->
@@ -75,7 +75,7 @@ class ScarletRepositoryImpl(
         dbInstance.exerciseDao.deleteExercise(ExerciseEntity(exercise))
     }
 
-    override fun getExercisesWithMovementAndSetsBySessionId(sessionId: Int) =
+    override fun getExercisesWithMovementAndSetsBySessionId(sessionId: Long) =
         dbInstance.exerciseDao.getExercisesWithMovementAndSetsBySessionId(sessionId)
             .map { entityList ->
                 entityList.map { entity ->

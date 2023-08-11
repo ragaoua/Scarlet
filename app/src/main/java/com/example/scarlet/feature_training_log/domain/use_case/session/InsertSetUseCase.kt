@@ -17,7 +17,7 @@ class InsertSetUseCase(
      * @return a resource with data (id of the inserted set)
      */
     suspend operator fun invoke(
-        exerciseId: Int,
+        exerciseId: Long,
         exerciseSets: List<Set>
     ): Resource<Long> {
         val set = Set(

@@ -47,7 +47,7 @@ class BlockViewModel @Inject constructor(
                             resource.data?.let { insertedSessionId ->
                                 _uiActions.emit(UiAction.NavigateToSessionScreen(
                                     session.copy(
-                                        id = insertedSessionId.toInt()
+                                        id = insertedSessionId
                                     )
                                 ))
                             }

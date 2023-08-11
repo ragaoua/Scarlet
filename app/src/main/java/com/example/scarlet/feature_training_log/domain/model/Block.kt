@@ -3,7 +3,7 @@ package com.example.scarlet.feature_training_log.domain.model
 import java.io.Serializable
 
 data class Block(
-    val id: Int = 0,
+    val id: Long = 0,
     val name: String = "",
     val completed: Boolean = false
 ): Serializable

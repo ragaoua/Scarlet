@@ -22,8 +22,8 @@ import com.example.scarlet.feature_training_log.domain.model.Set
 )
 data class SetEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
-    val exerciseId: Int = 0,
+    val id: Long = 0,
+    val exerciseId: Long = 0,
     val order: Int = 0,
     val reps: Int? = null,
     val weight: Float? = null,

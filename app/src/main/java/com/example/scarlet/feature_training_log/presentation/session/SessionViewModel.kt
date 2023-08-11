@@ -86,14 +86,14 @@ class SessionViewModel @Inject constructor(
                             state.value.exerciseToEdit?.let { exercise ->
                                 useCases.updateExercise(
                                     exercise = exercise.copy(
-                                        movementId = insertedMovementId.toInt(),
+                                        movementId = insertedMovementId,
                                     )
                                 )
                             } ?: run {
                                 useCases.insertExercise(
                                     Exercise(
                                         sessionId = state.value.session.id,
-                                        movementId = insertedMovementId.toInt(),
+                                        movementId = insertedMovementId,
                                         order = state.value.exercises.size + 1
                                     )
                                 )

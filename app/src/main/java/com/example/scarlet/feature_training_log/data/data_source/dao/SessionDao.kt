@@ -20,7 +20,7 @@ interface SessionDao {
         FROM session
         WHERE blockId = :blockId
     """)
-    fun getSessionsWithMovementsByBlockId(blockId: Int): Flow<List<SessionWithExercisesWithMovementNameEntity>>
+    fun getSessionsWithMovementsByBlockId(blockId: Long): Flow<List<SessionWithExercisesWithMovementNameEntity>>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertSession(session: SessionEntity): Long

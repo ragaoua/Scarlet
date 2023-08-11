@@ -34,9 +34,9 @@ import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovemen
 )
 data class ExerciseEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
-    val sessionId: Int = 0,
-    val movementId: Int = 0,
+    val id: Long = 0,
+    val sessionId: Long = 0,
+    val movementId: Long = 0,
     val order: Int = 0
 ) {
 
