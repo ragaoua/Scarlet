@@ -115,15 +115,7 @@ fun ExerciseSetRow(
                     set.copy(rpe = text.toFloatOrNull())
                 ))
             },
-            imeAction = if (isLastSet) ImeAction.Done else ImeAction.Next,
-            onIconClicked = if (isFirstSet) null else {
-                {
-                    onEvent(SessionEvent.CopyPreviousSet(
-                        set = set,
-                        fieldToCopy = SetFieldType.RPE
-                    ))
-                }
-            }
+            imeAction = if (isLastSet) ImeAction.Done else ImeAction.Next
         )
 
         Icon(
