@@ -85,44 +85,45 @@ fun MovementSelectionSheet(
                                 text = stringResource(R.string.enter_movement_name),
                                 textAlign = TextAlign.Center
                             )
-                        } else {
-                            SecondaryActionButton(
-                                onClick = {
-                                    onEvent(SessionEvent.AddMovement(movementNameFilter))
-                                }
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Add,
-                                    contentDescription = stringResource(
-                                        R.string.add_new_movement_btn_msg,
-                                        movementNameFilter
-                                    )
-                                )
-                                Text(
-                                    text = stringResource(
-                                        R.string.add_new_movement_btn_msg,
-                                        movementNameFilter
-                                    ),
-                                    style = MaterialTheme.typography.titleLarge
-                                )
-                            }
                         }
                     }
-                } else {
-                    items(movements) { movement ->
-                        Text(
-                            text = movement.name,
-                            style = MaterialTheme.typography.titleMedium,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(2.dp)
-                                .clickable {
-                                    onEvent(SessionEvent.SelectMovement(movement.id))
-                                }
-                                .border(1.dp, MaterialTheme.colorScheme.onSurfaceVariant)
-                                .padding(8.dp)
-                        )
+                }
+                if(
+                    movements.none { it.name == movementNameFilter } and
+                    movementNameFilter.isNotBlank()
+                ) {
+                    item {
+                        SecondaryActionButton(onClick = {
+                            onEvent(SessionEvent.AddMovement(movementNameFilter))
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.Add,
+                                contentDescription = stringResource(
+                                    R.string.add_new_movement_btn_msg,
+                                    movementNameFilter
+                                )
+                            )
+                            Text(
+                                text = stringResource(
+                                    R.string.add_new_movement_btn_msg,
+                                    movementNameFilter
+                                ),
+                                style = MaterialTheme.typography.titleLarge
+                            )
+                        }
                     }
+                }
+                items(movements) { movement ->
+                    Text(
+                        text = movement.name,
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(2.dp)
+                            .clickable { onEvent(SessionEvent.SelectMovement(movement.id)) }
+                            .border(1.dp, MaterialTheme.colorScheme.onSurfaceVariant)
+                            .padding(8.dp)
+                    )
                 }
             }
 
