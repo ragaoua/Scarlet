@@ -42,20 +42,15 @@ class TrainingLogViewModel @Inject constructor(
             }
             is TrainingLogEvent.AddBlock -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    val block = Block(name = event.blockName)
-                    useCases.insertBlock(block)
+                    useCases.insertBlock(event.blockName)
                         .also { resource ->
                             resource.error?.let { error ->
                                 _state.update { it.copy (
                                     newBlockSheetTextFieldError = error
                                 )}
                             }
-                            resource.data?.let { insertedBlockId ->
-                                _uiActions.emit(UiAction.NavigateToBlockScreen(
-                                    block = block.copy(
-                                        id = insertedBlockId
-                                    )
-                                ))
+                            resource.data?.let { insertedBlock ->
+                                _uiActions.emit(UiAction.NavigateToBlockScreen(insertedBlock))
                                 _state.update { it.copy(
                                     isNewBlockSheetExpanded = false,
                                     newBlockSheetTextFieldError = null

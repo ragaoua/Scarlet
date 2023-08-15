@@ -2,6 +2,7 @@ package com.example.scarlet.feature_training_log.domain.repository
 
 import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.domain.model.BlockWithSessions
+import com.example.scarlet.feature_training_log.domain.model.Day
 import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
 import com.example.scarlet.feature_training_log.domain.model.Movement
@@ -21,6 +22,12 @@ interface ScarletRepository {
 
     fun getBlocksWithSessionsByCompleted(completed: Boolean): Flow<List<BlockWithSessions>>
     suspend fun getBlockByName(name: String): Block?
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////// DAY /////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    suspend fun insertDay(day: Day): Long
+    suspend fun getDaysByBlockId(blockId: Long): List<Day>
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////// SESSION ///////////////////////////////////////////

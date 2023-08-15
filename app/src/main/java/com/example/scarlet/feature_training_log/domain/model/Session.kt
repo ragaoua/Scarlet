@@ -5,7 +5,7 @@ import java.util.Date
 
 data class Session(
     val id: Long = 0,
-    val blockId: Long = 0,
+    val dayId: Long = 0,
     val date: Date = Date(System.currentTimeMillis()),
 ): Serializable
 

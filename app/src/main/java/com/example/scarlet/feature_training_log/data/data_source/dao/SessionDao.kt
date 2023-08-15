@@ -18,7 +18,8 @@ interface SessionDao {
     @Query("""
         SELECT session.*
         FROM session
-        WHERE blockId = :blockId
+        JOIN day on day.id = session.dayId
+        WHERE day.blockId = :blockId
     """)
     fun getSessionsWithMovementsByBlockId(blockId: Long): Flow<List<SessionWithExercisesWithMovementNameEntity>>
 

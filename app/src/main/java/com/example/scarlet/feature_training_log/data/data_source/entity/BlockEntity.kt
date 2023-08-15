@@ -3,6 +3,7 @@ package com.example.scarlet.feature_training_log.data.data_source.entity
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.Index
+import androidx.room.Junction
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 import com.example.scarlet.feature_training_log.domain.model.Block
@@ -18,6 +19,7 @@ data class BlockEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
     val name: String = "",
+    val nbDays: Int = 1,
     val completed: Boolean = false
 ) {
 
@@ -39,7 +41,12 @@ data class BlockWithSessionsEntity(
     val block: BlockEntity,
     @Relation(
         parentColumn = "id",
-        entityColumn = "blockId"
+        entityColumn = "dayId",
+        associateBy = Junction(
+            DayEntity::class,
+            parentColumn = "id",
+            entityColumn = "blockId"
+        )
     )
     val sessions: List<SessionEntity> = emptyList()
 ) {

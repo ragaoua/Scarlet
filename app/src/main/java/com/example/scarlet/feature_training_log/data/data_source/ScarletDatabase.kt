@@ -4,11 +4,13 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.scarlet.feature_training_log.data.data_source.dao.BlockDao
+import com.example.scarlet.feature_training_log.data.data_source.dao.DayDao
 import com.example.scarlet.feature_training_log.data.data_source.dao.ExerciseDao
 import com.example.scarlet.feature_training_log.data.data_source.dao.MovementDao
 import com.example.scarlet.feature_training_log.data.data_source.dao.SessionDao
 import com.example.scarlet.feature_training_log.data.data_source.dao.SetDao
 import com.example.scarlet.feature_training_log.data.data_source.entity.BlockEntity
+import com.example.scarlet.feature_training_log.data.data_source.entity.DayEntity
 import com.example.scarlet.feature_training_log.data.data_source.entity.ExerciseEntity
 import com.example.scarlet.feature_training_log.data.data_source.entity.ExerciseWithMovementNameEntity
 import com.example.scarlet.feature_training_log.data.data_source.entity.MovementEntity
@@ -18,6 +20,7 @@ import com.example.scarlet.feature_training_log.data.data_source.entity.SetEntit
 @Database(
     entities = [
         BlockEntity::class,
+        DayEntity::class,
         SessionEntity::class,
         ExerciseEntity::class,
         MovementEntity::class,
@@ -31,6 +34,7 @@ import com.example.scarlet.feature_training_log.data.data_source.entity.SetEntit
 abstract class ScarletDatabase : RoomDatabase() {
 
     abstract val blockDao: BlockDao
+    abstract val dayDao: DayDao
     abstract val sessionDao: SessionDao
     abstract val exerciseDao: ExerciseDao
     abstract val setDao: SetDao

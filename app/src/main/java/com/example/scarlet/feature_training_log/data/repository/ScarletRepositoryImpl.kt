@@ -2,11 +2,13 @@ package com.example.scarlet.feature_training_log.data.repository
 
 import com.example.scarlet.feature_training_log.data.data_source.ScarletDatabase
 import com.example.scarlet.feature_training_log.data.data_source.entity.BlockEntity
+import com.example.scarlet.feature_training_log.data.data_source.entity.DayEntity
 import com.example.scarlet.feature_training_log.data.data_source.entity.ExerciseEntity
 import com.example.scarlet.feature_training_log.data.data_source.entity.MovementEntity
 import com.example.scarlet.feature_training_log.data.data_source.entity.SessionEntity
 import com.example.scarlet.feature_training_log.data.data_source.entity.SetEntity
 import com.example.scarlet.feature_training_log.domain.model.Block
+import com.example.scarlet.feature_training_log.domain.model.Day
 import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Session
@@ -40,6 +42,16 @@ class ScarletRepositoryImpl(
 
     override suspend fun getBlockByName(name: String): Block? =
         dbInstance.blockDao.getBlockByName(name)?.toBlock()
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////// DAY /////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    override suspend fun insertDay(day: Day): Long =
+        dbInstance.dayDao.insertDay(DayEntity(day))
+
+    override suspend fun getDaysByBlockId(blockId: Long): List<Day> =
+        dbInstance.dayDao.getDaysByBlockId(blockId)
+            .map { it.toDay() }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////// SESSION ///////////////////////////////////////////

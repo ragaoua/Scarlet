@@ -13,13 +13,13 @@ import java.util.Date
 @Entity(
     tableName = "session",
     indices = [
-        Index("blockId")
+        Index("dayId")
     ],
     foreignKeys = [
         ForeignKey(
             entity = BlockEntity::class,
             parentColumns = arrayOf("id"),
-            childColumns = arrayOf("blockId"),
+            childColumns = arrayOf("dayId"),
             onDelete = ForeignKey.CASCADE
         )
     ]
@@ -27,19 +27,19 @@ import java.util.Date
 data class SessionEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
-    val blockId: Long = 0,
+    val dayId: Long = 0,
     val date: Date = Date(System.currentTimeMillis()),
 ) {
 
     constructor(session: Session) : this(
         id = session.id,
-        blockId = session.blockId,
+        dayId = session.dayId,
         date = session.date
     )
 
     fun toSession() = Session(
         id = id,
-        blockId = blockId,
+        dayId = dayId,
         date = date
     )
 }
