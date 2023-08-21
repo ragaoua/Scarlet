@@ -91,15 +91,29 @@ class BlockViewModel @Inject constructor(
                     }
                 }
             }
+            is BlockEvent.SelectDay -> {
+                _state.update { it.copy(
+                    selectedDayId = event.dayId
+                )}
+            }
         }
     }
 
     private fun initBlockSessionsCollection() {
         useCases.getDaysWithSessionsWithMovementsByBlockId(block.id)
             .onEach { resource ->
-                _state.update { it.copy(
-                    days = resource.data ?: emptyList()
-                )}
+                val days = resource.data ?: emptyList()
+                _state.update { state ->
+                    state.copy(
+                        days = days,
+                        selectedDayId =
+                            if (state.selectedDayId in days.map { it.day.id }) {
+                                state.selectedDayId
+                            } else {
+                                days.firstOrNull()?.day?.id ?: 0L
+                            }
+                    )
+                }
             }.launchIn(viewModelScope)
     }
 

@@ -9,4 +9,5 @@ sealed interface BlockEvent {
     object AddSession: BlockEvent
     data class DeleteSession(val session: Session) : BlockEvent
     object EditBlock: BlockEvent
+    data class SelectDay(val dayId: Long) : BlockEvent
 }

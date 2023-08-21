@@ -6,5 +6,6 @@ import com.example.scarlet.feature_training_log.domain.model.DayWithSessionsWith
 data class BlockUiState (
     val block: Block = Block(),
     val days: List<DayWithSessionsWithExercisesWithMovementName> = emptyList(),
+    val selectedDayId: Long = 0L,
     val isInEditMode: Boolean = false
 )
