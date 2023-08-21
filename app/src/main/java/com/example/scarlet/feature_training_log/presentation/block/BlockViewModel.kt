@@ -95,10 +95,10 @@ class BlockViewModel @Inject constructor(
     }
 
     private fun initBlockSessionsCollection() {
-        useCases.getSessionsWithMovementsByBlockId(block.id)
+        useCases.getDaysWithSessionsWithMovementsByBlockId(block.id)
             .onEach { resource ->
                 _state.update { it.copy(
-                    sessions = resource.data ?: emptyList()
+                    days = resource.data ?: emptyList()
                 )}
             }.launchIn(viewModelScope)
     }

@@ -9,6 +9,7 @@ import com.example.scarlet.feature_training_log.data.data_source.entity.SessionE
 import com.example.scarlet.feature_training_log.data.data_source.entity.SetEntity
 import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.domain.model.Day
+import com.example.scarlet.feature_training_log.domain.model.DayWithSessionsWithExercisesWithMovementName
 import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Session
@@ -53,6 +54,17 @@ class ScarletRepositoryImpl(
         dbInstance.dayDao.getDaysByBlockId(blockId)
             .map { it.toDay() }
 
+    override fun getDaysWithSessionsWithExercisesWithMovementNameByBlockId(blockId: Long) =
+        dbInstance.dayDao.getDaysWithSessionsWithMovementsByBlockId(blockId)
+            .map { map ->
+                map.entries.map { entry ->
+                    DayWithSessionsWithExercisesWithMovementName(
+                        day = entry.key.toDay(),
+                        sessions = entry.value.map { it.toSessionWithExercisesWithMovementName() }
+                    )
+                }
+            }
+
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////// SESSION ///////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,14 +76,6 @@ class ScarletRepositoryImpl(
 
     override suspend fun updateSession(session: Session) =
         dbInstance.sessionDao.updateSession(SessionEntity(session))
-
-    override fun getSessionsWithExercisesWithMovementNameByBlockId(blockId: Long) =
-        dbInstance.sessionDao.getSessionsWithMovementsByBlockId(blockId)
-            .map { entityList ->
-                entityList.map { entity ->
-                    entity.toSessionWithExercisesWithMovementName()
-                }
-            }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////// EXERCISE ///////////////////////////////////////////

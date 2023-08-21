@@ -8,3 +8,8 @@ data class Day(
     val name: String = "",
     val order: Int = 0
 ): Serializable
+
+data class DayWithSessionsWithExercisesWithMovementName(
+    val day: Day = Day(),
+    val sessions: List<SessionWithExercisesWithMovementName> = emptyList()
+)

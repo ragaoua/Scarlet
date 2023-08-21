@@ -38,8 +38,11 @@ fun SessionsList(
             .padding(TitleLazyListPadding),
         title = stringResource(R.string.block_sessions_list_title)
     ) {
-        if (state.sessions.isNotEmpty()) {
-            items(state.sessions) { sessionWithExercisesWithMovementName ->
+        /* TODO : for now, we assume that a block only has one day.
+            We should change this when we allow the user to add multiple days to a block.
+         */
+        if (state.days.firstOrNull()?.sessions?.isNotEmpty() == true) {
+            items(state.days.first().sessions) { sessionWithExercisesWithMovementName ->
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     contentPadding = MainButtonContentPadding,

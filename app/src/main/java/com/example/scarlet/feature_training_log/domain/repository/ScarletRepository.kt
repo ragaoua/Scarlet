@@ -3,11 +3,11 @@ package com.example.scarlet.feature_training_log.domain.repository
 import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.domain.model.BlockWithSessions
 import com.example.scarlet.feature_training_log.domain.model.Day
+import com.example.scarlet.feature_training_log.domain.model.DayWithSessionsWithExercisesWithMovementName
 import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
 import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Session
-import com.example.scarlet.feature_training_log.domain.model.SessionWithExercisesWithMovementName
 import com.example.scarlet.feature_training_log.domain.model.Set
 import kotlinx.coroutines.flow.Flow
 
@@ -36,8 +36,8 @@ interface ScarletRepository {
     suspend fun updateSession(session: Session)
     suspend fun deleteSession(session: Session)
 
-    fun getSessionsWithExercisesWithMovementNameByBlockId(blockId: Long):
-            Flow<List<SessionWithExercisesWithMovementName>>
+    fun getDaysWithSessionsWithExercisesWithMovementNameByBlockId(blockId: Long):
+            Flow<List<DayWithSessionsWithExercisesWithMovementName>>
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////// EXERCISE ///////////////////////////////////////////
