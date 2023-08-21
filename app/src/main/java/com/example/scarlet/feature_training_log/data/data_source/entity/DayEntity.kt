@@ -9,7 +9,8 @@ import com.example.scarlet.feature_training_log.domain.model.Day
 @Entity(
     tableName = "day",
     indices = [
-        Index("blockId")
+        Index("blockId"),
+        Index(value = ["blockId", "order"], unique = true)
     ],
     foreignKeys = [
         ForeignKey(
