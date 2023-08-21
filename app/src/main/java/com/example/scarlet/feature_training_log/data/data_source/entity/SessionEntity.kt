@@ -17,7 +17,7 @@ import java.util.Date
     ],
     foreignKeys = [
         ForeignKey(
-            entity = BlockEntity::class,
+            entity = DayEntity::class,
             parentColumns = arrayOf("id"),
             childColumns = arrayOf("dayId"),
             onDelete = ForeignKey.CASCADE
