@@ -41,7 +41,7 @@ class BlockViewModel @Inject constructor(
         when(event) {
             BlockEvent.AddSession -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    useCases.insertSession(state.value.block.id)
+                    useCases.insertSession(state.value.selectedDayId)
                         .also { resource ->
                             resource.data?.let { insertedSession ->
                                 _uiActions.emit(UiAction.NavigateToSessionScreen(insertedSession))

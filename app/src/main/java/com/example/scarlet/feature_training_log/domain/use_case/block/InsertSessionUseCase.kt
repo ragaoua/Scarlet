@@ -11,15 +11,12 @@ class InsertSessionUseCase(
     /**
      * Insert a session
      *
-     * @param blockId block id for the session to be inserted
+     * @param dayId day id for the session to be inserted
      *
      * @return resource with data (the inserted session)
      */
-    suspend operator fun invoke(blockId: Long): Resource<Session> {
-        // In the future, the day id will/should be provided as an argument to the use case
-        // For now, we assume that a block only has one day associated, to to simplify
-        // things by getting the first day out of all days of the block...
-        val session = Session(dayId = repository.getDaysByBlockId(blockId).first().id)
+    suspend operator fun invoke(dayId: Long): Resource<Session> {
+        val session = Session(dayId = dayId)
 
         repository.insertSession(session)
             .also {
