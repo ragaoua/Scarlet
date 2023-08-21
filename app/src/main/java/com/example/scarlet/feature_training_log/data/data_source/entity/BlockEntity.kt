@@ -19,7 +19,6 @@ data class BlockEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
     val name: String = "",
-    val nbDays: Int = 1,
     val completed: Boolean = false
 ) {
 
