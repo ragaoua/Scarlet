@@ -9,7 +9,8 @@ import com.example.scarlet.feature_training_log.domain.model.Set
 @Entity(
     tableName = "set",
     indices = [
-        Index("exerciseId")
+        Index("exerciseId"),
+        Index(value = ["exerciseId", "order"], unique = true)
     ],
     foreignKeys = [
         ForeignKey(
