@@ -77,7 +77,8 @@ data class ExerciseWithMovementAndSetsEntity(
 }
 
 @DatabaseView(
-    """
+    viewName = "exercise_with_movement_name",
+    value = """
         SELECT exercise.*, movement.name as movementName
         FROM exercise
         INNER JOIN movement ON exercise.movementId = movement.id
