@@ -13,7 +13,6 @@ class UpdateSessionUseCase(
      * @param session session to be updated
      */
     suspend operator fun invoke(session: Session) {
-        println("UpdateSessionUseCase: updating session $session")
         repository.updateSession(session)
     }
 }
