@@ -45,12 +45,14 @@ class SessionViewModel @Inject constructor(
                 )}
             }
             is SessionEvent.UpdateSessionDate -> {
+                println("SessionViewModel: updating session date to ${event.date}")
                 viewModelScope.launch(Dispatchers.IO) {
-                    useCases.updateSession(state.value.session)
+                    val updatedSession = state.value.session.copy(
+                        date = event.date
+                    )
+                    useCases.updateSession(updatedSession)
                     _state.update { it.copy(
-                        session = it.session.copy (
-                            date = event.date
-                        ),
+                        session = updatedSession,
                         isDatePickerDialogOpen = false
                     )}
                 }
