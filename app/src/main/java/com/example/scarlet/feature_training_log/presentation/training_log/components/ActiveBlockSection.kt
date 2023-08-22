@@ -84,7 +84,7 @@ fun ActiveBlockSection(
                         width = 4.dp
                     ),
                     onClick = {
-                        onEvent(TrainingLogEvent.ToggleNewBlockSheet)
+                        onEvent(TrainingLogEvent.ShowNewBlockSheet)
                     }
                 ) {
                     Column(

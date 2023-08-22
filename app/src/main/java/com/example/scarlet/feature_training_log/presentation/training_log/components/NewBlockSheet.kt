@@ -32,11 +32,11 @@ import com.example.scarlet.feature_training_log.presentation.training_log.Traini
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewBlockSheet(
-    state: TrainingLogUiState,
+    sheetState: TrainingLogUiState.NewBlockSheetState,
     onEvent: (TrainingLogEvent) -> Unit
 ) {
     ModalBottomSheet(
-        onDismissRequest = { onEvent(TrainingLogEvent.ToggleNewBlockSheet) }
+        onDismissRequest = { onEvent(TrainingLogEvent.HideNewBlockSheet) }
     ) {
         // Used to automatically focus the text field when the sheet is shown
         val focusRequester = remember { FocusRequester() }
@@ -66,7 +66,7 @@ fun NewBlockSheet(
                  *************************************************************************/
                 OutlinedTextField(
                     modifier = Modifier.focusRequester(focusRequester),
-                    value = state.newBlockName,
+                    value = sheetState.blockName,
                     onValueChange = { onEvent(TrainingLogEvent.UpdateNewBlockName(it)) },
                     placeholder = {
                         Text(
@@ -74,8 +74,8 @@ fun NewBlockSheet(
                             /* TODO set color */
                         )
                     },
-                    isError = state.newBlockSheetTextFieldError != null,
-                    supportingText = state.newBlockSheetTextFieldError?.let { error ->
+                    isError = sheetState.textFieldError != null,
+                    supportingText = sheetState.textFieldError?.let { error ->
                         { Text(stringResource(error.resId, *error.args)) }
                     },
                     singleLine = true
@@ -89,7 +89,7 @@ fun NewBlockSheet(
                  *************************************************************************/
                 Button(
                     onClick = {
-                        onEvent(TrainingLogEvent.AddBlock(state.newBlockName))
+                        onEvent(TrainingLogEvent.AddBlock(sheetState.blockName))
                     },
                     modifier = Modifier.align(Alignment.End)
                 ) {

@@ -34,15 +34,21 @@ class TrainingLogViewModel @Inject constructor(
 
     fun onEvent(event: TrainingLogEvent){
         when(event) {
-            TrainingLogEvent.ToggleNewBlockSheet -> {
+            TrainingLogEvent.ShowNewBlockSheet -> {
                 _state.update { it.copy(
-                    isNewBlockSheetExpanded = !it.isNewBlockSheetExpanded,
-                    newBlockSheetTextFieldError = null
+                    newBlockSheetState = TrainingLogUiState.NewBlockSheetState()
+                )}
+            }
+            TrainingLogEvent.HideNewBlockSheet -> {
+                _state.update { it.copy(
+                    newBlockSheetState = null
                 )}
             }
             is TrainingLogEvent.UpdateNewBlockName -> {
                 _state.update { it.copy(
-                    newBlockName = event.newBlockName
+                    newBlockSheetState = it.newBlockSheetState?.copy(
+                        blockName = event.newBlockName
+                    )
                 )}
             }
             is TrainingLogEvent.AddBlock -> {
@@ -51,14 +57,15 @@ class TrainingLogViewModel @Inject constructor(
                         .also { resource ->
                             resource.error?.let { error ->
                                 _state.update { it.copy (
-                                    newBlockSheetTextFieldError = error
+                                    newBlockSheetState = it.newBlockSheetState?.copy(
+                                        textFieldError = error
+                                    )
                                 )}
                             }
                             resource.data?.let { insertedBlock ->
                                 _uiActions.emit(UiAction.NavigateToBlockScreen(insertedBlock))
                                 _state.update { it.copy(
-                                    isNewBlockSheetExpanded = false,
-                                    newBlockSheetTextFieldError = null
+                                    newBlockSheetState = null
                                 )}
                             }
                         }

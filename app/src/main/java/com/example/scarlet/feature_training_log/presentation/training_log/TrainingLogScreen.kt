@@ -117,9 +117,9 @@ fun Screen(
                 }
             }
         }
-        if(state.isNewBlockSheetExpanded) {
+        state.newBlockSheetState?.let {
             NewBlockSheet(
-                state = state,
+                sheetState = it,
                 onEvent = onEvent
             )
         }
