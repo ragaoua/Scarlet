@@ -23,7 +23,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,13 +33,13 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
-import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.presentation.block.BlockEvent
+import com.example.scarlet.feature_training_log.presentation.block.BlockUiState
 
 
 @Composable
 fun BlockHeader(
-    block: Block,
+    state: BlockUiState,
     isEditing: Boolean,
     onEvent: (BlockEvent) -> Unit
 ){
@@ -54,12 +53,10 @@ fun BlockHeader(
             SideEffect {
                 focusRequester.requestFocus()
             }
-            val blockName = remember(block.name) { mutableStateOf(block.name) }
-
             OutlinedTextField(
                 modifier = Modifier.focusRequester(focusRequester),
-                value = blockName.value,
-                onValueChange = { blockName.value = it },
+                value = state.editedBlockName,
+                onValueChange = { onEvent(BlockEvent.UpdateEditedBlockName(it)) },
                 singleLine = true,
                 textStyle = TextStyle(
                     fontSize = MaterialTheme.typography.headlineSmall.fontSize,
@@ -70,16 +67,16 @@ fun BlockHeader(
                         imageVector = Icons.Default.Check,
                         contentDescription = stringResource(R.string.save_block_name),
                         modifier = Modifier.clickable {
-                            onEvent(BlockEvent.UpdateBlock(
-                                block.copy(name = blockName.value)
+                            onEvent(BlockEvent.SaveBlock(
+                                state.block.copy(name = state.editedBlockName)
                             ))
                         }
                     )
                 },
                 keyboardActions = KeyboardActions (
                     onDone = {
-                        onEvent(BlockEvent.UpdateBlock(
-                            block.copy(name = blockName.value)
+                        onEvent(BlockEvent.SaveBlock(
+                            state.block.copy(name = state.editedBlockName)
                         ))
                     }
                 ),
@@ -97,7 +94,7 @@ fun BlockHeader(
                         .clickable { onEvent(BlockEvent.EditBlock) }
                 )
                 Text(
-                    text = block.name,
+                    text = state.block.name,
                     style = MaterialTheme.typography.headlineLarge,
                     modifier = Modifier
                         .padding(horizontal = editIconPadding + 4.dp)
@@ -124,7 +121,7 @@ fun BlockHeader(
                 onClick = {
                     onEvent(BlockEvent.EndBlock)
                 },
-                enabled = !block.completed && !isEditing
+                enabled = !state.block.completed && !isEditing
             ) {
                 Text(text = stringResource(id = R.string.end_block))
             }

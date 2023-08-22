@@ -74,10 +74,16 @@ class BlockViewModel @Inject constructor(
             }
             BlockEvent.EditBlock -> {
                 _state.update { it.copy(
-                    isInEditMode = true
+                    isInEditMode = true,
+                    editedBlockName = state.value.block.name
                 )}
             }
-            is BlockEvent.UpdateBlock -> {
+            is BlockEvent.UpdateEditedBlockName -> {
+                _state.update { it.copy(
+                    editedBlockName = event.editedBlockName
+                )}
+            }
+            is BlockEvent.SaveBlock -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     useCases.updateBlock(event.block).also { resource ->
                         resource.error?.let { error ->

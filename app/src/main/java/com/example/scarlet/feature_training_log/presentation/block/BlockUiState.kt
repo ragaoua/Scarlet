@@ -7,5 +7,6 @@ data class BlockUiState (
     val block: Block = Block(),
     val days: List<DayWithSessionsWithExercisesWithMovementName> = emptyList(),
     val selectedDayId: Long = 0L,
-    val isInEditMode: Boolean = false
+    val isInEditMode: Boolean = false,
+    val editedBlockName: String = ""
 )
