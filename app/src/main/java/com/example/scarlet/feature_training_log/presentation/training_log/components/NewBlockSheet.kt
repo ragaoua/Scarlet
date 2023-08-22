@@ -15,11 +15,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -68,11 +64,10 @@ fun NewBlockSheet(
                 /*************************************************************************
                  * Block name text field
                  *************************************************************************/
-                var blockName by rememberSaveable { mutableStateOf("") }
                 OutlinedTextField(
                     modifier = Modifier.focusRequester(focusRequester),
-                    value = blockName,
-                    onValueChange = { blockName = it },
+                    value = state.newBlockName,
+                    onValueChange = { onEvent(TrainingLogEvent.UpdateNewBlockName(it)) },
                     placeholder = {
                         Text(
                             text = stringResource(R.string.block_name),
@@ -94,7 +89,7 @@ fun NewBlockSheet(
                  *************************************************************************/
                 Button(
                     onClick = {
-                        onEvent(TrainingLogEvent.AddBlock(blockName))
+                        onEvent(TrainingLogEvent.AddBlock(state.newBlockName))
                     },
                     modifier = Modifier.align(Alignment.End)
                 ) {

@@ -40,6 +40,11 @@ class TrainingLogViewModel @Inject constructor(
                     newBlockSheetTextFieldError = null
                 )}
             }
+            is TrainingLogEvent.UpdateNewBlockName -> {
+                _state.update { it.copy(
+                    newBlockName = event.newBlockName
+                )}
+            }
             is TrainingLogEvent.AddBlock -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     useCases.insertBlock(event.blockName)
