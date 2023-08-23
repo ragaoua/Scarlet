@@ -131,6 +131,8 @@ private fun DayNavigationBottomBar(
     state: BlockUiState,
     onEvent: (BlockEvent) -> Unit
 ) {
+    if (state.days.size <= 1) return
+
     NavigationBar {
         LazyRow(
             modifier = Modifier.fillMaxWidth(),
