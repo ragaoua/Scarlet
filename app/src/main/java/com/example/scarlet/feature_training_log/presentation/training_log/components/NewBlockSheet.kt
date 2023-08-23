@@ -68,7 +68,7 @@ fun NewBlockSheet(
                     modifier = Modifier.focusRequester(focusRequester),
                     value = sheetState.blockName,
                     onValueChange = { onEvent(TrainingLogEvent.UpdateNewBlockName(it)) },
-                    placeholder = {
+                    label = {
                         Text(
                             text = stringResource(R.string.block_name),
                             /* TODO set color */
