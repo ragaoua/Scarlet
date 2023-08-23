@@ -3,7 +3,6 @@ package com.example.scarlet.feature_training_log.presentation.block.components
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,7 +17,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -107,24 +105,13 @@ fun BlockHeader(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        Row {
-            Button(
-                onClick = {
-                    onEvent(BlockEvent.AddSession)
-                },
-                enabled = !isEditing
-            ) {
-                Text(text = stringResource(id = R.string.new_session))
-            }
-            Spacer(modifier = Modifier.width(8.dp))
-            OutlinedButton(
-                onClick = {
-                    onEvent(BlockEvent.EndBlock)
-                },
-                enabled = !state.block.completed && !isEditing
-            ) {
-                Text(text = stringResource(id = R.string.end_block))
-            }
+        Button(
+            onClick = {
+                onEvent(BlockEvent.AddSession)
+            },
+            enabled = !isEditing
+        ) {
+            Text(text = stringResource(id = R.string.new_session))
         }
     }
 }

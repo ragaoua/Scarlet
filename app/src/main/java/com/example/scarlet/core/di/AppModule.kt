@@ -24,8 +24,7 @@ import com.example.scarlet.feature_training_log.domain.use_case.session.UpdateLo
 import com.example.scarlet.feature_training_log.domain.use_case.session.UpdateSessionUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.session.UpdateSetUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.training_log.DeleteBlockUseCase
-import com.example.scarlet.feature_training_log.domain.use_case.training_log.GetActiveBlockUseCase
-import com.example.scarlet.feature_training_log.domain.use_case.training_log.GetCompletedBlocksUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.training_log.GetAllBlocksUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.training_log.InsertBlockUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.training_log.TrainingLogUseCases
 import dagger.Module
@@ -56,8 +55,7 @@ object AppModule {
     @Singleton
     fun provideTrainingLogUseCases(repository: ScarletRepository) =
         TrainingLogUseCases(
-            getActiveBlock = GetActiveBlockUseCase(repository),
-            getCompletedBlocks = GetCompletedBlocksUseCase(repository),
+            getAllBlocks = GetAllBlocksUseCase(repository),
             deleteBlock = DeleteBlockUseCase(repository),
             insertBlock = InsertBlockUseCase(repository)
         )

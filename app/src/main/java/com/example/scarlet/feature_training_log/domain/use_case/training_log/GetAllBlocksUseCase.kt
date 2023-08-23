@@ -6,17 +6,17 @@ import com.example.scarlet.feature_training_log.domain.repository.ScarletReposit
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class GetCompletedBlocksUseCase(
+class GetAllBlocksUseCase(
     private val repository: ScarletRepository
 ) {
 
     /**
-     * Retrieve a list of completed block (completed is true)
+     * Retrieve a list of all blocks
      *
-     * @return a flow of resources with an error or data (list of completed blocks)
+     * @return a flow of resources with an error or data (list of blocks)
      */
     operator fun invoke(): Flow<Resource<List<BlockWithSessions>>> {
-        return repository.getBlocksWithSessionsByCompleted(true)
+        return repository.getAllBlocksWithSessions()
             .map { blocksWithSession ->
                 blocksWithSession
                     .map { blockWithSessions ->

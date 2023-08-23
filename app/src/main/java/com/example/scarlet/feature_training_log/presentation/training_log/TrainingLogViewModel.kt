@@ -103,21 +103,10 @@ class TrainingLogViewModel @Inject constructor(
     }
 
     private fun initBlocksCollection() {
-        useCases.getActiveBlock()
-            .onEach { resource ->
-                resource.error?.let { error ->
-                    _uiActions.send(UiAction.ShowSnackbarWithError(error))
-                } ?: run {
-                    _state.update { it.copy(
-                        activeBlock = resource.data
-                    )}
-                }
-            }.launchIn(viewModelScope)
-
-        useCases.getCompletedBlocks()
+        useCases.getAllBlocks()
             .onEach { resource ->
                 _state.update { it.copy(
-                    completedBlocks = resource.data ?: emptyList()
+                    blocks = resource.data ?: emptyList()
                 )}
             }.launchIn(viewModelScope)
     }

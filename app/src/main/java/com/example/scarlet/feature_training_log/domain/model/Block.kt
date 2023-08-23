@@ -4,8 +4,7 @@ import java.io.Serializable
 
 data class Block(
     val id: Long = 0,
-    val name: String = "",
-    val completed: Boolean = false
+    val name: String = ""
 ): Serializable
 
 data class BlockWithSessions(

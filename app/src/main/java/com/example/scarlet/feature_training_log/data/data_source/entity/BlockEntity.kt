@@ -18,20 +18,17 @@ import com.example.scarlet.feature_training_log.domain.model.BlockWithSessions
 data class BlockEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
-    val name: String = "",
-    val completed: Boolean = false
+    val name: String = ""
 ) {
 
     constructor(block: Block) : this(
         id = block.id,
-        name = block.name,
-        completed = block.completed
+        name = block.name
     )
 
     fun toBlock() = Block(
         id = id,
-        name = name,
-        completed = completed
+        name = name
     )
 }
 

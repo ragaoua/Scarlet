@@ -33,8 +33,8 @@ class ScarletRepositoryImpl(
     override suspend fun deleteBlock(block: Block) =
         dbInstance.blockDao.deleteBlock(BlockEntity(block))
 
-    override fun getBlocksWithSessionsByCompleted(completed: Boolean) =
-        dbInstance.blockDao.getBlocksWithSessionsByCompleted(completed)
+    override fun getAllBlocksWithSessions() =
+        dbInstance.blockDao.getAllBlocksWithSessions()
             .map { entityList ->
                 entityList.map { entity ->
                     entity.toBlockWithSessions()

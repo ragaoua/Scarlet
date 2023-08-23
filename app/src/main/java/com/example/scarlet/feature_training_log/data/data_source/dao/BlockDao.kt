@@ -24,12 +24,8 @@ interface BlockDao {
     suspend fun deleteBlock(block: BlockEntity)
 
     @Transaction
-    @Query("""
-        SELECT *
-        FROM block
-        WHERE COMPLETED = :completed
-    """)
-    fun getBlocksWithSessionsByCompleted(completed: Boolean): Flow<List<BlockWithSessionsEntity>>
+    @Query("SELECT * FROM block")
+    fun getAllBlocksWithSessions(): Flow<List<BlockWithSessionsEntity>>
 
     @Query("""
         SELECT *

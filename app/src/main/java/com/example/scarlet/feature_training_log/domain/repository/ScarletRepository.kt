@@ -20,7 +20,7 @@ interface ScarletRepository {
     suspend fun updateBlock(block: Block)
     suspend fun deleteBlock(block: Block)
 
-    fun getBlocksWithSessionsByCompleted(completed: Boolean): Flow<List<BlockWithSessions>>
+    fun getAllBlocksWithSessions(): Flow<List<BlockWithSessions>>
     suspend fun getBlockByName(name: String): Block?
 
     ///////////////////////////////////////////////////////////////////////////////////////////////

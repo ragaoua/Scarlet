@@ -5,6 +5,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -24,8 +28,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
-import com.example.scarlet.feature_training_log.presentation.training_log.components.ActiveBlockSection
-import com.example.scarlet.feature_training_log.presentation.training_log.components.CompletedBlocksSection
+import com.example.scarlet.feature_training_log.presentation.training_log.components.BlockListSection
 import com.example.scarlet.feature_training_log.presentation.training_log.components.NewBlockSheet
 import com.example.scarlet.ui.theme.ScarletTheme
 import com.ramcosta.composedestinations.annotation.Destination
@@ -81,6 +84,16 @@ fun Screen(
     ScarletTheme {
         Scaffold(
             snackbarHost = { SnackbarHost(snackbarHostState) },
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = { onEvent(TrainingLogEvent.ShowNewBlockSheet) }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = stringResource(id = R.string.add_new_block)
+                    )
+                }
+            }
         ) { innerPadding ->
             Surface (
                 modifier = Modifier
@@ -99,16 +112,10 @@ fun Screen(
                     )
 
                     Spacer(modifier = Modifier.height(32.dp))
-                    ActiveBlockSection(
-                        navigator = navigator,
-                        activeBlockWithSessions = state.activeBlock,
-                        onEvent = onEvent
-                    )
 
-                    Spacer(modifier = Modifier.height(16.dp))
-                    CompletedBlocksSection(
+                    BlockListSection(
                         navigator = navigator,
-                        completedBlocks = state.completedBlocks,
+                        blocks = state.blocks,
                         onEvent = onEvent
                     )
                 }

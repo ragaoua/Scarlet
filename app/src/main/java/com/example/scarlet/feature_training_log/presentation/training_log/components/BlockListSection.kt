@@ -25,19 +25,19 @@ import com.example.scarlet.ui.theme.TitleLazyListPadding
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Composable
-fun CompletedBlocksSection(
+fun BlockListSection(
     navigator: DestinationsNavigator,
-    completedBlocks: List<BlockWithSessions> = emptyList(),
+    blocks: List<BlockWithSessions> = emptyList(),
     onEvent: (TrainingLogEvent) -> Unit
 ) {
     TitledLazyList(
         modifier = Modifier
             .fillMaxWidth()
             .padding(TitleLazyListPadding),
-        title = stringResource(R.string.completed_training_blocks)
+        title = stringResource(R.string.training_blocks)
     ) {
-        if (completedBlocks.isNotEmpty()) {
-            items(completedBlocks) {
+        if (blocks.isNotEmpty()) {
+            items(blocks) {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     contentPadding = MainButtonContentPadding,
@@ -82,7 +82,7 @@ fun CompletedBlocksSection(
         } else {
             item {
                 Text(
-                    text = stringResource(R.string.no_completed_training_blocks),
+                    text = stringResource(R.string.no_training_blocks),
                     style = MaterialTheme.typography.bodyMedium
                     // TODO color = grey
                 )

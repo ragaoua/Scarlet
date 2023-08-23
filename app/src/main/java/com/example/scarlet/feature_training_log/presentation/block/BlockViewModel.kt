@@ -49,24 +49,6 @@ class BlockViewModel @Inject constructor(
                         }
                 }
             }
-            BlockEvent.EndBlock -> {
-                viewModelScope.launch(Dispatchers.IO) {
-                    state.value.block.copy(
-                        completed = true
-                    ).also { updatedBlock ->
-                        useCases.updateBlock(updatedBlock).also { resource ->
-                            resource.error?.let { error ->
-                                _uiActions.send(UiAction.ShowSnackbarWithError(error))
-                            } ?: run {
-                                _state.update { it.copy(
-                                    block = updatedBlock
-                                )}
-                                _uiActions.send(UiAction.NavigateUp)
-                            }
-                        }
-                    }
-                }
-            }
             is BlockEvent.DeleteSession -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     useCases.deleteSession(event.session)
