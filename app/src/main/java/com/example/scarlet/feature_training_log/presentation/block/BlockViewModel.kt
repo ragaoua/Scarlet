@@ -9,12 +9,12 @@ import com.example.scarlet.feature_training_log.domain.use_case.block.BlockUseCa
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,8 +25,8 @@ class BlockViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val _uiActions = MutableSharedFlow<UiAction>()
-    val uiActions = _uiActions.asSharedFlow()
+    private val _uiActions = Channel<UiAction>()
+    val uiActions = _uiActions.receiveAsFlow()
 
     private val block = BlockScreenDestination.argsFrom(savedStateHandle).block
 
@@ -44,7 +44,7 @@ class BlockViewModel @Inject constructor(
                     useCases.insertSession(state.value.selectedDayId)
                         .also { resource ->
                             resource.data?.let { insertedSession ->
-                                _uiActions.emit(UiAction.NavigateToSessionScreen(insertedSession))
+                                _uiActions.send(UiAction.NavigateToSessionScreen(insertedSession))
                             }
                         }
                 }
@@ -56,12 +56,12 @@ class BlockViewModel @Inject constructor(
                     ).also { updatedBlock ->
                         useCases.updateBlock(updatedBlock).also { resource ->
                             resource.error?.let { error ->
-                                _uiActions.emit(UiAction.ShowSnackbarWithError(error))
+                                _uiActions.send(UiAction.ShowSnackbarWithError(error))
                             } ?: run {
                                 _state.update { it.copy(
                                     block = updatedBlock
                                 )}
-                                _uiActions.emit(UiAction.NavigateUp)
+                                _uiActions.send(UiAction.NavigateUp)
                             }
                         }
                     }
@@ -87,7 +87,7 @@ class BlockViewModel @Inject constructor(
                 viewModelScope.launch(Dispatchers.IO) {
                     useCases.updateBlock(event.block).also { resource ->
                         resource.error?.let { error ->
-                            _uiActions.emit(UiAction.ShowSnackbarWithError(error))
+                            _uiActions.send(UiAction.ShowSnackbarWithError(error))
                         } ?: run {
                             _state.update { it.copy(
                                 block = event.block,
