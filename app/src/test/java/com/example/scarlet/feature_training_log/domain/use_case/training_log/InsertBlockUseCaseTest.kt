@@ -27,9 +27,8 @@ class InsertBlockUseCaseTest {
 
     @Test
     fun insertBlockUseCase_insertsBlock() {
-        val blockWithEmptyName = Block(name = "")
         runBlocking {
-            insertBlock(blockWithEmptyName).also { resource ->
+            insertBlock("", 1).also { resource ->
                 resource.error?.let { error ->
                     assertTrue(
                         "Wrong resource id returned",
@@ -39,9 +38,8 @@ class InsertBlockUseCaseTest {
             }
         }
 
-        val existingBlock = Block(name = "Block A")
         runBlocking {
-            insertBlock(existingBlock).also { resource ->
+            insertBlock("Block A", 1).also { resource ->
                 resource.error?.let { error ->
                     assertTrue(
                         "Wrong resource id returned",
@@ -51,11 +49,11 @@ class InsertBlockUseCaseTest {
             }
         }
 
-        val validBlock = Block(name = "MyBlock")
         runBlocking {
-            insertBlock(validBlock).also { resource ->
+            insertBlock("MyBlock", 3).also { resource ->
                 resource.data ?: fail("No id returned when inserting")
                 // TODO test that the block has been inserted ?
+                // TODO test that the days have been inserted ?
             }
         }
     }
