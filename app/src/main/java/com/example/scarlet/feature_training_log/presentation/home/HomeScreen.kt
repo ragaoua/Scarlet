@@ -39,9 +39,7 @@ fun HomeScreen(
         ) {
             HomeScreenButton(
                 text = stringResource(id = R.string.training_log),
-                onClick = {
-                    navigator.navigate(TrainingLogScreenDestination())
-                }
+                onClick = { navigator.navigate(TrainingLogScreenDestination()) }
             )
             HomeScreenButton(
                 text = stringResource(id = R.string.statistics),

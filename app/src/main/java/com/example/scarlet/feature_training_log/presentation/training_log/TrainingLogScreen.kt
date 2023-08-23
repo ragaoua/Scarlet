@@ -39,24 +39,12 @@ fun TrainingLogScreen(
 ) {
     val trainingLogViewModel: TrainingLogViewModel = hiltViewModel()
     val state by trainingLogViewModel.state.collectAsStateWithLifecycle()
-    val uiActions = trainingLogViewModel.uiActions
-
-    LaunchedEffect(true) {
-        uiActions.collect { action ->
-            when(action) {
-                is TrainingLogViewModel.UiAction.NavigateToBlockScreen -> {
-                    navigator.navigate(BlockScreenDestination(action.block))
-                }
-                else -> Unit
-            }
-        }
-    }
 
     Screen(
         navigator = navigator,
         state = state,
         onEvent = trainingLogViewModel::onEvent,
-        uiActions = uiActions
+        uiActions = trainingLogViewModel.uiActions
     )
 }
 
@@ -67,20 +55,29 @@ fun Screen(
     onEvent: (TrainingLogEvent) -> Unit,
     uiActions: Flow<TrainingLogViewModel.UiAction>
 ) {
+    /************************************************************************
+     * Treating UI actions from the ViewModel
+     ************************************************************************/
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
     LaunchedEffect(true) {
         uiActions.collect { action ->
             when(action) {
+                is TrainingLogViewModel.UiAction.NavigateToBlockScreen -> {
+                    navigator.navigate(BlockScreenDestination(action.block))
+                }
                 is TrainingLogViewModel.UiAction.ShowSnackbarWithError -> {
                     snackbarHostState.showSnackbar(
                         message = context.getString(action.error.resId, *action.error.args)
                     )
                 }
-                else -> Unit
             }
         }
     }
+
+    /************************************************************************
+     * Actual screen
+     ************************************************************************/
     ScarletTheme {
         Scaffold(
             snackbarHost = { SnackbarHost(snackbarHostState) },

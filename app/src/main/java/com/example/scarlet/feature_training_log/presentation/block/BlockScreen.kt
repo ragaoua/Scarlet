@@ -48,9 +48,28 @@ fun BlockScreen(
 ) {
     val blockViewModel: BlockViewModel = hiltViewModel()
     val state by blockViewModel.state.collectAsStateWithLifecycle()
-    val uiActions = blockViewModel.uiActions
 
-    LaunchedEffect(key1 = true) {
+    Screen(
+        navigator = navigator,
+        state = state,
+        onEvent = blockViewModel::onEvent,
+        uiActions = blockViewModel.uiActions
+    )
+}
+
+@Composable
+fun Screen(
+    navigator: DestinationsNavigator,
+    state: BlockUiState,
+    onEvent: (BlockEvent) -> Unit,
+    uiActions: Flow<BlockViewModel.UiAction>
+) {
+    /************************************************************************
+     * Treating UI actions from the ViewModel
+     ************************************************************************/
+    val snackbarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
+    LaunchedEffect(true) {
         uiActions.collect { action ->
             when(action) {
                 is BlockViewModel.UiAction.NavigateUp -> {
@@ -62,41 +81,18 @@ fun BlockScreen(
                         block = state.block
                     ))
                 }
-                else -> Unit
-            }
-        }
-    }
-
-    Screen(
-        navigator = navigator,
-        state = state,
-        onEvent = blockViewModel::onEvent,
-        uiActions = uiActions
-    )
-}
-
-@Composable
-fun Screen(
-    navigator: DestinationsNavigator,
-    state: BlockUiState,
-    onEvent: (BlockEvent) -> Unit,
-    uiActions: Flow<BlockViewModel.UiAction>
-) {
-    val snackbarHostState = remember { SnackbarHostState() }
-    val context = LocalContext.current
-    LaunchedEffect(true) {
-        uiActions.collect { action ->
-            when(action) {
                 is BlockViewModel.UiAction.ShowSnackbarWithError -> {
                     snackbarHostState.showSnackbar(
                         message = context.getString(action.error.resId, *action.error.args)
                     )
                 }
-                else -> Unit
             }
         }
     }
 
+    /************************************************************************
+     * Actual screen
+     ************************************************************************/
     ScarletTheme {
         Scaffold(
             snackbarHost = { SnackbarHost(snackbarHostState) },
