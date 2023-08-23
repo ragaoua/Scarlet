@@ -25,8 +25,9 @@ class GetAllBlocksUseCase(
                                 .sortedBy { it.date }
                         )
                     }
-                    .sortedByDescending { it.sessions.lastOrNull()?.date }
-                    .let { Resource.Success(it) }
+                    .sortedWith(compareByDescending<BlockWithSessions>
+                        { it.sessions.lastOrNull()?.date }.thenByDescending { it.block.id }
+                    ).let { Resource.Success(it) }
             }
     }
 }
