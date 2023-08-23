@@ -17,6 +17,6 @@ val MainButtonContentPadding = PaddingValues(
  */
 val TitleLazyListPadding =
     PaddingValues(
-        start = 24.dp,
-        end = 24.dp
+        start = 16.dp,
+        end = 16.dp
     )
