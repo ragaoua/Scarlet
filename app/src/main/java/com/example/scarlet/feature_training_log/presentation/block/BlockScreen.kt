@@ -96,32 +96,7 @@ fun Screen(
     ScarletTheme {
         Scaffold(
             snackbarHost = { SnackbarHost(snackbarHostState) },
-            bottomBar = {
-                NavigationBar {
-                    LazyRow (
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        items(state.days) {
-                            Text(
-                                modifier = Modifier
-                                    .clip(MaterialTheme.shapes.small)
-                                    .clickable {
-                                        onEvent(BlockEvent.SelectDay(it.day.id))
-                                    }
-                                    .padding(4.dp)
-                                    .widthIn(64.dp, 128.dp),
-                                text = it.day.name,
-                                maxLines = 3,
-                                overflow = TextOverflow.Ellipsis,
-                                style = MaterialTheme.typography.titleMedium,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                    }
-                }
-            }
+            bottomBar = { DayNavigationBottomBar(state, onEvent) }
         ) { innerPadding ->
             Surface(
                 modifier = Modifier
@@ -146,6 +121,35 @@ fun Screen(
                         onEvent = onEvent
                     )
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun DayNavigationBottomBar(
+    state: BlockUiState,
+    onEvent: (BlockEvent) -> Unit
+) {
+    NavigationBar {
+        LazyRow(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            items(state.days) {
+                Text(
+                    modifier = Modifier
+                        .clip(MaterialTheme.shapes.small)
+                        .clickable { onEvent(BlockEvent.SelectDay(it.day.id)) }
+                        .padding(4.dp)
+                        .widthIn(64.dp, 128.dp),
+                    text = it.day.name,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.titleMedium,
+                    textAlign = TextAlign.Center
+                )
             }
         }
     }
