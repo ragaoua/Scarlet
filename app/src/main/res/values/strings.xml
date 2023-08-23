@@ -9,11 +9,11 @@
     <string name="competitions">Competitions</string>
 
     <!-- Training Log -->
-    <string name="active_training_block">Active training block</string>
-    <string name="training_blocks">Training blocks</string>
+    <string name="latest_training_block">Latest training block</string>
+    <string name="preceding_training_blocks">Preceding training blocks</string>
     <string name="no_training_blocks">No training blocks yet</string>
     <string name="no_active_block">No active block</string>
-    <string name="start_new_block">Click to start a new block</string>
+    <string name="start_new_block">Tap the button down below to add a new one</string>
     <string name="new_block">New Block</string>
     <string name="training_days_per_micro_cycle">Training days per micro cycle :</string>
     <string name="hide_advanced_block_settings">Hide advanced block settings</string>
