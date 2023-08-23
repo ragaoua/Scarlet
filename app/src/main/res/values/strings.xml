@@ -15,6 +15,9 @@
     <string name="no_active_block">No active block</string>
     <string name="start_new_block">Click to start a new block</string>
     <string name="new_block">New Block</string>
+    <string name="training_days_per_micro_cycle">Training days per micro cycle :</string>
+    <string name="hide_advanced_block_settings">Hide advanced block settings</string>
+    <string name="advanced_block_settings">Advanced block settings…</string>
     <string name="create_block">Create block</string>
 
     <!-- Block -->
@@ -69,4 +72,6 @@
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
+    <string name="decrement">Decrement</string>
+    <string name="increment">Increment</string>
 </resources>

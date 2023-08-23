@@ -10,6 +10,8 @@ data class TrainingLogUiState (
 ) {
     data class NewBlockSheetState(
         val blockName: String = "",
-        val textFieldError: StringResource? = null
+        val textFieldError: StringResource? = null,
+        val areMicroCycleSettingsExpanded: Boolean = false,
+        val daysPerMicroCycle: Int = 3
     )
 }

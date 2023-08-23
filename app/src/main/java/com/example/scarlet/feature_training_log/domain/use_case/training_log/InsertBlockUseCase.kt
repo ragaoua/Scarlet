@@ -20,7 +20,7 @@ class InsertBlockUseCase(
      *
      * @return resource with an error or data (the inserted block)
      */
-    suspend operator fun invoke(blockName: String, nbDays: Int = 1): Resource<Block> {
+    suspend operator fun invoke(blockName: String, nbDays: Int): Resource<Block> {
         if (blockName.isBlank()) {
             return Resource.Error(StringResource(R.string.error_block_name_is_empty))
         }

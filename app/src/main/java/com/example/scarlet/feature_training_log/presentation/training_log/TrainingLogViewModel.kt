@@ -51,24 +51,47 @@ class TrainingLogViewModel @Inject constructor(
                     )
                 )}
             }
+            TrainingLogEvent.ToggleMicroCycleSettings -> {
+                _state.update { it.copy(
+                    newBlockSheetState = it.newBlockSheetState?.copy(
+                        areMicroCycleSettingsExpanded = !it.newBlockSheetState.areMicroCycleSettingsExpanded
+                    )
+                )}
+            }
+            is TrainingLogEvent.UpdateDaysPerMicroCycle -> {
+                _state.update { it.copy(
+                    newBlockSheetState = it.newBlockSheetState?.copy(
+                        daysPerMicroCycle = event.nbDays
+                    )
+                )}
+            }
             is TrainingLogEvent.AddBlock -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    useCases.insertBlock(event.blockName)
-                        .also { resource ->
-                            resource.error?.let { error ->
-                                _state.update { it.copy (
-                                    newBlockSheetState = it.newBlockSheetState?.copy(
-                                        textFieldError = error
-                                    )
-                                )}
-                            }
-                            resource.data?.let { insertedBlock ->
-                                _uiActions.emit(UiAction.NavigateToBlockScreen(insertedBlock))
-                                _state.update { it.copy(
-                                    newBlockSheetState = null
-                                )}
-                            }
+                    useCases.insertBlock(
+                        blockName = event.blockName,
+                        nbDays = state.value.newBlockSheetState?.let {
+                            if(it.areMicroCycleSettingsExpanded) {
+                                it.daysPerMicroCycle
+                            } else 1
+                        } ?: run {
+                            // TODO Should we display an error here ?
+                            return@launch
                         }
+                    ).also { resource ->
+                        resource.error?.let { error ->
+                            _state.update { it.copy (
+                                newBlockSheetState = it.newBlockSheetState?.copy(
+                                    textFieldError = error
+                                )
+                            )}
+                        }
+                        resource.data?.let { insertedBlock ->
+                            _uiActions.emit(UiAction.NavigateToBlockScreen(insertedBlock))
+                            _state.update { it.copy(
+                                newBlockSheetState = null
+                            )}
+                        }
+                    }
                 }
             }
             is TrainingLogEvent.DeleteBlock -> {
