@@ -1,5 +1,6 @@
 package com.example.scarlet.feature_training_log.presentation.block
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,6 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -221,7 +223,11 @@ private fun DayNavigationBottomBar(
                     modifier = Modifier
                         .clip(MaterialTheme.shapes.small)
                         .clickable { onEvent(BlockEvent.SelectDay(it.day.id)) }
-                        .padding(4.dp)
+                        .background(
+                            if (it.day.id == state.selectedDayId) {
+                                MaterialTheme.colorScheme.primary
+                            } else Color.Transparent
+                        ).padding(4.dp)
                         .widthIn(64.dp, 128.dp),
                     text = it.day.name,
                     maxLines = 3,
