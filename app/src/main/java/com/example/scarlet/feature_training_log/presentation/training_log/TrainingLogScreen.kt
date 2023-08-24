@@ -90,16 +90,6 @@ fun Screen(
                 .fillMaxSize()
                 .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
             snackbarHost = { SnackbarHost(snackbarHostState) },
-            floatingActionButton = {
-                FloatingActionButton(
-                    onClick = { onEvent(TrainingLogEvent.ShowNewBlockSheet) }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = stringResource(id = R.string.add_new_block)
-                    )
-                }
-            },
             topBar = {
                 LargeTopAppBar(
                     title = {
@@ -114,8 +104,18 @@ fun Screen(
                         containerColor = MaterialTheme.colorScheme.background,
                         scrolledContainerColor = MaterialTheme.colorScheme.surface,
                     ),
-                    scrollBehavior = topAppBarScrollBehavior,
+                    scrollBehavior = topAppBarScrollBehavior
                 )
+            },
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = { onEvent(TrainingLogEvent.ShowNewBlockSheet) }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = stringResource(id = R.string.add_new_block)
+                    )
+                }
             }
         ) { innerPadding ->
             Surface (
