@@ -9,10 +9,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -21,7 +19,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -38,7 +35,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -47,6 +43,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.presentation.block.components.SessionsList
+import com.example.scarlet.feature_training_log.presentation.core.components.AddEditBlockSheet
+import com.example.scarlet.feature_training_log.presentation.core.components.AddEditBlockSheetState
 import com.example.scarlet.feature_training_log.presentation.destinations.SessionScreenDestination
 import com.example.scarlet.ui.theme.ScarletTheme
 import com.ramcosta.composedestinations.annotation.Destination
@@ -83,7 +81,6 @@ fun Screen(
      * Treating UI actions from the ViewModel
      ************************************************************************/
     val snackbarHostState = remember { SnackbarHostState() }
-    val context = LocalContext.current
     LaunchedEffect(true) {
         uiActions.collect { action ->
             when(action) {
@@ -95,11 +92,6 @@ fun Screen(
                         session = action.session,
                         block = state.block
                     ))
-                }
-                is BlockViewModel.UiAction.ShowSnackbarWithError -> {
-                    snackbarHostState.showSnackbar(
-                        message = context.getString(action.error.resId, *action.error.args)
-                    )
                 }
             }
         }
@@ -141,6 +133,32 @@ fun Screen(
                 )
             }
         }
+
+        state.editBlockSheetState?.let{
+            AddEditBlockSheet(
+                sheetState = AddEditBlockSheetState(
+                    blockName = it.blockName,
+                    blockNameError = it.blockNameError?.let { error ->
+                        stringResource(error.resId, *error.args)
+                    },
+                    areMicroCycleSettingsExpanded = it.areMicroCycleSettingsExpanded,
+                    daysPerMicroCycle = it.daysPerMicroCycle
+                ),
+                onBlockNameValueChange = { value ->
+                    onEvent(BlockEvent.UpdateEditedBlockName(value))
+                },
+                onMicroCycleSettingsToggle = {
+                    onEvent(BlockEvent.ToggleMicroCycleSettings)
+                },
+                onDaysPerMicroCycleValueChange = { value ->
+                    onEvent(BlockEvent.UpdateDaysPerMicroCycle(value))
+                },
+                onDismissRequest = {
+                    onEvent(BlockEvent.CancelBlockEdition)
+                },
+                onValidate = { onEvent(BlockEvent.SaveBlockName) }
+            )
+        }
     }
 }
 
@@ -153,48 +171,21 @@ private fun BlockTopAppBar(
 ) {
     MediumTopAppBar(
         title = {
-            if(state.isInEditMode) {
-                OutlinedTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    value = state.editedBlockName,
-                    onValueChange = { onEvent(BlockEvent.UpdateEditedBlockName(it)) },
-                    singleLine = true,
-                    textStyle = MaterialTheme.typography.headlineSmall.copy(
-                        textAlign = TextAlign.Center
-                    ),
-                    keyboardActions = KeyboardActions (
-                        onDone = { onEvent(BlockEvent.SaveBlockName) }
-                    ),
-                )
-            } else {
-                Text(
-                    text = state.block.name,
-                    style = MaterialTheme.typography.headlineLarge,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
+            Text(
+                text = state.block.name,
+                style = MaterialTheme.typography.headlineLarge,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
         },
         actions = {
-            if(state.isInEditMode) {
-                IconButton(
-                    onClick = { onEvent(BlockEvent.SaveBlockName) }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Check,
-                        contentDescription = stringResource(R.string.save_block_name),
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                }
-            } else {
-                IconButton(
-                    onClick = { onEvent(BlockEvent.EditBlock) }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Edit,
-                        contentDescription = stringResource(R.string.edit_block_name)
-                    )
-                }
+            IconButton(
+                onClick = { onEvent(BlockEvent.EditBlock) }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = stringResource(R.string.edit_block)
+                )
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
@@ -227,7 +218,8 @@ private fun DayNavigationBottomBar(
                             if (it.day == state.selectedDay) {
                                 MaterialTheme.colorScheme.primary
                             } else Color.Transparent
-                        ).padding(4.dp)
+                        )
+                        .padding(4.dp)
                         .widthIn(64.dp, 128.dp),
                     text = it.day.name,
                     maxLines = 3,

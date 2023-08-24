@@ -3,7 +3,6 @@ package com.example.scarlet.feature_training_log.presentation.block
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.scarlet.core.util.StringResource
 import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.domain.use_case.block.BlockUseCases
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
@@ -58,35 +57,65 @@ class BlockViewModel @Inject constructor(
             }
             BlockEvent.EditBlock -> {
                 _state.update { it.copy(
-                    isInEditMode = true,
-                    editedBlockName = state.value.block.name
+                    editBlockSheetState = BlockUiState.EditBlockSheetState(
+                        blockName = state.value.block.name,
+                        areMicroCycleSettingsExpanded = false, // TODO
+                        daysPerMicroCycle = 3 // TODO
+                    )
+                )}
+            }
+            BlockEvent.CancelBlockEdition -> {
+                _state.update { it.copy(
+                    editBlockSheetState = null
                 )}
             }
             is BlockEvent.UpdateEditedBlockName -> {
                 _state.update { it.copy(
-                    editedBlockName = event.editedBlockName
+                    editBlockSheetState = it.editBlockSheetState?.copy(
+                        blockName = event.editedBlockName
+                    )
+                )}
+            }
+            BlockEvent.ToggleMicroCycleSettings -> {
+                _state.update { it.copy(
+                    editBlockSheetState = it.editBlockSheetState?.copy(
+                        areMicroCycleSettingsExpanded = !it.editBlockSheetState.areMicroCycleSettingsExpanded
+                    )
+                )}
+            }
+            is BlockEvent.UpdateDaysPerMicroCycle -> {
+                _state.update { it.copy(
+                    editBlockSheetState = it.editBlockSheetState?.copy(
+                        daysPerMicroCycle = event.nbDays
+                    )
                 )}
             }
             is BlockEvent.SaveBlockName -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    if(state.value.editedBlockName == state.value.block.name) {
-                        _state.update { it.copy(
-                            isInEditMode = false
-                        )}
-                        return@launch
-                    }
-
-                    val updatedBlock = state.value.block.copy(
-                        name = state.value.editedBlockName
-                    )
-                    useCases.updateBlock(updatedBlock).also { resource ->
-                        resource.error?.let { error ->
-                            _uiActions.send(UiAction.ShowSnackbarWithError(error))
-                        } ?: run {
+                    state.value.editBlockSheetState?.blockName?.let { editedBlockName ->
+                        if(editedBlockName == state.value.block.name) {
                             _state.update { it.copy(
-                                block = updatedBlock,
-                                isInEditMode = false
+                                editBlockSheetState = null
                             )}
+                            return@launch
+                        }
+
+                        val updatedBlock = state.value.block.copy(
+                            name = editedBlockName
+                        )
+                        useCases.updateBlock(updatedBlock).also { resource ->
+                            resource.error?.let { error ->
+                                _state.update { it.copy (
+                                    editBlockSheetState = it.editBlockSheetState?.copy(
+                                        blockNameError = error
+                                    )
+                                )}
+                            } ?: run {
+                                _state.update { it.copy(
+                                    block = updatedBlock,
+                                    editBlockSheetState = null
+                                )}
+                            }
                         }
                     }
                 }
@@ -120,6 +149,5 @@ class BlockViewModel @Inject constructor(
     sealed interface UiAction {
         object NavigateUp: UiAction
         data class NavigateToSessionScreen(val session: Session): UiAction
-        class ShowSnackbarWithError(val error: StringResource): UiAction
     }
 }

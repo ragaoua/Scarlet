@@ -61,8 +61,7 @@ fun SessionsList(
                                     block = state.block
                                 )
                             )
-                        },
-                        enabled = !state.isInEditMode
+                        }
                     ) {
                         DeletableItem(
                             modifier = Modifier.fillMaxSize(),

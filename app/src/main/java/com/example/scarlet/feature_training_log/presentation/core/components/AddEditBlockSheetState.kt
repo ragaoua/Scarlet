@@ -133,7 +133,7 @@ fun AddEditBlockSheet(
                 onClick = { onValidate(sheetState.blockName) },
                 modifier = Modifier.align(Alignment.End)
             ) {
-                Text(stringResource(R.string.create_block)) // TODO change to validate ?
+                Text(stringResource(R.string.validate))
             }
             Spacer(modifier = Modifier.height(16.dp))
         }

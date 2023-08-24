@@ -18,7 +18,6 @@
     <string name="training_days_per_micro_cycle">Training days per micro cycle :</string>
     <string name="hide_advanced_block_settings">Hide advanced block settings</string>
     <string name="advanced_block_settings">Advanced block settings…</string>
-    <string name="create_block">Create block</string>
 
     <!-- Block -->
     <string name="block_name">Block name</string>
@@ -28,7 +27,7 @@
     <string name="empty_block">Empty block</string>
     <string name="block_started_on">Started on %1$s</string>
     <string name="empty_session">Empty session</string>
-    <string name="edit_block_name">Edit name</string>
+    <string name="edit_block">Edit block</string>
     <string name="save_block_name">Save name</string>
     <!-- Block : Errors -->
     <string name="error_too_many_active_blocks">Error : Too many active blocks</string>
@@ -75,4 +74,5 @@
     <string name="decrement">Decrement</string>
     <string name="increment">Increment</string>
     <string name="add_new_block">Add a new block</string>
+    <string name="validate">Validate</string>
 </resources>
