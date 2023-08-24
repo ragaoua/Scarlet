@@ -30,14 +30,11 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -155,13 +152,8 @@ private fun BlockTopAppBar(
     MediumTopAppBar(
         title = {
             if(state.isInEditMode) {
-                val focusRequester = remember { FocusRequester() }
-                SideEffect { focusRequester.requestFocus() }
-
                 OutlinedTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .focusRequester(focusRequester),
+                    modifier = Modifier.fillMaxWidth(),
                     value = state.editedBlockName,
                     onValueChange = { onEvent(BlockEvent.UpdateEditedBlockName(it)) },
                     singleLine = true,
