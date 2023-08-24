@@ -222,9 +222,9 @@ private fun DayNavigationBottomBar(
                 Text(
                     modifier = Modifier
                         .clip(MaterialTheme.shapes.small)
-                        .clickable { onEvent(BlockEvent.SelectDay(it.day.id)) }
+                        .clickable { onEvent(BlockEvent.SelectDay(it.day)) }
                         .background(
-                            if (it.day.id == state.selectedDayId) {
+                            if (it.day == state.selectedDay) {
                                 MaterialTheme.colorScheme.primary
                             } else Color.Transparent
                         ).padding(4.dp)

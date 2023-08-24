@@ -41,12 +41,14 @@ class BlockViewModel @Inject constructor(
         when(event) {
             BlockEvent.AddSession -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    useCases.insertSession(state.value.selectedDayId)
-                        .also { resource ->
-                            resource.data?.let { insertedSession ->
-                                _uiActions.send(UiAction.NavigateToSessionScreen(insertedSession))
+                    state.value.selectedDay?.let { selectedDay ->
+                        useCases.insertSession(selectedDay.id)
+                            .also { resource ->
+                                resource.data?.let { insertedSession ->
+                                    _uiActions.send(UiAction.NavigateToSessionScreen(insertedSession))
+                                }
                             }
-                        }
+                    } // TODO should we print an error if selectedDay is null?
                 }
             }
             is BlockEvent.DeleteSession -> {
@@ -91,7 +93,7 @@ class BlockViewModel @Inject constructor(
             }
             is BlockEvent.SelectDay -> {
                 _state.update { it.copy(
-                    selectedDayId = event.dayId
+                    selectedDay = event.day
                 )}
             }
         }
@@ -104,11 +106,11 @@ class BlockViewModel @Inject constructor(
                 _state.update { state ->
                     state.copy(
                         days = days,
-                        selectedDayId =
-                            if (state.selectedDayId in days.map { it.day.id }) {
-                                state.selectedDayId
+                        selectedDay =
+                            if (state.selectedDay in days.map { it.day }) {
+                                state.selectedDay
                             } else {
-                                days.firstOrNull()?.day?.id ?: 0L
+                                days.firstOrNull()?.day
                             }
                     )
                 }

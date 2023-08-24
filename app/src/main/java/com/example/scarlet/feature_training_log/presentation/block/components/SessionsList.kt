@@ -40,7 +40,7 @@ fun SessionsList(
     ) {
         val sessions =
             state.days.find {
-                it.day.id == state.selectedDayId
+                it.day == state.selectedDay
             }?.sessions ?: emptyList()
         if (sessions.isNotEmpty()) {
             items(sessions) { sessionWithExercisesWithMovementName ->
