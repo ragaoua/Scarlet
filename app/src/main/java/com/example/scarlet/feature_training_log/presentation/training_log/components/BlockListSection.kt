@@ -148,6 +148,9 @@ fun BlockListSection(
                 }
             }
         }
+
+        // Give some space at the bottom of the lazy column
+        item { Spacer(modifier = Modifier.height(16.dp)) }
     }
 }
 
