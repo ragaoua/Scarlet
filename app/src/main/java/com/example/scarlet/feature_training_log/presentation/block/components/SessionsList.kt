@@ -34,10 +34,10 @@ fun SessionsList(
     onEvent: (BlockEvent) -> Unit
 ) {
     AnimatedContent(
-        targetState = state.days.find { it.day == state.selectedDay }
-            ?.sessions ?: emptyList(),
-        label = "sessions list animation"
-    ) { sessions ->
+        targetState = state.days.find { it.day == state.selectedDay },
+        label = "day selection animation"
+    ) {
+        val sessions = it?.sessions ?: emptyList()
         TitledLazyList(
             modifier = Modifier
                 .fillMaxWidth()
