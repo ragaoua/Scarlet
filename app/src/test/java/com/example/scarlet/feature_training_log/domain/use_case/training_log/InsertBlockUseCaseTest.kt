@@ -4,6 +4,7 @@ import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.domain.repository.ScarletRepository
 import com.example.scarlet.feature_training_log.domain.repository.TestRepository
+import com.example.scarlet.feature_training_log.domain.use_case.training_log.helpers.ValidateBlockNameHelper
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
@@ -14,11 +15,13 @@ class InsertBlockUseCaseTest {
 
     private lateinit var insertBlock: InsertBlockUseCase
     private lateinit var repository: ScarletRepository
+    private lateinit var validateBlockName: ValidateBlockNameHelper
 
     @Before
     fun setUp() {
         repository = TestRepository()
-        insertBlock = InsertBlockUseCase(repository)
+        validateBlockName = ValidateBlockNameHelper(repository)
+        insertBlock = InsertBlockUseCase(repository, validateBlockName)
 
         runBlocking {
             repository.insertBlock(Block(name = "Block A"))

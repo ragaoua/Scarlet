@@ -27,6 +27,7 @@ import com.example.scarlet.feature_training_log.domain.use_case.training_log.Del
 import com.example.scarlet.feature_training_log.domain.use_case.training_log.GetAllBlocksUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.training_log.InsertBlockUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.training_log.TrainingLogUseCases
+import com.example.scarlet.feature_training_log.domain.use_case.training_log.helpers.ValidateBlockNameHelper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -53,20 +54,29 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideTrainingLogUseCases(repository: ScarletRepository) =
-        TrainingLogUseCases(
+    fun provideValidateBlockNameHelper(repository: ScarletRepository) =
+        ValidateBlockNameHelper(repository)
+
+    @Provides
+    @Singleton
+    fun provideTrainingLogUseCases(
+        repository: ScarletRepository,
+        validateBlockName: ValidateBlockNameHelper
+    ) = TrainingLogUseCases(
             getAllBlocks = GetAllBlocksUseCase(repository),
             deleteBlock = DeleteBlockUseCase(repository),
-            insertBlock = InsertBlockUseCase(repository)
+            insertBlock = InsertBlockUseCase(repository, validateBlockName)
         )
 
     @Provides
     @Singleton
-    fun provideBlockUseCases(repository: ScarletRepository) =
-        BlockUseCases(
+    fun provideBlockUseCases(
+        repository: ScarletRepository,
+        validateBlockName: ValidateBlockNameHelper
+    ) = BlockUseCases(
             getDaysWithSessionsWithMovementsByBlockId = GetDaysWithSessionsWithMovementsByBlockIdUseCase(repository),
             insertSession = InsertSessionUseCase(repository),
-            updateBlock = UpdateBlockUseCase(repository),
+            updateBlock = UpdateBlockUseCase(repository, validateBlockName),
             deleteSession = DeleteSessionUseCase(repository)
         )
 

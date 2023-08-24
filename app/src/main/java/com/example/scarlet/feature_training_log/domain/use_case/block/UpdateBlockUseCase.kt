@@ -1,14 +1,14 @@
 package com.example.scarlet.feature_training_log.domain.use_case.block
 
-import com.example.scarlet.R
 import com.example.scarlet.core.util.Resource
 import com.example.scarlet.core.util.SimpleResource
-import com.example.scarlet.core.util.StringResource
 import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.domain.repository.ScarletRepository
+import com.example.scarlet.feature_training_log.domain.use_case.training_log.helpers.ValidateBlockNameHelper
 
 class UpdateBlockUseCase(
-    private val repository: ScarletRepository
+    private val repository: ScarletRepository,
+    private val validateBlockName: ValidateBlockNameHelper
 ) {
 
     /**
@@ -19,8 +19,10 @@ class UpdateBlockUseCase(
      * @return a resource with an error if found, or a simple resource with no data
      */
     suspend operator fun invoke(block: Block): SimpleResource {
-        if (block.name.isBlank()) {
-            return Resource.Error(StringResource(R.string.error_block_name_is_empty))
+        validateBlockName(block.name).let { resource ->
+            resource.error?.let {
+                return Resource.Error(resource.error)
+            }
         }
 
         repository.updateBlock(block)

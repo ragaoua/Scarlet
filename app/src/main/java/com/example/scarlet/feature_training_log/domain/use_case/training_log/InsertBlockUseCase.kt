@@ -1,14 +1,14 @@
 package com.example.scarlet.feature_training_log.domain.use_case.training_log
 
-import com.example.scarlet.R
 import com.example.scarlet.core.util.Resource
-import com.example.scarlet.core.util.StringResource
 import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.domain.model.Day
 import com.example.scarlet.feature_training_log.domain.repository.ScarletRepository
+import com.example.scarlet.feature_training_log.domain.use_case.training_log.helpers.ValidateBlockNameHelper
 
 class InsertBlockUseCase(
-    private val repository: ScarletRepository
+    private val repository: ScarletRepository,
+    private val validateBlockName: ValidateBlockNameHelper
 ) {
 
     /**
@@ -21,14 +21,10 @@ class InsertBlockUseCase(
      * @return resource with an error or data (the inserted block)
      */
     suspend operator fun invoke(blockName: String, nbDays: Int): Resource<Block> {
-        if (blockName.isBlank()) {
-            return Resource.Error(StringResource(R.string.error_block_name_is_empty))
-        }
-
-        repository.getBlockByName(blockName)?.let { existingBlock ->
-            return Resource.Error(
-                StringResource(R.string.block_with_name_already_exists, existingBlock.name)
-            )
+        validateBlockName(blockName).let { resource ->
+            resource.error?.let {
+                return Resource.Error(resource.error)
+            }
         }
 
         var block = Block(name = blockName)
