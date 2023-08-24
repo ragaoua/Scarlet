@@ -67,6 +67,13 @@ class BlockViewModel @Inject constructor(
             }
             is BlockEvent.SaveBlockName -> {
                 viewModelScope.launch(Dispatchers.IO) {
+                    if(state.value.editedBlockName == state.value.block.name) {
+                        _state.update { it.copy(
+                            isInEditMode = false
+                        )}
+                        return@launch
+                    }
+
                     val updatedBlock = state.value.block.copy(
                         name = state.value.editedBlockName
                     )
