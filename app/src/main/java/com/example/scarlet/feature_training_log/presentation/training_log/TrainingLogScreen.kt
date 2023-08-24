@@ -111,7 +111,8 @@ fun Screen(
                         )
                     },
                     colors = TopAppBarDefaults.largeTopAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.background
+                        containerColor = MaterialTheme.colorScheme.background,
+                        scrolledContainerColor = MaterialTheme.colorScheme.surface,
                     ),
                     scrollBehavior = topAppBarScrollBehavior,
                 )
