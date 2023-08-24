@@ -68,7 +68,7 @@ class BlockViewModel @Inject constructor(
             is BlockEvent.SaveBlockName -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     val updatedBlock = state.value.block.copy(
-                        name = event.blockName
+                        name = state.value.editedBlockName
                     )
                     useCases.updateBlock(updatedBlock).also { resource ->
                         resource.error?.let { error ->

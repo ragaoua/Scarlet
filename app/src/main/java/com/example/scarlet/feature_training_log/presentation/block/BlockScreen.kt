@@ -169,7 +169,7 @@ private fun BlockTopAppBar(
                         textAlign = TextAlign.Center
                     ),
                     keyboardActions = KeyboardActions (
-                        onDone = { onEvent(BlockEvent.SaveBlockName(state.editedBlockName)) }
+                        onDone = { onEvent(BlockEvent.SaveBlockName) }
                     ),
                 )
             } else {
@@ -184,7 +184,7 @@ private fun BlockTopAppBar(
         actions = {
             if(state.isInEditMode) {
                 IconButton(
-                    onClick = { onEvent(BlockEvent.SaveBlockName(state.editedBlockName)) }
+                    onClick = { onEvent(BlockEvent.SaveBlockName) }
                 ) {
                     Icon(
                         imageVector = Icons.Default.Check,
