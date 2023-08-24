@@ -25,7 +25,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.scarlet.R
@@ -121,8 +120,7 @@ fun Screen(
             Surface (
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(top = 32.dp),
+                    .padding(innerPadding),
                 color = MaterialTheme.colorScheme.background
             ) {
                 BlockListSection(
