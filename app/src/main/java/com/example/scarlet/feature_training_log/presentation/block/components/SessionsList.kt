@@ -1,5 +1,6 @@
 package com.example.scarlet.feature_training_log.presentation.block.components
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,79 +33,83 @@ fun SessionsList(
     state: BlockUiState,
     onEvent: (BlockEvent) -> Unit
 ) {
-    TitledLazyList(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(TitleLazyListPadding),
-        title = stringResource(R.string.block_sessions_list_title)
-    ) {
-        val sessions =
-            state.days.find {
-                it.day == state.selectedDay
-            }?.sessions ?: emptyList()
-        if (sessions.isNotEmpty()) {
-            items(sessions) { sessionWithExercisesWithMovementName ->
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentPadding = MainButtonContentPadding,
-                    shape = MaterialTheme.shapes.large,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.secondary,
-                        contentColor = MaterialTheme.colorScheme.onSecondary
-                    ),
-                    onClick = {
-                        navigator.navigate(
-                            SessionScreenDestination(
-                                session = sessionWithExercisesWithMovementName.session,
-                                block = state.block
+    AnimatedContent(
+        targetState = state.days.find { it.day == state.selectedDay }
+            ?.sessions ?: emptyList(),
+        label = "sessions list animation"
+    ) { sessions ->
+        TitledLazyList(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(TitleLazyListPadding),
+            title = stringResource(R.string.block_sessions_list_title)
+        ) {
+            if (sessions.isNotEmpty()) {
+                items(sessions) { sessionWithExercisesWithMovementName ->
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentPadding = MainButtonContentPadding,
+                        shape = MaterialTheme.shapes.large,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.secondary,
+                            contentColor = MaterialTheme.colorScheme.onSecondary
+                        ),
+                        onClick = {
+                            navigator.navigate(
+                                SessionScreenDestination(
+                                    session = sessionWithExercisesWithMovementName.session,
+                                    block = state.block
+                                )
                             )
-                        )
-                    },
-                    enabled = !state.isInEditMode
-                ) {
-                    DeletableItem(
-                        modifier = Modifier.fillMaxSize(),
-                        onDeleteClicked = {
-                            onEvent(BlockEvent.DeleteSession(
-                                sessionWithExercisesWithMovementName.session
-                            ))
-                        }
+                        },
+                        enabled = !state.isInEditMode
                     ) {
-                        Column(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                        DeletableItem(
+                            modifier = Modifier.fillMaxSize(),
+                            onDeleteClicked = {
+                                onEvent(
+                                    BlockEvent.DeleteSession(
+                                        sessionWithExercisesWithMovementName.session
+                                    )
+                                )
+                            }
                         ) {
-                            Text(
-                                text = DateUtils.formatDate(
-                                    sessionWithExercisesWithMovementName.session.date
-                                ),
-                                style = MaterialTheme.typography.titleLarge
-                            )
-                            Text(
-                                text = if (
-                                    sessionWithExercisesWithMovementName.exercises.isNotEmpty()
-                                ) {
-                                    sessionWithExercisesWithMovementName.exercises.joinToString {
-                                        it.movementName
-                                    }
-                                } else {
-                                    stringResource(R.string.empty_session)
-                                },
-                                style = MaterialTheme.typography.bodyLarge,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = DateUtils.formatDate(
+                                        sessionWithExercisesWithMovementName.session.date
+                                    ),
+                                    style = MaterialTheme.typography.titleLarge
+                                )
+                                Text(
+                                    text = if (
+                                        sessionWithExercisesWithMovementName.exercises.isNotEmpty()
+                                    ) {
+                                        sessionWithExercisesWithMovementName.exercises.joinToString {
+                                            it.movementName
+                                        }
+                                    } else {
+                                        stringResource(R.string.empty_session)
+                                    },
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            }
                         }
                     }
                 }
-            }
-        } else {
-            item {
-                Text(
-                    text = stringResource(R.string.empty_block),
-                    style = MaterialTheme.typography.bodyMedium
-                    // TODO color = grey
-                )
+            } else {
+                item {
+                    Text(
+                        text = stringResource(R.string.empty_block),
+                        style = MaterialTheme.typography.bodyMedium
+                        // TODO color = grey
+                    )
+                }
             }
         }
     }
