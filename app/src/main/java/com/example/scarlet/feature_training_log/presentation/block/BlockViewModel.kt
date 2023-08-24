@@ -28,9 +28,9 @@ class BlockViewModel @Inject constructor(
     private val _uiActions = Channel<UiAction>()
     val uiActions = _uiActions.receiveAsFlow()
 
-    private val block = BlockScreenDestination.argsFrom(savedStateHandle).block
-
-    private val _state = MutableStateFlow(BlockUiState(block = block))
+    private val _state = MutableStateFlow(BlockUiState(
+        block = BlockScreenDestination.argsFrom(savedStateHandle).block
+    ))
     val state = _state.asStateFlow()
 
     init {
@@ -65,14 +65,17 @@ class BlockViewModel @Inject constructor(
                     editedBlockName = event.editedBlockName
                 )}
             }
-            is BlockEvent.SaveBlock -> {
+            is BlockEvent.SaveBlockName -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    useCases.updateBlock(event.block).also { resource ->
+                    val updatedBlock = state.value.block.copy(
+                        name = event.blockName
+                    )
+                    useCases.updateBlock(updatedBlock).also { resource ->
                         resource.error?.let { error ->
                             _uiActions.send(UiAction.ShowSnackbarWithError(error))
                         } ?: run {
                             _state.update { it.copy(
-                                block = event.block,
+                                block = updatedBlock,
                                 isInEditMode = false
                             )}
                         }
@@ -88,7 +91,7 @@ class BlockViewModel @Inject constructor(
     }
 
     private fun initBlockSessionsCollection() {
-        useCases.getDaysWithSessionsWithMovementsByBlockId(block.id)
+        useCases.getDaysWithSessionsWithMovementsByBlockId(state.value.block.id)
             .onEach { resource ->
                 val days = resource.data ?: emptyList()
                 _state.update { state ->
