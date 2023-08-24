@@ -1,4 +1,4 @@
-package com.example.scarlet.feature_training_log.presentation.training_log.components
+package com.example.scarlet.feature_training_log.presentation.core.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
@@ -24,26 +24,33 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
-import com.example.scarlet.feature_training_log.presentation.core.components.NumberPicker
-import com.example.scarlet.feature_training_log.presentation.training_log.TrainingLogEvent
-import com.example.scarlet.feature_training_log.presentation.training_log.TrainingLogUiState
 
 /**
- * Bottom sheet that allows the user to create a new block.
+ * Bottom sheet that allows the user to create or edit a block.
  *
- * @param sheetState the state of the bottom sheet
- * @param onEvent the event handler
+ * @param sheetState the state of the sheet
+ * @param onBlockNameValueChange callback that is called when the block name value changes
+ * @param onMicroCycleSettingsToggle callback that is called when the user toggles the micro cycle
+ * settings
+ * @param onDaysPerMicroCycleValueChange callback that is called when the user changes the number
+ * of days per micro cycle
+ * @param onDismissRequest callback that is called when the user dismisses the sheet
+ * @param onValidate callback that is called when the user clicks the validation button
  *
- * @see TrainingLogUiState.NewBlockSheetState
+ * @see AddEditBlockSheetState
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewBlockSheet(
-    sheetState: TrainingLogUiState.NewBlockSheetState,
-    onEvent: (TrainingLogEvent) -> Unit
+fun AddEditBlockSheet(
+    sheetState: AddEditBlockSheetState,
+    onBlockNameValueChange: (String) -> Unit,
+    onMicroCycleSettingsToggle: () -> Unit,
+    onDaysPerMicroCycleValueChange: (Int) -> Unit,
+    onDismissRequest: () -> Unit,
+    onValidate: (String) -> Unit
 ) {
     ModalBottomSheet(
-        onDismissRequest = { onEvent(TrainingLogEvent.HideNewBlockSheet) }
+        onDismissRequest = onDismissRequest
     ) {
         Column(
             modifier = Modifier
@@ -69,14 +76,14 @@ fun NewBlockSheet(
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = sheetState.blockName,
-                onValueChange = { onEvent(TrainingLogEvent.UpdateNewBlockName(it)) },
+                onValueChange = onBlockNameValueChange,
                 label = {
                     Text(stringResource(R.string.block_name))
                     // TODO set the color to a lighter one
                 },
-                isError = sheetState.textFieldError != null,
-                supportingText = sheetState.textFieldError?.let { error ->
-                    { Text(stringResource(error.resId, *error.args)) }
+                isError = sheetState.blockNameError != null,
+                supportingText = sheetState.blockNameError?.let { error ->
+                    { Text(error) }
                 },
                 singleLine = true
             )
@@ -90,9 +97,7 @@ fun NewBlockSheet(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.CenterStart
             ) {
-                TextButton(onClick = {
-                    onEvent(TrainingLogEvent.ToggleMicroCycleSettings)
-                }) {
+                TextButton(onClick = onMicroCycleSettingsToggle) {
                     Text(
                         text = stringResource(
                             if (sheetState.areMicroCycleSettingsExpanded) {
@@ -112,7 +117,7 @@ fun NewBlockSheet(
                     Spacer(modifier = Modifier.width(8.dp))
                     NumberPicker(
                         value = sheetState.daysPerMicroCycle,
-                        onValueChange = { onEvent(TrainingLogEvent.UpdateDaysPerMicroCycle(it)) },
+                        onValueChange = onDaysPerMicroCycleValueChange,
                         minValue = 1,
                         maxValue = 10
                     )
@@ -125,14 +130,20 @@ fun NewBlockSheet(
              * Validation button
              *************************************************************************/
             Button(
-                onClick = {
-                    onEvent(TrainingLogEvent.AddBlock(sheetState.blockName))
-                },
+                onClick = { onValidate(sheetState.blockName) },
                 modifier = Modifier.align(Alignment.End)
             ) {
-                Text(stringResource(R.string.create_block))
+                Text(stringResource(R.string.create_block)) // TODO change to validate ?
             }
             Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
+
+data class AddEditBlockSheetState(
+    val isSheetExpanded: Boolean = false,
+    val blockName: String = "",
+    val blockNameError: String? = null,
+    val areMicroCycleSettingsExpanded: Boolean = false,
+    val daysPerMicroCycle: Int = 3
+)

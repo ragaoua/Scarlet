@@ -28,9 +28,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.scarlet.R
+import com.example.scarlet.feature_training_log.presentation.core.components.AddEditBlockSheet
+import com.example.scarlet.feature_training_log.presentation.core.components.AddEditBlockSheetState
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
 import com.example.scarlet.feature_training_log.presentation.training_log.components.BlockListSection
-import com.example.scarlet.feature_training_log.presentation.training_log.components.NewBlockSheet
 import com.example.scarlet.ui.theme.ScarletTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -131,10 +132,32 @@ fun Screen(
                 )
             }
         }
+
         state.newBlockSheetState?.let {
-            NewBlockSheet(
-                sheetState = it,
-                onEvent = onEvent
+            AddEditBlockSheet(
+                sheetState = AddEditBlockSheetState(
+                    blockName = it.blockName,
+                    blockNameError = it.blockNameError?.let { error ->
+                        stringResource(error.resId, *error.args)
+                    },
+                    areMicroCycleSettingsExpanded = it.areMicroCycleSettingsExpanded,
+                    daysPerMicroCycle = it.daysPerMicroCycle
+                ),
+                onBlockNameValueChange = { value ->
+                    onEvent(TrainingLogEvent.UpdateNewBlockName(value))
+                },
+                onMicroCycleSettingsToggle = {
+                    onEvent(TrainingLogEvent.ToggleMicroCycleSettings)
+                },
+                onDaysPerMicroCycleValueChange = { value ->
+                    onEvent(TrainingLogEvent.UpdateDaysPerMicroCycle(value))
+                },
+                onDismissRequest = {
+                    onEvent(TrainingLogEvent.HideNewBlockSheet)
+                },
+                onValidate = { blockName ->
+                    onEvent(TrainingLogEvent.AddBlock(blockName))
+                }
             )
         }
     }

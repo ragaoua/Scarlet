@@ -81,7 +81,7 @@ class TrainingLogViewModel @Inject constructor(
                         resource.error?.let { error ->
                             _state.update { it.copy (
                                 newBlockSheetState = it.newBlockSheetState?.copy(
-                                    textFieldError = error
+                                    blockNameError = error
                                 )
                             )}
                         }
