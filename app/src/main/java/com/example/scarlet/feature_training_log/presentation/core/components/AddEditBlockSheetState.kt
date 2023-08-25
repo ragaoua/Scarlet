@@ -62,7 +62,11 @@ fun AddEditBlockSheet(
              * Sheet title
              *************************************************************************/
             Text(
-                text = stringResource(R.string.new_block),
+                text = stringResource(
+                    if (sheetState.isNewBlock) {
+                        R.string.new_block
+                    } else R.string.edit_block
+                ),
                 style = MaterialTheme.typography.headlineMedium
             )
             Spacer(modifier = Modifier.height(4.dp))
@@ -142,6 +146,7 @@ fun AddEditBlockSheet(
 
 data class AddEditBlockSheetState(
     val isSheetExpanded: Boolean = false,
+    val isNewBlock: Boolean = true,
     val blockName: String = "",
     val blockNameError: String? = null,
     val areMicroCycleSettingsExpanded: Boolean = false,

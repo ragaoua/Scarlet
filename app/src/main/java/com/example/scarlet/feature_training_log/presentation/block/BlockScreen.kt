@@ -137,6 +137,7 @@ fun Screen(
         state.editBlockSheetState?.let{
             AddEditBlockSheet(
                 sheetState = AddEditBlockSheetState(
+                    isNewBlock = false,
                     blockName = it.blockName,
                     blockNameError = it.blockNameError?.let { error ->
                         stringResource(error.resId, *error.args)
