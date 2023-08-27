@@ -114,11 +114,14 @@ fun AddEditBlockSheet(
             AnimatedVisibility(sheetState.areMicroCycleSettingsExpanded) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceAround,
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(stringResource(R.string.training_days_per_micro_cycle))
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        modifier = Modifier.weight(1f),
+                        text = stringResource(R.string.training_days_per_micro_cycle),
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
                     NumberPicker(
                         value = sheetState.daysPerMicroCycle,
                         onValueChange = onDaysPerMicroCycleValueChange,
@@ -150,5 +153,6 @@ data class AddEditBlockSheetState(
     val blockName: String = "",
     val blockNameError: String? = null,
     val areMicroCycleSettingsExpanded: Boolean = false,
-    val daysPerMicroCycle: Int = 3
+    val daysPerMicroCycle: Int = 3,
+    val blockDays: List<String> = emptyList()
 )
