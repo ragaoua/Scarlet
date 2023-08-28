@@ -9,7 +9,6 @@ import com.example.scarlet.feature_training_log.data.data_source.entity.SessionE
 import com.example.scarlet.feature_training_log.data.data_source.entity.SetEntity
 import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.domain.model.Day
-import com.example.scarlet.feature_training_log.domain.model.DayWithSessionsWithExercisesWithMovement
 import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Session
@@ -55,13 +54,10 @@ class ScarletRepositoryImpl(
             .map { it.toDay() }
 
     override fun getDaysWithSessionsWithExercisesWithMovementByBlockId(blockId: Long) =
-        dbInstance.dayDao.getDaysWithSessionsWithMovementsByBlockId(blockId)
-            .map { map ->
-                map.entries.map { entry ->
-                    DayWithSessionsWithExercisesWithMovement(
-                        day = entry.key.toDay(),
-                        sessions = entry.value.map { it.toSessionWithExercisesWithMovement() }
-                    )
+        dbInstance.dayDao.getDaysWithSessionsWithMovementByBlockId(blockId)
+            .map { entityList ->
+                entityList.map { entity ->
+                    entity.toDayWithSessionsWithExercisesWithMovement()
                 }
             }
 

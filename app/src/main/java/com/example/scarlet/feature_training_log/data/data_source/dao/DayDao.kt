@@ -6,7 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.example.scarlet.feature_training_log.data.data_source.entity.DayEntity
-import com.example.scarlet.feature_training_log.data.data_source.entity.SessionWithExercisesWithMovementEntity
+import com.example.scarlet.feature_training_log.data.data_source.entity.DayWithSessionsWithExercisesWithMovementEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -25,7 +25,7 @@ interface DayDao {
         LEFT JOIN session ON day.id = session.dayId
         WHERE day.blockId = :blockId
     """)
-    fun getDaysWithSessionsWithMovementsByBlockId(blockId: Long):
-            Flow<Map<DayEntity, List<SessionWithExercisesWithMovementEntity>>>
+    fun getDaysWithSessionsWithMovementByBlockId(blockId: Long):
+            Flow<List<DayWithSessionsWithExercisesWithMovementEntity>>
 
 }

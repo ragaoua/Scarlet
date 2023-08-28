@@ -1,10 +1,13 @@
 package com.example.scarlet.feature_training_log.data.data_source.entity
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import androidx.room.Relation
 import com.example.scarlet.feature_training_log.domain.model.Day
+import com.example.scarlet.feature_training_log.domain.model.DayWithSessionsWithExercisesWithMovement
 
 @Entity(
     tableName = "day",
@@ -41,5 +44,23 @@ data class DayEntity(
         blockId = blockId,
         name = name,
         order = order
+    )
+}
+
+
+data class DayWithSessionsWithExercisesWithMovementEntity(
+    @Embedded
+    val day: DayEntity,
+    @Relation(
+        entity = SessionEntity::class,
+        parentColumn = "id",
+        entityColumn = "dayId"
+    )
+    val sessionsWithExercisesWithMovement: List<SessionWithExercisesWithMovementEntity>
+) {
+
+    fun toDayWithSessionsWithExercisesWithMovement() = DayWithSessionsWithExercisesWithMovement(
+        day = day.toDay(),
+        sessions = sessionsWithExercisesWithMovement.map { it.toSessionWithExercisesWithMovement() }
     )
 }
