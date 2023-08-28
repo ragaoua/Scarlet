@@ -56,13 +56,17 @@ data class ExerciseEntity(
 
 
 data class ExerciseWithMovementAndSetsEntity(
-    @Embedded(prefix = "exercise_")
+    @Embedded
     val exercise: ExerciseEntity,
-    @Embedded(prefix = "movement_")
+    @Relation(
+        entity = MovementEntity::class,
+        parentColumn = "movementId",
+        entityColumn = "id"
+    )
     val movement: MovementEntity,
     @Relation(
         entity = SetEntity::class,
-        parentColumn = "exercise_id",
+        parentColumn = "id",
         entityColumn = "exerciseId"
     )
     val sets: List<SetEntity>

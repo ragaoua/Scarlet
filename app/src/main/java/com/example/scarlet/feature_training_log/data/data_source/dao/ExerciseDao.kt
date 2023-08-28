@@ -15,13 +15,7 @@ interface ExerciseDao {
 
     @Transaction
     @Query("""
-        SELECT
-            exercise.id AS exercise_id, 
-            sessionId AS exercise_sessionId,
-            exercise.movementId AS exercise_movementId,
-            "order" AS exercise_order,
-            movement.id AS movement_id,
-            name AS movement_name
+        SELECT *
         FROM exercise
         INNER JOIN movement ON exercise.movementId = movement.id
         WHERE exercise.sessionId = :sessionId
