@@ -3,11 +3,10 @@ package com.example.scarlet.feature_training_log.data.data_source.entity
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.Index
-import androidx.room.Junction
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 import com.example.scarlet.feature_training_log.domain.model.Block
-import com.example.scarlet.feature_training_log.domain.model.BlockWithSessions
+import com.example.scarlet.feature_training_log.domain.model.BlockWithList
 
 @Entity(
     tableName = "block",
@@ -32,23 +31,20 @@ data class BlockEntity(
     )
 }
 
-data class BlockWithSessionsEntity(
+data class BlockWithDaysWithSessionsEntity(
     @Embedded
     val block: BlockEntity,
     @Relation(
+        entity = DayEntity::class,
         parentColumn = "id",
-        entityColumn = "dayId",
-        associateBy = Junction(
-            DayEntity::class,
-            parentColumn = "id",
-            entityColumn = "blockId"
-        )
+        entityColumn = "blockId"
     )
-    val sessions: List<SessionEntity> = emptyList()
+    val days: List<DayWithSessionsEntity> = emptyList()
 ) {
 
-    fun toBlockWithSessions() = BlockWithSessions(
-        block = block.toBlock(),
-        sessions = sessions.map { it.toSession() }
+    fun toModel() = BlockWithList(
+        id = block.id,
+        name = block.name,
+        days = days.map { it.toModel() }
     )
 }

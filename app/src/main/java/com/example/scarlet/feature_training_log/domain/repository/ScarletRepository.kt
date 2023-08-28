@@ -1,8 +1,9 @@
 package com.example.scarlet.feature_training_log.domain.repository
 
 import com.example.scarlet.feature_training_log.domain.model.Block
-import com.example.scarlet.feature_training_log.domain.model.BlockWithSessions
+import com.example.scarlet.feature_training_log.domain.model.BlockWithList
 import com.example.scarlet.feature_training_log.domain.model.Day
+import com.example.scarlet.feature_training_log.domain.model.DayWithSessions
 import com.example.scarlet.feature_training_log.domain.model.DayWithSessionsWithExercisesWithMovement
 import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
@@ -20,7 +21,7 @@ interface ScarletRepository {
     suspend fun updateBlock(block: Block)
     suspend fun deleteBlock(block: Block)
 
-    fun getAllBlocksWithSessions(): Flow<List<BlockWithSessions>>
+    fun getAllBlocksWithSessions(): Flow<List<BlockWithList<DayWithSessions>>>
     suspend fun getBlockByName(name: String): Block?
 
     ///////////////////////////////////////////////////////////////////////////////////////////////

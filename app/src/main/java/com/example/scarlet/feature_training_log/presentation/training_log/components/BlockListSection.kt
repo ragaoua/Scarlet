@@ -19,9 +19,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
-import com.example.scarlet.feature_training_log.domain.model.BlockWithSessions
-import com.example.scarlet.feature_training_log.presentation.core.components.DeletableItem
+import com.example.scarlet.feature_training_log.domain.model.BlockWithList
+import com.example.scarlet.feature_training_log.domain.model.DayWithSessions
 import com.example.scarlet.feature_training_log.presentation.core.DateUtils
+import com.example.scarlet.feature_training_log.presentation.core.components.DeletableItem
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
 import com.example.scarlet.feature_training_log.presentation.training_log.TrainingLogEvent
 import com.example.scarlet.ui.theme.MainButtonContentPadding
@@ -30,7 +31,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Composable
 fun BlockListSection(
     navigator: DestinationsNavigator,
-    blocks: List<BlockWithSessions> = emptyList(),
+    blocks: List<BlockWithList<DayWithSessions>> = emptyList(),
     onEvent: (TrainingLogEvent) -> Unit
 ) {
     LazyColumn(
@@ -49,19 +50,20 @@ fun BlockListSection(
             )
         }
         item {
-            blocks.firstOrNull()?.let { latestBlockWithSessions ->
+            blocks.firstOrNull()?.let { latestBlock ->
+                val blockSessions = latestBlock.days.flatMap { it.sessions }
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     contentPadding = MainButtonContentPadding,
                     shape = MaterialTheme.shapes.large,
                     onClick = {
-                        navigator.navigate(BlockScreenDestination(latestBlockWithSessions.block))
+                        navigator.navigate(BlockScreenDestination(latestBlock.toBlock()))
                     }
                 ) {
                     DeletableItem(
                         modifier = Modifier.fillMaxSize(),
                         onDeleteClicked = {
-                            onEvent(TrainingLogEvent.DeleteBlock(latestBlockWithSessions.block))
+                            onEvent(TrainingLogEvent.DeleteBlock(latestBlock.toBlock()))
                         }
                     ) {
                         Column(
@@ -69,14 +71,14 @@ fun BlockListSection(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = latestBlockWithSessions.block.name,
+                                text = latestBlock.name,
                                 style = MaterialTheme.typography.titleLarge
                             )
                             Text(
-                                text = if (latestBlockWithSessions.sessions.isNotEmpty()) {
+                                text = if (blockSessions.isNotEmpty()) {
                                     stringResource(
                                         R.string.block_started_on,
-                                        DateUtils.formatDate(latestBlockWithSessions.sessions.first().date)
+                                        DateUtils.formatDate(blockSessions.first().date)
                                     )
                                 } else {
                                     stringResource(R.string.empty_block)
@@ -107,7 +109,8 @@ fun BlockListSection(
             item {
                 SectionTitle(stringResource(R.string.preceding_training_blocks))
             }
-            items(blocks.subList(1, blocks.size)) {
+            items(blocks.subList(1, blocks.size)) { block ->
+                val blockSessions = block.days.flatMap { it.sessions }
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     contentPadding = MainButtonContentPadding,
@@ -117,13 +120,13 @@ fun BlockListSection(
                         contentColor = MaterialTheme.colorScheme.onSecondary
                     ),
                     onClick = {
-                        navigator.navigate(BlockScreenDestination(it.block))
+                        navigator.navigate(BlockScreenDestination(block.toBlock()))
                     }
                 ) {
                     DeletableItem(
                         modifier = Modifier.fillMaxSize(),
                         onDeleteClicked = {
-                            onEvent(TrainingLogEvent.DeleteBlock(it.block))
+                            onEvent(TrainingLogEvent.DeleteBlock(block.toBlock()))
                         }
                     ) {
                         Column(
@@ -131,13 +134,13 @@ fun BlockListSection(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = it.block.name,
+                                text = block.name,
                                 style = MaterialTheme.typography.titleLarge
                             )
                             Text(
-                                text = if (it.sessions.isNotEmpty()) {
-                                    DateUtils.formatDate(it.sessions.first().date) + " - " +
-                                            DateUtils.formatDate(it.sessions.last().date)
+                                text = if (blockSessions.isNotEmpty()) {
+                                    DateUtils.formatDate(blockSessions.first().date) + " - " +
+                                            DateUtils.formatDate(blockSessions.last().date)
                                 } else {
                                     stringResource(R.string.empty_block)
                                 },

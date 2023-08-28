@@ -2,12 +2,29 @@ package com.example.scarlet.feature_training_log.domain.model
 
 import java.io.Serializable
 
-data class Block(
-    val id: Long = 0,
-    val name: String = ""
-): Serializable
+interface IBlock {
+    val id: Long
+    val name: String
 
-data class BlockWithSessions(
-    val block: Block,
-    val sessions: List<Session> = emptyList()
-): Serializable
+    companion object Default {
+        const val id: Long = 0
+        const val name: String = ""
+    }
+}
+
+data class Block(
+    override val id: Long = IBlock.id,
+    override val name: String = IBlock.name
+): IBlock, Serializable
+
+data class BlockWithList<T: IDay>(
+    override val id: Long = IBlock.id,
+    override val name: String = IBlock.name,
+    val days: List<T> = emptyList()
+): IBlock {
+
+    fun toBlock() = Block(
+        id = id,
+        name = name
+    )
+}

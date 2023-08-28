@@ -8,7 +8,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import com.example.scarlet.feature_training_log.data.data_source.entity.BlockEntity
-import com.example.scarlet.feature_training_log.data.data_source.entity.BlockWithSessionsEntity
+import com.example.scarlet.feature_training_log.data.data_source.entity.BlockWithDaysWithSessionsEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -25,7 +25,7 @@ interface BlockDao {
 
     @Transaction
     @Query("SELECT * FROM block")
-    fun getAllBlocksWithSessions(): Flow<List<BlockWithSessionsEntity>>
+    fun getAllBlocksWithSessions(): Flow<List<BlockWithDaysWithSessionsEntity>>
 
     @Query("""
         SELECT *

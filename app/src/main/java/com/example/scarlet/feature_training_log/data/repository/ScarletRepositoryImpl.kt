@@ -36,7 +36,7 @@ class ScarletRepositoryImpl(
         dbInstance.blockDao.getAllBlocksWithSessions()
             .map { entityList ->
                 entityList.map { entity ->
-                    entity.toBlockWithSessions()
+                    entity.toModel()
                 }
             }
 
