@@ -34,7 +34,7 @@ class TestRepository: ScarletRepository {
         TODO("Not yet implemented")
     }
 
-    override fun getAllBlocksWithSessions(): Flow<List<BlockWithSessions>> {
+    override fun getAllBlocks(): Flow<List<BlockWithSessions>> {
         return flow { emit(
             blocks
                 .map { block ->

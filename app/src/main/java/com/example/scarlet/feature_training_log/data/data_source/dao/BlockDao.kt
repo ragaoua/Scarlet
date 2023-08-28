@@ -25,7 +25,7 @@ interface BlockDao {
 
     @Transaction
     @Query("SELECT * FROM block")
-    fun getAllBlocksWithSessions(): Flow<List<BlockWithDaysWithSessionsEntity>>
+    fun getAllBlocks(): Flow<List<BlockWithDaysWithSessionsEntity>>
 
     @Query("""
         SELECT *

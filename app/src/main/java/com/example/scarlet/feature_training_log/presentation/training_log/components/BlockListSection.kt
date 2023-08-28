@@ -19,8 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
-import com.example.scarlet.feature_training_log.domain.model.BlockWithList
+import com.example.scarlet.feature_training_log.domain.model.BlockWithDays
 import com.example.scarlet.feature_training_log.domain.model.DayWithSessions
+import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.presentation.core.DateUtils
 import com.example.scarlet.feature_training_log.presentation.core.components.DeletableItem
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
@@ -31,7 +32,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Composable
 fun BlockListSection(
     navigator: DestinationsNavigator,
-    blocks: List<BlockWithList<DayWithSessions>> = emptyList(),
+    blocks: List<BlockWithDays<DayWithSessions<Session>>> = emptyList(),
     onEvent: (TrainingLogEvent) -> Unit
 ) {
     LazyColumn(

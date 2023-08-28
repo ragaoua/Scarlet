@@ -1,8 +1,9 @@
 package com.example.scarlet.feature_training_log.domain.use_case.training_log
 
 import com.example.scarlet.core.util.Resource
-import com.example.scarlet.feature_training_log.domain.model.BlockWithList
+import com.example.scarlet.feature_training_log.domain.model.BlockWithDays
 import com.example.scarlet.feature_training_log.domain.model.DayWithSessions
+import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.domain.repository.ScarletRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -16,8 +17,8 @@ class GetAllBlocksUseCase(
      *
      * @return a flow of resources with an error or data (list of blocks)
      */
-    operator fun invoke(): Flow<Resource<List<BlockWithList<DayWithSessions>>>> {
-        return repository.getAllBlocksWithSessions()
+    operator fun invoke(): Flow<Resource<List<BlockWithDays<DayWithSessions<Session>>>>> {
+        return repository.getAllBlocks()
             .map { blocks ->
                 blocks.map { block ->
                     block.copy(
@@ -28,7 +29,7 @@ class GetAllBlocksUseCase(
                         }
                     )
                 }
-                .sortedWith(compareByDescending<BlockWithList<DayWithSessions>> { block ->
+                .sortedWith(compareByDescending<BlockWithDays<DayWithSessions<Session>>> { block ->
                     block.days.flatMap { it.sessions }.lastOrNull()?.date
                 }
                     .thenByDescending { block -> block.id }

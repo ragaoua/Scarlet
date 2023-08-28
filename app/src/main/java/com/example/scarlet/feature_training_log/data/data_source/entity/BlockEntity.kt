@@ -6,7 +6,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 import com.example.scarlet.feature_training_log.domain.model.Block
-import com.example.scarlet.feature_training_log.domain.model.BlockWithList
+import com.example.scarlet.feature_training_log.domain.model.BlockWithDays
 
 @Entity(
     tableName = "block",
@@ -42,7 +42,7 @@ data class BlockWithDaysWithSessionsEntity(
     val days: List<DayWithSessionsEntity> = emptyList()
 ) {
 
-    fun toModel() = BlockWithList(
+    fun toModel() = BlockWithDays(
         id = block.id,
         name = block.name,
         days = days.map { it.toModel() }

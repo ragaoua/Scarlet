@@ -17,7 +17,7 @@ data class Block(
     override val name: String = IBlock.name
 ): IBlock, Serializable
 
-data class BlockWithList<T: IDay>(
+data class BlockWithDays<T: IDay>(
     override val id: Long = IBlock.id,
     override val name: String = IBlock.name,
     val days: List<T> = emptyList()

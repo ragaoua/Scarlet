@@ -23,12 +23,12 @@ data class Day(
     override val order: Int = IDay.order
 ): IDay, Serializable
 
-data class DayWithSessions(
+data class DayWithSessions<T: ISession>(
     override val id: Long = IDay.id,
     override val blockId: Long = IDay.blockId,
     override val name: String = IDay.name,
     override val order: Int = IDay.order,
-    val sessions: List<Session> = emptyList()
+    val sessions: List<T> = emptyList()
 ): IDay
 
 data class DayWithSessionsWithExercisesWithMovement(
