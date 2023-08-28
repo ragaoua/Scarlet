@@ -18,7 +18,7 @@ class GetDaysWithSessionsWithMovementsByBlockIdUseCase(
      * @return a flow of resources with data (the list of days)
      */
     operator fun invoke(blockId: Long): Flow<Resource<List<DayWithSessionsWithExercisesWithMovementName>>> {
-        return repository.getDaysWithSessionsWithExercisesWithMovementNameByBlockId(blockId)
+        return repository.getDaysWithSessionsWithExercisesWithMovementByBlockId(blockId)
             .map { list ->
                 list.map { dayWithSessionWithExercisesWithMovementName ->
                     dayWithSessionWithExercisesWithMovementName.copy(

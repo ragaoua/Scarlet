@@ -9,7 +9,7 @@ data class Session(
     val date: Date = Date(System.currentTimeMillis()),
 ): Serializable
 
-data class SessionWithExercisesWithMovementName(
+data class SessionWithExercisesWithMovement(
     val session: Session,
-    val exercises: List<ExerciseWithMovementName>
+    val exercises: List<ExerciseWithMovement>
 )

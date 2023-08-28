@@ -11,5 +11,5 @@ data class Day(
 
 data class DayWithSessionsWithExercisesWithMovementName(
     val day: Day = Day(),
-    val sessions: List<SessionWithExercisesWithMovementName> = emptyList()
+    val sessions: List<SessionWithExercisesWithMovement> = emptyList()
 )

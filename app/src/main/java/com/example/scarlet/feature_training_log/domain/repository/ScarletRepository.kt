@@ -36,7 +36,7 @@ interface ScarletRepository {
     suspend fun updateSession(session: Session)
     suspend fun deleteSession(session: Session)
 
-    fun getDaysWithSessionsWithExercisesWithMovementNameByBlockId(blockId: Long):
+    fun getDaysWithSessionsWithExercisesWithMovementByBlockId(blockId: Long):
             Flow<List<DayWithSessionsWithExercisesWithMovementName>>
 
     ////////////////////////////////////////////////////////////////////////////////////////////////

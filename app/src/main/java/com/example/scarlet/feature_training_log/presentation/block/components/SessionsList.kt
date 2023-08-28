@@ -88,7 +88,7 @@ fun SessionsList(
                                         sessionWithExercisesWithMovementName.exercises.isNotEmpty()
                                     ) {
                                         sessionWithExercisesWithMovementName.exercises.joinToString {
-                                            it.movementName
+                                            it.movement.name
                                         }
                                     } else {
                                         stringResource(R.string.empty_session)

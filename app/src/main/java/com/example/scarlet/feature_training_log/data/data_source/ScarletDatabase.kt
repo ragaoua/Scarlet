@@ -12,7 +12,6 @@ import com.example.scarlet.feature_training_log.data.data_source.dao.SetDao
 import com.example.scarlet.feature_training_log.data.data_source.entity.BlockEntity
 import com.example.scarlet.feature_training_log.data.data_source.entity.DayEntity
 import com.example.scarlet.feature_training_log.data.data_source.entity.ExerciseEntity
-import com.example.scarlet.feature_training_log.data.data_source.entity.ExerciseWithMovementNameEntity
 import com.example.scarlet.feature_training_log.data.data_source.entity.MovementEntity
 import com.example.scarlet.feature_training_log.data.data_source.entity.SessionEntity
 import com.example.scarlet.feature_training_log.data.data_source.entity.SetEntity
@@ -25,9 +24,6 @@ import com.example.scarlet.feature_training_log.data.data_source.entity.SetEntit
         ExerciseEntity::class,
         MovementEntity::class,
         SetEntity::class
-    ],
-    views = [
-        ExerciseWithMovementNameEntity::class
     ],
     version = 1)
 @TypeConverters(DateConverter::class)
