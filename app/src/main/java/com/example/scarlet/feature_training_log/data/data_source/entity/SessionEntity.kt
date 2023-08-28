@@ -7,7 +7,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 import com.example.scarlet.feature_training_log.domain.model.Session
-import com.example.scarlet.feature_training_log.domain.model.SessionWithExercisesWithMovement
+import com.example.scarlet.feature_training_log.domain.model.SessionWithExercises
 import java.util.Date
 
 @Entity(
@@ -55,8 +55,10 @@ data class SessionWithExercisesWithMovementEntity(
     val exercisesWithMovement: List<ExerciseWithMovementEntity>
 ) {
 
-    fun toSessionWithExercisesWithMovement() = SessionWithExercisesWithMovement(
-        session = session.toSession(),
-        exercises = exercisesWithMovement.map { it.toExerciseWithMovement() }
+    fun toModel() = SessionWithExercises(
+        id = session.id,
+        dayId = session.dayId,
+        date = session.date,
+        exercises = exercisesWithMovement.map { it.toModel() }
     )
 }

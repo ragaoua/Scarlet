@@ -57,7 +57,7 @@ class ScarletRepositoryImpl(
         dbInstance.dayDao.getDaysWithSessionsWithMovementByBlockId(blockId)
             .map { entityList ->
                 entityList.map { entity ->
-                    entity.toDayWithSessionsWithExercisesWithMovement()
+                    entity.toModel()
                 }
             }
 
@@ -91,7 +91,7 @@ class ScarletRepositoryImpl(
         dbInstance.exerciseDao.getExercisesWithMovementAndSetsBySessionId(sessionId)
             .map { entityList ->
                 entityList.map { entity ->
-                    entity.toExerciseWithMovementAndSets()
+                    entity.toModel()
                 }
             }
 

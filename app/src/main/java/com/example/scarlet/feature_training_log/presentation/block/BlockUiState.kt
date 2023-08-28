@@ -3,11 +3,13 @@ package com.example.scarlet.feature_training_log.presentation.block
 import com.example.scarlet.core.util.StringResource
 import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.domain.model.Day
-import com.example.scarlet.feature_training_log.domain.model.DayWithSessionsWithExercisesWithMovement
+import com.example.scarlet.feature_training_log.domain.model.DayWithSessions
+import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovement
+import com.example.scarlet.feature_training_log.domain.model.SessionWithExercises
 
 data class BlockUiState (
     val block: Block = Block(),
-    val days: List<DayWithSessionsWithExercisesWithMovement> = emptyList(),
+    val days: List<DayWithSessions<SessionWithExercises<ExerciseWithMovement>>> = emptyList(),
     val selectedDay: Day? = null,
 
     val editBlockSheetState: EditBlockSheetState? = null // null means the sheet is hidden

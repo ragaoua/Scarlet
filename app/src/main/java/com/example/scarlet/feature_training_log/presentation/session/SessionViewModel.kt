@@ -134,17 +134,16 @@ class SessionViewModel @Inject constructor(
             }
             is SessionEvent.DeleteExercise -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    val sessionExercises = state.value.exercises.map { it.exercise }
                     useCases.deleteExercise(
                         exercise = event.exercise,
-                        sessionExercises = sessionExercises
+                        sessionExercises = state.value.exercises.map { it.toExercise() }
                     )
                 }
             }
             is SessionEvent.AddSet -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     val exerciseSets = state.value.exercises
-                        .find { it.exercise.id == event.exercise.id }
+                        .find { it.id == event.exercise.id }
                         ?.sets ?: emptyList()
                     useCases.insertSet(
                         exerciseId = event.exercise.id,
@@ -162,7 +161,7 @@ class SessionViewModel @Inject constructor(
                     useCases.deleteSet(
                         set = event.set,
                         exerciseSets = state.value.exercises
-                            .find { it.exercise.id == event.set.exerciseId }
+                            .find { it.id == event.set.exerciseId }
                             ?.sets ?: emptyList()
                     )
                 }
@@ -178,7 +177,7 @@ class SessionViewModel @Inject constructor(
             }
             is SessionEvent.ShowLoadCalculationDialog -> {
                 val previousSet = state.value.exercises
-                    .find { it.exercise.id == event.set.exerciseId }
+                    .find { it.id == event.set.exerciseId }
                     ?.sets
                     ?.find { it.order == event.set.order - 1 }
                     ?: run {

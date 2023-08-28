@@ -8,7 +8,6 @@ import androidx.room.PrimaryKey
 import androidx.room.Relation
 import com.example.scarlet.feature_training_log.domain.model.Day
 import com.example.scarlet.feature_training_log.domain.model.DayWithSessions
-import com.example.scarlet.feature_training_log.domain.model.DayWithSessionsWithExercisesWithMovement
 
 @Entity(
     tableName = "day",
@@ -79,8 +78,11 @@ data class DayWithSessionsWithExercisesWithMovementEntity(
     val sessionsWithExercisesWithMovement: List<SessionWithExercisesWithMovementEntity>
 ) {
 
-    fun toDayWithSessionsWithExercisesWithMovement() = DayWithSessionsWithExercisesWithMovement(
-        day = day.toDay(),
-        sessions = sessionsWithExercisesWithMovement.map { it.toSessionWithExercisesWithMovement() }
+    fun toModel() = DayWithSessions(
+        id = day.id,
+        blockId = day.blockId,
+        name = day.name,
+        order = day.order,
+        sessions = sessionsWithExercisesWithMovement.map { it.toModel() }
     )
 }

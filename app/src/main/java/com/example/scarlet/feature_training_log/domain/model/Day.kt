@@ -29,9 +29,12 @@ data class DayWithSessions<T: ISession>(
     override val name: String = IDay.name,
     override val order: Int = IDay.order,
     val sessions: List<T> = emptyList()
-): IDay
+): IDay {
 
-data class DayWithSessionsWithExercisesWithMovement(
-    val day: Day = Day(),
-    val sessions: List<SessionWithExercisesWithMovement> = emptyList()
-)
+    fun toDay() = Day(
+        id = id,
+        blockId = blockId,
+        name = name,
+        order = order
+    )
+}

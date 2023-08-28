@@ -136,10 +136,10 @@ class BlockViewModel @Inject constructor(
                     state.copy(
                         days = days,
                         selectedDay =
-                            if (state.selectedDay in days.map { it.day }) {
+                            if (state.selectedDay in days.map { it.toDay() }) {
                                 state.selectedDay
                             } else {
-                                days.firstOrNull()?.day
+                                days.firstOrNull()?.toDay()
                             }
                     )
                 }

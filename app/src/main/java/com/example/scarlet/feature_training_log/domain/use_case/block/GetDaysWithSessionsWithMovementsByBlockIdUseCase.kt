@@ -1,7 +1,9 @@
 package com.example.scarlet.feature_training_log.domain.use_case.block
 
 import com.example.scarlet.core.util.Resource
-import com.example.scarlet.feature_training_log.domain.model.DayWithSessionsWithExercisesWithMovement
+import com.example.scarlet.feature_training_log.domain.model.DayWithSessions
+import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovement
+import com.example.scarlet.feature_training_log.domain.model.SessionWithExercises
 import com.example.scarlet.feature_training_log.domain.repository.ScarletRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -17,17 +19,16 @@ class GetDaysWithSessionsWithMovementsByBlockIdUseCase(
      *
      * @return a flow of resources with data (the list of days)
      */
-    operator fun invoke(blockId: Long): Flow<Resource<List<DayWithSessionsWithExercisesWithMovement>>> {
+    operator fun invoke(blockId: Long):
+            Flow<Resource<List<DayWithSessions<SessionWithExercises<ExerciseWithMovement>>>>> {
         return repository.getDaysWithSessionsWithExercisesWithMovementByBlockId(blockId)
             .map { list ->
-                list.map { dayWithSessionWithExercisesWithMovement ->
-                    dayWithSessionWithExercisesWithMovement.copy(
-                        sessions = dayWithSessionWithExercisesWithMovement.sessions
-                            .sortedByDescending { it.session.date }
-                            .map { sessionWithExercisesWithMovement ->
-                                sessionWithExercisesWithMovement.copy(
-                                    exercises = sessionWithExercisesWithMovement.exercises
-                                        .sortedBy { it.exercise.order }
+                list.map { day ->
+                    day.copy(
+                        sessions = day.sessions.sortedByDescending { it.date }
+                            .map { session ->
+                                session.copy(
+                                    exercises = session.exercises.sortedBy { it.order }
                                 )
                             }
                     )

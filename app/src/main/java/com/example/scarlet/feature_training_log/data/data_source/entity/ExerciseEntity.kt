@@ -45,13 +45,6 @@ data class ExerciseEntity(
         movementId = exercise.movementId,
         order = exercise.order
     )
-
-    fun toExercise() = Exercise(
-        id = id,
-        sessionId = sessionId,
-        movementId = movementId,
-        order = order
-    )
 }
 
 
@@ -72,8 +65,11 @@ data class ExerciseWithMovementAndSetsEntity(
     val sets: List<SetEntity>
 ) {
 
-    fun toExerciseWithMovementAndSets() = ExerciseWithMovementAndSets(
-        exercise = exercise.toExercise(),
+    fun toModel() = ExerciseWithMovementAndSets(
+        id = exercise.id,
+        sessionId = exercise.sessionId,
+        order = exercise.order,
+        movementId = exercise.movementId,
         movement = movement.toMovement(),
         sets = sets.map { it.toSet() }
     )
@@ -89,8 +85,11 @@ data class ExerciseWithMovementEntity(
     )
     val movement: MovementEntity
 ) {
-    fun toExerciseWithMovement() = ExerciseWithMovement(
-        exercise = exercise.toExercise(),
+    fun toModel() = ExerciseWithMovement(
+        id = exercise.id,
+        sessionId = exercise.sessionId,
+        order = exercise.order,
+        movementId = exercise.movementId,
         movement = movement.toMovement()
     )
 }

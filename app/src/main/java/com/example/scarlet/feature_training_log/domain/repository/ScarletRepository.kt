@@ -4,11 +4,12 @@ import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.domain.model.BlockWithDays
 import com.example.scarlet.feature_training_log.domain.model.Day
 import com.example.scarlet.feature_training_log.domain.model.DayWithSessions
-import com.example.scarlet.feature_training_log.domain.model.DayWithSessionsWithExercisesWithMovement
 import com.example.scarlet.feature_training_log.domain.model.Exercise
+import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovement
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
 import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Session
+import com.example.scarlet.feature_training_log.domain.model.SessionWithExercises
 import com.example.scarlet.feature_training_log.domain.model.Set
 import kotlinx.coroutines.flow.Flow
 
@@ -38,7 +39,7 @@ interface ScarletRepository {
     suspend fun deleteSession(session: Session)
 
     fun getDaysWithSessionsWithExercisesWithMovementByBlockId(blockId: Long):
-            Flow<List<DayWithSessionsWithExercisesWithMovement>>
+            Flow<List<DayWithSessions<SessionWithExercises<ExerciseWithMovement>>>>
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////// EXERCISE ///////////////////////////////////////////

@@ -21,7 +21,7 @@ class GetExercisesWithMovementAndSetsBySessionIdUseCase(
         return repository.getExercisesWithMovementAndSetsBySessionId(sessionId)
             .map { exercisesWithMovementAndSets ->
                 exercisesWithMovementAndSets
-                    .sortedBy { it.exercise.order }
+                    .sortedBy { it.order }
                     .let { Resource.Success(it) }
             }
     }

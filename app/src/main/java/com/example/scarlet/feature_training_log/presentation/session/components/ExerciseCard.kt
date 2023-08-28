@@ -76,14 +76,14 @@ fun ExerciseCard(
                 ) {
                     Icon(
                         modifier = Modifier.clickable {
-                            onEvent(SessionEvent.ShowMovementSelectionSheet(exercise.exercise))
+                            onEvent(SessionEvent.ShowMovementSelectionSheet(exercise.toExercise()))
                         },
                         imageVector = Icons.Default.Edit,
                         contentDescription = stringResource(R.string.select_movement)
                     )
                     Icon(
                         modifier = Modifier.clickable {
-                            onEvent(SessionEvent.DeleteExercise(exercise.exercise))
+                            onEvent(SessionEvent.DeleteExercise(exercise.toExercise()))
                         },
                         imageVector = Icons.Default.Delete,
                         contentDescription = stringResource(R.string.delete)
@@ -142,7 +142,7 @@ fun ExerciseCard(
                         .fillMaxWidth()
                         .padding(horizontal = 8.dp),
                     onClick = {
-                        onEvent(SessionEvent.AddSet(exercise.exercise))
+                        onEvent(SessionEvent.AddSet(exercise.toExercise()))
                     }
                 ) {
                     Icon(

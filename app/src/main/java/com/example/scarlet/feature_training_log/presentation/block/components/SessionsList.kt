@@ -34,10 +34,10 @@ fun SessionsList(
     onEvent: (BlockEvent) -> Unit
 ) {
     AnimatedContent(
-        targetState = state.days.find { it.day == state.selectedDay },
+        targetState = state.days.find { it.toDay() == state.selectedDay },
         label = "day selection animation"
-    ) {
-        val sessions = it?.sessions ?: emptyList()
+    ) { day ->
+        val sessions = day?.sessions ?: emptyList()
         TitledLazyList(
             modifier = Modifier
                 .fillMaxWidth()
@@ -45,7 +45,7 @@ fun SessionsList(
             title = stringResource(R.string.block_sessions_list_title)
         ) {
             if (sessions.isNotEmpty()) {
-                items(sessions) { sessionWithExercisesWithMovementName ->
+                items(sessions) { sessions ->
                     Button(
                         modifier = Modifier.fillMaxWidth(),
                         contentPadding = MainButtonContentPadding,
@@ -57,7 +57,7 @@ fun SessionsList(
                         onClick = {
                             navigator.navigate(
                                 SessionScreenDestination(
-                                    session = sessionWithExercisesWithMovementName.session,
+                                    session = sessions.toSession(),
                                     block = state.block
                                 )
                             )
@@ -68,7 +68,7 @@ fun SessionsList(
                             onDeleteClicked = {
                                 onEvent(
                                     BlockEvent.DeleteSession(
-                                        sessionWithExercisesWithMovementName.session
+                                        sessions.toSession()
                                     )
                                 )
                             }
@@ -79,15 +79,15 @@ fun SessionsList(
                             ) {
                                 Text(
                                     text = DateUtils.formatDate(
-                                        sessionWithExercisesWithMovementName.session.date
+                                        sessions.date
                                     ),
                                     style = MaterialTheme.typography.titleLarge
                                 )
                                 Text(
                                     text = if (
-                                        sessionWithExercisesWithMovementName.exercises.isNotEmpty()
+                                        sessions.exercises.isNotEmpty()
                                     ) {
-                                        sessionWithExercisesWithMovementName.exercises.joinToString {
+                                        sessions.exercises.joinToString {
                                             it.movement.name
                                         }
                                     } else {

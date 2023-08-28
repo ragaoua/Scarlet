@@ -1,13 +1,15 @@
 package com.example.scarlet.feature_training_log.domain.repository
 
 import com.example.scarlet.feature_training_log.domain.model.Block
-import com.example.scarlet.feature_training_log.domain.model.BlockWithSessions
+import com.example.scarlet.feature_training_log.domain.model.BlockWithDays
 import com.example.scarlet.feature_training_log.domain.model.Day
-import com.example.scarlet.feature_training_log.domain.model.DayWithSessionsWithExercisesWithMovement
+import com.example.scarlet.feature_training_log.domain.model.DayWithSessions
 import com.example.scarlet.feature_training_log.domain.model.Exercise
+import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovement
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
 import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Session
+import com.example.scarlet.feature_training_log.domain.model.SessionWithExercises
 import com.example.scarlet.feature_training_log.domain.model.Set
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -15,7 +17,7 @@ import kotlinx.coroutines.flow.flow
 class TestRepository: ScarletRepository {
 
     private val blocks = mutableListOf<Block>()
-    private val days = mutableListOf<Day>()
+    private val days = mutableListOf<DayWithSessions<Session>>()
     private val sessions = mutableListOf<Session>()
 
     override suspend fun insertBlock(block: Block): Long {
@@ -34,17 +36,15 @@ class TestRepository: ScarletRepository {
         TODO("Not yet implemented")
     }
 
-    override fun getAllBlocks(): Flow<List<BlockWithSessions>> {
+    override fun getAllBlocks(): Flow<List<BlockWithDays<DayWithSessions<Session>>>> {
         return flow { emit(
-            blocks
-                .map { block ->
-                    BlockWithSessions(
-                        block = block,
-                        sessions = sessions.filter { session ->
-                            session.dayId == days.find { day -> day.blockId == block.id }?.id
-                        }
-                    )
-                }
+            blocks.map { block ->
+                BlockWithDays(
+                    id = block.id,
+                    name = block.name,
+                    days = days.filter { day -> day.blockId == block.id }
+                )
+            }
         )}
     }
 
@@ -55,7 +55,15 @@ class TestRepository: ScarletRepository {
     override suspend fun insertDay(day: Day): Long {
         val dayToBeInserted = day.copy(id = (days.size+1).toLong())
 
-        days.add(dayToBeInserted)
+        days.add(
+            DayWithSessions(
+                id = dayToBeInserted.id,
+                blockId = dayToBeInserted.blockId,
+                name = dayToBeInserted.name,
+                order = dayToBeInserted.order,
+                sessions = emptyList()
+            )
+        )
 
         return dayToBeInserted.id
     }
@@ -81,7 +89,7 @@ class TestRepository: ScarletRepository {
     }
 
     override fun getDaysWithSessionsWithExercisesWithMovementByBlockId(blockId: Long):
-            Flow<List<DayWithSessionsWithExercisesWithMovement>> {
+            Flow<List<DayWithSessions<SessionWithExercises<ExerciseWithMovement>>>> {
         TODO("Not yet implemented")
     }
 

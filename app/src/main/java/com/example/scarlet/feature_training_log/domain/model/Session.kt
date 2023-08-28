@@ -21,7 +21,16 @@ data class Session(
     override val date: Date = ISession.date,
 ): ISession, Serializable
 
-data class SessionWithExercisesWithMovement(
-    val session: Session,
-    val exercises: List<ExerciseWithMovement>
-)
+data class SessionWithExercises<T: IExercise>(
+    override val id: Long = ISession.id,
+    override val dayId: Long = ISession.dayId,
+    override val date: Date = ISession.date,
+    val exercises: List<T>
+): ISession {
+
+    fun toSession() = Session(
+        id = id,
+        dayId = dayId,
+        date = date
+    )
+}

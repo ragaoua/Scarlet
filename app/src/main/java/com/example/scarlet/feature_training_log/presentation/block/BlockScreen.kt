@@ -210,19 +210,19 @@ private fun DayNavigationBottomBar(
             horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            items(state.days) {
+            items(state.days) { day ->
                 Text(
                     modifier = Modifier
                         .clip(MaterialTheme.shapes.small)
-                        .clickable { onEvent(BlockEvent.SelectDay(it.day)) }
+                        .clickable { onEvent(BlockEvent.SelectDay(day.toDay())) }
                         .background(
-                            if (it.day == state.selectedDay) {
+                            if (day.toDay() == state.selectedDay) {
                                 MaterialTheme.colorScheme.primary
                             } else Color.Transparent
                         )
                         .padding(4.dp)
                         .widthIn(64.dp, 128.dp),
-                    text = it.day.name,
+                    text = day.name,
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.titleMedium,
