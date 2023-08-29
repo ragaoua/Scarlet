@@ -151,8 +151,7 @@ fun Exercise(
                         .fillMaxWidth()
                         .padding(horizontal = 8.dp),
                     onClick = {
-                        // TODO
-//                        onEvent(SessionEvent.AddSet(exercise.toExercise()))
+                        onEvent(BlockEvent.AddSet(exercise.toExercise()))
                     }
                 ) {
                     Icon(

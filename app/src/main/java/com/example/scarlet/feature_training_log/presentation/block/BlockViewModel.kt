@@ -218,6 +218,18 @@ class BlockViewModel @Inject constructor(
                     )
                 }
             }
+            is BlockEvent.AddSet -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    useCases.insertSet(
+                        exerciseId = event.exercise.id,
+                        exerciseSets = state.value.days
+                            .flatMap { it.sessions }
+                            .flatMap { it.exercises }
+                            .flatMap { it.sets }
+                            .filter { it.exerciseId == event.exercise.id }
+                    )
+                }
+            }
         }
     }
 
