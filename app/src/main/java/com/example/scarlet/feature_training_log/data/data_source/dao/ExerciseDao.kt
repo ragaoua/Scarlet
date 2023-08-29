@@ -14,12 +14,7 @@ import kotlinx.coroutines.flow.Flow
 interface ExerciseDao {
 
     @Transaction
-    @Query("""
-        SELECT *
-        FROM exercise
-        INNER JOIN movement ON exercise.movementId = movement.id
-        WHERE exercise.sessionId = :sessionId
-    """)
+    @Query("SELECT * FROM exercise WHERE exercise.sessionId = :sessionId")
     fun getExercisesWithMovementAndSetsBySessionId(sessionId: Long):
             Flow<List<ExerciseWithMovementAndSetsEntity>>
 

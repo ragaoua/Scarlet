@@ -19,12 +19,7 @@ interface DayDao {
     suspend fun getDaysByBlockId(blockId: Long): List<DayEntity>
 
     @Transaction
-    @Query("""
-            SELECT *
-            FROM day
-            LEFT JOIN session ON day.id = session.dayId
-            WHERE day.blockId = :blockId
-        """)
+    @Query("SELECT * FROM day WHERE day.blockId = :blockId")
     fun getDaysWithSessionsWithExercisesWithMovementAndSetsByBlockIdTest(blockId: Long):
             Flow<List<DayWithSessionsWithExercisesWithMovementAndSetsEntity>>
 
