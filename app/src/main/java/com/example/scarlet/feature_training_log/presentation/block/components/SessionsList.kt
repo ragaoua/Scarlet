@@ -1,18 +1,19 @@
 package com.example.scarlet.feature_training_log.presentation.block.components
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.example.scarlet.feature_training_log.presentation.block.BlockEvent
 import com.example.scarlet.feature_training_log.presentation.block.BlockUiState
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SessionsList(
     navigator: DestinationsNavigator,
@@ -25,12 +26,14 @@ fun SessionsList(
     ) { day ->
         val sessions = day?.sessions ?: emptyList()
 
+        val lazyListState = rememberLazyListState()
         LazyRow(
-            modifier = Modifier.fillMaxWidth()
+            state = lazyListState,
+            flingBehavior = rememberSnapFlingBehavior(lazyListState = lazyListState)
         ) {
             items(sessions) {session ->
                 Session(
-                    modifier = Modifier.width(400.dp), // TODO adapt to the screen size
+                    modifier = Modifier.fillParentMaxWidth(),
                     session = session,
                     onEvent = onEvent
                 )
