@@ -151,6 +151,37 @@ class BlockViewModel @Inject constructor(
                 )}
                 updateMovementNameFilter(event.nameFilter)
             }
+            is BlockEvent.AddMovement -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    state.value.movementSelectionSheet?.let { sheet ->
+                        useCases.insertMovement(sheet.movementNameFilter).also { resource ->
+                            resource.error?.let {
+                                /* TODO */
+                            }
+                            resource.data?.let { insertedMovementId ->
+                                sheet.exercise?.let { exercise ->
+                                    useCases.updateExercise(
+                                        exercise = exercise.copy(
+                                            movementId = insertedMovementId,
+                                        )
+                                    )
+                                } ?: run {
+                                    useCases.insertExercise(
+                                        Exercise(
+                                            sessionId = sheet.session.id,
+                                            movementId = insertedMovementId,
+                                            order = sheet.session.exercises.size + 1
+                                        )
+                                    )
+                                }
+                                _state.update { it.copy(
+                                    movementSelectionSheet = null
+                                )}
+                            }
+                        }
+                    }
+                }
+            }
             is BlockEvent.SelectMovement -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     state.value.movementSelectionSheet?.exercise?.let { exercise ->

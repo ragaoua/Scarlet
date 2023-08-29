@@ -89,8 +89,7 @@ fun MovementSelectionSheet(
                 ) {
                     item {
                         SecondaryActionButton(onClick = {
-                            // TODO
-//                            onEvent(SessionEvent.AddMovement(movementNameFilter))
+                            onEvent(BlockEvent.AddMovement)
                         }) {
                             Icon(
                                 imageVector = Icons.Default.Add,

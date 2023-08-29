@@ -80,7 +80,8 @@ object AppModule {
             deleteSession = DeleteSessionUseCase(repository),
             getMovementsFilteredByName = GetMovementsFilteredByNameUseCase(repository),
             insertExercise = InsertExerciseUseCase(repository),
-            updateExercise = UpdateExerciseUseCase(repository)
+            updateExercise = UpdateExerciseUseCase(repository),
+            insertMovement = InsertMovementUseCase(repository)
         )
 
     @Provides

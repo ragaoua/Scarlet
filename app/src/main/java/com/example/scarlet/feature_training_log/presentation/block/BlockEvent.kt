@@ -26,6 +26,7 @@ sealed interface BlockEvent {
     ) : BlockEvent
     object HideMovementSelectionSheet : BlockEvent
     data class FilterMovementsByName(val nameFilter: String) : BlockEvent
+    object AddMovement: BlockEvent
     data class SelectMovement(val movement: Movement) : BlockEvent
 
 }
