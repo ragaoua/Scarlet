@@ -3,11 +3,16 @@ package com.example.scarlet.feature_training_log.presentation.block.components
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.presentation.block.BlockEvent
 import com.example.scarlet.feature_training_log.presentation.block.BlockUiState
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -24,94 +29,31 @@ fun SessionsList(
         targetState = state.days.find { it.toDay() == state.selectedDay },
         label = "day selection animation"
     ) { day ->
-        val sessions = day?.sessions ?: emptyList()
-
         val lazyListState = rememberLazyListState()
         LazyRow(
             state = lazyListState,
-            flingBehavior = rememberSnapFlingBehavior(lazyListState = lazyListState)
+            flingBehavior = rememberSnapFlingBehavior(lazyListState = lazyListState),
+            horizontalArrangement = Arrangement.Center
         ) {
-            items(sessions) {session ->
-                Session(
-                    modifier = Modifier.fillParentMaxWidth(),
-                    session = session,
-                    onEvent = onEvent
-                )
+            val sessions = day?.sessions ?: emptyList()
+            if (sessions.isNotEmpty()) {
+                items(sessions) { session ->
+                    Session(
+                        modifier = Modifier.fillParentMaxWidth(),
+                        session = session,
+                        onEvent = onEvent
+                    )
+                }
+            } else {
+                item {
+                    Text(
+                        text = stringResource(R.string.no_sessions_yet),
+                        style = MaterialTheme.typography.bodyMedium
+                        // TODO use a lighter color
+                    )
+                }
             }
-        }
-
-//        TitledLazyList(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(TitleLazyListPadding),
-//            title = stringResource(R.string.block_sessions_list_title)
-//        ) {
-//            if (sessions.isNotEmpty()) {
-//                items(sessions) { sessions ->
-//                    Button(
-//                        modifier = Modifier.fillMaxWidth(),
-//                        contentPadding = MainButtonContentPadding,
-//                        shape = MaterialTheme.shapes.large,
-//                        colors = ButtonDefaults.buttonColors(
-//                            containerColor = MaterialTheme.colorScheme.secondary,
-//                            contentColor = MaterialTheme.colorScheme.onSecondary
-//                        ),
-//                        onClick = {
-//                            navigator.navigate(
-//                                SessionScreenDestination(
-//                                    session = sessions.toSession(),
-//                                    block = state.block
-//                                )
-//                            )
-//                        }
-//                    ) {
-//                        DeletableItem(
-//                            modifier = Modifier.fillMaxSize(),
-//                            onDeleteClicked = {
-//                                onEvent(
-//                                    BlockEvent.DeleteSession(
-//                                        sessions.toSession()
-//                                    )
-//                                )
-//                            }
-//                        ) {
-//                            Column(
-//                                modifier = Modifier.fillMaxWidth(),
-//                                horizontalAlignment = Alignment.CenterHorizontally
-//                            ) {
-//                                Text(
-//                                    text = DateUtils.formatDate(
-//                                        sessions.date
-//                                    ),
-//                                    style = MaterialTheme.typography.titleLarge
-//                                )
-//                                Text(
-//                                    text = if (
-//                                        sessions.exercises.isNotEmpty()
-//                                    ) {
-//                                        sessions.exercises.joinToString {
-//                                            it.movement.name
-//                                        }
-//                                    } else {
-//                                        stringResource(R.string.empty_session)
-//                                    },
-//                                    style = MaterialTheme.typography.bodyLarge,
-//                                    maxLines = 1,
-//                                    overflow = TextOverflow.Ellipsis
-//                                )
-//                            }
-//                        }
-//                    }
-//                }
-//            } else {
-//                item {
-//                    Text(
-//                        text = stringResource(R.string.empty_block),
-//                        style = MaterialTheme.typography.bodyMedium
-//                        // TODO color = grey
-//                    )
-//                }
-//            }
 //        }
+        }
     }
 }

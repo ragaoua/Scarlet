@@ -25,6 +25,7 @@
     <string name="end_block">End block</string>
     <string name="block_sessions_list_title">Block sessions</string>
     <string name="empty_block">Empty block</string>
+    <string name="no_sessions_yet">No sessions yet</string>
     <string name="block_started_on">Started on %1$s</string>
     <string name="empty_session">Empty session</string>
     <string name="edit_block">Edit block</string>
