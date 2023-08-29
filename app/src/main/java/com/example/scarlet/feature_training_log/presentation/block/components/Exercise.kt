@@ -33,11 +33,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
+import com.example.scarlet.feature_training_log.domain.model.IExercise
+import com.example.scarlet.feature_training_log.domain.model.SessionWithExercises
 import com.example.scarlet.feature_training_log.presentation.block.BlockEvent
 import com.example.scarlet.feature_training_log.presentation.core.components.SecondaryActionButton
 
 @Composable
 fun Exercise(
+    session: SessionWithExercises<out IExercise>,
     exercise: ExerciseWithMovementAndSets,
     isInEditMode: Boolean,
     onEvent: (BlockEvent) -> Unit
@@ -78,8 +81,10 @@ fun Exercise(
                 ) {
                     Icon(
                         modifier = Modifier.clickable {
-                            // TODO
-//                            onEvent(SessionEvent.ShowMovementSelectionSheet(exercise.toExercise()))
+                            onEvent(BlockEvent.ShowMovementSelectionSheet(
+                                session = session,
+                                exercise = exercise.toExercise()
+                            ))
                         },
                         imageVector = Icons.Default.Edit,
                         contentDescription = stringResource(R.string.select_movement)

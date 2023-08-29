@@ -33,6 +33,7 @@ fun Session(
         if(session.exercises.isNotEmpty()) {
             items(session.exercises) { exercise ->
                 Exercise(
+                    session = session,
                     exercise = exercise,
                     isInEditMode = false, // TODO
                     onEvent = onEvent
