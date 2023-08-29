@@ -206,6 +206,18 @@ class BlockViewModel @Inject constructor(
                     )}
                 }
             }
+            is BlockEvent.DeleteExercise -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    useCases.deleteExercise(
+                        exercise = event.exercise,
+                        sessionExercises = state.value.days
+                            .flatMap { it.sessions }
+                            .flatMap { it.exercises }
+                            .filter { it.sessionId == event.exercise.sessionId }
+                            .map { it.toExercise() }
+                    )
+                }
+            }
         }
     }
 

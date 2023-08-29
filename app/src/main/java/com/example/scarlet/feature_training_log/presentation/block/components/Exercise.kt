@@ -91,8 +91,7 @@ fun Exercise(
                     )
                     Icon(
                         modifier = Modifier.clickable {
-                            // TODO
-//                            onEvent(SessionEvent.DeleteExercise(exercise.toExercise()))
+                            onEvent(BlockEvent.DeleteExercise(exercise.toExercise()))
                         },
                         imageVector = Icons.Default.Delete,
                         contentDescription = stringResource(R.string.delete)

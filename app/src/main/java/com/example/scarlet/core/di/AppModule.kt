@@ -81,7 +81,8 @@ object AppModule {
             getMovementsFilteredByName = GetMovementsFilteredByNameUseCase(repository),
             insertExercise = InsertExerciseUseCase(repository),
             updateExercise = UpdateExerciseUseCase(repository),
-            insertMovement = InsertMovementUseCase(repository)
+            insertMovement = InsertMovementUseCase(repository),
+            deleteExercise = DeleteExerciseUseCase(repository)
         )
 
     @Provides

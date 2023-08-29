@@ -29,4 +29,6 @@ sealed interface BlockEvent {
     object AddMovement: BlockEvent
     data class SelectMovement(val movement: Movement) : BlockEvent
 
+    data class DeleteExercise(val exercise: Exercise) : BlockEvent
+
 }
