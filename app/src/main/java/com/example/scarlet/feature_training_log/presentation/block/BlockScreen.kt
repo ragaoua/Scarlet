@@ -165,6 +165,7 @@ fun Screen(
         state.movementSelectionSheetState?.let {
             MovementSelectionSheet(
                 movements = state.movements,
+                movementNameFilter = it.movementNameFilter,
                 onEvent = onEvent,
             )
         }

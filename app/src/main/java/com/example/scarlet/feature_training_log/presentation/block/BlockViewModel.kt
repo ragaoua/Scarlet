@@ -142,6 +142,14 @@ class BlockViewModel @Inject constructor(
                     movementSelectionSheetState = null
                 )}
             }
+            is BlockEvent.FilterMovementsByName -> {
+                _state.update { it.copy(
+                    movementSelectionSheetState = it.movementSelectionSheetState?.copy(
+                        movementNameFilter = event.nameFilter
+                    )
+                )}
+                updateMovementNameFilter(event.nameFilter)
+            }
         }
     }
 

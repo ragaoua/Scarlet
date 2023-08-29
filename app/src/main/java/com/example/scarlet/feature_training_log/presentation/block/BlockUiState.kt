@@ -30,6 +30,7 @@ data class BlockUiState (
 
     data class MovementSelectionSheetState(
         val session: Session,
-        val exercise: Exercise? = null
+        val exercise: Exercise? = null,
+        val movementNameFilter: String = ""
     )
 }
