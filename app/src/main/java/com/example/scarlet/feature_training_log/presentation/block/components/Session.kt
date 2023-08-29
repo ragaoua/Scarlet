@@ -3,6 +3,10 @@ package com.example.scarlet.feature_training_log.presentation.block.components
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,13 +33,11 @@ fun Session(
     ) {
         if(session.exercises.isNotEmpty()) {
             items(session.exercises) { exercise ->
-                Text(text = exercise.movement.name)
-                // TODO
-//                ExerciseCard(
-//                    exercise = exercise,
-//                    isInEditMode = state.isInEditMode,
-//                    onEvent = onEvent
-//                )
+                Exercise(
+                    exercise = exercise,
+                    isInEditMode = false, // TODO
+                    onEvent = onEvent
+                )
             }
         } else {
             item {
@@ -46,22 +48,22 @@ fun Session(
                 )
             }
         }
-        // TODO
- //        if (!state.isInEditMode) {
-//            item {
-//                Button(
-//                    modifier = Modifier.fillMaxWidth(),
-//                    shape = MaterialTheme.shapes.small,
-//                    onClick = {
+//        if (!state.isInEditMode) { // TODO
+            item {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.small,
+                    onClick = {
+                        // TODO
 //                        onEvent(SessionEvent.ShowMovementSelectionSheet())
-//                    }
-//                ) {
-//                    Icon(
-//                        imageVector = Icons.Default.Add,
-//                        contentDescription = stringResource(R.string.new_exercise)
-//                    )
-//                }
-//            }
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = stringResource(R.string.new_exercise)
+                    )
+                }
+            }
 //        }
     }
 }
