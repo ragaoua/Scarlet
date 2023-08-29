@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.scarlet.R
+import com.example.scarlet.feature_training_log.presentation.block.components.MovementSelectionSheet
 import com.example.scarlet.feature_training_log.presentation.block.components.SessionsList
 import com.example.scarlet.feature_training_log.presentation.core.components.AddEditBlockSheet
 import com.example.scarlet.feature_training_log.presentation.core.components.AddEditBlockSheetState
@@ -158,6 +159,13 @@ fun Screen(
                     onEvent(BlockEvent.CancelBlockEdition)
                 },
                 onValidate = { onEvent(BlockEvent.SaveBlockName) }
+            )
+        }
+
+        state.movementSelectionSheetState?.let {
+            MovementSelectionSheet(
+                movements = state.movements,
+                onEvent = onEvent,
             )
         }
     }

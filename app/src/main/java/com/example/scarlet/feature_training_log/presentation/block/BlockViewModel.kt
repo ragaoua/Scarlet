@@ -8,6 +8,7 @@ import com.example.scarlet.feature_training_log.domain.use_case.block.BlockUseCa
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,6 +24,8 @@ class BlockViewModel @Inject constructor(
     private val useCases : BlockUseCases,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+
+    private var filterMovementsJob: Job? = null
 
     private val _uiActions = Channel<UiAction>()
     val uiActions = _uiActions.receiveAsFlow()
@@ -125,6 +128,20 @@ class BlockViewModel @Inject constructor(
                     selectedDay = event.day
                 )}
             }
+            is BlockEvent.ShowMovementSelectionSheet -> {
+                updateMovementNameFilter("")
+                _state.update { it.copy(
+                    movementSelectionSheetState = BlockUiState.MovementSelectionSheetState(
+                        session = event.session,
+                        exercise = event.exercise
+                    )
+                )}
+            }
+            BlockEvent.HideMovementSelectionSheet -> {
+                _state.update { it.copy(
+                    movementSelectionSheetState = null
+                )}
+            }
         }
     }
 
@@ -143,6 +160,16 @@ class BlockViewModel @Inject constructor(
                             }
                     )
                 }
+            }.launchIn(viewModelScope)
+    }
+
+    private fun updateMovementNameFilter(nameFilter: String) {
+        filterMovementsJob?.cancel()
+        filterMovementsJob = useCases.getMovementsFilteredByName(nameFilter)
+            .onEach { movements ->
+                _state.update { it.copy(
+                    movements = movements.data ?: emptyList()
+                )}
             }.launchIn(viewModelScope)
     }
 

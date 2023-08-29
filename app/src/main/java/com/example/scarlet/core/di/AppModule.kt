@@ -77,7 +77,8 @@ object AppModule {
             getDaysWithSessionsWithMovementAndSetsByBlockId = GetDaysWithSessionsWithMovementAndSetsByBlockIdUseCase(repository),
             insertSession = InsertSessionUseCase(repository),
             updateBlock = UpdateBlockUseCase(repository, validateBlockName),
-            deleteSession = DeleteSessionUseCase(repository)
+            deleteSession = DeleteSessionUseCase(repository),
+            getMovementsFilteredByName = GetMovementsFilteredByNameUseCase(repository)
         )
 
     @Provides

@@ -48,21 +48,22 @@ fun Session(
             }
         }
 //        if (!state.isInEditMode) { // TODO
-            item {
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = MaterialTheme.shapes.small,
-                    onClick = {
-                        // TODO
-//                        onEvent(SessionEvent.ShowMovementSelectionSheet())
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = stringResource(R.string.new_exercise)
-                    )
+        item {
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.small,
+                onClick = {
+                    onEvent(BlockEvent.ShowMovementSelectionSheet(
+                        session = session.toSession()
+                    ))
                 }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = stringResource(R.string.new_exercise)
+                )
             }
+        }
 //        }
     }
 }
