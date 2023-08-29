@@ -3,6 +3,7 @@ package com.example.scarlet.feature_training_log.presentation.block
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.domain.use_case.block.BlockUseCases
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
@@ -131,7 +132,7 @@ class BlockViewModel @Inject constructor(
             is BlockEvent.ShowMovementSelectionSheet -> {
                 updateMovementNameFilter("")
                 _state.update { it.copy(
-                    movementSelectionSheetState = BlockUiState.MovementSelectionSheetState(
+                    movementSelectionSheet = BlockUiState.MovementSelectionSheetState(
                         session = event.session,
                         exercise = event.exercise
                     )
@@ -139,16 +140,40 @@ class BlockViewModel @Inject constructor(
             }
             BlockEvent.HideMovementSelectionSheet -> {
                 _state.update { it.copy(
-                    movementSelectionSheetState = null
+                    movementSelectionSheet = null
                 )}
             }
             is BlockEvent.FilterMovementsByName -> {
                 _state.update { it.copy(
-                    movementSelectionSheetState = it.movementSelectionSheetState?.copy(
+                    movementSelectionSheet = it.movementSelectionSheet?.copy(
                         movementNameFilter = event.nameFilter
                     )
                 )}
                 updateMovementNameFilter(event.nameFilter)
+            }
+            is BlockEvent.SelectMovement -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    state.value.movementSelectionSheet?.exercise?.let { exercise ->
+                        useCases.updateExercise(
+                            exercise = exercise.copy(
+                                movementId = event.movement.id
+                            )
+                        )
+                    } ?: run {
+                        state.value.movementSelectionSheet?.let { sheet ->
+                            useCases.insertExercise(
+                                Exercise(
+                                    sessionId = sheet.session.id,
+                                    movementId = event.movement.id,
+                                    order = sheet.session.exercises.size + 1
+                                )
+                            )
+                        }
+                    }
+                    _state.update { it.copy(
+                        movementSelectionSheet = null
+                    )}
+                }
             }
         }
     }

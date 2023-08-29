@@ -6,8 +6,8 @@ import com.example.scarlet.feature_training_log.domain.model.Day
 import com.example.scarlet.feature_training_log.domain.model.DayWithSessions
 import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
+import com.example.scarlet.feature_training_log.domain.model.IExercise
 import com.example.scarlet.feature_training_log.domain.model.Movement
-import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.domain.model.SessionWithExercises
 
 data class BlockUiState (
@@ -18,7 +18,7 @@ data class BlockUiState (
     val editBlockSheetState: EditBlockSheetState? = null, // null means the sheet is hidden
 
     val movements: List<Movement> = emptyList(),
-    val movementSelectionSheetState: MovementSelectionSheetState? = null // null means the sheet is hidden
+    val movementSelectionSheet: MovementSelectionSheetState? = null // null means the sheet is hidden
 ) {
 
     data class EditBlockSheetState(
@@ -29,7 +29,7 @@ data class BlockUiState (
     )
 
     data class MovementSelectionSheetState(
-        val session: Session,
+        val session: SessionWithExercises<out IExercise>,
         val exercise: Exercise? = null,
         val movementNameFilter: String = ""
     )

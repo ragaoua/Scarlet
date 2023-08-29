@@ -2,7 +2,10 @@ package com.example.scarlet.feature_training_log.presentation.block
 
 import com.example.scarlet.feature_training_log.domain.model.Day
 import com.example.scarlet.feature_training_log.domain.model.Exercise
+import com.example.scarlet.feature_training_log.domain.model.IExercise
+import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Session
+import com.example.scarlet.feature_training_log.domain.model.SessionWithExercises
 
 sealed interface BlockEvent {
     object AddSession: BlockEvent
@@ -18,10 +21,11 @@ sealed interface BlockEvent {
     data class SelectDay(val day: Day) : BlockEvent
 
     data class ShowMovementSelectionSheet(
-        val session: Session,
+        val session: SessionWithExercises<out IExercise>,
         val exercise: Exercise? = null
     ) : BlockEvent
     object HideMovementSelectionSheet : BlockEvent
     data class FilterMovementsByName(val nameFilter: String) : BlockEvent
+    data class SelectMovement(val movement: Movement) : BlockEvent
 
 }

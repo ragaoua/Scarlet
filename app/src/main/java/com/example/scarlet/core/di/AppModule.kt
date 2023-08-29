@@ -78,7 +78,9 @@ object AppModule {
             insertSession = InsertSessionUseCase(repository),
             updateBlock = UpdateBlockUseCase(repository, validateBlockName),
             deleteSession = DeleteSessionUseCase(repository),
-            getMovementsFilteredByName = GetMovementsFilteredByNameUseCase(repository)
+            getMovementsFilteredByName = GetMovementsFilteredByNameUseCase(repository),
+            insertExercise = InsertExerciseUseCase(repository),
+            updateExercise = UpdateExerciseUseCase(repository)
         )
 
     @Provides

@@ -54,7 +54,7 @@ fun Session(
                 shape = MaterialTheme.shapes.small,
                 onClick = {
                     onEvent(BlockEvent.ShowMovementSelectionSheet(
-                        session = session.toSession()
+                        session = session
                     ))
                 }
             ) {

@@ -162,7 +162,7 @@ fun Screen(
             )
         }
 
-        state.movementSelectionSheetState?.let {
+        state.movementSelectionSheet?.let {
             MovementSelectionSheet(
                 movements = state.movements,
                 movementNameFilter = it.movementNameFilter,

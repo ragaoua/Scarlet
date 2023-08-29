@@ -117,8 +117,7 @@ fun MovementSelectionSheet(
                             .fillMaxWidth()
                             .padding(2.dp)
                             .clickable {
-                                // TODO
-//                                onEvent(SessionEvent.SelectMovement(movement.id))
+                                onEvent(BlockEvent.SelectMovement(movement))
                             }
                             .border(1.dp, MaterialTheme.colorScheme.onSurfaceVariant)
                             .padding(8.dp)
