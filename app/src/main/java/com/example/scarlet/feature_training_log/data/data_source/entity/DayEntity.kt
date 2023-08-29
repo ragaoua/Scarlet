@@ -67,7 +67,7 @@ data class DayWithSessionsEntity(
 }
 
 
-data class DayWithSessionsWithExercisesWithMovementEntity(
+data class DayWithSessionsWithExercisesWithMovementAndSetsEntity(
     @Embedded
     val day: DayEntity,
     @Relation(
@@ -75,7 +75,7 @@ data class DayWithSessionsWithExercisesWithMovementEntity(
         parentColumn = "id",
         entityColumn = "dayId"
     )
-    val sessionsWithExercisesWithMovement: List<SessionWithExercisesWithMovementEntity>
+    val sessionsWithExercisesWithMovementAndSets: List<SessionWithExercisesWithMovementAndSetsEntity>
 ) {
 
     fun toModel() = DayWithSessions(
@@ -83,6 +83,6 @@ data class DayWithSessionsWithExercisesWithMovementEntity(
         blockId = day.blockId,
         name = day.name,
         order = day.order,
-        sessions = sessionsWithExercisesWithMovement.map { it.toModel() }
+        sessions = sessionsWithExercisesWithMovementAndSets.map { it.toModel() }
     )
 }

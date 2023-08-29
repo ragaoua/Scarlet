@@ -88,7 +88,7 @@ class TestRepository: ScarletRepository {
         TODO("Not yet implemented")
     }
 
-    override fun getDaysWithSessionsWithExercisesWithMovementByBlockId(blockId: Long):
+    override fun getDaysWithSessionsWithExercisesWithMovementAndSetsByBlockId(blockId: Long):
             Flow<List<DayWithSessions<SessionWithExercises<ExerciseWithMovement>>>> {
         TODO("Not yet implemented")
     }

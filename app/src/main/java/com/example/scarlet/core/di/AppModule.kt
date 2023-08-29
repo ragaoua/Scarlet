@@ -7,7 +7,7 @@ import com.example.scarlet.feature_training_log.data.repository.ScarletRepositor
 import com.example.scarlet.feature_training_log.domain.repository.ScarletRepository
 import com.example.scarlet.feature_training_log.domain.use_case.block.BlockUseCases
 import com.example.scarlet.feature_training_log.domain.use_case.block.DeleteSessionUseCase
-import com.example.scarlet.feature_training_log.domain.use_case.block.GetDaysWithSessionsWithMovementsByBlockIdUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.block.GetDaysWithSessionsWithMovementAndSetsByBlockIdUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.block.InsertSessionUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.block.UpdateBlockUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.session.CopyPrecedingSetFieldUseCase
@@ -74,7 +74,7 @@ object AppModule {
         repository: ScarletRepository,
         validateBlockName: ValidateBlockNameHelper
     ) = BlockUseCases(
-            getDaysWithSessionsWithMovementsByBlockId = GetDaysWithSessionsWithMovementsByBlockIdUseCase(repository),
+            getDaysWithSessionsWithMovementAndSetsByBlockId = GetDaysWithSessionsWithMovementAndSetsByBlockIdUseCase(repository),
             insertSession = InsertSessionUseCase(repository),
             updateBlock = UpdateBlockUseCase(repository, validateBlockName),
             deleteSession = DeleteSessionUseCase(repository)

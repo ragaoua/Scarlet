@@ -53,11 +53,11 @@ class ScarletRepositoryImpl(
         dbInstance.dayDao.getDaysByBlockId(blockId)
             .map { it.toDay() }
 
-    override fun getDaysWithSessionsWithExercisesWithMovementByBlockId(blockId: Long) =
-        dbInstance.dayDao.getDaysWithSessionsWithMovementByBlockId(blockId)
-            .map { entityList ->
-                entityList.map { entity ->
-                    entity.toModel()
+    override fun getDaysWithSessionsWithExercisesWithMovementAndSetsByBlockId(blockId: Long) =
+        dbInstance.dayDao.getDaysWithSessionsWithExercisesWithMovementAndSetsByBlockIdTest(blockId)
+            .map { days ->
+                days.map { day ->
+                    day.toModel()
                 }
             }
 

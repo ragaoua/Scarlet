@@ -5,7 +5,6 @@ import com.example.scarlet.feature_training_log.domain.model.BlockWithDays
 import com.example.scarlet.feature_training_log.domain.model.Day
 import com.example.scarlet.feature_training_log.domain.model.DayWithSessions
 import com.example.scarlet.feature_training_log.domain.model.Exercise
-import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovement
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
 import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Session
@@ -38,8 +37,8 @@ interface ScarletRepository {
     suspend fun updateSession(session: Session)
     suspend fun deleteSession(session: Session)
 
-    fun getDaysWithSessionsWithExercisesWithMovementByBlockId(blockId: Long):
-            Flow<List<DayWithSessions<SessionWithExercises<ExerciseWithMovement>>>>
+    fun getDaysWithSessionsWithExercisesWithMovementAndSetsByBlockId(blockId: Long):
+            Flow<List<DayWithSessions<SessionWithExercises<ExerciseWithMovementAndSets>>>>
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////// EXERCISE ///////////////////////////////////////////
