@@ -1,9 +1,13 @@
 package com.example.scarlet.feature_training_log.presentation.block.components
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.example.scarlet.feature_training_log.presentation.block.BlockEvent
 import com.example.scarlet.feature_training_log.presentation.block.BlockUiState
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -21,9 +25,12 @@ fun SessionsList(
     ) { day ->
         val sessions = day?.sessions ?: emptyList()
 
-        LazyRow {
+        LazyRow(
+            modifier = Modifier.fillMaxWidth()
+        ) {
             items(sessions) {session ->
                 Session(
+                    modifier = Modifier.width(400.dp), // TODO adapt to the screen size
                     session = session,
                     onEvent = onEvent
                 )

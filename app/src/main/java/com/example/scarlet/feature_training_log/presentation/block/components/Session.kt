@@ -22,13 +22,12 @@ import com.example.scarlet.ui.theme.TitleLazyListPadding
 
 @Composable
 fun Session(
+    modifier: Modifier = Modifier,
     session: SessionWithExercises<ExerciseWithMovementAndSets>,
     onEvent: (BlockEvent) -> Unit
 ) {
     TitledLazyList(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(TitleLazyListPadding),
+        modifier = modifier.padding(TitleLazyListPadding),
         title = DateUtils.formatDate(session.date)
     ) {
         if(session.exercises.isNotEmpty()) {

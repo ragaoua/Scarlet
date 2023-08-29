@@ -126,14 +126,13 @@ fun Exercise(
                     )
                     Spacer(modifier = Modifier) // Doubles the space between header and sets
                     exercise.sets.forEach { set ->
-                        // TODO
-                        Text(text = set.toString())
-//                        ExerciseSetRow(
-//                            set = set,
-//                            isFirstSet = set == exercise.sets.first(),
-//                            isLastSet = set == exercise.sets.last(),
-//                            onEvent = onEvent
-//                        )
+                        ExerciseSetRow(
+                            modifier = Modifier.fillMaxWidth(),
+                            set = set,
+                            isFirstSet = set == exercise.sets.first(),
+                            isLastSet = set == exercise.sets.last(),
+                            onEvent = onEvent
+                        )
                     }
                 } else {
                     Text(text = stringResource(R.string.no_sets_msg))
