@@ -86,7 +86,8 @@ object AppModule {
             insertSet = InsertSetUseCase(repository),
             updateSet = UpdateSetUseCase(repository),
             deleteSet = DeleteSetUseCase(repository),
-            copyPrecedingSetField = CopyPrecedingSetFieldUseCase(repository)
+            copyPrecedingSetField = CopyPrecedingSetFieldUseCase(repository),
+            updateLoadBasedOnPreviousSet = UpdateLoadBasedOnPreviousSetUseCase(repository)
         )
 
     @Provides

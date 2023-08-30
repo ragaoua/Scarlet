@@ -94,8 +94,7 @@ fun ExerciseSetRow(
                 }
             },
             onIconLongClicked = {
-                // TODO
-//                onEvent(SessionEvent.ShowLoadCalculationDialog(set))
+                onEvent(BlockEvent.ShowLoadCalculationDialog(set))
             }
         )
 

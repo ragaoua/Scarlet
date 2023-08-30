@@ -61,7 +61,7 @@ class BlockViewModel @Inject constructor(
             }
             BlockEvent.EditBlock -> {
                 _state.update { it.copy(
-                    editBlockSheetState = BlockUiState.EditBlockSheetState(
+                    editBlockSheet = BlockUiState.EditBlockSheetState(
                         blockName = state.value.block.name,
                         areMicroCycleSettingsExpanded = false, // TODO
                         daysPerMicroCycle = 3 // TODO
@@ -70,36 +70,36 @@ class BlockViewModel @Inject constructor(
             }
             BlockEvent.CancelBlockEdition -> {
                 _state.update { it.copy(
-                    editBlockSheetState = null
+                    editBlockSheet = null
                 )}
             }
             is BlockEvent.UpdateEditedBlockName -> {
                 _state.update { it.copy(
-                    editBlockSheetState = it.editBlockSheetState?.copy(
+                    editBlockSheet = it.editBlockSheet?.copy(
                         blockName = event.editedBlockName
                     )
                 )}
             }
             BlockEvent.ToggleMicroCycleSettings -> {
                 _state.update { it.copy(
-                    editBlockSheetState = it.editBlockSheetState?.copy(
-                        areMicroCycleSettingsExpanded = !it.editBlockSheetState.areMicroCycleSettingsExpanded
+                    editBlockSheet = it.editBlockSheet?.copy(
+                        areMicroCycleSettingsExpanded = !it.editBlockSheet.areMicroCycleSettingsExpanded
                     )
                 )}
             }
             is BlockEvent.UpdateDaysPerMicroCycle -> {
                 _state.update { it.copy(
-                    editBlockSheetState = it.editBlockSheetState?.copy(
+                    editBlockSheet = it.editBlockSheet?.copy(
                         daysPerMicroCycle = event.nbDays
                     )
                 )}
             }
             is BlockEvent.SaveBlockName -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    state.value.editBlockSheetState?.blockName?.let { editedBlockName ->
+                    state.value.editBlockSheet?.blockName?.let { editedBlockName ->
                         if(editedBlockName == state.value.block.name) {
                             _state.update { it.copy(
-                                editBlockSheetState = null
+                                editBlockSheet = null
                             )}
                             return@launch
                         }
@@ -110,14 +110,14 @@ class BlockViewModel @Inject constructor(
                         useCases.updateBlock(updatedBlock).also { resource ->
                             resource.error?.let { error ->
                                 _state.update { it.copy (
-                                    editBlockSheetState = it.editBlockSheetState?.copy(
+                                    editBlockSheet = it.editBlockSheet?.copy(
                                         blockNameError = error
                                     )
                                 )}
                             } ?: run {
                                 _state.update { it.copy(
                                     block = updatedBlock,
-                                    editBlockSheetState = null
+                                    editBlockSheet = null
                                 )}
                             }
                         }
@@ -256,6 +256,40 @@ class BlockViewModel @Inject constructor(
                             .flatMap { it.exercises },
                         fieldToCopy = event.fieldToCopy
                     )
+                }
+            }
+            is BlockEvent.ShowLoadCalculationDialog -> {
+                val previousSet = state.value.days
+                    .flatMap { it.sessions }
+                    .flatMap { it.exercises }
+                    .flatMap { it.sets }
+                    .find { it.exerciseId == event.set.exerciseId &&
+                            it.order == event.set.order - 1
+                    } ?: return
+                _state.update { it.copy(
+                    loadCalculationDialog = BlockUiState.LoadCalculationDialogState(
+                        set = event.set,
+                        previousSet = previousSet
+                    )
+                )}
+            }
+            is BlockEvent.HideLoadCalculationDialog -> {
+                _state.update { it.copy(
+                    loadCalculationDialog = null
+                )}
+            }
+            is BlockEvent.CalculateLoad -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    state.value.loadCalculationDialog?.let { dialog ->
+                        useCases.updateLoadBasedOnPreviousSet(
+                            set = dialog.set,
+                            precedingSet = dialog.previousSet,
+                            loadPercentage = event.percentage
+                        )
+                    }
+                    _state.update { it.copy(
+                        loadCalculationDialog = null
+                    )}
                 }
             }
         }

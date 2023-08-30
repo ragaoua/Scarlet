@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.scarlet.R
+import com.example.scarlet.feature_training_log.presentation.block.components.LoadCalculationDialog
 import com.example.scarlet.feature_training_log.presentation.block.components.MovementSelectionSheet
 import com.example.scarlet.feature_training_log.presentation.block.components.SessionsList
 import com.example.scarlet.feature_training_log.presentation.core.components.AddEditBlockSheet
@@ -135,7 +136,7 @@ fun Screen(
             }
         }
 
-        state.editBlockSheetState?.let{
+        state.editBlockSheet?.let{
             AddEditBlockSheet(
                 sheetState = AddEditBlockSheetState(
                     isNewBlock = false,
@@ -167,6 +168,12 @@ fun Screen(
                 movements = state.movements,
                 movementNameFilter = it.movementNameFilter,
                 onEvent = onEvent,
+            )
+        }
+        state.loadCalculationDialog?.let {
+            LoadCalculationDialog(
+                dialogState = it,
+                onEvent = onEvent
             )
         }
     }

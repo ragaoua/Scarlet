@@ -38,4 +38,8 @@ sealed interface BlockEvent {
         val set: Set,
         val fieldToCopy: com.example.scarlet.feature_training_log.presentation.session.util.SetFieldType
     ) : BlockEvent
+
+    data class ShowLoadCalculationDialog(val set: Set) : BlockEvent
+    object HideLoadCalculationDialog : BlockEvent
+    data class CalculateLoad(val percentage: String) : BlockEvent
 }
