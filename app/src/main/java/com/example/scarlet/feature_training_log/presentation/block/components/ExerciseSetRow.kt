@@ -17,7 +17,8 @@ import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.Set
 import com.example.scarlet.feature_training_log.presentation.block.BlockEvent
-import com.example.scarlet.feature_training_log.presentation.session.util.SetFieldRatio
+import com.example.scarlet.feature_training_log.presentation.block.util.SetFieldRatio
+import com.example.scarlet.feature_training_log.presentation.session.util.SetFieldType
 
 @Composable
 fun ExerciseSetRow(
@@ -58,11 +59,10 @@ fun ExerciseSetRow(
             imeAction = ImeAction.Next,
             onIconClicked = if (isFirstSet) null else {
                 {
-                    // TODO
-//                    onEvent(SessionEvent.CopyPreviousSet(
-//                        set = set,
-//                        fieldToCopy = SetFieldType.REPS
-//                    ))
+                    onEvent(BlockEvent.CopyPreviousSet(
+                        set = set,
+                        fieldToCopy = SetFieldType.REPS
+                    ))
                 }
             }
         )
@@ -87,11 +87,10 @@ fun ExerciseSetRow(
             imeAction = ImeAction.Next,
             onIconClicked = if (isFirstSet) null else {
                 {
-                    // TODO
-//                    onEvent(SessionEvent.CopyPreviousSet(
-//                        set = set,
-//                        fieldToCopy = SetFieldType.WEIGHT
-//                    ))
+                    onEvent(BlockEvent.CopyPreviousSet(
+                        set = set,
+                        fieldToCopy = SetFieldType.WEIGHT
+                    ))
                 }
             },
             onIconLongClicked = {

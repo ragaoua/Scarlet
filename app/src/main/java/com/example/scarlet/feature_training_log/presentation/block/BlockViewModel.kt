@@ -247,6 +247,17 @@ class BlockViewModel @Inject constructor(
                     )
                 }
             }
+            is BlockEvent.CopyPreviousSet -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    useCases.copyPrecedingSetField(
+                        set = event.set,
+                        sessionExercises = state.value.days
+                            .flatMap { it.sessions }
+                            .flatMap { it.exercises },
+                        fieldToCopy = event.fieldToCopy
+                    )
+                }
+            }
         }
     }
 

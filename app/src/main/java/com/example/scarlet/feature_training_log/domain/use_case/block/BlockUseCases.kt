@@ -1,5 +1,6 @@
 package com.example.scarlet.feature_training_log.domain.use_case.block
 
+import com.example.scarlet.feature_training_log.domain.use_case.session.CopyPrecedingSetFieldUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.session.DeleteExerciseUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.session.DeleteSetUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.session.GetMovementsFilteredByNameUseCase
@@ -21,5 +22,6 @@ data class BlockUseCases(
     val deleteExercise: DeleteExerciseUseCase,
     val insertSet: InsertSetUseCase,
     val updateSet: UpdateSetUseCase,
-    val deleteSet: DeleteSetUseCase
+    val deleteSet: DeleteSetUseCase,
+    val copyPrecedingSetField: CopyPrecedingSetFieldUseCase
 )

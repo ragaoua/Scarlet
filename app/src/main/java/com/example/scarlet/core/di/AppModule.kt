@@ -85,7 +85,8 @@ object AppModule {
             deleteExercise = DeleteExerciseUseCase(repository),
             insertSet = InsertSetUseCase(repository),
             updateSet = UpdateSetUseCase(repository),
-            deleteSet = DeleteSetUseCase(repository)
+            deleteSet = DeleteSetUseCase(repository),
+            copyPrecedingSetField = CopyPrecedingSetFieldUseCase(repository)
         )
 
     @Provides

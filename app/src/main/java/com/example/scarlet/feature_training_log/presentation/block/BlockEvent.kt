@@ -34,4 +34,8 @@ sealed interface BlockEvent {
     data class AddSet(val exercise: Exercise) : BlockEvent
     data class UpdateSet(val set: Set) : BlockEvent
     data class DeleteSet(val set: Set) : BlockEvent
+    data class CopyPreviousSet(
+        val set: Set,
+        val fieldToCopy: com.example.scarlet.feature_training_log.presentation.session.util.SetFieldType
+    ) : BlockEvent
 }
