@@ -42,7 +42,7 @@ import com.example.scarlet.feature_training_log.presentation.core.components.Sec
 fun Exercise(
     session: SessionWithExercises<out IExercise>,
     exercise: ExerciseWithMovementAndSets,
-    isInEditMode: Boolean,
+    isInSessionEditMode: Boolean,
     onEvent: (BlockEvent) -> Unit
 ) {
     Column(
@@ -57,11 +57,11 @@ fun Exercise(
         /*************************************************************************
          * EXERCISE HEADER
          *************************************************************************/
-        var isExerciseDetailExpanded by remember(isInEditMode) { mutableStateOf(!isInEditMode) }
+        var isExerciseDetailExpanded by remember(isInSessionEditMode) { mutableStateOf(!isInSessionEditMode) }
 
         Row(
             modifier =
-            if (!isInEditMode) {
+            if (!isInSessionEditMode) {
                 Modifier.clickable { isExerciseDetailExpanded = !isExerciseDetailExpanded }
             } else {
                 Modifier
@@ -75,7 +75,7 @@ fun Exercise(
                 text = exercise.movement.name,
                 style = MaterialTheme.typography.titleLarge
             )
-            if(isInEditMode) {
+            if(isInSessionEditMode) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {

@@ -15,13 +15,11 @@ import androidx.compose.ui.res.stringResource
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.presentation.block.BlockEvent
 import com.example.scarlet.feature_training_log.presentation.block.BlockUiState
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SessionsList(
-    navigator: DestinationsNavigator,
     state: BlockUiState,
     onEvent: (BlockEvent) -> Unit
 ) {
@@ -41,6 +39,7 @@ fun SessionsList(
                     Session(
                         modifier = Modifier.fillParentMaxWidth(),
                         session = session,
+                        isInSessionEditMode = state.isInSessionEditMode,
                         onEvent = onEvent
                     )
                 }
@@ -53,7 +52,6 @@ fun SessionsList(
                     )
                 }
             }
-//        }
         }
     }
 }
