@@ -33,4 +33,5 @@ sealed interface BlockEvent {
 
     data class AddSet(val exercise: Exercise) : BlockEvent
     data class UpdateSet(val set: Set) : BlockEvent
+    data class DeleteSet(val set: Set) : BlockEvent
 }

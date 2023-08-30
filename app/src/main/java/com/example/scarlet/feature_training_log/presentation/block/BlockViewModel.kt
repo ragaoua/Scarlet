@@ -235,6 +235,18 @@ class BlockViewModel @Inject constructor(
                     useCases.updateSet(event.set)
                 }
             }
+            is BlockEvent.DeleteSet -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    useCases.deleteSet(
+                        set = event.set,
+                        exerciseSets = state.value.days
+                            .flatMap { it.sessions }
+                            .flatMap { it.exercises }
+                            .flatMap { it.sets }
+                            .filter { it.exerciseId == event.set.exerciseId }
+                    )
+                }
+            }
         }
     }
 

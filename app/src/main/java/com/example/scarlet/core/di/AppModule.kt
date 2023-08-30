@@ -84,7 +84,8 @@ object AppModule {
             insertMovement = InsertMovementUseCase(repository),
             deleteExercise = DeleteExerciseUseCase(repository),
             insertSet = InsertSetUseCase(repository),
-            updateSet = UpdateSetUseCase(repository)
+            updateSet = UpdateSetUseCase(repository),
+            deleteSet = DeleteSetUseCase(repository)
         )
 
     @Provides

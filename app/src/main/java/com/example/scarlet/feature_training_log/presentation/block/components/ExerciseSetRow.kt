@@ -126,8 +126,7 @@ fun ExerciseSetRow(
             modifier = Modifier
                 .weight(SetFieldRatio.OTHER)
                 .clickable {
-                    // TODO
-//                    onEvent(SessionEvent.DeleteSet(set))
+                    onEvent(BlockEvent.DeleteSet(set))
                 }
         )
     }
