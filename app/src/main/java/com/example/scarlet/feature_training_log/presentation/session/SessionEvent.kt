@@ -2,7 +2,7 @@ package com.example.scarlet.feature_training_log.presentation.session
 
 import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.Set
-import com.example.scarlet.feature_training_log.presentation.session.util.SetFieldType
+import com.example.scarlet.feature_training_log.presentation.block.util.SetFieldType
 import java.util.Date
 
 sealed interface SessionEvent {

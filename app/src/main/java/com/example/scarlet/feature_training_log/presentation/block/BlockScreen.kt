@@ -47,7 +47,6 @@ import com.example.scarlet.feature_training_log.presentation.block.components.Mo
 import com.example.scarlet.feature_training_log.presentation.block.components.SessionsList
 import com.example.scarlet.feature_training_log.presentation.core.components.AddEditBlockSheet
 import com.example.scarlet.feature_training_log.presentation.core.components.AddEditBlockSheetState
-import com.example.scarlet.feature_training_log.presentation.destinations.SessionScreenDestination
 import com.example.scarlet.ui.theme.ScarletTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -88,12 +87,6 @@ fun Screen(
             when(action) {
                 is BlockViewModel.UiAction.NavigateUp -> {
                     navigator.navigateUp()
-                }
-                is BlockViewModel.UiAction.NavigateToSessionScreen -> {
-                    navigator.navigate(SessionScreenDestination(
-                        session = action.session,
-                        block = state.block
-                    ))
                 }
             }
         }

@@ -17,9 +17,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.Set
+import com.example.scarlet.feature_training_log.presentation.block.util.SetFieldType
 import com.example.scarlet.feature_training_log.presentation.session.SessionEvent
 import com.example.scarlet.feature_training_log.presentation.session.util.SetFieldRatio
-import com.example.scarlet.feature_training_log.presentation.session.util.SetFieldType
 
 @Composable
 fun ExerciseSetRow(

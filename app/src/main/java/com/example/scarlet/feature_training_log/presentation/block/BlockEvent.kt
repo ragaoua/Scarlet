@@ -7,6 +7,7 @@ import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.domain.model.SessionWithExercises
 import com.example.scarlet.feature_training_log.domain.model.Set
+import com.example.scarlet.feature_training_log.presentation.block.util.SetFieldType
 
 sealed interface BlockEvent {
     object AddSession: BlockEvent
@@ -36,7 +37,7 @@ sealed interface BlockEvent {
     data class DeleteSet(val set: Set) : BlockEvent
     data class CopyPreviousSet(
         val set: Set,
-        val fieldToCopy: com.example.scarlet.feature_training_log.presentation.session.util.SetFieldType
+        val fieldToCopy: SetFieldType
     ) : BlockEvent
 
     data class ShowLoadCalculationDialog(val set: Set) : BlockEvent

@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.scarlet.feature_training_log.domain.model.Exercise
-import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.domain.use_case.block.BlockUseCases
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -46,11 +45,6 @@ class BlockViewModel @Inject constructor(
                 viewModelScope.launch(Dispatchers.IO) {
                     state.value.selectedDay?.let { selectedDay ->
                         useCases.insertSession(selectedDay.id)
-                            .also { resource ->
-                                resource.data?.let { insertedSession ->
-                                    _uiActions.send(UiAction.NavigateToSessionScreen(insertedSession))
-                                }
-                            }
                     } // TODO should we print an error if selectedDay is null?
                 }
             }
@@ -325,6 +319,5 @@ class BlockViewModel @Inject constructor(
 
     sealed interface UiAction {
         object NavigateUp: UiAction
-        data class NavigateToSessionScreen(val session: Session): UiAction
     }
 }

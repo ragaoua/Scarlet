@@ -7,7 +7,7 @@ import com.example.scarlet.core.util.StringResource
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
 import com.example.scarlet.feature_training_log.domain.model.Set
 import com.example.scarlet.feature_training_log.domain.repository.ScarletRepository
-import com.example.scarlet.feature_training_log.presentation.session.util.SetFieldType
+import com.example.scarlet.feature_training_log.presentation.block.util.SetFieldType
 
 class CopyPrecedingSetFieldUseCase(
     private val repository: ScarletRepository
