@@ -43,6 +43,7 @@ fun Session(
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             item {

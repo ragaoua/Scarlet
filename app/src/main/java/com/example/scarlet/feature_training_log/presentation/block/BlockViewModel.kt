@@ -137,9 +137,11 @@ class BlockViewModel @Inject constructor(
             }
             is BlockEvent.UpdateSessionDate -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    useCases.updateSession(
-                        session = state.value.sessionDatePickerDialog?.session ?: return@launch
-                    )
+                    val updatedSession = state.value.sessionDatePickerDialog?.session?.copy(
+                        date = event.date
+                    ) ?: return@launch
+                    useCases.updateSession(updatedSession)
+
                     _state.update { it.copy(
                         sessionDatePickerDialog = null
                     )}

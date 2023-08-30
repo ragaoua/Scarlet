@@ -8,6 +8,7 @@ import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.domain.model.SessionWithExercises
 import com.example.scarlet.feature_training_log.domain.model.Set
 import com.example.scarlet.feature_training_log.presentation.block.util.SetFieldType
+import java.util.Date
 
 sealed interface BlockEvent {
     object AddSession: BlockEvent
@@ -24,7 +25,7 @@ sealed interface BlockEvent {
 
     data class ShowSessionDatePickerDialog(val session: Session) : BlockEvent
     object HideSessionDatePickerDialog : BlockEvent
-    data class UpdateSessionDate(val date: String) : BlockEvent
+    data class UpdateSessionDate(val date: Date) : BlockEvent
 
     object ToggleSessionEditMode : BlockEvent
 
