@@ -22,6 +22,12 @@ sealed interface BlockEvent {
 
     data class SelectDay(val day: Day) : BlockEvent
 
+    data class ShowSessionDatePickerDialog(val session: Session) : BlockEvent
+    object HideSessionDatePickerDialog : BlockEvent
+    data class UpdateSessionDate(val date: String) : BlockEvent
+
+    object ToggleSessionEditMode : BlockEvent
+
     data class ShowMovementSelectionSheet(
         val session: SessionWithExercises<out IExercise>,
         val exercise: Exercise? = null

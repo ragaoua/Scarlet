@@ -75,8 +75,9 @@ object AppModule {
         validateBlockName: ValidateBlockNameHelper
     ) = BlockUseCases(
             getDaysWithSessionsWithMovementAndSetsByBlockId = GetDaysWithSessionsWithMovementAndSetsByBlockIdUseCase(repository),
-            insertSession = InsertSessionUseCase(repository),
             updateBlock = UpdateBlockUseCase(repository, validateBlockName),
+            insertSession = InsertSessionUseCase(repository),
+            updateSession = UpdateSessionUseCase(repository),
             deleteSession = DeleteSessionUseCase(repository),
             getMovementsFilteredByName = GetMovementsFilteredByNameUseCase(repository),
             insertExercise = InsertExerciseUseCase(repository),

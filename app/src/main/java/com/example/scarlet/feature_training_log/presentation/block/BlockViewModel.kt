@@ -123,6 +123,33 @@ class BlockViewModel @Inject constructor(
                     selectedDay = event.day
                 )}
             }
+            is BlockEvent.ShowSessionDatePickerDialog -> {
+                _state.update { it.copy(
+                    sessionDatePickerDialog = BlockUiState.SessionDatePickerDialogState(
+                        session = event.session
+                    )
+                )}
+            }
+            BlockEvent.HideSessionDatePickerDialog -> {
+                _state.update { it.copy(
+                    sessionDatePickerDialog = null
+                )}
+            }
+            is BlockEvent.UpdateSessionDate -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    useCases.updateSession(
+                        session = state.value.sessionDatePickerDialog?.session ?: return@launch
+                    )
+                    _state.update { it.copy(
+                        sessionDatePickerDialog = null
+                    )}
+                }
+            }
+            BlockEvent.ToggleSessionEditMode -> {
+                _state.update { it.copy(
+                    isInSessionEditMode = !it.isInSessionEditMode
+                )}
+            }
             is BlockEvent.ShowMovementSelectionSheet -> {
                 updateMovementNameFilter("")
                 _state.update { it.copy(

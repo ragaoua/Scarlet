@@ -8,6 +8,7 @@ import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
 import com.example.scarlet.feature_training_log.domain.model.IExercise
 import com.example.scarlet.feature_training_log.domain.model.Movement
+import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.domain.model.SessionWithExercises
 import com.example.scarlet.feature_training_log.domain.model.Set
 
@@ -16,6 +17,10 @@ data class BlockUiState (
     val days: List<DayWithSessions<SessionWithExercises<ExerciseWithMovementAndSets>>> = emptyList(),
     val selectedDay: Day? = null,
 
+    val isInSessionEditMode: Boolean = false,
+
+    val sessionDatePickerDialog: SessionDatePickerDialogState? = null, // null means the dialog is hidden
+
     val editBlockSheet: EditBlockSheetState? = null, // null means the sheet is hidden
 
     val movements: List<Movement> = emptyList(),
@@ -23,6 +28,8 @@ data class BlockUiState (
 
     val loadCalculationDialog: LoadCalculationDialogState? = null // null means the dialog is hidden
 ) {
+
+    data class SessionDatePickerDialogState(val session: Session)
 
     data class EditBlockSheetState(
         val blockName: String = "",
