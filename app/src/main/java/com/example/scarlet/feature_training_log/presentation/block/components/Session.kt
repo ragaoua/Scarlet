@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.EditCalendar
 import androidx.compose.material3.Button
@@ -73,6 +74,15 @@ fun Session(
                                 contentDescription = stringResource(R.string.edit_session_date)
                             )
                         }
+                        IconButton(onClick = {
+                            onEvent(BlockEvent.DeleteSession(session.toSession()))
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = stringResource(R.string.delete)
+                            )
+                        }
+
                     }
                 }
                 HorizontalDivider()
