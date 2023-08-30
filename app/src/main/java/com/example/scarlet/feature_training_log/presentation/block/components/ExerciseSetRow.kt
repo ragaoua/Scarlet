@@ -51,10 +51,9 @@ fun ExerciseSetRow(
                 }
             },
             updateSet = { text ->
-                // TODO
-//                onEvent(SessionEvent.UpdateSet(
-//                    set.copy(reps = text.toIntOrNull())
-//                ))
+                onEvent(BlockEvent.UpdateSet(
+                    set.copy(reps = text.toIntOrNull())
+                ))
             },
             imeAction = ImeAction.Next,
             onIconClicked = if (isFirstSet) null else {
@@ -81,10 +80,9 @@ fun ExerciseSetRow(
                 }
             },
             updateSet = { text ->
-                // TODO
-//                onEvent(SessionEvent.UpdateSet(
-//                    set.copy(weight = text.toFloatOrNull())
-//                ))
+                onEvent(BlockEvent.UpdateSet(
+                    set.copy(weight = text.toFloatOrNull())
+                ))
             },
             imeAction = ImeAction.Next,
             onIconClicked = if (isFirstSet) null else {
@@ -115,10 +113,9 @@ fun ExerciseSetRow(
                 }
             },
             updateSet = { text ->
-                // TODO
-//                onEvent(SessionEvent.UpdateSet(
-//                    set.copy(rpe = text.toFloatOrNull())
-//                ))
+                onEvent(BlockEvent.UpdateSet(
+                    set.copy(rpe = text.toFloatOrNull())
+                ))
             },
             imeAction = if (isLastSet) ImeAction.Done else ImeAction.Next
         )

@@ -230,6 +230,11 @@ class BlockViewModel @Inject constructor(
                     )
                 }
             }
+            is BlockEvent.UpdateSet -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    useCases.updateSet(event.set)
+                }
+            }
         }
     }
 

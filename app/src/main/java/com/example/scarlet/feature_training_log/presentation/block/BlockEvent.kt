@@ -6,6 +6,7 @@ import com.example.scarlet.feature_training_log.domain.model.IExercise
 import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.domain.model.SessionWithExercises
+import com.example.scarlet.feature_training_log.domain.model.Set
 
 sealed interface BlockEvent {
     object AddSession: BlockEvent
@@ -31,5 +32,5 @@ sealed interface BlockEvent {
     data class DeleteExercise(val exercise: Exercise) : BlockEvent
 
     data class AddSet(val exercise: Exercise) : BlockEvent
-
+    data class UpdateSet(val set: Set) : BlockEvent
 }
