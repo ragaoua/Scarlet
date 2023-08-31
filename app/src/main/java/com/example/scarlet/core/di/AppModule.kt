@@ -6,23 +6,21 @@ import com.example.scarlet.feature_training_log.data.data_source.ScarletDatabase
 import com.example.scarlet.feature_training_log.data.repository.ScarletRepositoryImpl
 import com.example.scarlet.feature_training_log.domain.repository.ScarletRepository
 import com.example.scarlet.feature_training_log.domain.use_case.block.BlockUseCases
+import com.example.scarlet.feature_training_log.domain.use_case.block.CopyPrecedingSetFieldUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.block.DeleteExerciseUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.block.DeleteSessionUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.block.DeleteSetUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.block.GetDaysWithSessionsWithMovementAndSetsByBlockIdUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.block.GetMovementsFilteredByNameUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.block.InsertExerciseUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.block.InsertMovementUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.block.InsertSessionUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.block.InsertSetUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.block.UpdateBlockUseCase
-import com.example.scarlet.feature_training_log.domain.use_case.session.CopyPrecedingSetFieldUseCase
-import com.example.scarlet.feature_training_log.domain.use_case.session.DeleteExerciseUseCase
-import com.example.scarlet.feature_training_log.domain.use_case.session.DeleteSetUseCase
-import com.example.scarlet.feature_training_log.domain.use_case.session.GetExercisesWithMovementAndSetsBySessionIdUseCase
-import com.example.scarlet.feature_training_log.domain.use_case.session.GetMovementsFilteredByNameUseCase
-import com.example.scarlet.feature_training_log.domain.use_case.session.InsertExerciseUseCase
-import com.example.scarlet.feature_training_log.domain.use_case.session.InsertMovementUseCase
-import com.example.scarlet.feature_training_log.domain.use_case.session.InsertSetUseCase
-import com.example.scarlet.feature_training_log.domain.use_case.session.SessionUseCases
-import com.example.scarlet.feature_training_log.domain.use_case.session.UpdateExerciseUseCase
-import com.example.scarlet.feature_training_log.domain.use_case.session.UpdateLoadBasedOnPreviousSetUseCase
-import com.example.scarlet.feature_training_log.domain.use_case.session.UpdateSessionUseCase
-import com.example.scarlet.feature_training_log.domain.use_case.session.UpdateSetUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.block.UpdateExerciseUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.block.UpdateLoadBasedOnPreviousSetUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.block.UpdateSessionUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.block.UpdateSetUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.training_log.DeleteBlockUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.training_log.GetAllBlocksUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.training_log.InsertBlockUseCase
@@ -87,25 +85,6 @@ object AppModule {
             insertSet = InsertSetUseCase(repository),
             updateSet = UpdateSetUseCase(repository),
             deleteSet = DeleteSetUseCase(repository),
-            copyPrecedingSetField = CopyPrecedingSetFieldUseCase(repository),
-            updateLoadBasedOnPreviousSet = UpdateLoadBasedOnPreviousSetUseCase(repository)
-        )
-
-    @Provides
-    @Singleton
-    fun provideSessionUseCases(repository: ScarletRepository) =
-        SessionUseCases(
-            getExercisesWithMovementAndSetsBySessionId =
-                GetExercisesWithMovementAndSetsBySessionIdUseCase(repository),
-            getMovementsFilteredByName = GetMovementsFilteredByNameUseCase(repository),
-            updateSession = UpdateSessionUseCase(repository),
-            insertExercise = InsertExerciseUseCase(repository),
-            insertSet = InsertSetUseCase(repository),
-            updateSet = UpdateSetUseCase(repository),
-            deleteSet = DeleteSetUseCase(repository),
-            insertMovement = InsertMovementUseCase(repository),
-            deleteExercise = DeleteExerciseUseCase(repository),
-            updateExercise = UpdateExerciseUseCase(repository),
             copyPrecedingSetField = CopyPrecedingSetFieldUseCase(repository),
             updateLoadBasedOnPreviousSet = UpdateLoadBasedOnPreviousSetUseCase(repository)
         )

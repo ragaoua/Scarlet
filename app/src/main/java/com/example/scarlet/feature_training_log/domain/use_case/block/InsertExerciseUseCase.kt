@@ -1,4 +1,4 @@
-package com.example.scarlet.feature_training_log.domain.use_case.session
+package com.example.scarlet.feature_training_log.domain.use_case.block
 
 import com.example.scarlet.core.util.Resource
 import com.example.scarlet.feature_training_log.domain.model.Exercise
