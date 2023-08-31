@@ -63,9 +63,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.Flow
 import java.util.Date
 
-@Destination(
-    navArgsDelegate = BlockScreenNavArgs::class
-)
+@Destination(navArgsDelegate = BlockScreenNavArgs::class)
 @Composable
 fun BlockScreen(
     navigator: DestinationsNavigator
@@ -133,10 +131,10 @@ fun Screen(
                 color = MaterialTheme.colorScheme.background
             ) {
                 AnimatedContent(
-                    targetState = state.selectedDay,
+                    targetState = state.selectedDayId,
                     label = "day selection animation"
-                ) { selectedDay ->
-                    val day = state.days.find { it.toDay() == selectedDay }
+                ) { selectedDayId ->
+                    val day = state.days.find { it.id == selectedDayId }
 
                     val lazyListState = rememberLazyListState(
                         initialFirstVisibleItemIndex = state.visibleSessionIndex
@@ -309,7 +307,7 @@ private fun DayNavigationBottomBar(
                         .clip(MaterialTheme.shapes.small)
                         .clickable { onEvent(BlockEvent.SelectDay(day.toDay())) }
                         .background(
-                            if (day.toDay() == state.selectedDay) {
+                            if (day.id == state.selectedDayId) {
                                 MaterialTheme.colorScheme.primary
                             } else Color.Transparent
                         )

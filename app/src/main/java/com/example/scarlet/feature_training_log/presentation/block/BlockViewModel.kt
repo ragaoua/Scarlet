@@ -43,9 +43,7 @@ class BlockViewModel @Inject constructor(
         when(event) {
             BlockEvent.AddSession -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    state.value.selectedDay?.let { selectedDay ->
-                        useCases.insertSession(selectedDay.id)
-                    } // TODO should we print an error if selectedDay is null?
+                    useCases.insertSession(state.value.selectedDayId)
                 }
             }
             is BlockEvent.DeleteSession -> {
@@ -123,7 +121,7 @@ class BlockViewModel @Inject constructor(
                     .find { day -> day.toDay() == event.day }
                     ?.sessions ?: return
                 _state.update { it.copy(
-                    selectedDay = event.day,
+                    selectedDayId = event.day.id,
                     visibleSessionIndex =
                         if(daySessions.isNotEmpty()) {
                             daySessions.lastIndex
@@ -331,18 +329,18 @@ class BlockViewModel @Inject constructor(
                 val days = resource.data ?: emptyList()
                 _state.update { state ->
 
-                    val selectedDay =
-                        if (state.selectedDay in days.map { it.toDay() }) {
-                            state.selectedDay
-                        } else days.firstOrNull()?.toDay()
+                    val selectedDayId =
+                        if (state.selectedDayId in days.map { it.id }) {
+                            state.selectedDayId
+                        } else days.firstOrNull()?.id ?: 0
 
                     val selectedDaySessions = days
-                        .find { it.toDay() == selectedDay }
+                        .find { it.id == selectedDayId }
                         ?.sessions ?: emptyList()
 
                     state.copy(
                         days = days,
-                        selectedDay = selectedDay,
+                        selectedDayId = selectedDayId,
                         visibleSessionIndex =
                             if(selectedDaySessions.isNotEmpty()) {
                                 selectedDaySessions.lastIndex

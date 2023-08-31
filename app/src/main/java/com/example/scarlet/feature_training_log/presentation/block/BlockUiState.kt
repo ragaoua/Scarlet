@@ -2,7 +2,6 @@ package com.example.scarlet.feature_training_log.presentation.block
 
 import com.example.scarlet.core.util.StringResource
 import com.example.scarlet.feature_training_log.domain.model.Block
-import com.example.scarlet.feature_training_log.domain.model.Day
 import com.example.scarlet.feature_training_log.domain.model.DayWithSessions
 import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
@@ -15,7 +14,7 @@ import com.example.scarlet.feature_training_log.domain.model.Set
 data class BlockUiState (
     val block: Block = Block(),
     val days: List<DayWithSessions<SessionWithExercises<ExerciseWithMovementAndSets>>> = emptyList(),
-    val selectedDay: Day? = null,
+    val selectedDayId: Long = 0,
     val visibleSessionIndex: Int = 0,
 
     val isInSessionEditMode: Boolean = false,
