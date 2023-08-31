@@ -139,6 +139,9 @@ fun Screen(
                     val lazyListState = rememberLazyListState(
                         initialFirstVisibleItemIndex = state.visibleSessionIndex
                     )
+                    LaunchedEffect(state.visibleSessionIndex) {
+                        lazyListState.animateScrollToItem(state.visibleSessionIndex)
+                    }
                     LazyRow(
                         state = lazyListState,
                         flingBehavior = rememberSnapFlingBehavior(lazyListState),
