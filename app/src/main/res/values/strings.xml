@@ -38,6 +38,7 @@
     <!-- Session -->
     <string name="session_exercises_list_title">Session Exercises</string>
     <string name="edit_session">Edit session</string>
+    <string name="edit_session_exercises">Edit session exercises</string>
     <string name="edit_session_date">Edit session date</string>
     <string name="save_session">Save session</string>
 

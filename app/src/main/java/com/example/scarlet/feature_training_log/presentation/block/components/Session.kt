@@ -59,13 +59,15 @@ fun Session(
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        IconButton(onClick = {
-                            onEvent(BlockEvent.ToggleSessionEditMode)
-                        }) {
-                            Icon(
-                                imageVector = Icons.Default.Edit,
-                                contentDescription = stringResource(R.string.edit_session_date)
-                            )
+                        if(session.exercises.isNotEmpty()) {
+                            IconButton(onClick = {
+                                onEvent(BlockEvent.ToggleSessionEditMode)
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Default.Edit,
+                                    contentDescription = stringResource(R.string.edit_session_exercises)
+                                )
+                            }
                         }
                         IconButton(onClick = {
                             onEvent(BlockEvent.ShowSessionDatePickerDialog(session.toSession()))
