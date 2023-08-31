@@ -133,9 +133,10 @@ fun Screen(
                 color = MaterialTheme.colorScheme.background
             ) {
                 AnimatedContent(
-                    targetState = state.days.find { it.toDay() == state.selectedDay },
+                    targetState = state.selectedDay,
                     label = "day selection animation"
-                ) { day ->
+                ) { selectedDay ->
+                    val day = state.days.find { it.toDay() == selectedDay }
                     val lazyListState = rememberLazyListState()
                     LazyRow(
                         state = lazyListState,
