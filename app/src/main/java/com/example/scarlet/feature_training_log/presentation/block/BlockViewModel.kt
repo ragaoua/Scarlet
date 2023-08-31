@@ -51,6 +51,13 @@ class BlockViewModel @Inject constructor(
                     useCases.deleteSession(event.session)
                 }
             }
+            is BlockEvent.UpdateSessionIndexScrollPosition -> {
+                _state.update { it.copy(
+                    sessionIndexScrollPositionByDayId = it.sessionIndexScrollPositionByDayId
+                        .toMutableMap()
+                        .apply { put(it.selectedDayId, event.index) }
+                )}
+            }
             BlockEvent.EditBlock -> {
                 _state.update { it.copy(
                     editBlockSheet = BlockUiState.EditBlockSheetState(
@@ -117,15 +124,8 @@ class BlockViewModel @Inject constructor(
                 }
             }
             is BlockEvent.SelectDay -> {
-                val daySessions = state.value.days
-                    .find { day -> day.toDay() == event.day }
-                    ?.sessions ?: return
                 _state.update { it.copy(
-                    selectedDayId = event.day.id,
-                    visibleSessionIndex =
-                        if(daySessions.isNotEmpty()) {
-                            daySessions.lastIndex
-                        } else 0
+                    selectedDayId = event.day.id
                 )}
             }
             is BlockEvent.ShowSessionDatePickerDialog -> {
@@ -328,23 +328,20 @@ class BlockViewModel @Inject constructor(
             .onEach { resource ->
                 val days = resource.data ?: emptyList()
                 _state.update { state ->
-
-                    val selectedDayId =
-                        if (state.selectedDayId in days.map { it.id }) {
-                            state.selectedDayId
-                        } else days.firstOrNull()?.id ?: 0
-
-                    val selectedDaySessions = days
-                        .find { it.id == selectedDayId }
-                        ?.sessions ?: emptyList()
-
                     state.copy(
                         days = days,
-                        selectedDayId = selectedDayId,
-                        visibleSessionIndex =
-                            if(selectedDaySessions.isNotEmpty()) {
-                                selectedDaySessions.lastIndex
-                            } else 0
+                        selectedDayId =
+                            if (days.any { it.id == state.selectedDayId }) {
+                                state.selectedDayId
+                            } else days.firstOrNull()?.id ?: 0,
+                        sessionIndexScrollPositionByDayId =
+                            days.associate { day ->
+                                Pair(
+                                    day.id,
+                                    state.sessionIndexScrollPositionByDayId[day.id] ?:
+                                        if(day.sessions.isNotEmpty()) day.sessions.lastIndex else 0
+                                )
+                            }
                     )
                 }
             }.launchIn(viewModelScope)

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -37,6 +38,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -136,12 +138,7 @@ fun Screen(
                 ) { selectedDayId ->
                     val day = state.days.find { it.id == selectedDayId }
 
-                    val lazyListState = rememberLazyListState(
-                        initialFirstVisibleItemIndex = state.visibleSessionIndex
-                    )
-                    LaunchedEffect(state.visibleSessionIndex) {
-                        lazyListState.animateScrollToItem(state.visibleSessionIndex)
-                    }
+                    val lazyListState = sessionsLazyListState(state, onEvent)
                     LazyRow(
                         state = lazyListState,
                         flingBehavior = rememberSnapFlingBehavior(lazyListState),
@@ -220,6 +217,33 @@ fun Screen(
             )
         }
     }
+}
+
+@Composable
+private fun sessionsLazyListState(
+    state: BlockUiState,
+    onEvent: (BlockEvent) -> Unit
+): LazyListState {
+    val sessionIndexScrollPosition =
+        state.sessionIndexScrollPositionByDayId[state.selectedDayId] ?: 0
+
+    val lazyListState = rememberLazyListState(
+        initialFirstVisibleItemIndex = sessionIndexScrollPosition
+    )
+    LaunchedEffect(sessionIndexScrollPosition) {
+        lazyListState.animateScrollToItem(sessionIndexScrollPosition)
+    }
+
+    val newSessionIndexScrollPosition by remember {
+        derivedStateOf {
+            lazyListState.firstVisibleItemIndex
+        }
+    }
+    LaunchedEffect(newSessionIndexScrollPosition) {
+        onEvent(BlockEvent.UpdateSessionIndexScrollPosition(lazyListState.firstVisibleItemIndex))
+    } // Using derivedStateOf avoids unnecessary recomposition when the scroll position changes
+
+    return lazyListState
 }
 
 @Composable

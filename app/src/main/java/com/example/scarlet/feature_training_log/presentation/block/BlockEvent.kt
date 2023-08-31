@@ -13,6 +13,7 @@ import java.util.Date
 sealed interface BlockEvent {
     object AddSession: BlockEvent
     data class DeleteSession(val session: Session) : BlockEvent
+    data class UpdateSessionIndexScrollPosition(val index: Int): BlockEvent
 
     object EditBlock: BlockEvent
     object CancelBlockEdition: BlockEvent
