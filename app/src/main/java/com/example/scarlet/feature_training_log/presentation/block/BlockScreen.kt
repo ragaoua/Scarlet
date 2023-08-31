@@ -137,13 +137,19 @@ fun Screen(
                     label = "day selection animation"
                 ) { selectedDay ->
                     val day = state.days.find { it.toDay() == selectedDay }
-                    val lazyListState = rememberLazyListState()
+                    val sessions = day?.sessions ?: emptyList()
+
+                    val lazyListState = rememberLazyListState(
+                        initialFirstVisibleItemIndex =
+                            if(sessions.isNotEmpty()) {
+                                sessions.lastIndex
+                            } else 0
+                    )
                     LazyRow(
                         state = lazyListState,
-                        flingBehavior = rememberSnapFlingBehavior(lazyListState = lazyListState),
+                        flingBehavior = rememberSnapFlingBehavior(lazyListState),
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        val sessions = day?.sessions ?: emptyList()
                         if (sessions.isNotEmpty()) {
                             items(sessions) { session ->
                                 Session(
