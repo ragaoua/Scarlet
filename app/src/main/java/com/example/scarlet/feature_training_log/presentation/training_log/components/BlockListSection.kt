@@ -45,14 +45,12 @@ fun BlockListSection(
         /*************************************************************************
          * Latest training block
          *************************************************************************/
-        item {
-            SectionTitle(
-                stringResource(R.string.latest_training_block)
-            )
-        }
-        item {
-            blocks.firstOrNull()?.let { latestBlock ->
+        blocks.firstOrNull()?.let { latestBlock ->
+            item {
+                SectionTitle(stringResource(R.string.latest_training_block))
+
                 val blockSessions = latestBlock.days.flatMap { it.sessions }
+
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     contentPadding = MainButtonContentPadding,
@@ -89,7 +87,62 @@ fun BlockListSection(
                         }
                     }
                 }
-            } ?: run {
+            }
+
+            item { Spacer(Modifier.height(8.dp)) }
+
+            /*************************************************************************
+             * Preceding training blocks
+             *************************************************************************/
+            if (blocks.size > 1) {
+                item {
+                    SectionTitle(stringResource(R.string.preceding_training_blocks))
+                }
+                items(blocks.subList(1, blocks.size)) { block ->
+                    val blockSessions = block.days.flatMap { it.sessions }
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentPadding = MainButtonContentPadding,
+                        shape = MaterialTheme.shapes.large,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.secondary,
+                            contentColor = MaterialTheme.colorScheme.onSecondary
+                        ),
+                        onClick = {
+                            navigator.navigate(BlockScreenDestination(block.toBlock()))
+                        }
+                    ) {
+                        DeletableItem(
+                            modifier = Modifier.fillMaxSize(),
+                            onDeleteClicked = {
+                                onEvent(TrainingLogEvent.DeleteBlock(block.toBlock()))
+                            }
+                        ) {
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = block.name,
+                                    style = MaterialTheme.typography.titleLarge
+                                )
+                                Text(
+                                    text = if (blockSessions.isNotEmpty()) {
+                                        DateUtils.formatDate(blockSessions.first().date) + " - " +
+                                                DateUtils.formatDate(blockSessions.last().date)
+                                    } else {
+                                        stringResource(R.string.empty_block)
+                                    },
+                                    style = MaterialTheme.typography.bodyMedium,
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+        } ?: run {
+            item {
                 Text(
                     text = stringResource(R.string.no_training_blocks),
                     style = MaterialTheme.typography.titleLarge
@@ -98,58 +151,6 @@ fun BlockListSection(
                     text = stringResource(R.string.start_new_block),
                     style = MaterialTheme.typography.bodyLarge
                 )
-            }
-        }
-
-        item { Spacer(Modifier.height(8.dp)) }
-
-        /*************************************************************************
-         * Preceding training blocks
-         *************************************************************************/
-        if (blocks.size > 1) {
-            item {
-                SectionTitle(stringResource(R.string.preceding_training_blocks))
-            }
-            items(blocks.subList(1, blocks.size)) { block ->
-                val blockSessions = block.days.flatMap { it.sessions }
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentPadding = MainButtonContentPadding,
-                    shape = MaterialTheme.shapes.large,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.secondary,
-                        contentColor = MaterialTheme.colorScheme.onSecondary
-                    ),
-                    onClick = {
-                        navigator.navigate(BlockScreenDestination(block.toBlock()))
-                    }
-                ) {
-                    DeletableItem(
-                        modifier = Modifier.fillMaxSize(),
-                        onDeleteClicked = {
-                            onEvent(TrainingLogEvent.DeleteBlock(block.toBlock()))
-                        }
-                    ) {
-                        Column(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = block.name,
-                                style = MaterialTheme.typography.titleLarge
-                            )
-                            Text(
-                                text = if (blockSessions.isNotEmpty()) {
-                                    DateUtils.formatDate(blockSessions.first().date) + " - " +
-                                            DateUtils.formatDate(blockSessions.last().date)
-                                } else {
-                                    stringResource(R.string.empty_block)
-                                },
-                                style = MaterialTheme.typography.bodyMedium,
-                            )
-                        }
-                    }
-                }
             }
         }
 
