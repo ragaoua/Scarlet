@@ -1,7 +1,10 @@
 package com.example.scarlet.feature_training_log.presentation.block
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
@@ -50,7 +54,7 @@ import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.presentation.block.components.LoadCalculationDialog
 import com.example.scarlet.feature_training_log.presentation.block.components.MovementSelectionSheet
-import com.example.scarlet.feature_training_log.presentation.block.components.SessionsList
+import com.example.scarlet.feature_training_log.presentation.block.components.Session
 import com.example.scarlet.feature_training_log.presentation.core.components.AddEditBlockSheet
 import com.example.scarlet.feature_training_log.presentation.core.components.AddEditBlockSheetState
 import com.example.scarlet.ui.theme.ScarletTheme
@@ -77,7 +81,7 @@ fun BlockScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun Screen(
     navigator: DestinationsNavigator,
@@ -128,10 +132,37 @@ fun Screen(
                     .padding(innerPadding),
                 color = MaterialTheme.colorScheme.background
             ) {
-                SessionsList(
-                    state = state,
-                    onEvent = onEvent
-                )
+                AnimatedContent(
+                    targetState = state.days.find { it.toDay() == state.selectedDay },
+                    label = "day selection animation"
+                ) { day ->
+                    val lazyListState = rememberLazyListState()
+                    LazyRow(
+                        state = lazyListState,
+                        flingBehavior = rememberSnapFlingBehavior(lazyListState = lazyListState),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        val sessions = day?.sessions ?: emptyList()
+                        if (sessions.isNotEmpty()) {
+                            items(sessions) { session ->
+                                Session(
+                                    modifier = Modifier.fillParentMaxWidth(),
+                                    session = session,
+                                    isInSessionEditMode = state.isInSessionEditMode,
+                                    onEvent = onEvent
+                                )
+                            }
+                        } else {
+                            item {
+                                Text(
+                                    text = stringResource(R.string.no_sessions_yet),
+                                    style = MaterialTheme.typography.bodyMedium
+                                    // TODO use a lighter color
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
 
