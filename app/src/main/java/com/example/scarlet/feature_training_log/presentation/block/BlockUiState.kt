@@ -16,6 +16,7 @@ data class BlockUiState (
     val block: Block = Block(),
     val days: List<DayWithSessions<SessionWithExercises<ExerciseWithMovementAndSets>>> = emptyList(),
     val selectedDay: Day? = null,
+    val visibleSessionIndex: Int = 0,
 
     val isInSessionEditMode: Boolean = false,
 

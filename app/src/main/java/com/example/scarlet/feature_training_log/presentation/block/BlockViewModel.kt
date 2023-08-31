@@ -119,8 +119,15 @@ class BlockViewModel @Inject constructor(
                 }
             }
             is BlockEvent.SelectDay -> {
+                val daySessions = state.value.days
+                    .find { day -> day.toDay() == event.day }
+                    ?.sessions ?: return
                 _state.update { it.copy(
-                    selectedDay = event.day
+                    selectedDay = event.day,
+                    visibleSessionIndex =
+                        if(daySessions.isNotEmpty()) {
+                            daySessions.lastIndex
+                        } else 0
                 )}
             }
             is BlockEvent.ShowSessionDatePickerDialog -> {
@@ -323,14 +330,23 @@ class BlockViewModel @Inject constructor(
             .onEach { resource ->
                 val days = resource.data ?: emptyList()
                 _state.update { state ->
+
+                    val selectedDay =
+                        if (state.selectedDay in days.map { it.toDay() }) {
+                            state.selectedDay
+                        } else days.firstOrNull()?.toDay()
+
+                    val selectedDaySessions = days
+                        .find { it.toDay() == selectedDay }
+                        ?.sessions ?: emptyList()
+
                     state.copy(
                         days = days,
-                        selectedDay =
-                            if (state.selectedDay in days.map { it.toDay() }) {
-                                state.selectedDay
-                            } else {
-                                days.firstOrNull()?.toDay()
-                            }
+                        selectedDay = selectedDay,
+                        visibleSessionIndex =
+                            if(selectedDaySessions.isNotEmpty()) {
+                                selectedDaySessions.lastIndex
+                            } else 0
                     )
                 }
             }.launchIn(viewModelScope)
