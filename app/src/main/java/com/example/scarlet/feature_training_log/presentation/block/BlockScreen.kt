@@ -226,12 +226,13 @@ private fun sessionsLazyListState(
 ): LazyListState {
     val sessionIndexScrollPosition =
         state.sessionIndexScrollPositionByDayId[state.selectedDayId] ?: 0
-
     val lazyListState = rememberLazyListState(
         initialFirstVisibleItemIndex = sessionIndexScrollPosition
     )
     LaunchedEffect(sessionIndexScrollPosition) {
-        lazyListState.animateScrollToItem(sessionIndexScrollPosition)
+        if(sessionIndexScrollPosition != lazyListState.firstVisibleItemIndex) {
+            lazyListState.animateScrollToItem(sessionIndexScrollPosition)
+        }
     }
 
     val newSessionIndexScrollPosition by remember {
@@ -242,6 +243,8 @@ private fun sessionsLazyListState(
     LaunchedEffect(newSessionIndexScrollPosition) {
         onEvent(BlockEvent.UpdateSessionIndexScrollPosition(lazyListState.firstVisibleItemIndex))
     } // Using derivedStateOf avoids unnecessary recomposition when the scroll position changes
+
+//    println("sessionsLazyListState: $sessionIndexScrollPosition - ${lazyListState.firstVisibleItemIndex} - $newSessionIndexScrollPosition")
 
     return lazyListState
 }

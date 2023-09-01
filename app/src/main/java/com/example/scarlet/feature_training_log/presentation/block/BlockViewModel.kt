@@ -327,23 +327,27 @@ class BlockViewModel @Inject constructor(
         useCases.getDaysWithSessionsWithMovementAndSetsByBlockId(state.value.block.id)
             .onEach { resource ->
                 val days = resource.data ?: emptyList()
-                _state.update { state ->
-                    state.copy(
-                        days = days,
-                        selectedDayId =
-                            if (days.any { it.id == state.selectedDayId }) {
-                                state.selectedDayId
-                            } else days.firstOrNull()?.id ?: 0,
-                        sessionIndexScrollPositionByDayId =
-                            days.associate { day ->
-                                Pair(
-                                    day.id,
-                                    state.sessionIndexScrollPositionByDayId[day.id] ?:
-                                        if(day.sessions.isNotEmpty()) day.sessions.lastIndex else 0
-                                )
-                            }
-                    )
-                }
+                _state.update { state -> state.copy(
+                    days = days,
+                    selectedDayId =
+                        if (state.selectedDayId in days.map { it.id }) {
+                            state.selectedDayId
+                        } else days.firstOrNull()?.id ?: 0,
+                    sessionIndexScrollPositionByDayId = days.associate { day ->
+                        val oldSessions = state.days.find { it.id == day.id }?.sessions ?: emptyList()
+
+                        // if sessions have been added, scroll to the latest one
+                        val latestAddedSession =
+                            day.sessions.minus(oldSessions.toSet()).maxByOrNull { it.date }
+
+                        Pair(
+                            day.id,
+                            latestAddedSession?.let { day.sessions.indexOf(it) }
+                                ?: state.sessionIndexScrollPositionByDayId[day.id]
+                                ?: day.sessions.lastIndex.let { if(it == -1) 0 else it }
+                        )
+                    }
+                )}
             }.launchIn(viewModelScope)
     }
 
@@ -359,5 +363,6 @@ class BlockViewModel @Inject constructor(
 
     sealed interface UiAction {
         object NavigateUp: UiAction
+//        data class ScrollToSession(val sessionIndex: Int): UiAction
     }
 }
