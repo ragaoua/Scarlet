@@ -244,8 +244,6 @@ private fun sessionsLazyListState(
         onEvent(BlockEvent.UpdateSessionIndexScrollPosition(lazyListState.firstVisibleItemIndex))
     } // Using derivedStateOf avoids unnecessary recomposition when the scroll position changes
 
-//    println("sessionsLazyListState: $sessionIndexScrollPosition - ${lazyListState.firstVisibleItemIndex} - $newSessionIndexScrollPosition")
-
     return lazyListState
 }
 
