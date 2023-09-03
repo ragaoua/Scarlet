@@ -38,9 +38,9 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -62,7 +62,10 @@ import com.example.scarlet.feature_training_log.presentation.core.components.Add
 import com.example.scarlet.ui.theme.ScarletTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 import java.util.Date
 
 @Destination(navArgsDelegate = BlockScreenNavArgs::class)
@@ -224,6 +227,7 @@ fun Screen(
     }
 }
 
+@OptIn(FlowPreview::class)
 @Composable
 private fun sessionsLazyListState(
     state: BlockUiState,
@@ -231,23 +235,22 @@ private fun sessionsLazyListState(
 ): LazyListState {
     val sessionIndexScrollPosition =
         state.sessionIndexScrollPositionByDayId[state.selectedDayId] ?: 0
+
     val lazyListState = rememberLazyListState(
         initialFirstVisibleItemIndex = sessionIndexScrollPosition
-    )
-    LaunchedEffect(sessionIndexScrollPosition) {
-        if(sessionIndexScrollPosition != lazyListState.firstVisibleItemIndex) {
-            lazyListState.animateScrollToItem(sessionIndexScrollPosition)
-        }
-    }
+    ) // Restore the saved position when this is recomposed
 
-    val newSessionIndexScrollPosition by remember {
-        derivedStateOf {
-            lazyListState.firstVisibleItemIndex
-        }
-    }
-    LaunchedEffect(newSessionIndexScrollPosition) {
-        onEvent(BlockEvent.UpdateSessionIndexScrollPosition(lazyListState.firstVisibleItemIndex))
-    } // Using derivedStateOf avoids unnecessary recomposition when the scroll position changes
+    LaunchedEffect(sessionIndexScrollPosition) {
+        lazyListState.animateScrollToItem(sessionIndexScrollPosition)
+    } // Animate the scroll position when the a session is added or removed
+
+    LaunchedEffect(lazyListState) {
+        snapshotFlow { lazyListState.firstVisibleItemIndex }
+            .debounce(1000L)
+            .collectLatest {
+                onEvent(BlockEvent.UpdateSessionIndexScrollPosition(it))
+            }
+    } // Save the scroll position for when this is recomposed
 
     return lazyListState
 }
