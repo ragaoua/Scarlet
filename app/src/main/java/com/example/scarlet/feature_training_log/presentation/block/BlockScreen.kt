@@ -146,9 +146,14 @@ fun Screen(
                     ) {
                         val sessions = day?.sessions ?: emptyList()
                         if (sessions.isNotEmpty()) {
-                            items(sessions) { session ->
+                            items(
+                                items = sessions,
+                                key = { it.id }
+                            ) { session ->
                                 Session(
-                                    modifier = Modifier.fillParentMaxWidth(),
+                                    modifier = Modifier
+                                        .fillParentMaxWidth()
+                                        .animateItemPlacement(),
                                     session = session,
                                     isInSessionEditMode = state.isInSessionEditMode,
                                     onEvent = onEvent
