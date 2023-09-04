@@ -22,8 +22,12 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -126,6 +130,11 @@ fun MovementSelectionSheet(
 
             Spacer(modifier = Modifier.height(8.dp))
 
+            val focusRequester = remember { FocusRequester() }
+
+            SideEffect {
+                focusRequester.requestFocus()
+            }
             OutlinedTextField(
                 value = movementNameFilter,
                 onValueChange = {
@@ -136,6 +145,7 @@ fun MovementSelectionSheet(
                 },
                 singleLine = true,
                 modifier = Modifier
+                    .focusRequester(focusRequester)
                     .fillMaxWidth()
                     .padding(8.dp)
             )
