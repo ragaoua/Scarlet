@@ -62,17 +62,19 @@ fun Exercise(
 
         Row(
             modifier =
-            if (!isInSessionEditMode) {
-                Modifier.clickable { isExerciseDetailExpanded = !isExerciseDetailExpanded }
-            } else {
-                Modifier
-            }
+                if (!isInSessionEditMode) {
+                    Modifier.clickable { isExerciseDetailExpanded = !isExerciseDetailExpanded }
+                } else {
+                    Modifier
+                }
                 .fillMaxWidth()
-                .padding(8.dp),
+                .padding(8.dp)
+                .padding(start = 4.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
+                modifier = Modifier.weight(1f),
                 text = exercise.movement.name,
                 style = MaterialTheme.typography.titleLarge
             )
