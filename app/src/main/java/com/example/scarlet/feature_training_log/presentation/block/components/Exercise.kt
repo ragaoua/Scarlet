@@ -19,6 +19,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -79,23 +80,25 @@ fun Exercise(
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(
-                        modifier = Modifier.clickable {
-                            onEvent(BlockEvent.ShowMovementSelectionSheet(
-                                session = session,
-                                exercise = exercise.toExercise()
-                            ))
-                        },
-                        imageVector = Icons.Default.Edit,
-                        contentDescription = stringResource(R.string.select_movement)
-                    )
-                    Icon(
-                        modifier = Modifier.clickable {
-                            onEvent(BlockEvent.DeleteExercise(exercise.toExercise()))
-                        },
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = stringResource(R.string.delete)
-                    )
+                    IconButton(onClick = {
+                        onEvent(BlockEvent.ShowMovementSelectionSheet(
+                            session = session,
+                            exercise = exercise.toExercise()
+                        ))
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = stringResource(R.string.select_movement)
+                        )
+                    }
+                    IconButton(onClick = {
+                        onEvent(BlockEvent.DeleteExercise(exercise.toExercise()))
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = stringResource(R.string.delete)
+                        )
+                    }
                 }
             } else {
                 if (isExerciseDetailExpanded) {
