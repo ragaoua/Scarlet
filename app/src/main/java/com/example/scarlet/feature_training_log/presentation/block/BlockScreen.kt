@@ -246,9 +246,10 @@ private fun sessionsLazyListState(
 
     LaunchedEffect(lazyListState) {
         snapshotFlow { lazyListState.firstVisibleItemIndex }
-            .debounce(1000L)
+            .debounce(500L)
             .collectLatest {
-                onEvent(BlockEvent.UpdateSessionIndexScrollPosition(it))
+                if(!lazyListState.isScrollInProgress)
+                    onEvent(BlockEvent.UpdateSessionIndexScrollPosition(it))
             }
     } // Save the scroll position for when this is recomposed
 
