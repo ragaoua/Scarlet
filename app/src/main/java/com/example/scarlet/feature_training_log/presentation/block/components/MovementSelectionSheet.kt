@@ -92,9 +92,13 @@ fun MovementSelectionSheet(
                     movementNameFilter.isNotBlank()
                 ) {
                     item {
-                        SecondaryActionButton(onClick = {
-                            onEvent(BlockEvent.AddMovement)
-                        }) {
+                        SecondaryActionButton(
+                            onClick = {
+                                onEvent(BlockEvent.AddMovement)
+                            },
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                        ) {
                             Icon(
                                 imageVector = Icons.Default.Add,
                                 contentDescription = stringResource(
@@ -107,7 +111,8 @@ fun MovementSelectionSheet(
                                     R.string.add_new_movement_btn_msg,
                                     movementNameFilter
                                 ),
-                                style = MaterialTheme.typography.titleLarge
+                                style = MaterialTheme.typography.titleLarge,
+                                textAlign = TextAlign.Center,
                             )
                         }
                     }
