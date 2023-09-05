@@ -157,6 +157,16 @@ class BlockViewModel @Inject constructor(
                     isInSessionEditMode = !it.isInSessionEditMode
                 )}
             }
+            is BlockEvent.ToggleExerciseDetail -> {
+                _state.update { it.copy(
+                    isExerciseDetailExpandedById = it.isExerciseDetailExpandedById[event.exerciseId]
+                        ?.let { isExpanded ->
+                            it.isExerciseDetailExpandedById
+                                .toMutableMap()
+                                .apply { put(event.exerciseId, !isExpanded) }
+                        } ?: return
+                )}
+            }
             is BlockEvent.ShowMovementSelectionSheet -> {
                 updateMovementNameFilter("")
                 _state.update { it.copy(
@@ -329,6 +339,12 @@ class BlockViewModel @Inject constructor(
                 val days = resource.data ?: emptyList()
                 _state.update { state -> state.copy(
                     days = days,
+                    isExerciseDetailExpandedById = days.flatMap { it.sessions }
+                        .flatMap { it.exercises }
+                        .associate { day -> Pair(
+                            day.id,
+                            state.isExerciseDetailExpandedById[day.id] ?: true
+                        ) },
                     selectedDayId =
                         if (state.selectedDayId in days.map { it.id }) {
                             state.selectedDayId

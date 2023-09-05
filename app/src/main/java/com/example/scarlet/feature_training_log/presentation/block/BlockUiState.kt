@@ -12,20 +12,21 @@ import com.example.scarlet.feature_training_log.domain.model.SessionWithExercise
 import com.example.scarlet.feature_training_log.domain.model.Set
 
 data class BlockUiState (
+    /** Block */
     val block: Block = Block(),
     val days: List<DayWithSessions<SessionWithExercises<ExerciseWithMovementAndSets>>> = emptyList(),
-    val selectedDayId: Long = 0,
-    val sessionIndexScrollPositionByDayId: Map<Long, Int> = emptyMap(),
-
-    val isInSessionEditMode: Boolean = false,
-
-    val sessionDatePickerDialog: SessionDatePickerDialogState? = null, // null means the dialog is hidden
-
+    val selectedDayId: Long = days.firstOrNull()?.id ?: 0,
     val editBlockSheet: EditBlockSheetState? = null, // null means the sheet is hidden
 
+    /** Sessions */
+    val sessionIndexScrollPositionByDayId: Map<Long, Int> = emptyMap(),
+    val isInSessionEditMode: Boolean = false,
+    val sessionDatePickerDialog: SessionDatePickerDialogState? = null, // null means the dialog is hidden
+
+    /** Exercises */
+    val isExerciseDetailExpandedById: Map<Long, Boolean> = emptyMap(),
     val movements: List<Movement> = emptyList(),
     val movementSelectionSheet: MovementSelectionSheetState? = null, // null means the sheet is hidden
-
     val loadCalculationDialog: LoadCalculationDialogState? = null // null means the dialog is hidden
 ) {
 

@@ -23,10 +23,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,6 +39,7 @@ import com.example.scarlet.feature_training_log.presentation.core.components.Sec
 fun Exercise(
     session: SessionWithExercises<out IExercise>,
     exercise: ExerciseWithMovementAndSets,
+    isExerciseDetailExpandedById: Map<Long, Boolean>,
     isInSessionEditMode: Boolean,
     onEvent: (BlockEvent) -> Unit
 ) {
@@ -58,12 +55,10 @@ fun Exercise(
         /*************************************************************************
          * EXERCISE HEADER
          *************************************************************************/
-        var isExerciseDetailExpanded by remember(isInSessionEditMode) { mutableStateOf(!isInSessionEditMode) }
-
         Row(
             modifier =
                 if (!isInSessionEditMode) {
-                    Modifier.clickable { isExerciseDetailExpanded = !isExerciseDetailExpanded }
+                    Modifier.clickable { onEvent(BlockEvent.ToggleExerciseDetail(exercise.id)) }
                 } else {
                     Modifier
                 }
@@ -103,7 +98,7 @@ fun Exercise(
                     }
                 }
             } else {
-                if (isExerciseDetailExpanded) {
+                if (isExerciseDetailExpandedById[exercise.id] == true) {
                     Icon(
                         imageVector = Icons.Default.KeyboardArrowUp,
                         contentDescription = stringResource(R.string.collapse_details)
@@ -120,7 +115,7 @@ fun Exercise(
         /*************************************************************************
          * EXERCISE DETAIL
          *************************************************************************/
-        AnimatedVisibility(visible = isExerciseDetailExpanded) {
+        AnimatedVisibility(visible = (isExerciseDetailExpandedById[exercise.id] == true)) {
             HorizontalDivider(modifier = Modifier.fillMaxWidth())
             Column(
                 modifier = Modifier

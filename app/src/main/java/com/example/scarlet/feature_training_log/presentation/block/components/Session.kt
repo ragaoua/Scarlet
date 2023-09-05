@@ -34,6 +34,7 @@ import com.example.scarlet.ui.theme.TitleLazyListPadding
 fun Session(
     modifier: Modifier = Modifier,
     session: SessionWithExercises<ExerciseWithMovementAndSets>,
+    isExerciseDetailExpandedById: Map<Long, Boolean>,
     isInSessionEditMode: Boolean,
     onEvent: (BlockEvent) -> Unit
 ) {
@@ -96,6 +97,7 @@ fun Session(
                     Exercise(
                         session = session,
                         exercise = exercise,
+                        isExerciseDetailExpandedById = isExerciseDetailExpandedById,
                         isInSessionEditMode = isInSessionEditMode,
                         onEvent = onEvent
                     )

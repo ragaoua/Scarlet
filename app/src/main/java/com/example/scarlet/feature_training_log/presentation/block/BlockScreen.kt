@@ -158,6 +158,7 @@ fun Screen(
                                         .fillParentMaxWidth()
                                         .animateItemPlacement(),
                                     session = session,
+                                    isExerciseDetailExpandedById = state.isExerciseDetailExpandedById,
                                     isInSessionEditMode = state.isInSessionEditMode,
                                     onEvent = onEvent
                                 )
