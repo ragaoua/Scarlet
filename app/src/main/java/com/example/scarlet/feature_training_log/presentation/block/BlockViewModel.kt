@@ -363,6 +363,5 @@ class BlockViewModel @Inject constructor(
 
     sealed interface UiAction {
         object NavigateUp: UiAction
-//        data class ScrollToSession(val sessionIndex: Int): UiAction
     }
 }
