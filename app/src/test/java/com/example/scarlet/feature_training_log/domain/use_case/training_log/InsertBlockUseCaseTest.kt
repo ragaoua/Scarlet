@@ -24,7 +24,7 @@ class InsertBlockUseCaseTest {
         insertBlock = InsertBlockUseCase(repository, validateBlockName)
 
         runBlocking {
-            repository.insertBlock(Block(name = "Block A"))
+            repository.insertBlockWithDays(Block(name = "Block A"))
         }
     }
 

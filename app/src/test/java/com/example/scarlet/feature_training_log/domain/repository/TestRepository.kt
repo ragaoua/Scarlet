@@ -20,7 +20,7 @@ class TestRepository: ScarletRepository {
     private val days = mutableListOf<DayWithSessions<Session>>()
     private val sessions = mutableListOf<Session>()
 
-    override suspend fun insertBlock(block: Block): Long {
+    override suspend fun insertBlockWithDays(block: Block): Long {
         val blockToBeInserted = block.copy(id = (blocks.size+1).toLong())
 
         blocks.add(blockToBeInserted)

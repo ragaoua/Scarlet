@@ -12,8 +12,7 @@ class InsertBlockUseCase(
 ) {
 
     /**
-     * Insert a block after checking that its name isn't blank or used already.
-     * Then, insert the days for the block
+     * Insert a block (and its blocks) after checking that its name isn't blank or used already.
      *
      * @param blockName the block's name
      * @param nbDays number of days to insert for the block
@@ -28,16 +27,15 @@ class InsertBlockUseCase(
         }
 
         var block = Block(name = blockName)
-        repository.insertBlock(block)
-            .also { block = block.copy(id = it) }
-
-        (1..nbDays).forEach {
-            repository.insertDay(Day(
-                blockId = block.id,
+        val days = (1..nbDays).map {
+            Day(
                 name = "Day $it", // No need to localize this string, this is just a placeholder
                 order = it
-            ))
+            )
         }
+
+        repository.insertBlockWithDays(block, days)
+            .also { block = block.copy(id = it) }
 
         return Resource.Success(block)
     }

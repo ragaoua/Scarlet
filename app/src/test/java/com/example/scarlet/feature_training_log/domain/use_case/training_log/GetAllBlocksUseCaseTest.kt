@@ -27,7 +27,7 @@ class GetAllBlocksUseCaseTest {
         val dayIds = mutableListOf<Long>()
         (1..5).forEach { _ ->
             runBlocking {
-                repository.insertBlock(Block())
+                repository.insertBlockWithDays(Block())
                     .also { blockId ->
                         repository.insertDay(
                             Day(
