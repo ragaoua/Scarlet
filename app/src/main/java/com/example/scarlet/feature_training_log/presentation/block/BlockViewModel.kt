@@ -354,7 +354,9 @@ class BlockViewModel @Inject constructor(
 
                         // if sessions have been added, scroll to the latest one
                         val latestAddedSession =
-                            day.sessions.minus(oldSessions.toSet()).maxByOrNull { it.date }
+                            day.sessions.minus(oldSessions.toSet()).maxWithOrNull(
+                                compareBy ({ it.date }, { it.id })
+                            )
 
                         Pair(
                             day.id,
