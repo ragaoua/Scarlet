@@ -12,6 +12,7 @@ import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
@@ -79,7 +80,8 @@ fun Screen(
                         message = context.getString(action.message.resId, *action.message.args),
                         actionLabel = action.actionLabel?.let {
                             context.getString(it.resId, *it.args)
-                        }
+                        },
+                        duration = SnackbarDuration.Short
                     )
                     action.onActionPerformed?.let { onActionPerformed ->
                         when(snackbarResult) {
