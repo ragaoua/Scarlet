@@ -11,8 +11,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -72,10 +74,21 @@ fun Screen(
                 is TrainingLogViewModel.UiAction.NavigateToBlockScreen -> {
                     navigator.navigate(BlockScreenDestination(action.block))
                 }
-                is TrainingLogViewModel.UiAction.ShowSnackbarWithError -> {
-                    snackbarHostState.showSnackbar(
-                        message = context.getString(action.error.resId, *action.error.args)
+                is TrainingLogViewModel.UiAction.ShowSnackbar -> {
+                    val snackbarResult = snackbarHostState.showSnackbar(
+                        message = context.getString(action.message.resId, *action.message.args),
+                        actionLabel = action.actionLabel?.let {
+                            context.getString(it.resId, *it.args)
+                        }
                     )
+                    action.onActionPerformed?.let { onActionPerformed ->
+                        when(snackbarResult) {
+                            SnackbarResult.ActionPerformed -> {
+                                onActionPerformed()
+                            }
+                            SnackbarResult.Dismissed -> Unit
+                        }
+                    }
                 }
             }
         }
@@ -90,7 +103,12 @@ fun Screen(
             modifier = Modifier
                 .fillMaxSize()
                 .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
-            snackbarHost = { SnackbarHost(snackbarHostState) },
+            snackbarHost = { SnackbarHost(snackbarHostState) { data ->
+                Snackbar(
+                    actionColor = MaterialTheme.colorScheme.primary,
+                    snackbarData = data
+                )
+            } },
             topBar = {
                 LargeTopAppBar(
                     title = {
