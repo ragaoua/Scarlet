@@ -38,7 +38,7 @@ class TrainingLogViewModel @Inject constructor(
 
     private var blockCollectionJob: Job? = null
 
-    private val DELETE_BLOCK_TIMEOUT = 5000L
+    private val DELETE_BLOCK_TIMEOUT = 5000L // Should be the same as the snackbar duration
 //    private val latestDeletedBlock: MutableStateFlow<Block?> = MutableStateFlow(null)
     private var blockToRestoreOnUndo: Block? = null
     private var deleteBlockJob: Job? = null
