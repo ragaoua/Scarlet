@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.presentation.block.util.SetFieldRatio
-import com.example.scarlet.feature_training_log.presentation.core.components.LabeledSwitch
 
 @Composable
 fun ExerciseDetailHeader(

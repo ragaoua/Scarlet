@@ -1,4 +1,4 @@
-package com.example.scarlet.feature_training_log.presentation.core.components
+package com.example.scarlet.feature_training_log.presentation.block.components
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
