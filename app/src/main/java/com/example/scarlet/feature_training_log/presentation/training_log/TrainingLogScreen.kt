@@ -19,6 +19,7 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -28,6 +29,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.scarlet.R
@@ -105,36 +107,13 @@ fun Screen(
             modifier = Modifier
                 .fillMaxSize()
                 .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
-            snackbarHost = { SnackbarHost(snackbarHostState) { data ->
-                Snackbar(
-                    actionColor = MaterialTheme.colorScheme.primary,
-                    snackbarData = data
-                )
-            } },
-            topBar = {
-                LargeTopAppBar(
-                    title = {
-                        Text(
-                            text = stringResource(id = R.string.training_log),
-                            style = MaterialTheme.typography.displaySmall,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    },
-                    colors = TopAppBarDefaults.largeTopAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.background,
-                        scrolledContainerColor = MaterialTheme.colorScheme.surface,
-                    ),
-                    scrollBehavior = topAppBarScrollBehavior
-                )
-            },
-            floatingActionButton = {
-                FloatingActionButton(
-                    onClick = { onEvent(TrainingLogEvent.ShowNewBlockSheet) }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = stringResource(id = R.string.add_new_block)
+            topBar = { TrainingLogTopAppBar(topAppBarScrollBehavior) },
+            floatingActionButton = { AddBlockButton(onEvent) },
+            snackbarHost = {
+                SnackbarHost(snackbarHostState) { data ->
+                    Snackbar(
+                        actionColor = MaterialTheme.colorScheme.primary,
+                        snackbarData = data
                     )
                 }
             }
@@ -146,6 +125,9 @@ fun Screen(
                 color = MaterialTheme.colorScheme.background
             ) {
                 BlockListSection(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
                     navigator = navigator,
                     blocks = state.blocks,
                     onEvent = onEvent
@@ -181,4 +163,38 @@ fun Screen(
             )
         }
     }
+}
+
+@Composable
+private fun AddBlockButton(onEvent: (TrainingLogEvent) -> Unit) {
+    FloatingActionButton(
+        onClick = { onEvent(TrainingLogEvent.ShowNewBlockSheet) }
+    ) {
+        Icon(
+            imageVector = Icons.Default.Add,
+            contentDescription = stringResource(id = R.string.add_new_block)
+        )
+    }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun TrainingLogTopAppBar(
+    topAppBarScrollBehavior: TopAppBarScrollBehavior
+) {
+    LargeTopAppBar(
+        title = {
+            Text(
+                text = stringResource(id = R.string.training_log),
+                style = MaterialTheme.typography.displaySmall,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+        },
+        colors = TopAppBarDefaults.largeTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.background,
+            scrolledContainerColor = MaterialTheme.colorScheme.surface,
+        ),
+        scrollBehavior = topAppBarScrollBehavior
+    )
 }
