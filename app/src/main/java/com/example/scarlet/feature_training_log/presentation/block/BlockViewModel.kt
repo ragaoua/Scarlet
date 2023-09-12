@@ -61,9 +61,7 @@ class BlockViewModel @Inject constructor(
             BlockEvent.EditBlock -> {
                 _state.update { it.copy(
                     editBlockSheet = BlockUiState.EditBlockSheetState(
-                        blockName = state.value.block.name,
-                        areMicroCycleSettingsExpanded = false, // TODO
-                        daysPerMicroCycle = 3 // TODO
+                        blockName = state.value.block.name
                     )
                 )}
             }
@@ -76,20 +74,6 @@ class BlockViewModel @Inject constructor(
                 _state.update { it.copy(
                     editBlockSheet = it.editBlockSheet?.copy(
                         blockName = event.editedBlockName
-                    )
-                )}
-            }
-            BlockEvent.ToggleMicroCycleSettings -> {
-                _state.update { it.copy(
-                    editBlockSheet = it.editBlockSheet?.copy(
-                        areMicroCycleSettingsExpanded = !it.editBlockSheet.areMicroCycleSettingsExpanded
-                    )
-                )}
-            }
-            is BlockEvent.UpdateDaysPerMicroCycle -> {
-                _state.update { it.copy(
-                    editBlockSheet = it.editBlockSheet?.copy(
-                        daysPerMicroCycle = event.nbDays
                     )
                 )}
             }

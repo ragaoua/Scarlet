@@ -1,5 +1,6 @@
 package com.example.scarlet.feature_training_log.presentation.training_log
 
+import NewBlockSheet
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -33,8 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.scarlet.R
-import com.example.scarlet.feature_training_log.presentation.core.components.AddEditBlockSheet
-import com.example.scarlet.feature_training_log.presentation.core.components.AddEditBlockSheetState
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
 import com.example.scarlet.feature_training_log.presentation.training_log.components.BlockListSection
 import com.example.scarlet.ui.theme.ScarletTheme
@@ -136,30 +135,9 @@ fun Screen(
         }
 
         state.newBlockSheetState?.let {
-            AddEditBlockSheet(
-                sheetState = AddEditBlockSheetState(
-                    blockName = it.blockName,
-                    blockNameError = it.blockNameError?.let { error ->
-                        stringResource(error.resId, *error.args)
-                    },
-                    areMicroCycleSettingsExpanded = it.areMicroCycleSettingsExpanded,
-                    daysPerMicroCycle = it.daysPerMicroCycle
-                ),
-                onBlockNameValueChange = { value ->
-                    onEvent(TrainingLogEvent.UpdateNewBlockName(value))
-                },
-                onMicroCycleSettingsToggle = {
-                    onEvent(TrainingLogEvent.ToggleMicroCycleSettings)
-                },
-                onDaysPerMicroCycleValueChange = { value ->
-                    onEvent(TrainingLogEvent.UpdateDaysPerMicroCycle(value))
-                },
-                onDismissRequest = {
-                    onEvent(TrainingLogEvent.HideNewBlockSheet)
-                },
-                onValidate = { blockName ->
-                    onEvent(TrainingLogEvent.AddBlock(blockName))
-                }
+            NewBlockSheet(
+                sheetState = it,
+                onEvent = onEvent
             )
         }
     }

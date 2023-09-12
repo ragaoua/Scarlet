@@ -18,8 +18,6 @@ sealed interface BlockEvent {
     object EditBlock: BlockEvent
     object CancelBlockEdition: BlockEvent
     data class UpdateEditedBlockName(val editedBlockName: String) : BlockEvent
-    object ToggleMicroCycleSettings: BlockEvent
-    data class UpdateDaysPerMicroCycle(val nbDays: Int) : BlockEvent
     object SaveBlockName: BlockEvent
 
     data class SelectDay(val day: Day) : BlockEvent

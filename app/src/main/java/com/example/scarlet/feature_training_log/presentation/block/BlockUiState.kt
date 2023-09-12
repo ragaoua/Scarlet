@@ -34,9 +34,7 @@ data class BlockUiState (
 
     data class EditBlockSheetState(
         val blockName: String = "",
-        val blockNameError: StringResource? = null,
-        val areMicroCycleSettingsExpanded: Boolean = false,
-        val daysPerMicroCycle: Int = 3
+        val blockNameError: StringResource? = null
     )
 
     data class MovementSelectionSheetState(

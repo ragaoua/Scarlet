@@ -54,11 +54,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.Session
+import com.example.scarlet.feature_training_log.presentation.block.components.EditBlockSheet
 import com.example.scarlet.feature_training_log.presentation.block.components.LoadCalculationDialog
 import com.example.scarlet.feature_training_log.presentation.block.components.MovementSelectionSheet
 import com.example.scarlet.feature_training_log.presentation.block.components.Session
-import com.example.scarlet.feature_training_log.presentation.core.components.AddEditBlockSheet
-import com.example.scarlet.feature_training_log.presentation.core.components.AddEditBlockSheetState
 import com.example.scarlet.ui.theme.ScarletTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -178,29 +177,9 @@ fun Screen(
         }
 
         state.editBlockSheet?.let{
-            AddEditBlockSheet(
-                sheetState = AddEditBlockSheetState(
-                    isNewBlock = false,
-                    blockName = it.blockName,
-                    blockNameError = it.blockNameError?.let { error ->
-                        stringResource(error.resId, *error.args)
-                    },
-                    areMicroCycleSettingsExpanded = it.areMicroCycleSettingsExpanded,
-                    daysPerMicroCycle = it.daysPerMicroCycle
-                ),
-                onBlockNameValueChange = { value ->
-                    onEvent(BlockEvent.UpdateEditedBlockName(value))
-                },
-                onMicroCycleSettingsToggle = {
-                    onEvent(BlockEvent.ToggleMicroCycleSettings)
-                },
-                onDaysPerMicroCycleValueChange = { value ->
-                    onEvent(BlockEvent.UpdateDaysPerMicroCycle(value))
-                },
-                onDismissRequest = {
-                    onEvent(BlockEvent.CancelBlockEdition)
-                },
-                onValidate = { onEvent(BlockEvent.SaveBlockName) }
+            EditBlockSheet(
+                sheetState = it,
+                onEvent = onEvent
             )
         }
 
