@@ -57,8 +57,9 @@ fun LabeledSwitch(
     var rightItemWidth by remember { mutableStateOf(0.dp) }
 
     val selectionBoxWidth by animateDpAsState(
-        targetValue = if (selection == LabeledSwitchSelection.LEFT) leftItemWidth
-        else rightItemWidth,
+        targetValue = if (selection == LabeledSwitchSelection.LEFT) {
+            leftItemWidth
+        } else rightItemWidth,
         label ="Selection box width"
     )
     val selectionBoxStartPadding by animateDpAsState(
