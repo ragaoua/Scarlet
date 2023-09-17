@@ -125,9 +125,7 @@ private fun SwitchItem(
 ) {
     Text(
         modifier = Modifier
-            .onGloballyPositioned { coordinates ->
-                onGloballyPositioned(coordinates)
-            }
+            .onGloballyPositioned(onGloballyPositioned)
             .padding(horizontal = 4.dp),
         text = text,
         color = if (isSelected) Color.White else Color.Gray
