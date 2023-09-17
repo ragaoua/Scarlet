@@ -40,7 +40,7 @@ class CopyPrecedingSetFieldUseCase(
             when (fieldToCopy) {
                 SetFieldType.REPS -> set.copy(reps = precedingSet.reps)
                 SetFieldType.WEIGHT -> set.copy(weight = precedingSet.weight)
-                SetFieldType.RPE -> set.copy(rpe = precedingSet.rpe)
+                SetFieldType.RPE -> set.copy(rating = precedingSet.rating)
             }
         )
 

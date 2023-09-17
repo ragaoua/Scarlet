@@ -126,7 +126,14 @@ fun Exercise(
             ) {
                 if (exercise.sets.isNotEmpty()) {
                     ExerciseDetailHeader(
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        ratingType = exercise.ratingType,
+                        onRatingTypeChange = { ratingType ->
+                            onEvent(BlockEvent.UpdateRatingType(
+                                exercise = exercise.toExercise(),
+                                ratingType = ratingType
+                            ))
+                        }
                     )
                     Spacer(modifier = Modifier) // Doubles the space between header and sets
                     exercise.sets.forEach { set ->

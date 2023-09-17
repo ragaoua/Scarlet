@@ -9,6 +9,7 @@ import androidx.room.Relation
 import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovement
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
+import com.example.scarlet.feature_training_log.domain.model.RatingType
 
 @Entity(
     tableName = "exercise",
@@ -36,14 +37,16 @@ data class ExerciseEntity(
     val id: Long = 0,
     val sessionId: Long = 0,
     val movementId: Long = 0,
-    val order: Int = 0
+    val order: Int = 0,
+    val ratingType: RatingType = RatingType.RPE
 ) {
 
     constructor(exercise: Exercise) : this(
         id = exercise.id,
         sessionId = exercise.sessionId,
         movementId = exercise.movementId,
-        order = exercise.order
+        order = exercise.order,
+        ratingType = exercise.ratingType
     )
 }
 
@@ -71,6 +74,7 @@ data class ExerciseWithMovementAndSetsEntity(
         order = exercise.order,
         movementId = exercise.movementId,
         movement = movement.toMovement(),
+        ratingType = exercise.ratingType,
         sets = sets.map { it.toSet() }
     )
 }
@@ -90,6 +94,7 @@ data class ExerciseWithMovementEntity(
         sessionId = exercise.sessionId,
         order = exercise.order,
         movementId = exercise.movementId,
+        ratingType = exercise.ratingType,
         movement = movement.toMovement()
     )
 }

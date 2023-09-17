@@ -8,5 +8,5 @@ data class Set(
     val order: Int = 0,
     val reps: Int? = null,
     val weight: Float? = null,
-    val rpe: Float? = null
+    val rating: Float? = null
 ) : Serializable

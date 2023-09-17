@@ -10,11 +10,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.scarlet.R
+import com.example.scarlet.feature_training_log.domain.model.RatingType
 import com.example.scarlet.feature_training_log.presentation.block.util.SetFieldRatio
 
 @Composable
 fun ExerciseDetailHeader(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    ratingType: RatingType,
+    onRatingTypeChange: (RatingType) -> Unit
 ) {
     Row(
         modifier = modifier
@@ -48,7 +51,18 @@ fun ExerciseDetailHeader(
                 modifier = Modifier.align(Alignment.Center),
                 lText = stringResource(R.string.rpe),
                 rText = stringResource(R.string.rir),
-                onValueChange = { /* TODO */ }
+                onValueChange = { selection ->
+                    onRatingTypeChange(
+                        if (selection == LabeledSwitchSelection.LEFT) {
+                            RatingType.RPE
+                        } else RatingType.RIR
+                    )
+                },
+                initialSelection = if (ratingType == RatingType.RPE) {
+                    LabeledSwitchSelection.LEFT
+                } else {
+                    LabeledSwitchSelection.RIGHT
+                }
             )
         }
 

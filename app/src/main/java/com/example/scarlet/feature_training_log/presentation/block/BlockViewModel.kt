@@ -240,6 +240,15 @@ class BlockViewModel @Inject constructor(
                     )
                 }
             }
+            is BlockEvent.UpdateRatingType -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    useCases.updateExercise(
+                        exercise = event.exercise.copy(
+                            ratingType = event.ratingType
+                        )
+                    )
+                }
+            }
             is BlockEvent.AddSet -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     useCases.insertSet(

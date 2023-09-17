@@ -28,7 +28,7 @@ data class SetEntity(
     val order: Int = 0,
     val reps: Int? = null,
     val weight: Float? = null,
-    val rpe: Float? = null
+    val rating: Float? = null
 ) {
 
     constructor(set: Set) : this(
@@ -37,7 +37,7 @@ data class SetEntity(
         order = set.order,
         reps = set.reps,
         weight = set.weight,
-        rpe = set.rpe
+        rating = set.rating
     )
 
     fun toSet() = Set(
@@ -46,6 +46,6 @@ data class SetEntity(
         order = order,
         reps = reps,
         weight = weight,
-        rpe = rpe
+        rating = rating
     )
 }

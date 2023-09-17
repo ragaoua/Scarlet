@@ -102,7 +102,7 @@ fun ExerciseSetRow(
             modifier = Modifier
                 .padding(horizontal = 2.dp)
                 .weight(SetFieldRatio.RPE),
-            originalValue = set.rpe?.toString() ?: "",
+            originalValue = set.rating?.toString() ?: "",
             onValueChangeCheck = { text ->
                 if (text.isBlank()) true else {
                     text.toFloatOrNull()?.let { rpe ->
@@ -112,7 +112,7 @@ fun ExerciseSetRow(
             },
             updateSet = { text ->
                 onEvent(BlockEvent.UpdateSet(
-                    set.copy(rpe = text.toFloatOrNull())
+                    set.copy(rating = text.toFloatOrNull())
                 ))
             },
             imeAction = if (isLastSet) ImeAction.Done else ImeAction.Next
