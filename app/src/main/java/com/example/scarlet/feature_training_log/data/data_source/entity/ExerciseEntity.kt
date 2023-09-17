@@ -7,7 +7,6 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 import com.example.scarlet.feature_training_log.domain.model.Exercise
-import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovement
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
 import com.example.scarlet.feature_training_log.domain.model.RatingType
 
@@ -76,25 +75,5 @@ data class ExerciseWithMovementAndSetsEntity(
         movement = movement.toMovement(),
         ratingType = exercise.ratingType,
         sets = sets.map { it.toSet() }
-    )
-}
-
-data class ExerciseWithMovementEntity(
-    @Embedded
-    val exercise: ExerciseEntity,
-    @Relation(
-        entity = MovementEntity::class,
-        parentColumn = "movementId",
-        entityColumn = "id"
-    )
-    val movement: MovementEntity
-) {
-    fun toModel() = ExerciseWithMovement(
-        id = exercise.id,
-        sessionId = exercise.sessionId,
-        order = exercise.order,
-        movementId = exercise.movementId,
-        ratingType = exercise.ratingType,
-        movement = movement.toMovement()
     )
 }
