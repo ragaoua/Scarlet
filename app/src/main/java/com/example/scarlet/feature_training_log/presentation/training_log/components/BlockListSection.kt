@@ -178,7 +178,6 @@ private fun BlockButton(
                     .align(Alignment.CenterEnd)
                     .onGloballyPositioned {
                         iconButtonWidth = with(localDensity) {
-                            println("it.size.width = ${it.size.width}")
                             it.size.width.toDp()
                         }
                     }
