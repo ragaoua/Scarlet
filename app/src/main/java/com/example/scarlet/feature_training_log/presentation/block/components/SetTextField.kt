@@ -102,9 +102,7 @@ fun SetTextField(
             },
             modifier = modifier
                 .fillMaxWidth()
-                .background(
-                    color = MaterialTheme.colorScheme.surfaceVariant
-                )
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .bottomBorder(
                     strokeWidth = 1.dp,
                     color = MaterialTheme.colorScheme.primary
@@ -115,6 +113,8 @@ fun SetTextField(
                             selection = TextRange(0, tfValue.text.length)
                         )
                     } else {
+                        // Manually clear the selection. Otherwise, the
+                        // focus will be lost but the selection will remain
                         tfValue = tfValue.copy(selection = TextRange(0, 0))
                         if (tfValue.text != originalValue) {
                             updateSet(tfValue.text)
