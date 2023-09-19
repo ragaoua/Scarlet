@@ -3,6 +3,7 @@ package com.example.scarlet.feature_training_log.presentation.training_log.compo
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,7 +39,6 @@ import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.presentation.core.DateUtils
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
 import com.example.scarlet.feature_training_log.presentation.training_log.TrainingLogEvent
-import com.example.scarlet.ui.theme.MainButtonContentPadding
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Composable
@@ -146,12 +146,13 @@ private fun BlockButton(
 ) {
     Button(
         modifier = Modifier.fillMaxWidth(),
-        contentPadding = MainButtonContentPadding,
+        contentPadding = PaddingValues(
+            vertical = 20.dp,
+            horizontal = 16.dp
+        ),
         shape = MaterialTheme.shapes.large,
         colors = colors,
-        onClick = {
-            navigator.navigate(BlockScreenDestination(block.toBlock()))
-        }
+        onClick = { navigator.navigate(BlockScreenDestination(block.toBlock())) }
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             var iconButtonWidth by remember { mutableStateOf(0.dp) }
