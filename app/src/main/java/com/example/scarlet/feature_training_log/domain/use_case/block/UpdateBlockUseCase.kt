@@ -4,7 +4,7 @@ import com.example.scarlet.core.util.Resource
 import com.example.scarlet.core.util.SimpleResource
 import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.domain.repository.ScarletRepository
-import com.example.scarlet.feature_training_log.domain.use_case.training_log.helpers.ValidateBlockNameHelper
+import com.example.scarlet.feature_training_log.domain.use_case.block.helpers.ValidateBlockNameHelper
 
 class UpdateBlockUseCase(
     private val repository: ScarletRepository,

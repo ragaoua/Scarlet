@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.scarlet.R
 import com.example.scarlet.core.util.StringResource
 import com.example.scarlet.feature_training_log.domain.model.Block
-import com.example.scarlet.feature_training_log.domain.use_case.training_log.TrainingLogUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi

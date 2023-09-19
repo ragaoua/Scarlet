@@ -1,4 +1,4 @@
-package com.example.scarlet.feature_training_log.domain.use_case.block
+package com.example.scarlet.feature_training_log.domain.use_case.set
 
 import com.example.scarlet.feature_training_log.domain.model.Set
 import com.example.scarlet.feature_training_log.domain.repository.ScarletRepository

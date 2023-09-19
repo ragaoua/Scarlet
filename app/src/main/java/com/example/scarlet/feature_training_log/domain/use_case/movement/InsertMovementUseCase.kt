@@ -1,4 +1,4 @@
-package com.example.scarlet.feature_training_log.domain.use_case.block
+package com.example.scarlet.feature_training_log.domain.use_case.movement
 
 import com.example.scarlet.R
 import com.example.scarlet.core.util.Resource
