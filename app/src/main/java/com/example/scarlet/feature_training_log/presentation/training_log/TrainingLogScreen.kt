@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -40,6 +41,7 @@ import com.example.scarlet.ui.theme.ScarletTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
 @Destination
 @Composable
@@ -70,6 +72,7 @@ fun Screen(
      ************************************************************************/
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
     LaunchedEffect(true) {
         uiActions.collect { action ->
             when(action) {
@@ -77,21 +80,26 @@ fun Screen(
                     navigator.navigate(BlockScreenDestination(action.block))
                 }
                 is TrainingLogViewModel.UiAction.ShowSnackbar -> {
-                    val snackbarResult = snackbarHostState.showSnackbar(
-                        message = context.getString(action.message.resId, *action.message.args),
-                        actionLabel = action.actionLabel?.let {
-                            context.getString(it.resId, *it.args)
-                        },
-                        duration = SnackbarDuration.Short
-                    )
-                    action.onActionPerformed?.let { onActionPerformed ->
-                        when(snackbarResult) {
-                            SnackbarResult.ActionPerformed -> {
-                                onActionPerformed()
+                    coroutineScope.launch {
+                        snackbarHostState.currentSnackbarData?.dismiss()
+                        val snackbarResult = snackbarHostState.showSnackbar(
+                            message = context.getString(action.message.resId, *action.message.args),
+                            actionLabel = action.actionLabel?.let {
+                                context.getString(it.resId, *it.args)
+                            },
+                            duration = SnackbarDuration.Short
+                        )
+                        action.onActionPerformed?.let { onActionPerformed ->
+                            when (snackbarResult) {
+                                SnackbarResult.ActionPerformed -> {
+                                    onActionPerformed()
+                                }
+
+                                SnackbarResult.Dismissed -> Unit
                             }
-                            SnackbarResult.Dismissed -> Unit
                         }
                     }
+                    println("ok2")
                 }
             }
         }
