@@ -7,6 +7,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,7 +15,6 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -30,7 +30,9 @@ fun LoadCalculationDialog(
     dialogState: BlockUiState.LoadCalculationDialogState,
     onEvent: (BlockEvent) -> Unit
 ) {
-    var percentage by remember { mutableStateOf("") }
+    val percentage by remember(dialogState.percentage) {
+        mutableStateOf(dialogState.percentage?.toString() ?: "")
+    }
 
     AlertDialog(
         onDismissRequest = {
@@ -45,7 +47,7 @@ fun LoadCalculationDialog(
         },
         title = {
             Text(
-                text = "Update load based on the previous set",
+                text = "Update load based on the previous set", // TODO string resource
                 textAlign = TextAlign.Center
             )
         },
@@ -59,8 +61,8 @@ fun LoadCalculationDialog(
             ) {
                 OutlinedTextField(
                     value = percentage,
-                    onValueChange = { percentage = it },
-                    trailingIcon = { Text(text = "%") },
+                    onValueChange = { onEvent(BlockEvent.UpdateLoadPercentage(it)) },
+                    trailingIcon = { Text("%") },
                     textStyle = LocalTextStyle.current.copy(
                         textAlign = TextAlign.Right
                     ),
@@ -77,7 +79,8 @@ fun LoadCalculationDialog(
                     // TODO : limit to < 100
                 )
                 Text(
-                    text = " x ${dialogState.previousSet.weight} kg" // TODO kg or lbs ???
+                    text = " x ${dialogState.previousSet.weight} kg", // TODO kg or lbs ???
+                    style = MaterialTheme.typography.bodyLarge
                 )
             }
 

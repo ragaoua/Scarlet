@@ -308,6 +308,13 @@ class BlockViewModel @Inject constructor(
                     loadCalculationDialog = null
                 )}
             }
+            is BlockEvent.UpdateLoadPercentage -> {
+                _state.update { it.copy(
+                    loadCalculationDialog = it.loadCalculationDialog?.copy(
+                        percentage = event.percentage.toIntOrNull()
+                    )
+                )}
+            }
             is BlockEvent.CalculateLoad -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     state.value.loadCalculationDialog?.let { dialog ->
