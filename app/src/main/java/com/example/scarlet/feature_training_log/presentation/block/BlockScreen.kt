@@ -1,11 +1,15 @@
 package com.example.scarlet.feature_training_log.presentation.block
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,6 +20,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -111,7 +116,7 @@ fun Screen(
             snackbarHost = { SnackbarHost(snackbarHostState) },
             topBar = { BlockTopAppBar(state, onEvent, topAppBarScrollBehavior) },
             bottomBar = { DayNavigationBottomBar(state, onEvent) },
-            floatingActionButton = { AddSessionButton(onEvent) }
+            floatingActionButton = { BlockFloatingActionButtons(state, onEvent) }
         ) { innerPadding ->
             Surface(
                 modifier = Modifier
@@ -222,14 +227,46 @@ private fun sessionsLazyListState(
 }
 
 @Composable
-private fun AddSessionButton(onEvent: (BlockEvent) -> Unit) {
-    FloatingActionButton(
-        onClick = { onEvent(BlockEvent.AddSession) }
+private fun BlockFloatingActionButtons(
+    state: BlockUiState,
+    onEvent: (BlockEvent) -> Unit
+) {
+    // The Modifier.fillMaxWidth() and Arrangement.End are needed because, otherwise,
+    // the AnimatedVisibility won't show the AddSession button when deleting the last
+    // session, even though state.isInSessionEditMode is made false by the viewmodel in
+    // that case. I can't seem to find the reason for this behavior
+    Row (
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.End
     ) {
-        Icon(
-            imageVector = Icons.Default.Add,
-            contentDescription = stringResource(id = R.string.new_session)
-        )
+        AnimatedVisibility(
+            visible = state.days.flatMap { it.sessions }.isNotEmpty(),
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            FloatingActionButton(
+                onClick = { onEvent(BlockEvent.ToggleSessionEditMode) },
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            ) {
+                Icon(
+                    imageVector = if (state.isInSessionEditMode) {
+                        Icons.Default.Check
+                    } else Icons.Default.Edit,
+                    contentDescription = stringResource(id = R.string.edit_sessions)
+                )
+            }
+        }
+        AnimatedVisibility(visible = !state.isInSessionEditMode) {
+            FloatingActionButton(
+                onClick = { onEvent(BlockEvent.AddSession) },
+                modifier = Modifier.padding(start = 16.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = stringResource(id = R.string.new_session)
+                )
+            }
+        }
     }
 }
 

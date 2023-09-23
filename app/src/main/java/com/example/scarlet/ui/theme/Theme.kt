@@ -25,6 +25,8 @@ private val lightColorScheme = lightColorScheme(
 
     secondary = Secondary50,
     onSecondary = Color.White,
+    secondaryContainer = Secondary60,
+    onSecondaryContainer = Color.White,
 
     error = Red40,
     onError = Color.White,
@@ -52,6 +54,8 @@ private val darkColorScheme = darkColorScheme(
 
     secondary = Secondary70,
     onSecondary = Color.White,
+    secondaryContainer = Secondary60,
+    onSecondaryContainer = Color.White,
 
     error = Red60,
     onError = Color.White,

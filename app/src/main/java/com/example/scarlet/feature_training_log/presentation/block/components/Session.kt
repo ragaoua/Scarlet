@@ -1,5 +1,6 @@
 package com.example.scarlet.feature_training_log.presentation.block.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,7 +11,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.EditCalendar
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
@@ -60,33 +60,26 @@ fun Session(
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        if(session.exercises.isNotEmpty()) {
+                        AnimatedVisibility (visible = !isInSessionEditMode) {
                             IconButton(onClick = {
-                                onEvent(BlockEvent.ToggleSessionEditMode)
+                                onEvent(BlockEvent.ShowSessionDatePickerDialog(session.toSession()))
                             }) {
                                 Icon(
-                                    imageVector = Icons.Default.Edit,
-                                    contentDescription = stringResource(R.string.edit_session_exercises)
+                                    imageVector = Icons.Default.EditCalendar,
+                                    contentDescription = stringResource(R.string.edit_session_date)
                                 )
                             }
                         }
-                        IconButton(onClick = {
-                            onEvent(BlockEvent.ShowSessionDatePickerDialog(session.toSession()))
-                        }) {
-                            Icon(
-                                imageVector = Icons.Default.EditCalendar,
-                                contentDescription = stringResource(R.string.edit_session_date)
-                            )
+                        AnimatedVisibility (visible = isInSessionEditMode) {
+                            IconButton(onClick = {
+                                onEvent(BlockEvent.DeleteSession(session.toSession()))
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = stringResource(R.string.delete)
+                                )
+                            }
                         }
-                        IconButton(onClick = {
-                            onEvent(BlockEvent.DeleteSession(session.toSession()))
-                        }) {
-                            Icon(
-                                imageVector = Icons.Default.Delete,
-                                contentDescription = stringResource(R.string.delete)
-                            )
-                        }
-
                     }
                 }
                 HorizontalDivider()

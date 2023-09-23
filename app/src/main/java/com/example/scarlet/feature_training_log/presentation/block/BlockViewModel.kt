@@ -331,6 +331,9 @@ class BlockViewModel @Inject constructor(
                 val days = resource.data ?: emptyList()
                 _state.update { state -> state.copy(
                     days = days,
+                    isInSessionEditMode = if (days.flatMap { it.sessions }.isNotEmpty()) {
+                        state.isInSessionEditMode
+                    } else false,
                     isExerciseDetailExpandedById = days.flatMap { it.sessions }
                         .flatMap { it.exercises }
                         .associate { day -> Pair(
