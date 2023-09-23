@@ -1,5 +1,6 @@
 package com.example.scarlet.feature_training_log.presentation.core.components
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -14,7 +15,56 @@ import androidx.compose.ui.res.stringResource
 import com.example.scarlet.R
 
 /**
- * A number picker
+ * A generic number picker
+ *
+ * @param modifier Modifier to be applied to the picker
+ * @param value The string representation of the value of the picker
+ * @param onMinusClick Callback when the minus button is clicked
+ * @param onPlusClick Callback when the plus button is clicked
+ * @param isMinusButtonEnabled Whether the minus button is enabled
+ * @param isPlusButtonEnabled Whether the plus button is enabled
+ */
+@Composable
+fun NumberPicker(
+    modifier: Modifier = Modifier,
+    value: String,
+    onMinusClick: (String) -> Unit,
+    onPlusClick: (String) -> Unit,
+    isMinusButtonEnabled: Boolean = true,
+    isPlusButtonEnabled: Boolean = true
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        IconButton(
+            onClick = { onMinusClick(value) },
+            enabled = isMinusButtonEnabled
+        ) {
+            Icon(
+                imageVector = Icons.Default.Remove,
+                contentDescription = stringResource(R.string.decrement)
+            )
+        }
+
+        Text(value)
+
+        IconButton(
+            onClick = { onPlusClick(value) },
+            enabled = isPlusButtonEnabled
+        ) {
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = stringResource(R.string.increment)
+            )
+        }
+    }
+}
+
+/**
+ * A whole number picker.
+ * When the plus or minus button is clicked, the value is incremented or decremented by 1
  *
  * @param modifier Modifier to be applied to the picker
  * @param value The current value of the picker
@@ -30,30 +80,16 @@ fun NumberPicker(
     minValue: Int? = null,
     maxValue: Int? = null
 ) {
-    Row(
+    NumberPicker(
         modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        IconButton(
-            onClick = { onValueChange(value - 1) },
-            enabled = minValue == null || value > minValue
-        ) {
-            Icon(
-                imageVector = Icons.Default.Remove,
-                contentDescription = stringResource(R.string.decrement)
-            )
-        }
-
-        Text(value.toString())
-
-        IconButton(
-            onClick = { onValueChange(value + 1) },
-            enabled = maxValue == null || value < maxValue
-        ) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = stringResource(R.string.increment)
-            )
-        }
-    }
+        value = value.toString(),
+        onMinusClick = {
+            onValueChange(it.toInt() - 1)
+        },
+        onPlusClick = {
+            onValueChange(it.toInt() + 1)
+        },
+        isMinusButtonEnabled = minValue == null || value > minValue,
+        isPlusButtonEnabled = maxValue == null || value < maxValue
+    )
 }
