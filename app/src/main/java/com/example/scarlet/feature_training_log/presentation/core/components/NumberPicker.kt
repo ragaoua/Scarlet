@@ -1,6 +1,5 @@
 package com.example.scarlet.feature_training_log.presentation.core.components
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -31,29 +30,30 @@ fun NumberPicker(
     minValue: Int? = null,
     maxValue: Int? = null
 ) {
-    Box(modifier = modifier) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            IconButton(
-                onClick = { onValueChange(value - 1) },
-                enabled = minValue == null || value > minValue
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Remove,
-                    contentDescription = stringResource(R.string.decrement)
-                )
-            }
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        IconButton(
+            onClick = { onValueChange(value - 1) },
+            enabled = minValue == null || value > minValue
+        ) {
+            Icon(
+                imageVector = Icons.Default.Remove,
+                contentDescription = stringResource(R.string.decrement)
+            )
+        }
 
-            Text(value.toString())
+        Text(value.toString())
 
-            IconButton(
-                onClick = { onValueChange(value + 1) },
-                enabled = maxValue == null || value < maxValue
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = stringResource(R.string.increment)
-                )
-            }
+        IconButton(
+            onClick = { onValueChange(value + 1) },
+            enabled = maxValue == null || value < maxValue
+        ) {
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = stringResource(R.string.increment)
+            )
         }
     }
 }
