@@ -136,11 +136,20 @@ fun Exercise(
                         }
                     )
                     Spacer(modifier = Modifier) // Doubles the space between header and sets
-                    exercise.sets.forEach { set ->
+                    exercise.sets.forEachIndexed { index, set ->
+                        val previousSet = exercise.sets.getOrNull(index - 1)
                         ExerciseSetRow(
                             modifier = Modifier.fillMaxWidth(),
                             set = set,
-                            isFirstSet = set == exercise.sets.first(),
+                            isCopyRepsIconVisible = previousSet?.let {
+                                it.reps != null && it.reps != set.reps
+                            } ?: false,
+                            isCopyWeightIconVisible = previousSet?.let {
+                                // contrary to reps, here we want to display the icon even if the
+                                // weight is the same, because of the long click feature that
+                                // displays the load calculation dialog
+                                it.weight != null
+                            } ?: false,
                             isLastSet = set == exercise.sets.last(),
                             onEvent = onEvent
                         )

@@ -25,8 +25,8 @@ import com.example.scarlet.feature_training_log.presentation.block.util.SetField
  *
  * @param modifier modifier for the row
  * @param set set to be displayed
- * @param isFirstSet whether the set is the first one of the exercise. This is used to determine
- * the visibility of the copy icon
+ * @param isCopyRepsIconVisible whether the copy icon should be visible for the reps field
+ * @param isCopyWeightIconVisible whether the copy icon should be visible for the weight field
  * @param isLastSet whether the set is the last one of the exercise. This is used to determine
  * the ime action of the last field
  * @param onEvent event to be triggered when the user interacts with the row
@@ -37,7 +37,8 @@ import com.example.scarlet.feature_training_log.presentation.block.util.SetField
 fun ExerciseSetRow(
     modifier: Modifier = Modifier,
     set: Set,
-    isFirstSet: Boolean,
+    isCopyRepsIconVisible: Boolean,
+    isCopyWeightIconVisible: Boolean,
     isLastSet: Boolean,
     onEvent: (BlockEvent) -> Unit
 ) {
@@ -70,14 +71,14 @@ fun ExerciseSetRow(
                 ))
             },
             imeAction = ImeAction.Next,
-            onIconClicked = if (isFirstSet) null else {
+            onIconClicked = if (isCopyRepsIconVisible) {
                 {
                     onEvent(BlockEvent.CopyPreviousSet(
                         set = set,
                         fieldToCopy = SetFieldType.REPS
                     ))
                 }
-            }
+            } else null
         )
 
         SetTextField(
@@ -102,14 +103,14 @@ fun ExerciseSetRow(
                 ))
             },
             imeAction = ImeAction.Next,
-            onIconClicked = if (isFirstSet) null else {
+            onIconClicked = if (isCopyWeightIconVisible) {
                 {
                     onEvent(BlockEvent.CopyPreviousSet(
                         set = set,
                         fieldToCopy = SetFieldType.WEIGHT
                     ))
                 }
-            },
+            } else null,
             onIconLongClicked = {
                 onEvent(BlockEvent.ShowLoadCalculationDialog(set))
             }
