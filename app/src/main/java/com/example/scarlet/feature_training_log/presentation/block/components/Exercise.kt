@@ -115,7 +115,9 @@ fun Exercise(
         /*************************************************************************
          * EXERCISE DETAIL
          *************************************************************************/
-        AnimatedVisibility(visible = (isExerciseDetailExpandedById[exercise.id] == true)) {
+        AnimatedVisibility(
+            visible = (isExerciseDetailExpandedById[exercise.id] == true) && !isInSessionEditMode
+        ) {
             HorizontalDivider(modifier = Modifier.fillMaxWidth())
             Column(
                 modifier = Modifier
