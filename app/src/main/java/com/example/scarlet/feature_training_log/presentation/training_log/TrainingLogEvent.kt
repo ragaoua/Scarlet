@@ -10,5 +10,4 @@ sealed interface TrainingLogEvent {
     class UpdateDaysPerMicroCycle(val nbDays: Int) : TrainingLogEvent
     data class AddBlock(val blockName: String): TrainingLogEvent
     data class DeleteBlock(val block: Block): TrainingLogEvent
-    object UndoDeleteBlock: TrainingLogEvent
 }

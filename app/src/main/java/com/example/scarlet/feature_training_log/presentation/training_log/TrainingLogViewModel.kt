@@ -86,10 +86,7 @@ class TrainingLogViewModel @Inject constructor(
                             if(it.areMicroCycleSettingsExpanded) {
                                 it.daysPerMicroCycle
                             } else 1
-                        } ?: run {
-                            // TODO Should we display an error here ?
-                            return@launch
-                        }
+                        } ?: return@launch
                     ).also { resource ->
                         resource.error?.let { error ->
                             _state.update { it.copy (
@@ -108,7 +105,7 @@ class TrainingLogViewModel @Inject constructor(
                 }
             }
             is TrainingLogEvent.DeleteBlock -> {
-                executeBlockDeletionImmediately()
+                executePreviousBlockDeletionImmediately()
 
                 blockToRestoreOnUndo = event.block
                 deleteBlockJob = viewModelScope.launch(Dispatchers.IO) {
@@ -126,16 +123,9 @@ class TrainingLogViewModel @Inject constructor(
                     _uiActions.send(UiAction.ShowSnackbar(
                         message = StringResource(R.string.block_deleted),
                         actionLabel = StringResource(R.string.undo),
-                        onActionPerformed = {
-                            onEvent(TrainingLogEvent.UndoDeleteBlock)
-                        }
+                        onActionPerformed = { undoDeleteBlock() }
                     ))
                 }
-            }
-            is TrainingLogEvent.UndoDeleteBlock -> {
-                deleteBlockJob?.cancel()
-                blockToRestoreOnUndo = null
-                collectBlocks()
             }
         }
     }
@@ -152,7 +142,22 @@ class TrainingLogViewModel @Inject constructor(
             }.launchIn(viewModelScope)
     }
 
-    private fun executeBlockDeletionImmediately(scope: CoroutineScope = viewModelScope) {
+    private fun undoDeleteBlock() {
+        deleteBlockJob?.cancel()
+        blockToRestoreOnUndo = null
+        collectBlocks()
+    }
+
+    /**
+     * If a block is being deleted, cancel the deletion (since it has a delay)
+     * and delete the block immediately.
+     *
+     * @param scope the scope in which the deletion should be executed
+     * (default is the view model scope)
+     *
+     * @see onCleared
+     */
+    private fun executePreviousBlockDeletionImmediately(scope: CoroutineScope = viewModelScope) {
         deleteBlockJob?.cancel()
         blockToRestoreOnUndo?.let { block ->
             blockToRestoreOnUndo = null
@@ -165,9 +170,7 @@ class TrainingLogViewModel @Inject constructor(
     @OptIn(DelicateCoroutinesApi::class)
     override fun onCleared() {
         super.onCleared()
-
-        // TODO Should we use runBlocking instead of a GlobalScope when the view model is cleared ?
-        executeBlockDeletionImmediately(scope = GlobalScope)
+        executePreviousBlockDeletionImmediately(scope = GlobalScope)
     }
 
     sealed interface UiAction {
