@@ -53,15 +53,15 @@ private val darkColorScheme = darkColorScheme(
     secondary = Secondary70,
     onSecondary = Color.White,
 
-    error = Red40,
+    error = Red60,
     onError = Color.White,
     errorContainer = Red10,
     onErrorContainer = Red90,
 
-    background = Secondary80,
+    background = Secondary90,
     onBackground = Color.White,
 
-    surface = Secondary75,
+    surface = Secondary80,
     onSurface = Color.White,
     surfaceVariant = Secondary70,
     onSurfaceVariant = Color.White,

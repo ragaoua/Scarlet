@@ -28,6 +28,7 @@ val Secondary90 = Color(0xFF15181E)
 
 val Red10 = Color(0xFF2f0406)
 val Red40 = Color(0xFFbd0f18)
+val Red60 = Color(0xFFe11a24)
 val Red90 = Color(0xFFfbd0d2)
 
 
