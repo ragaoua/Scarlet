@@ -29,15 +29,17 @@ interface ScarletRepository {
     ///////////////////////////////////////////////////////////////////////////////////////////////
     suspend fun getDaysByBlockId(blockId: Long): List<Day>
 
+    fun getDaysWithSessionsWithExercisesWithMovementAndSetsByBlockId(blockId: Long):
+            Flow<List<DayWithSessions<SessionWithExercises<ExerciseWithMovementAndSets>>>>
+
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////// SESSION ///////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    suspend fun insertSession(session: Session): Long
     suspend fun updateSession(session: Session)
     suspend fun deleteSession(session: Session)
 
-    fun getDaysWithSessionsWithExercisesWithMovementAndSetsByBlockId(blockId: Long):
-            Flow<List<DayWithSessions<SessionWithExercises<ExerciseWithMovementAndSets>>>>
+    suspend fun getSessionsWithExercisesByDayId(dayId: Long): List<SessionWithExercises<Exercise>>
+    suspend fun insertSessionWithExercises(session: Session, exercises: List<Exercise>): Long
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////// EXERCISE ///////////////////////////////////////////

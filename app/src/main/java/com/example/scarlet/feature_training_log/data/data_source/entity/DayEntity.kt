@@ -62,7 +62,7 @@ data class DayWithSessionsEntity(
         blockId = day.blockId,
         name = day.name,
         order = day.order,
-        sessions = sessions.map { it.toSession() }
+        sessions = sessions.map { it.toModel() }
     )
 }
 

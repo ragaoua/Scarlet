@@ -47,6 +47,14 @@ data class ExerciseEntity(
         order = exercise.order,
         ratingType = exercise.ratingType
     )
+
+    fun toModel() = Exercise(
+        id = id,
+        sessionId = sessionId,
+        movementId = movementId,
+        order = order,
+        ratingType = ratingType
+    )
 }
 
 

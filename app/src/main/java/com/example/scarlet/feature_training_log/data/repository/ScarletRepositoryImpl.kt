@@ -65,14 +65,24 @@ class ScarletRepositoryImpl(
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////// SESSION ///////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    override suspend fun insertSession(session: Session) =
-        dbInstance.sessionDao.insertSession(SessionEntity(session))
-
     override suspend fun deleteSession(session: Session) =
         dbInstance.sessionDao.deleteSession(SessionEntity(session))
 
     override suspend fun updateSession(session: Session) =
         dbInstance.sessionDao.updateSession(SessionEntity(session))
+
+    override suspend fun getSessionsWithExercisesByDayId(dayId: Long) =
+        dbInstance.sessionDao.getSessionsWithExercisesByDayId(dayId)
+            .map { entity ->
+                entity.toModel()
+            }
+
+    override suspend fun insertSessionWithExercises(session: Session, exercises: List<Exercise>) =
+        dbInstance.sessionDao.insertSessionWithExercises(
+            SessionEntity(session),
+            exercises.map { ExerciseEntity(it) },
+            dbInstance.exerciseDao
+        )
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////// EXERCISE ///////////////////////////////////////////

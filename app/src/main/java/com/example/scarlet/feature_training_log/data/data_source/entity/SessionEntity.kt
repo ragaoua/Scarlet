@@ -37,10 +37,29 @@ data class SessionEntity(
         date = session.date
     )
 
-    fun toSession() = Session(
+    fun toModel() = Session(
         id = id,
         dayId = dayId,
         date = date
+    )
+}
+
+data class SessionWithExercisesEntity(
+    @Embedded
+    val session: SessionEntity,
+    @Relation(
+        entity = ExerciseEntity::class,
+        parentColumn = "id",
+        entityColumn = "sessionId"
+    )
+    val exercises: List<ExerciseEntity>
+) {
+
+    fun toModel() = SessionWithExercises(
+        id = session.id,
+        dayId = session.dayId,
+        date = session.date,
+        exercises = exercises.map { it.toModel() }
     )
 }
 
