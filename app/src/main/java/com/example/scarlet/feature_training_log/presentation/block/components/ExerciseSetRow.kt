@@ -20,6 +20,19 @@ import com.example.scarlet.feature_training_log.presentation.block.BlockEvent
 import com.example.scarlet.feature_training_log.presentation.block.util.SetFieldRatio
 import com.example.scarlet.feature_training_log.presentation.block.util.SetFieldType
 
+/**
+ * Row containing the fields of a set
+ *
+ * @param modifier modifier for the row
+ * @param set set to be displayed
+ * @param isFirstSet whether the set is the first one of the exercise. This is used to determine
+ * the visibility of the copy icon
+ * @param isLastSet whether the set is the last one of the exercise. This is used to determine
+ * the ime action of the last field
+ * @param onEvent event to be triggered when the user interacts with the row
+ *
+ * @see SetTextField
+ */
 @Composable
 fun ExerciseSetRow(
     modifier: Modifier = Modifier,

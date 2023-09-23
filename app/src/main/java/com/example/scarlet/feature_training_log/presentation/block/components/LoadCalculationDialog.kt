@@ -40,9 +40,8 @@ fun LoadCalculationDialog(
             Button(onClick = {
                 onEvent(BlockEvent.CalculateLoad(percentage))
             }) {
-                Text("Confirm")
+                Text("Confirm") // TODO string resource
             }
-
         },
         title = {
             Text(
