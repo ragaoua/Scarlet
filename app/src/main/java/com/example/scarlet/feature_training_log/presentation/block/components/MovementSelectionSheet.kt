@@ -64,7 +64,7 @@ fun MovementSelectionSheet(
             Spacer(modifier = Modifier.height(4.dp))
             HorizontalDivider(modifier = Modifier.width(96.dp))
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             LazyColumn(
                 modifier = Modifier.weight(1f),
@@ -96,8 +96,7 @@ fun MovementSelectionSheet(
                             onClick = {
                                 onEvent(BlockEvent.AddMovement)
                             },
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
+                            modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Add,
@@ -113,6 +112,7 @@ fun MovementSelectionSheet(
                                 ),
                                 style = MaterialTheme.typography.titleLarge,
                                 textAlign = TextAlign.Center,
+                                modifier = Modifier.padding(vertical = 4.dp)
                             )
                         }
                     }
