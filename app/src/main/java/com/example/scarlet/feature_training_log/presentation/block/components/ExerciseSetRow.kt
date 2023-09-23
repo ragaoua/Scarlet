@@ -71,7 +71,11 @@ fun ExerciseSetRow(
             modifier = Modifier
                 .padding(horizontal = 2.dp)
                 .weight(SetFieldRatio.WEIGHT),
-            originalValue = set.weight?.toString() ?: "",
+            originalValue = set.weight?.let {
+                if (it % 1 == 0f) {
+                    it.toInt().toString()
+                } else it.toString()
+            } ?: "",
             onValueChangeCheck = { text ->
                 if (text.isBlank()) true else {
                     text.toFloatOrNull()?.let { weight ->
@@ -102,7 +106,11 @@ fun ExerciseSetRow(
             modifier = Modifier
                 .padding(horizontal = 2.dp)
                 .weight(SetFieldRatio.RPE),
-            originalValue = set.rating?.toString() ?: "",
+            originalValue = set.rating?.let {
+                if (it % 1 == 0f) {
+                    it.toInt().toString()
+                } else it.toString()
+            } ?: "",
             onValueChangeCheck = { text ->
                 if (text.isBlank()) true else {
                     text.toFloatOrNull()?.let { rpe ->
