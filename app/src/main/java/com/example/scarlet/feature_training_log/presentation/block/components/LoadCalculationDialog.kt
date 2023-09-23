@@ -52,9 +52,10 @@ fun LoadCalculationDialog(
             onEvent(BlockEvent.HideLoadCalculationDialog)
         },
         confirmButton = {
-            Button(onClick = {
-                onEvent(BlockEvent.UpdateSetBasedOnPrecedingSet)
-            }) {
+            Button(
+                onClick = { onEvent(BlockEvent.UpdateSetBasedOnPrecedingSet) },
+                enabled = dialogState.calculatedLoad != null
+            ) {
                 Text(stringResource(R.string.confirm))
             }
         },
