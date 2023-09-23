@@ -94,13 +94,13 @@ fun SetTextField(
                             )
                         )
                     } ?: Spacer(modifier = Modifier.width(24.dp))
-                    Box(modifier = modifier.weight(1f)) {
+                    Box(modifier = Modifier.weight(1f)) {
                         innerTextField()
                     }
                     Spacer(modifier = Modifier.width(4.dp))
                 }
             },
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.surfaceVariant)
                 .bottomBorder(
