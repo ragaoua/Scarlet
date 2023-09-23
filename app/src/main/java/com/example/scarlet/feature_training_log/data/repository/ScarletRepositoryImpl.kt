@@ -24,7 +24,11 @@ class ScarletRepositoryImpl(
     //////////////////////////////////////////// BLOCK ////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////
     override suspend fun insertBlockWithDays(block: Block, days: List<Day>) =
-        dbInstance.blockDao.insertBlockWithDays(BlockEntity(block), days.map { DayEntity(it) })
+        dbInstance.blockDao.insertBlockWithDays(
+            BlockEntity(block),
+            days.map { DayEntity(it) },
+            dbInstance.dayDao
+        )
 
     override suspend fun updateBlock(block: Block) =
         dbInstance.blockDao.updateBlock(BlockEntity(block))
