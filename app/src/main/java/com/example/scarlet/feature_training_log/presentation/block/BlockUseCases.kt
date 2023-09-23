@@ -13,7 +13,6 @@ import com.example.scarlet.feature_training_log.domain.use_case.session.UpdateSe
 import com.example.scarlet.feature_training_log.domain.use_case.set.CopyPrecedingSetFieldUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.set.DeleteSetUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.set.InsertSetUseCase
-import com.example.scarlet.feature_training_log.domain.use_case.set.UpdateLoadBasedOnPreviousSetUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.set.UpdateSetUseCase
 
 data class BlockUseCases(
@@ -30,6 +29,5 @@ data class BlockUseCases(
     val insertSet: InsertSetUseCase,
     val updateSet: UpdateSetUseCase,
     val deleteSet: DeleteSetUseCase,
-    val copyPrecedingSetField: CopyPrecedingSetFieldUseCase,
-    val updateLoadBasedOnPreviousSet: UpdateLoadBasedOnPreviousSetUseCase
+    val copyPrecedingSetField: CopyPrecedingSetFieldUseCase
 )

@@ -46,6 +46,7 @@ data class BlockUiState (
     data class LoadCalculationDialogState(
         val set: Set,
         val previousSet: Set,
-        val percentage: Int? = null
+        val percentage: Int? = null, // 0-100
+        val calculatedLoad: Float? = null
     )
 }

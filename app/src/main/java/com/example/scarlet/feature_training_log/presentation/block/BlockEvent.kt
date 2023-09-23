@@ -56,5 +56,6 @@ sealed interface BlockEvent {
     data class ShowLoadCalculationDialog(val set: Set) : BlockEvent
     object HideLoadCalculationDialog : BlockEvent
     data class UpdateLoadPercentage(val percentage: String) : BlockEvent
-    data class CalculateLoad(val percentage: String) : BlockEvent
+    data class UpdateCalculatedLoad(val load: Float) : BlockEvent
+    object UpdateSetBasedOnPrecedingSet: BlockEvent
 }

@@ -57,6 +57,9 @@
     <string name="no_sets_msg">Click below to add a set</string>
     <string name="add_set">Add set</string>
     <string name="copy_previous_set_value">Copy the value of the previous set for this field</string>
+    <string name="update_load">Update load</string>
+    <string name="percentage">Load percentage</string>
+    <string name="base_load_kg">Base Load : %1$skg</string>
     <!-- Set : Errors -->
     <string name="error_no_previous_set">Error : No previous set found</string>
     <string name="error_invalid_percentage">Error : percentage format is invalid</string>
@@ -78,4 +81,5 @@
     <string name="increment">Increment</string>
     <string name="done">Done</string>
     <string name="undo">Undo</string>
+    <string name="confirm">Confirm</string>
 </resources>

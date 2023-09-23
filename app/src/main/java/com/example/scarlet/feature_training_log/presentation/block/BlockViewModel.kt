@@ -9,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -33,6 +34,9 @@ class BlockViewModel @Inject constructor(
         block = BlockScreenDestination.argsFrom(savedStateHandle).block
     ))
     val state = _state.asStateFlow()
+
+    private var updateLoadSuggestionsJob: Job? = null
+    private val LOAD_SUGGESTIONS_DELAY = 500L
 
     init {
         initBlockSessionsCollection()
@@ -309,21 +313,44 @@ class BlockViewModel @Inject constructor(
                 )}
             }
             is BlockEvent.UpdateLoadPercentage -> {
+                val percentage = event.percentage.toIntOrNull()
+                if (percentage != null && percentage !in 1..100) return
+
                 _state.update { it.copy(
                     loadCalculationDialog = it.loadCalculationDialog?.copy(
-                        percentage = event.percentage.toIntOrNull()
+                        percentage = percentage
+                    )
+                )}
+
+                updateLoadSuggestionsJob?.cancel()
+                updateLoadSuggestionsJob = viewModelScope.launch {
+                    val dialog = state.value.loadCalculationDialog ?: return@launch
+                    val previousSetWeight = dialog.previousSet.weight ?: return@launch
+
+                    delay(LOAD_SUGGESTIONS_DELAY)
+                    _state.update { state -> state.copy(
+                        loadCalculationDialog = state.loadCalculationDialog?.copy(
+                            calculatedLoad = percentage?.let {
+                                it * previousSetWeight / 100
+                            }
+                        )
+                    )}
+                }
+            }
+            is BlockEvent.UpdateCalculatedLoad -> {
+                _state.update { it.copy(
+                    loadCalculationDialog = it.loadCalculationDialog?.copy(
+                        calculatedLoad = event.load
                     )
                 )}
             }
-            is BlockEvent.CalculateLoad -> {
+            BlockEvent.UpdateSetBasedOnPrecedingSet -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    state.value.loadCalculationDialog?.let { dialog ->
-                        useCases.updateLoadBasedOnPreviousSet(
-                            set = dialog.set,
-                            precedingSet = dialog.previousSet,
-                            loadPercentage = event.percentage
-                        )
-                    }
+                    useCases.updateSet(
+                        set = state.value.loadCalculationDialog?.set?.copy(
+                            weight = state.value.loadCalculationDialog?.calculatedLoad
+                        ) ?: return@launch
+                    )
                     _state.update { it.copy(
                         loadCalculationDialog = null
                     )}
