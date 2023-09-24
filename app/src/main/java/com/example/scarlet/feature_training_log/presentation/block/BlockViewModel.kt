@@ -293,17 +293,18 @@ class BlockViewModel @Inject constructor(
                 }
             }
             is BlockEvent.ShowLoadCalculationDialog -> {
-                val previousSet = state.value.days
+                val previousSetLoad = state.value.days
                     .flatMap { it.sessions }
                     .flatMap { it.exercises }
                     .flatMap { it.sets }
                     .find { it.exerciseId == event.set.exerciseId &&
                             it.order == event.set.order - 1
-                    } ?: return
+                    }?.weight
+                    ?: return
                 _state.update { it.copy(
                     loadCalculationDialog = BlockUiState.LoadCalculationDialogState(
                         set = event.set,
-                        previousSet = previousSet
+                        previousSetLoad = previousSetLoad
                     )
                 )}
             }
@@ -325,13 +326,12 @@ class BlockViewModel @Inject constructor(
                 updateLoadSuggestionsJob?.cancel()
                 updateLoadSuggestionsJob = viewModelScope.launch {
                     val dialog = state.value.loadCalculationDialog ?: return@launch
-                    val previousSetWeight = dialog.previousSet.weight ?: return@launch
 
                     delay(LOAD_SUGGESTIONS_DELAY)
                     _state.update { state -> state.copy(
                         loadCalculationDialog = state.loadCalculationDialog?.copy(
                             calculatedLoad = percentage?.let {
-                                it * previousSetWeight / 100
+                                it * dialog.previousSetLoad / 100
                             }
                         )
                     )}

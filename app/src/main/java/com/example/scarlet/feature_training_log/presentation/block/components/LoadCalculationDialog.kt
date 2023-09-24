@@ -71,7 +71,7 @@ fun LoadCalculationDialog(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(
                         R.string.base_load_kg,
-                        dialogState.previousSet.weight.toString()
+                        dialogState.previousSetLoad.toString()
                     ),
                     style = MaterialTheme.typography.bodyLarge,
                     textAlign = TextAlign.Center
