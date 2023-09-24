@@ -36,7 +36,7 @@ class BlockViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     private var updateLoadSuggestionsJob: Job? = null
-    private val LOAD_SUGGESTIONS_DELAY = 500L
+    private val LOAD_CALCULATION_DELAY = 500L
 
     init {
         initBlockSessionsCollection()
@@ -401,7 +401,7 @@ class BlockViewModel @Inject constructor(
                 updateLoadSuggestionsJob = viewModelScope.launch {
                     val dialog = state.value.loadCalculationDialog ?: return@launch
 
-                    delay(LOAD_SUGGESTIONS_DELAY)
+                    delay(LOAD_CALCULATION_DELAY)
                     _state.update { state -> state.copy(
                         loadCalculationDialog = state.loadCalculationDialog?.copy(
                             calculatedLoad = percentage?.let {
