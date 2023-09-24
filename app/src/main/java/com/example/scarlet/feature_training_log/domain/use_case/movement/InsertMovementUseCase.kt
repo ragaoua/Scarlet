@@ -5,12 +5,14 @@ import com.example.scarlet.core.util.Resource
 import com.example.scarlet.core.util.StringResource
 import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.repository.ScarletRepository
+import com.example.scarlet.feature_training_log.domain.use_case.movement.helpers.ValidateMovementNameHelper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 class InsertMovementUseCase(
-    private val repository: ScarletRepository
+    private val repository: ScarletRepository,
+    private val validateMovementName: ValidateMovementNameHelper
 ) {
 
     private var movements: Flow<List<Movement>>? = null
@@ -23,6 +25,12 @@ class InsertMovementUseCase(
      * @return a resource with an error or data (id of the inserted movement)
      */
     suspend operator fun invoke(movementName: String): Resource<Long> {
+        validateMovementName(movementName).let { resource ->
+            resource.error?.let {
+                return Resource.Error(resource.error)
+            }
+        }
+
         return (movements ?: run { repository.getAllMovements() })
             .also { movements = it }
             .map { movements ->

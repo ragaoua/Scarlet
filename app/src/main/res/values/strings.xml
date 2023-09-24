@@ -70,8 +70,12 @@
     <string name="enter_movement_name">Enter a movement name below to add it to the list</string>
     <string name="add_new_movement_btn_msg">Add \"%1$s\"</string>
     <string name="enter_movement">Enter a movement name</string>
+    <string name="edit_movement">Edit movement</string>
+    <string name="movement_name">Movement name</string>
+    <string name="delete_movement">Delete this movement</string>
     <!-- Movement : Errors -->
-    <string name="error_movement_already_exists">Error : This movement already exists</string>
+    <string name="error_movement_already_exists">This movement already exists</string>
+    <string name="error_movement_name_is_empty">The movement name can\'t be empty</string>
 
     <!-- Misc -->
     <string name="save">Save</string>

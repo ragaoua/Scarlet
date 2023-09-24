@@ -54,6 +54,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.presentation.block.components.EditBlockSheet
+import com.example.scarlet.feature_training_log.presentation.block.components.EditMovementSheet
 import com.example.scarlet.feature_training_log.presentation.block.components.LoadCalculationDialog
 import com.example.scarlet.feature_training_log.presentation.block.components.MovementSelectionSheet
 import com.example.scarlet.feature_training_log.presentation.block.components.Session
@@ -180,12 +181,19 @@ fun Screen(
             )
         }
 
-        state.movementSelectionSheet?.let {
-            MovementSelectionSheet(
-                movements = state.movements,
-                movementNameFilter = it.movementNameFilter,
-                onEvent = onEvent,
-            )
+        state.movementSelectionSheet?.let { sheetState ->
+            sheetState.editMovementSheet?.let {
+                EditMovementSheet(
+                    sheetState = it,
+                    onEvent = onEvent
+                )
+            } ?: run {
+                MovementSelectionSheet(
+                    movements = state.movements,
+                    movementNameFilter = sheetState.movementNameFilter,
+                    onEvent = onEvent,
+                )
+            }
         }
 
         state.loadCalculationDialog?.let {

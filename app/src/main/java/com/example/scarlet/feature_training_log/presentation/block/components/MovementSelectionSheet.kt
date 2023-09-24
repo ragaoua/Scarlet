@@ -3,6 +3,7 @@ package com.example.scarlet.feature_training_log.presentation.block.components
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,9 +14,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
@@ -118,28 +121,37 @@ fun MovementSelectionSheet(
                     }
                 }
                 items(movements) { movement ->
-                    Text(
-                        text = movement.name,
-                        style = MaterialTheme.typography.titleMedium,
+                    Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(2.dp)
-                            .clickable {
-                                onEvent(BlockEvent.SelectMovement(movement))
-                            }
+                            .padding(vertical = 2.dp)
+                            .clickable { onEvent(BlockEvent.SelectMovement(movement)) }
                             .border(1.dp, MaterialTheme.colorScheme.onSurfaceVariant)
-                            .padding(8.dp)
-                    )
+                            .padding(start = 16.dp, top = 16.dp, bottom = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = movement.name,
+                            style = MaterialTheme.typography.bodyLarge,
+                            modifier = Modifier.weight(1f)
+                        )
+                        IconButton(onClick = {
+                            onEvent(BlockEvent.ShowEditMovementSheet(movement))
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = stringResource(R.string.edit_movement)
+                            )
+                        }
+                    }
                 }
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
             val focusRequester = remember { FocusRequester() }
+            SideEffect { focusRequester.requestFocus() }
 
-            SideEffect {
-                focusRequester.requestFocus()
-            }
             OutlinedTextField(
                 value = movementNameFilter,
                 onValueChange = {

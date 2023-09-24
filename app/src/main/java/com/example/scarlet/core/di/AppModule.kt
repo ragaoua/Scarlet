@@ -14,8 +14,11 @@ import com.example.scarlet.feature_training_log.domain.use_case.day.GetDaysWithS
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.DeleteExerciseUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.InsertExerciseUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.UpdateExerciseUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.movement.DeleteMovementUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.movement.GetMovementsFilteredByNameUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.movement.InsertMovementUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.movement.UpdateMovementUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.movement.helpers.ValidateMovementNameHelper
 import com.example.scarlet.feature_training_log.domain.use_case.session.DeleteSessionUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.session.InsertSessionUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.session.UpdateSessionUseCase
@@ -56,6 +59,11 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideValidateMovementNameHelper(repository: ScarletRepository) =
+        ValidateMovementNameHelper(repository)
+
+    @Provides
+    @Singleton
     fun provideTrainingLogUseCases(
         repository: ScarletRepository,
         validateBlockName: ValidateBlockNameHelper
@@ -69,7 +77,8 @@ object AppModule {
     @Singleton
     fun provideBlockUseCases(
         repository: ScarletRepository,
-        validateBlockName: ValidateBlockNameHelper
+        validateBlockName: ValidateBlockNameHelper,
+        validateMovementName: ValidateMovementNameHelper
     ) = BlockUseCases(
             getDaysWithSessionsWithMovementAndSetsByBlockId = GetDaysWithSessionsWithMovementAndSetsByBlockIdUseCase(repository),
             updateBlock = UpdateBlockUseCase(repository, validateBlockName),
@@ -79,7 +88,9 @@ object AppModule {
             getMovementsFilteredByName = GetMovementsFilteredByNameUseCase(repository),
             insertExercise = InsertExerciseUseCase(repository),
             updateExercise = UpdateExerciseUseCase(repository),
-            insertMovement = InsertMovementUseCase(repository),
+            insertMovement = InsertMovementUseCase(repository, validateMovementName),
+            updateMovement = UpdateMovementUseCase(repository, validateMovementName),
+            deleteMovement = DeleteMovementUseCase(repository),
             deleteExercise = DeleteExerciseUseCase(repository),
             insertSet = InsertSetUseCase(repository),
             updateSet = UpdateSetUseCase(repository),

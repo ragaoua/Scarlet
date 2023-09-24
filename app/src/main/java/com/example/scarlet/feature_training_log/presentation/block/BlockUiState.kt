@@ -40,7 +40,14 @@ data class BlockUiState (
     data class MovementSelectionSheetState(
         val session: SessionWithExercises<out IExercise>,
         val exercise: Exercise? = null,
-        val movementNameFilter: String = ""
+        val movementNameFilter: String = "",
+        val editMovementSheet: EditMovementSheetState? = null, // null means the sheet is hidden
+    )
+
+    data class EditMovementSheetState(
+        val movement: Movement,
+        val editedMovementName: String = movement.name,
+        val movementNameError: StringResource? = null
     )
 
     data class LoadCalculationDialogState(

@@ -122,6 +122,12 @@ class ScarletRepositoryImpl(
     override suspend fun insertMovement(movement: Movement) =
         dbInstance.movementDao.insertMovement(MovementEntity(movement))
 
+    override suspend fun updateMovement(movement: Movement) =
+        dbInstance.movementDao.updateMovement(MovementEntity(movement))
+
+    override suspend fun deleteMovement(movement: Movement) =
+        dbInstance.movementDao.deleteMovement(MovementEntity(movement))
+
     override fun getAllMovements() =
         dbInstance.movementDao.getAllMovements()
             .map { entityList ->
@@ -129,4 +135,7 @@ class ScarletRepositoryImpl(
                     entity.toMovement()
                 }
             }
+
+    override suspend fun getMovementByName(name: String): Movement? =
+        dbInstance.movementDao.getMovementByName(name)?.toMovement()
 }

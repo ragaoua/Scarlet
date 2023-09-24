@@ -39,6 +39,13 @@ sealed interface BlockEvent {
     data class FilterMovementsByName(val nameFilter: String) : BlockEvent
     object AddMovement: BlockEvent
     data class SelectMovement(val movement: Movement) : BlockEvent
+
+    data class ShowEditMovementSheet(val movement: Movement) : BlockEvent
+    object HideEditMovementSheet: BlockEvent
+    data class UpdateEditedMovementName(val editedMovementName: String) : BlockEvent
+    object UpdateEditedMovement : BlockEvent
+    object DeleteEditedMovement : BlockEvent
+
     data class DeleteExercise(val exercise: Exercise) : BlockEvent
     data class UpdateRatingType(
         val exercise: Exercise,

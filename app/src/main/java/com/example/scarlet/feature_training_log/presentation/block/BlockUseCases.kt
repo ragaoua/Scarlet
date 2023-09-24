@@ -5,8 +5,10 @@ import com.example.scarlet.feature_training_log.domain.use_case.day.GetDaysWithS
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.DeleteExerciseUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.InsertExerciseUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.UpdateExerciseUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.movement.DeleteMovementUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.movement.GetMovementsFilteredByNameUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.movement.InsertMovementUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.movement.UpdateMovementUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.session.DeleteSessionUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.session.InsertSessionUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.session.UpdateSessionUseCase
@@ -25,6 +27,8 @@ data class BlockUseCases(
     val insertExercise: InsertExerciseUseCase,
     val updateExercise: UpdateExerciseUseCase,
     val insertMovement: InsertMovementUseCase,
+    val updateMovement: UpdateMovementUseCase,
+    val deleteMovement: DeleteMovementUseCase,
     val deleteExercise: DeleteExerciseUseCase,
     val insertSet: InsertSetUseCase,
     val updateSet: UpdateSetUseCase,

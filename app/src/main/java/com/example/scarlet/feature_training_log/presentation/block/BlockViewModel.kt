@@ -207,6 +207,80 @@ class BlockViewModel @Inject constructor(
                     }
                 }
             }
+            is BlockEvent.ShowEditMovementSheet -> {
+                _state.update { state -> state.copy(
+                    movementSelectionSheet = state.movementSelectionSheet?.copy(
+                        editMovementSheet = BlockUiState.EditMovementSheetState(
+                            movement = event.movement
+                        )
+                    )
+                )}
+            }
+            BlockEvent.HideEditMovementSheet -> {
+                _state.update { state -> state.copy(
+                    movementSelectionSheet = state.movementSelectionSheet?.copy(
+                        editMovementSheet = null
+                    )
+                )}
+            }
+            is BlockEvent.UpdateEditedMovementName -> {
+                _state.update { state -> state.copy(
+                    movementSelectionSheet = state.movementSelectionSheet?.let { it.copy(
+                            editMovementSheet = it.editMovementSheet?.copy(
+                                editedMovementName = event.editedMovementName
+                            )
+                        )
+                    }
+                )}
+            }
+            BlockEvent.UpdateEditedMovement -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    val sheet = state.value.movementSelectionSheet?.editMovementSheet
+                        ?: return@launch
+
+                    if(sheet.editedMovementName == sheet.movement.name) {
+                        _state.update { state -> state.copy(
+                            movementSelectionSheet = state.movementSelectionSheet?.copy(
+                                editMovementSheet = null
+                            )
+                        )}
+                        return@launch
+                    }
+
+                    useCases.updateMovement(
+                        sheet.movement.copy(name = sheet.editedMovementName)
+                    ).also { resource ->
+                        resource.error?.let { error ->
+                            _state.update { it.copy(
+                                movementSelectionSheet = it.movementSelectionSheet?.copy(
+                                    editMovementSheet = sheet.copy(
+                                        movementNameError = error
+                                    )
+                                )
+                            )}
+                        } ?: run {
+                            _state.update { state -> state.copy(
+                                movementSelectionSheet = state.movementSelectionSheet?.copy(
+                                    editMovementSheet = null
+                                )
+                            )}
+                        }
+                    }
+                }
+            }
+            BlockEvent.DeleteEditedMovement -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    useCases.deleteMovement(
+                        movement = state.value.movementSelectionSheet?.editMovementSheet?.movement
+                            ?: return@launch
+                    )
+                    _state.update { it.copy(
+                        movementSelectionSheet = it.movementSelectionSheet?.copy(
+                            editMovementSheet = null
+                        )
+                    )}
+                }
+            }
             is BlockEvent.SelectMovement -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     state.value.movementSelectionSheet?.exercise?.let { exercise ->
