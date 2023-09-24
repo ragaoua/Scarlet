@@ -39,7 +39,7 @@ class BlockViewModel @Inject constructor(
     private val LOAD_CALCULATION_DELAY = 500L
 
     init {
-        initBlockSessionsCollection()
+        initDataCollection()
     }
 
     fun onEvent(event: BlockEvent) {
@@ -433,7 +433,7 @@ class BlockViewModel @Inject constructor(
         }
     }
 
-    private fun initBlockSessionsCollection() {
+    private fun initDataCollection() {
         useCases.getDaysWithSessionsWithMovementAndSetsByBlockId(state.value.block.id)
             .onEach { resource ->
                 val days = resource.data ?: emptyList()
