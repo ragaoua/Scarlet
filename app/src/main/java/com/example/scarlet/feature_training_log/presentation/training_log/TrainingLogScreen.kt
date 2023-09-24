@@ -94,12 +94,10 @@ fun Screen(
                                 SnackbarResult.ActionPerformed -> {
                                     onActionPerformed()
                                 }
-
                                 SnackbarResult.Dismissed -> Unit
                             }
                         }
                     }
-                    println("ok2")
                 }
             }
         }
