@@ -434,7 +434,7 @@ class BlockViewModel @Inject constructor(
     }
 
     private fun initDataCollection() {
-        useCases.getDaysWithSessionsWithMovementAndSetsByBlockId(state.value.block.id)
+        useCases.getDaysWithSessionsWithExercisesWithMovementAndSetsByBlockId(state.value.block.id)
             .onEach { resource ->
                 val days = resource.data ?: emptyList()
                 _state.update { state -> state.copy(

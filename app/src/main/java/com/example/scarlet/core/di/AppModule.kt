@@ -10,7 +10,7 @@ import com.example.scarlet.feature_training_log.domain.use_case.block.GetAllBloc
 import com.example.scarlet.feature_training_log.domain.use_case.block.InsertBlockUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.block.UpdateBlockUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.block.helpers.ValidateBlockNameHelper
-import com.example.scarlet.feature_training_log.domain.use_case.day.GetDaysWithSessionsWithMovementAndSetsByBlockIdUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.day.GetDaysWithSessionsWithExercisesWithMovementAndSetsByBlockIdUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.DeleteExerciseUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.InsertExerciseUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.UpdateExerciseUseCase
@@ -80,7 +80,7 @@ object AppModule {
         validateBlockName: ValidateBlockNameHelper,
         validateMovementName: ValidateMovementNameHelper
     ) = BlockUseCases(
-            getDaysWithSessionsWithMovementAndSetsByBlockId = GetDaysWithSessionsWithMovementAndSetsByBlockIdUseCase(repository),
+            getDaysWithSessionsWithExercisesWithMovementAndSetsByBlockId = GetDaysWithSessionsWithExercisesWithMovementAndSetsByBlockIdUseCase(repository),
             updateBlock = UpdateBlockUseCase(repository, validateBlockName),
             insertSession = InsertSessionUseCase(repository),
             updateSession = UpdateSessionUseCase(repository),

@@ -8,7 +8,7 @@ import com.example.scarlet.feature_training_log.domain.repository.ScarletReposit
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class GetDaysWithSessionsWithMovementAndSetsByBlockIdUseCase(
+class GetDaysWithSessionsWithExercisesWithMovementAndSetsByBlockIdUseCase(
     private val repository: ScarletRepository
 ) {
 
