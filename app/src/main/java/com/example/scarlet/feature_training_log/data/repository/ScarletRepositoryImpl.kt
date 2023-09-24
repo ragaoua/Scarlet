@@ -47,6 +47,25 @@ class ScarletRepositoryImpl(
     override suspend fun getBlockByName(name: String): Block? =
         dbInstance.blockDao.getBlockByName(name)?.toBlock()
 
+    override suspend fun insertBlockWithDaysWithSessionsWithExercisesWithSets(
+        block: Block,
+        days: List<Day>,
+        sessions: List<Session>,
+        exercises: List<Exercise>,
+        sets: List<Set>
+    ): Long =
+        dbInstance.blockDao.insertBlockWithDaysWithSessionsWithExercisesWithMovementAndSets(
+            BlockEntity(block),
+            days.map { DayEntity(it) },
+            sessions.map { SessionEntity(it) },
+            exercises.map { ExerciseEntity(it) },
+            sets.map { SetEntity(it) },
+            dbInstance.dayDao,
+            dbInstance.sessionDao,
+            dbInstance.exerciseDao,
+            dbInstance.setDao
+        )
+
     ///////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////// DAY /////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////

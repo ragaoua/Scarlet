@@ -5,23 +5,21 @@ import androidx.lifecycle.viewModelScope
 import com.example.scarlet.R
 import com.example.scarlet.core.util.StringResource
 import com.example.scarlet.feature_training_log.domain.model.Block
+import com.example.scarlet.feature_training_log.domain.model.BlockWithDays
+import com.example.scarlet.feature_training_log.domain.model.DayWithSessions
+import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
+import com.example.scarlet.feature_training_log.domain.model.SessionWithExercises
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,11 +33,8 @@ class TrainingLogViewModel @Inject constructor(
     private val _state = MutableStateFlow(TrainingLogUiState())
     val state = _state.asStateFlow()
 
-    private var blockCollectionJob: Job? = null
-
-    private val DELETE_BLOCK_TIMEOUT = 5000L // Should be the same as the snackbar duration
-    private var blockToRestoreOnUndo: Block? = null
-    private var deleteBlockJob: Job? = null
+    private var blockToRestoreOnUndo:
+            BlockWithDays<DayWithSessions<SessionWithExercises<ExerciseWithMovementAndSets>>>? = null
 
     init {
         collectBlocks()
@@ -105,25 +100,29 @@ class TrainingLogViewModel @Inject constructor(
                 }
             }
             is TrainingLogEvent.DeleteBlock -> {
-                executePreviousBlockDeletionImmediately()
+                viewModelScope.launch(Dispatchers.IO) {
+                    blockToRestoreOnUndo =
+                        BlockWithDays(
+                            id = event.block.id,
+                            name = event.block.name,
+                            days = useCases.getDaysWithSessionsWithExercisesWithMovementAndSetsByBlockId(
+                                event.block.id
+                            ).first().data ?: return@launch
+                        )
 
-                blockToRestoreOnUndo = event.block
-                deleteBlockJob = viewModelScope.launch(Dispatchers.IO) {
-                    delay(DELETE_BLOCK_TIMEOUT)
-                    withContext(NonCancellable) {
-                        blockToRestoreOnUndo = null
-                        useCases.deleteBlock(event.block)
-                    }
-                }
-                _state.update { state -> state.copy(
-                    blocks = state.blocks
-                        .filter { it.id != blockToRestoreOnUndo?.id }
-                )}
-                viewModelScope.launch {
+                    useCases.deleteBlock(event.block)
+
                     _uiActions.send(UiAction.ShowSnackbar(
                         message = StringResource(R.string.block_deleted),
                         actionLabel = StringResource(R.string.undo),
-                        onActionPerformed = { undoDeleteBlock() }
+                        onActionPerformed = {
+                            blockToRestoreOnUndo?.let {
+                                blockToRestoreOnUndo = null
+                                viewModelScope.launch(Dispatchers.IO) {
+                                    useCases.restoreBlockWithDaysWithSessionsWithExercisesWithSets(it)
+                                }
+                            }
+                        }
                     ))
                 }
             }
@@ -131,46 +130,12 @@ class TrainingLogViewModel @Inject constructor(
     }
 
     private fun collectBlocks() {
-        blockCollectionJob?.cancel()
-        blockCollectionJob = useCases.getAllBlocks()
+        useCases.getAllBlocks()
             .onEach { resource ->
                 _state.update { state -> state.copy(
-                    blocks = resource.data
-                        ?.filter { it.id != blockToRestoreOnUndo?.id }
-                        ?: emptyList()
+                    blocks = resource.data ?: emptyList()
                 )}
             }.launchIn(viewModelScope)
-    }
-
-    private fun undoDeleteBlock() {
-        deleteBlockJob?.cancel()
-        blockToRestoreOnUndo = null
-        collectBlocks()
-    }
-
-    /**
-     * If a block is being deleted, cancel the deletion (since it has a delay)
-     * and delete the block immediately.
-     *
-     * @param scope the scope in which the deletion should be executed
-     * (default is the view model scope)
-     *
-     * @see onCleared
-     */
-    private fun executePreviousBlockDeletionImmediately(scope: CoroutineScope = viewModelScope) {
-        deleteBlockJob?.cancel()
-        blockToRestoreOnUndo?.let { block ->
-            blockToRestoreOnUndo = null
-            scope.launch(Dispatchers.IO) {
-                useCases.deleteBlock(block)
-            }
-        }
-    }
-
-    @OptIn(DelicateCoroutinesApi::class)
-    override fun onCleared() {
-        super.onCleared()
-        executePreviousBlockDeletionImmediately(scope = GlobalScope)
     }
 
     sealed interface UiAction {

@@ -10,6 +10,9 @@ import androidx.room.Update
 import com.example.scarlet.feature_training_log.data.data_source.entity.BlockEntity
 import com.example.scarlet.feature_training_log.data.data_source.entity.BlockWithDaysWithSessionsEntity
 import com.example.scarlet.feature_training_log.data.data_source.entity.DayEntity
+import com.example.scarlet.feature_training_log.data.data_source.entity.ExerciseEntity
+import com.example.scarlet.feature_training_log.data.data_source.entity.SessionEntity
+import com.example.scarlet.feature_training_log.data.data_source.entity.SetEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -45,10 +48,26 @@ interface BlockDao {
     @Query("SELECT * FROM block")
     fun getAllBlocks(): Flow<List<BlockWithDaysWithSessionsEntity>>
 
-    @Query("""
-        SELECT *
-        FROM block
-        WHERE NAME = :name
-    """)
+    @Query("SELECT * FROM block WHERE name = :name")
     suspend fun getBlockByName(name: String): BlockEntity?
+
+    @Transaction
+    suspend fun insertBlockWithDaysWithSessionsWithExercisesWithMovementAndSets(
+        block: BlockEntity,
+        days: List<DayEntity>,
+        sessions: List<SessionEntity>,
+        exercises: List<ExerciseEntity>,
+        sets: List<SetEntity>,
+        dayDao: DayDao,
+        sessionDao: SessionDao,
+        exerciseDao: ExerciseDao,
+        setDao: SetDao
+    ): Long {
+        val blockId = insertBlock(block)
+        days.forEach { dayDao.insertDay(it) }
+        sessions.forEach { sessionDao.insertSession(it) }
+        exercises.forEach { exerciseDao.insertExercise(it) }
+        sets.forEach { setDao.insertSet(it) }
+        return blockId
+    }
 }
