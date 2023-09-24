@@ -35,7 +35,7 @@ class BlockViewModel @Inject constructor(
     ))
     val state = _state.asStateFlow()
 
-    private var updateLoadSuggestionsJob: Job? = null
+    private var updateCalculatedLoadJob: Job? = null
     private val LOAD_CALCULATION_DELAY = 500L
 
     init {
@@ -397,8 +397,8 @@ class BlockViewModel @Inject constructor(
                     )
                 )}
 
-                updateLoadSuggestionsJob?.cancel()
-                updateLoadSuggestionsJob = viewModelScope.launch {
+                updateCalculatedLoadJob?.cancel()
+                updateCalculatedLoadJob = viewModelScope.launch {
                     val dialog = state.value.loadCalculationDialog ?: return@launch
 
                     delay(LOAD_CALCULATION_DELAY)
