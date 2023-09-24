@@ -12,7 +12,7 @@ class UpdateBlockUseCase(
 ) {
 
     /**
-     * Update a block after checking that the name isn't blank
+     * Update a block after validating its name
      *
      * @param block block to be updated
      *
