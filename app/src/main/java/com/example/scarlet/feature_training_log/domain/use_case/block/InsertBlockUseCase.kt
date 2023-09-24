@@ -12,7 +12,7 @@ class InsertBlockUseCase(
 ) {
 
     /**
-     * Insert a block (and its blocks) after checking that its name isn't blank or used already.
+     * Insert a block (and its days) after checking that its name isn't blank or used already.
      *
      * @param blockName the block's name
      * @param nbDays number of days to insert for the block
