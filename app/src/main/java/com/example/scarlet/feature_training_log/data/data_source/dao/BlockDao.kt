@@ -11,6 +11,7 @@ import com.example.scarlet.feature_training_log.data.data_source.entity.BlockEnt
 import com.example.scarlet.feature_training_log.data.data_source.entity.BlockWithDaysWithSessionsEntity
 import com.example.scarlet.feature_training_log.data.data_source.entity.DayEntity
 import com.example.scarlet.feature_training_log.data.data_source.entity.ExerciseEntity
+import com.example.scarlet.feature_training_log.data.data_source.entity.MovementEntity
 import com.example.scarlet.feature_training_log.data.data_source.entity.SessionEntity
 import com.example.scarlet.feature_training_log.data.data_source.entity.SetEntity
 import kotlinx.coroutines.flow.Flow
@@ -57,15 +58,20 @@ interface BlockDao {
         days: List<DayEntity>,
         sessions: List<SessionEntity>,
         exercises: List<ExerciseEntity>,
+        movements: List<MovementEntity>,
         sets: List<SetEntity>,
         dayDao: DayDao,
         sessionDao: SessionDao,
         exerciseDao: ExerciseDao,
+        movementDao: MovementDao,
         setDao: SetDao
     ): Long {
         val blockId = insertBlock(block)
         days.forEach { dayDao.insertDay(it) }
         sessions.forEach { sessionDao.insertSession(it) }
+        movements.forEach {
+            movementDao.insertMovement(it, onConflict = OnConflictStrategy.IGNORE)
+        }
         exercises.forEach { exerciseDao.insertExercise(it) }
         sets.forEach { setDao.insertSet(it) }
         return blockId

@@ -14,10 +14,9 @@ class RestoreBlockWithDaysWithSessionsWithExercisesWithSetsUseCase(
 
     /**
      * Insert a block along with all its cascading data.
-     * This is meant to be used when restoring data (on an "undo")
+     * This is meant to be used when restoring data (on an "undo delete")
      * so it does not validate the block name or anything else
-     * regarding the inserted data
-     *
+     * regarding the inserted data.
      *
      * @param block the block to insert
      *
@@ -29,13 +28,15 @@ class RestoreBlockWithDaysWithSessionsWithExercisesWithSetsUseCase(
         val days = block.days
         val sessions = days.flatMap { it.sessions }
         val exercises = sessions.flatMap { it.exercises }
+        val movements = exercises.map { it.movement }
         val sets = exercises.flatMap { it.sets }
 
-        repository.insertBlockWithDaysWithSessionsWithExercisesWithSets(
+        repository.insertBlockWithDaysWithSessionsWithExercisesWithMovementAndSets(
             block = block.toBlock(),
             days = days.map { it.toDay() },
             sessions = sessions.map { it.toSession() },
             exercises = exercises.map { it.toExercise() },
+            movements = movements,
             sets = sets
         )
 

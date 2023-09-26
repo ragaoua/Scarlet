@@ -12,8 +12,22 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface MovementDao {
 
+    suspend fun insertMovement(
+        movement: MovementEntity,
+        onConflict: Int = OnConflictStrategy.ABORT
+    ): Long {
+        return when(onConflict) {
+            OnConflictStrategy.ABORT -> insertMovementOnConflictAbort(movement)
+            OnConflictStrategy.IGNORE -> insertMovementOnConflictIgnore(movement)
+            else -> throw IllegalArgumentException("Invalid onConflictStrategy")
+        }
+    }
+
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend fun insertMovement(movement: MovementEntity): Long
+    suspend fun insertMovementOnConflictAbort(movement: MovementEntity): Long
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertMovementOnConflictIgnore(movement: MovementEntity): Long
 
     @Update
     suspend fun updateMovement(movement: MovementEntity)

@@ -24,11 +24,12 @@ interface ScarletRepository {
     fun getAllBlocks(): Flow<List<BlockWithDays<DayWithSessions<Session>>>>
     suspend fun getBlockByName(name: String): Block?
 
-    suspend fun insertBlockWithDaysWithSessionsWithExercisesWithSets(
+    suspend fun insertBlockWithDaysWithSessionsWithExercisesWithMovementAndSets(
         block: Block,
         days: List<Day>,
         sessions: List<Session>,
         exercises: List<Exercise>,
+        movements: List<Movement>,
         sets: List<Set>
     ): Long
 
