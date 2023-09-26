@@ -118,7 +118,7 @@ class TrainingLogViewModel @Inject constructor(
                             blockToRestoreOnUndo?.let {
                                 blockToRestoreOnUndo = null
                                 viewModelScope.launch(Dispatchers.IO) {
-                                    useCases.restoreBlockWithDaysWithSessionsWithExercisesWithSets(it)
+                                    useCases.restoreBlockWithDaysWithSessionsWithExercisesWithMovementAndSets(it)
                                 }
                             }
                         }

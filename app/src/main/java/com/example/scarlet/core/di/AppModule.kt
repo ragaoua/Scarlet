@@ -8,11 +8,12 @@ import com.example.scarlet.feature_training_log.domain.repository.ScarletReposit
 import com.example.scarlet.feature_training_log.domain.use_case.block.DeleteBlockUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.block.GetAllBlocksUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.block.InsertBlockUseCase
-import com.example.scarlet.feature_training_log.domain.use_case.block.RestoreBlockWithDaysWithSessionsWithExercisesWithSetsUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.block.RestoreBlockWithDaysWithSessionsWithExercisesWithMovementAndSetsUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.block.UpdateBlockUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.block.helpers.ValidateBlockNameHelper
 import com.example.scarlet.feature_training_log.domain.use_case.day.GetDaysWithSessionsWithExercisesWithMovementAndSetsByBlockIdUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.DeleteExerciseUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.exercise.GetExercisesWithMovementAndSetsBySessionIdUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.InsertExerciseUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.UpdateExerciseUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.movement.DeleteMovementUseCase
@@ -74,8 +75,8 @@ object AppModule {
             insertBlock = InsertBlockUseCase(repository, validateBlockName),
             getDaysWithSessionsWithExercisesWithMovementAndSetsByBlockId =
                 GetDaysWithSessionsWithExercisesWithMovementAndSetsByBlockIdUseCase(repository),
-            restoreBlockWithDaysWithSessionsWithExercisesWithSets =
-                RestoreBlockWithDaysWithSessionsWithExercisesWithSetsUseCase(repository)
+            restoreBlockWithDaysWithSessionsWithExercisesWithMovementAndSets =
+                RestoreBlockWithDaysWithSessionsWithExercisesWithMovementAndSetsUseCase(repository)
         )
 
     @Provides

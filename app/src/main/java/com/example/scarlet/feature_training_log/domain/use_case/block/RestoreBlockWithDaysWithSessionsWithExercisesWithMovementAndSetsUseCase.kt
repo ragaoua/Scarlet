@@ -8,7 +8,7 @@ import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovemen
 import com.example.scarlet.feature_training_log.domain.model.SessionWithExercises
 import com.example.scarlet.feature_training_log.domain.repository.ScarletRepository
 
-class RestoreBlockWithDaysWithSessionsWithExercisesWithSetsUseCase(
+class RestoreBlockWithDaysWithSessionsWithExercisesWithMovementAndSetsUseCase(
     private val repository: ScarletRepository
 ) {
 
