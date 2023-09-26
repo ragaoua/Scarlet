@@ -22,6 +22,11 @@ data class BlockWithDays<T: IDay>(
     override val name: String = IBlock.name,
     val days: List<T> = emptyList()
 ): IBlock {
+    constructor(block: Block, days: List<T>): this(
+        id = block.id,
+        name = block.name,
+        days = days
+    )
 
     fun toBlock() = Block(
         id = id,
