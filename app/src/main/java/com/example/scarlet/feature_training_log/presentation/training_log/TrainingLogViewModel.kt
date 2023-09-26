@@ -6,9 +6,6 @@ import com.example.scarlet.R
 import com.example.scarlet.core.util.StringResource
 import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.domain.model.BlockWithDays
-import com.example.scarlet.feature_training_log.domain.model.DayWithSessions
-import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
-import com.example.scarlet.feature_training_log.domain.model.SessionWithExercises
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -32,9 +29,6 @@ class TrainingLogViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(TrainingLogUiState())
     val state = _state.asStateFlow()
-
-    private var blockToRestoreOnUndo:
-            BlockWithDays<DayWithSessions<SessionWithExercises<ExerciseWithMovementAndSets>>>? = null
 
     init {
         collectBlocks()
@@ -101,25 +95,22 @@ class TrainingLogViewModel @Inject constructor(
             }
             is TrainingLogEvent.DeleteBlock -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    blockToRestoreOnUndo =
-                        BlockWithDays(
-                            block = event.block,
-                            days = useCases.getDaysWithSessionsWithExercisesWithMovementAndSetsByBlockId(
-                                event.block.id
-                            ).first().data ?: return@launch
-                        )
-
                     useCases.deleteBlock(event.block)
 
                     _uiActions.send(UiAction.ShowSnackbar(
                         message = StringResource(R.string.block_deleted),
                         actionLabel = StringResource(R.string.undo),
                         onActionPerformed = {
-                            blockToRestoreOnUndo?.let {
-                                blockToRestoreOnUndo = null
-                                viewModelScope.launch(Dispatchers.IO) {
-                                    useCases.restoreBlockWithDaysWithSessionsWithExercisesWithMovementAndSets(it)
-                                }
+                            viewModelScope.launch(Dispatchers.IO) {
+                                val blockToRestore = BlockWithDays(
+                                    block = event.block,
+                                    days = useCases.getDaysWithSessionsWithExercisesWithMovementAndSetsByBlockId(
+                                        event.block.id
+                                    ).first().data ?: emptyList()
+                                )
+                                useCases.restoreBlockWithDaysWithSessionsWithExercisesWithMovementAndSets(
+                                    blockToRestore
+                                )
                             }
                         }
                     ))
