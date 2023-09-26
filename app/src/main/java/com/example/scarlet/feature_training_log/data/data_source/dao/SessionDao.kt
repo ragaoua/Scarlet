@@ -8,8 +8,10 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import com.example.scarlet.feature_training_log.data.data_source.entity.ExerciseEntity
+import com.example.scarlet.feature_training_log.data.data_source.entity.MovementEntity
 import com.example.scarlet.feature_training_log.data.data_source.entity.SessionEntity
 import com.example.scarlet.feature_training_log.data.data_source.entity.SessionWithExercisesEntity
+import com.example.scarlet.feature_training_log.data.data_source.entity.SetEntity
 
 @Dao
 interface SessionDao {
@@ -42,4 +44,24 @@ interface SessionDao {
 
     @Query("SELECT * FROM session WHERE dayId = :dayId")
     suspend fun getSessionsWithExercisesByDayId(dayId: Long): List<SessionWithExercisesEntity>
+
+    @Transaction
+    suspend fun insertSessionWithExercisesWithMovementAndSets(
+        session: SessionEntity,
+        exercises: List<ExerciseEntity>,
+        movements: List<MovementEntity>,
+        sets: List<SetEntity>,
+        exerciseDao: ExerciseDao,
+        movementDao: MovementDao,
+        setDao: SetDao
+    ): Long {
+        val sessionId = insertSession(session)
+        movements.forEach {
+            movementDao.insertMovement(it, onConflict = OnConflictStrategy.IGNORE)
+        }
+        exercises.forEach { exerciseDao.insertExercise(it) }
+        sets.forEach { setDao.insertSet(it) }
+
+        return sessionId
+    }
 }

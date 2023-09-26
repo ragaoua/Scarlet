@@ -3,7 +3,10 @@ package com.example.scarlet.feature_training_log.presentation.block
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.scarlet.R
+import com.example.scarlet.core.util.StringResource
 import com.example.scarlet.feature_training_log.domain.model.Exercise
+import com.example.scarlet.feature_training_log.domain.model.SessionWithExercises
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -38,6 +41,8 @@ class BlockViewModel @Inject constructor(
     private var updateCalculatedLoadJob: Job? = null
     private val LOAD_CALCULATION_DELAY = 500L
 
+//    private var sessionToRestoreOnUndo: SessionWithExercises<ExerciseWithMovementAndSets>? = null
+
     init {
         initDataCollection()
     }
@@ -52,6 +57,22 @@ class BlockViewModel @Inject constructor(
             is BlockEvent.DeleteSession -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     useCases.deleteSession(event.session)
+
+                    _uiActions.send(UiAction.ShowSnackbar(
+                        message = StringResource(R.string.session_deleted),
+                        actionLabel = StringResource(R.string.undo),
+                        onActionPerformed = {
+                            viewModelScope.launch(Dispatchers.IO) {
+                                val sessionToRestore = SessionWithExercises(
+                                    session = event.session,
+                                    exercises = useCases.getExercisesWithMovementAndSetsBySessionId(
+                                        event.session.id
+                                    ).data ?: emptyList()
+                                )
+                                useCases.restoreSessionWithExercisesWithMovementAndSets(sessionToRestore)
+                            }
+                        }
+                    ))
                 }
             }
             is BlockEvent.UpdateSessionIndexScrollPosition -> {
@@ -484,5 +505,10 @@ class BlockViewModel @Inject constructor(
 
     sealed interface UiAction {
         object NavigateUp: UiAction
+        class ShowSnackbar(
+            val message: StringResource,
+            val actionLabel: StringResource? = null,
+            val onActionPerformed: (() -> Unit)? = null
+        ): UiAction
     }
 }

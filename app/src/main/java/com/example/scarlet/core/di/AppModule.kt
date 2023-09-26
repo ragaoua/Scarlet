@@ -23,6 +23,7 @@ import com.example.scarlet.feature_training_log.domain.use_case.movement.UpdateM
 import com.example.scarlet.feature_training_log.domain.use_case.movement.helpers.ValidateMovementNameHelper
 import com.example.scarlet.feature_training_log.domain.use_case.session.DeleteSessionUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.session.InsertSessionUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.session.RestoreSessionWithExercisesWithMovementAndSetsUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.session.UpdateSessionUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.set.CopyPrecedingSetFieldUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.set.DeleteSetUseCase
@@ -86,22 +87,26 @@ object AppModule {
         validateBlockName: ValidateBlockNameHelper,
         validateMovementName: ValidateMovementNameHelper
     ) = BlockUseCases(
-            getDaysWithSessionsWithExercisesWithMovementAndSetsByBlockId =
-                GetDaysWithSessionsWithExercisesWithMovementAndSetsByBlockIdUseCase(repository),
-            updateBlock = UpdateBlockUseCase(repository, validateBlockName),
-            insertSession = InsertSessionUseCase(repository),
-            updateSession = UpdateSessionUseCase(repository),
-            deleteSession = DeleteSessionUseCase(repository),
-            getMovementsFilteredByName = GetMovementsFilteredByNameUseCase(repository),
-            insertExercise = InsertExerciseUseCase(repository),
-            updateExercise = UpdateExerciseUseCase(repository),
-            insertMovement = InsertMovementUseCase(repository, validateMovementName),
-            updateMovement = UpdateMovementUseCase(repository, validateMovementName),
-            deleteMovement = DeleteMovementUseCase(repository),
-            deleteExercise = DeleteExerciseUseCase(repository),
-            insertSet = InsertSetUseCase(repository),
-            updateSet = UpdateSetUseCase(repository),
-            deleteSet = DeleteSetUseCase(repository),
-            copyPrecedingSetField = CopyPrecedingSetFieldUseCase(repository)
-        )
+        getDaysWithSessionsWithExercisesWithMovementAndSetsByBlockId =
+            GetDaysWithSessionsWithExercisesWithMovementAndSetsByBlockIdUseCase(repository),
+        updateBlock = UpdateBlockUseCase(repository, validateBlockName),
+        insertSession = InsertSessionUseCase(repository),
+        updateSession = UpdateSessionUseCase(repository),
+        deleteSession = DeleteSessionUseCase(repository),
+        getMovementsFilteredByName = GetMovementsFilteredByNameUseCase(repository),
+        insertExercise = InsertExerciseUseCase(repository),
+        updateExercise = UpdateExerciseUseCase(repository),
+        insertMovement = InsertMovementUseCase(repository, validateMovementName),
+        updateMovement = UpdateMovementUseCase(repository, validateMovementName),
+        deleteMovement = DeleteMovementUseCase(repository),
+        deleteExercise = DeleteExerciseUseCase(repository),
+        insertSet = InsertSetUseCase(repository),
+        updateSet = UpdateSetUseCase(repository),
+        deleteSet = DeleteSetUseCase(repository),
+        copyPrecedingSetField = CopyPrecedingSetFieldUseCase(repository),
+        getExercisesWithMovementAndSetsBySessionId =
+            GetExercisesWithMovementAndSetsBySessionIdUseCase(repository),
+        restoreSessionWithExercisesWithMovementAndSets =
+            RestoreSessionWithExercisesWithMovementAndSetsUseCase(repository)
+    )
 }

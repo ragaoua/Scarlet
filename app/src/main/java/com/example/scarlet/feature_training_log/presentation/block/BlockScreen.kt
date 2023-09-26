@@ -30,8 +30,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -40,12 +43,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -66,6 +71,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.launch
 
 @Destination(navArgsDelegate = BlockScreenNavArgs::class)
 @Composable
@@ -95,11 +101,33 @@ fun Screen(
      * Treating UI actions from the ViewModel
      ************************************************************************/
     val snackbarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
     LaunchedEffect(true) {
         uiActions.collect { action ->
             when(action) {
                 is BlockViewModel.UiAction.NavigateUp -> {
                     navigator.navigateUp()
+                }
+                is BlockViewModel.UiAction.ShowSnackbar -> {
+                    coroutineScope.launch {
+                        snackbarHostState.currentSnackbarData?.dismiss()
+                        val snackbarResult = snackbarHostState.showSnackbar(
+                            message = context.getString(action.message.resId, *action.message.args),
+                            actionLabel = action.actionLabel?.let {
+                                context.getString(it.resId, *it.args)
+                            },
+                            duration = SnackbarDuration.Short
+                        )
+                        action.onActionPerformed?.let { onActionPerformed ->
+                            when (snackbarResult) {
+                                SnackbarResult.ActionPerformed -> {
+                                    onActionPerformed()
+                                }
+                                SnackbarResult.Dismissed -> Unit
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -114,7 +142,14 @@ fun Screen(
             modifier = Modifier
                 .fillMaxSize()
                 .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
-            snackbarHost = { SnackbarHost(snackbarHostState) },
+            snackbarHost = {
+                SnackbarHost(snackbarHostState) { data ->
+                    Snackbar(
+                        actionColor = MaterialTheme.colorScheme.primary,
+                        snackbarData = data
+                    )
+                }
+            },
             topBar = { BlockTopAppBar(state, onEvent, topAppBarScrollBehavior) },
             bottomBar = { DayNavigationBottomBar(state, onEvent) },
             floatingActionButton = { BlockFloatingActionButtons(state, onEvent) }

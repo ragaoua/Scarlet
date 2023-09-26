@@ -8,15 +8,14 @@ import androidx.room.Update
 import androidx.room.Upsert
 import com.example.scarlet.feature_training_log.data.data_source.entity.ExerciseEntity
 import com.example.scarlet.feature_training_log.data.data_source.entity.ExerciseWithMovementAndSetsEntity
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ExerciseDao {
 
     @Transaction
     @Query("SELECT * FROM exercise WHERE exercise.sessionId = :sessionId")
-    fun getExercisesWithMovementAndSetsBySessionId(sessionId: Long):
-            Flow<List<ExerciseWithMovementAndSetsEntity>>
+    suspend fun getExercisesWithMovementAndSetsBySessionId(sessionId: Long):
+            List<ExerciseWithMovementAndSetsEntity>
 
     @Upsert
     suspend fun insertExercise(exercise: ExerciseEntity): Long

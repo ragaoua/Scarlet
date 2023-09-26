@@ -3,6 +3,7 @@ package com.example.scarlet.feature_training_log.presentation.block
 import com.example.scarlet.feature_training_log.domain.use_case.block.UpdateBlockUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.day.GetDaysWithSessionsWithExercisesWithMovementAndSetsByBlockIdUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.DeleteExerciseUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.exercise.GetExercisesWithMovementAndSetsBySessionIdUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.InsertExerciseUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.UpdateExerciseUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.movement.DeleteMovementUseCase
@@ -11,6 +12,7 @@ import com.example.scarlet.feature_training_log.domain.use_case.movement.InsertM
 import com.example.scarlet.feature_training_log.domain.use_case.movement.UpdateMovementUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.session.DeleteSessionUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.session.InsertSessionUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.session.RestoreSessionWithExercisesWithMovementAndSetsUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.session.UpdateSessionUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.set.CopyPrecedingSetFieldUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.set.DeleteSetUseCase
@@ -34,5 +36,9 @@ data class BlockUseCases(
     val insertSet: InsertSetUseCase,
     val updateSet: UpdateSetUseCase,
     val deleteSet: DeleteSetUseCase,
-    val copyPrecedingSetField: CopyPrecedingSetFieldUseCase
+    val copyPrecedingSetField: CopyPrecedingSetFieldUseCase,
+    val getExercisesWithMovementAndSetsBySessionId:
+        GetExercisesWithMovementAndSetsBySessionIdUseCase,
+    val restoreSessionWithExercisesWithMovementAndSets:
+        RestoreSessionWithExercisesWithMovementAndSetsUseCase
 )

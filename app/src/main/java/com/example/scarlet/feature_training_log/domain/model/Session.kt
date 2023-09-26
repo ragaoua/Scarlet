@@ -28,6 +28,13 @@ data class SessionWithExercises<T: IExercise>(
     val exercises: List<T>
 ): ISession {
 
+    constructor(session: Session, exercises: List<T>): this(
+        id = session.id,
+        dayId = session.dayId,
+        date = session.date,
+        exercises = exercises
+    )
+
     fun toSession() = Session(
         id = id,
         dayId = dayId,

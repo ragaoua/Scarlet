@@ -49,6 +49,12 @@ interface ScarletRepository {
 
     suspend fun getSessionsWithExercisesByDayId(dayId: Long): List<SessionWithExercises<Exercise>>
     suspend fun insertSessionWithExercises(session: Session, exercises: List<Exercise>): Long
+    suspend fun insertSessionWithExercisesWithMovementAndSets(
+        session: Session,
+        exercises: List<Exercise>,
+        movements: List<Movement>,
+        sets: List<Set>
+    ): Long
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////// EXERCISE ///////////////////////////////////////////
@@ -57,8 +63,8 @@ interface ScarletRepository {
     suspend fun updateExercise(exercise: Exercise)
     suspend fun deleteExercise(exercise: Exercise)
 
-    fun getExercisesWithMovementAndSetsBySessionId(sessionId: Long):
-            Flow<List<ExerciseWithMovementAndSets>>
+    suspend fun getExercisesWithMovementAndSetsBySessionId(sessionId: Long):
+            List<ExerciseWithMovementAndSets>
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////// SET /////////////////////////////////////////////

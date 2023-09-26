@@ -106,6 +106,22 @@ class ScarletRepositoryImpl(
             dbInstance.exerciseDao
         )
 
+    override suspend fun insertSessionWithExercisesWithMovementAndSets(
+        session: Session,
+        exercises: List<Exercise>,
+        movements: List<Movement>,
+        sets: List<Set>
+    ): Long =
+        dbInstance.sessionDao.insertSessionWithExercisesWithMovementAndSets(
+            session = SessionEntity(session),
+            exercises = exercises.map { ExerciseEntity(it) },
+            movements = movements.map { MovementEntity(it) },
+            sets = sets.map { SetEntity(it) },
+            exerciseDao = dbInstance.exerciseDao,
+            movementDao = dbInstance.movementDao,
+            setDao = dbInstance.setDao
+        )
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////// EXERCISE ///////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -120,12 +136,10 @@ class ScarletRepositoryImpl(
         dbInstance.exerciseDao.deleteExercise(ExerciseEntity(exercise))
     }
 
-    override fun getExercisesWithMovementAndSetsBySessionId(sessionId: Long) =
+    override suspend fun getExercisesWithMovementAndSetsBySessionId(sessionId: Long) =
         dbInstance.exerciseDao.getExercisesWithMovementAndSetsBySessionId(sessionId)
-            .map { entityList ->
-                entityList.map { entity ->
-                    entity.toModel()
-                }
+            .map { entity ->
+                entity.toModel()
             }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////

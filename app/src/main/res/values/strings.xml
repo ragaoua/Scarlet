@@ -42,6 +42,7 @@
     <string name="edit_session_exercises">Edit session exercises</string>
     <string name="edit_session_date">Edit session date</string>
     <string name="save_session">Save session</string>
+    <string name="session_deleted">Session deleted</string>
 
     <!-- Exercise -->
     <string name="new_exercise">New Exercise</string>
