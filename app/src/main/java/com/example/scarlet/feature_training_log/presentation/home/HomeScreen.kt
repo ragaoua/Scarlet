@@ -20,10 +20,8 @@ import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.presentation.destinations.TrainingLogScreenDestination
 import com.example.scarlet.ui.theme.ScarletTheme
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-@RootNavGraph(start = true)
 @Destination
 @Composable
 fun HomeScreen(

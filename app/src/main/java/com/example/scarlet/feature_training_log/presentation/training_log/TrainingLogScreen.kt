@@ -39,10 +39,12 @@ import com.example.scarlet.feature_training_log.presentation.destinations.BlockS
 import com.example.scarlet.feature_training_log.presentation.training_log.components.BlockListSection
 import com.example.scarlet.ui.theme.ScarletTheme
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
+@RootNavGraph(start = true)
 @Destination
 @Composable
 fun TrainingLogScreen(
