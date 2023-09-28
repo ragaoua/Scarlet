@@ -21,6 +21,9 @@ interface SetDao {
     @Delete
     suspend fun deleteSet(set: SetEntity)
 
+    @Query("SELECT * FROM `set` WHERE exerciseId = :exerciseId")
+    suspend fun getSetsByExerciseId(exerciseId: Long): List<SetEntity>
+
     @Transaction
     suspend fun deleteSetAndUpdateSubsequentSetsOrder(set: SetEntity) {
         deleteSet(set)
@@ -31,6 +34,13 @@ interface SetDao {
         ).forEach {
             updateSet(it.copy(order = it.order - 1))
         }
+    }
+
+    @Transaction
+    suspend fun insertSetWhileSettingOrder(set: SetEntity): Long {
+        val order = getSetsByExerciseId(set.exerciseId).size + 1
+
+        return insertSet(set.copy(order = order))
     }
 
     @Query("""

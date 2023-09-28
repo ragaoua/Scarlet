@@ -110,7 +110,7 @@ class TestRepository: ScarletRepository {
         TODO("Not yet implemented")
     }
 
-    override suspend fun insertSet(set: Set): Long {
+    override suspend fun insertSetWhileSettingOrder(set: Set): Long {
         TODO("Not yet implemented")
     }
 
