@@ -22,7 +22,6 @@ interface SetDao {
     suspend fun deleteSet(set: SetEntity)
 
     @Transaction
-    @Delete
     suspend fun deleteSetAndUpdateSubsequentSetsOrder(set: SetEntity) {
         deleteSet(set)
 
