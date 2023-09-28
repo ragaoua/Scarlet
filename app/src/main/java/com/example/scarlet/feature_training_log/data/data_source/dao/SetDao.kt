@@ -4,6 +4,8 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import com.example.scarlet.feature_training_log.data.data_source.entity.SetEntity
 
@@ -18,5 +20,26 @@ interface SetDao {
 
     @Delete
     suspend fun deleteSet(set: SetEntity)
+
+    @Transaction
+    @Delete
+    suspend fun deleteSetAndUpdateSubsequentSetsOrder(set: SetEntity) {
+        deleteSet(set)
+
+        getSetsByExerciseIdWhereOrderIsGreaterThan(
+            exerciseId = set.exerciseId,
+            setOrder = set.order
+        ).forEach {
+            updateSet(it.copy(order = it.order - 1))
+        }
+    }
+
+    @Query("""
+        SELECT *
+        FROM `set`
+        WHERE exerciseId = :exerciseId
+        AND `order` > :setOrder
+    """)
+    suspend fun getSetsByExerciseIdWhereOrderIsGreaterThan(exerciseId: Long, setOrder: Int): List<SetEntity>
 
 }

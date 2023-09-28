@@ -8,20 +8,11 @@ class DeleteSetUseCase(
 ) {
 
     /**
-     * Delete a set, then update the order of the subsequent sets for the same exercise
+     * Delete a set and update the order of the subsequent sets for the same exercise
      *
      * @param set set to be deleted
-     * @param exerciseSets list of that exercise's sets
      */
-    suspend operator fun invoke(
-        set: Set,
-        exerciseSets: List<Set>
-    ) {
-        repository.deleteSet(set)
-
-        // Update the order of the other sets if necessary
-        exerciseSets
-            .filter { it.order > set.order }
-            .forEach { repository.updateSet(it.copy(order = it.order - 1)) }
+    suspend operator fun invoke(set: Set) {
+        repository.deleteSetAndUpdateSubsequentSetsOrder(set)
     }
 }
