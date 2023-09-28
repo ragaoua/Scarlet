@@ -198,11 +198,11 @@ class BlockViewModel @Inject constructor(
                 updateMovementNameFilter(event.nameFilter)
             }
             is BlockEvent.AddMovement -> {
-                viewModelScope.launch(Dispatchers.IO) {
-                    state.value.movementSelectionSheet?.let { sheet ->
+                state.value.movementSelectionSheet?.let { sheet ->
+                    viewModelScope.launch(Dispatchers.IO) {
                         useCases.insertMovement(sheet.movementNameFilter).also { resource ->
                             resource.error?.let {
-                                /* TODO */
+                                _uiActions.send(UiAction.ShowSnackbar(it))
                             }
                             resource.data?.let { insertedMovementId ->
                                 sheet.exercise?.let { exercise ->
