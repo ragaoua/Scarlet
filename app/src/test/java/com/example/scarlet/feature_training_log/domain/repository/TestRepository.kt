@@ -101,7 +101,7 @@ class TestRepository: ScarletRepository {
         TODO("Not yet implemented")
     }
 
-    override suspend fun deleteExercise(exercise: Exercise) {
+    override suspend fun deleteExerciseAndUpdateSubsequenceExercisesOrder(exercise: Exercise) {
         TODO("Not yet implemented")
     }
 

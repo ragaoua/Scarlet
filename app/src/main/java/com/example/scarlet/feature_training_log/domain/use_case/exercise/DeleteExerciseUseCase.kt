@@ -8,19 +8,11 @@ class DeleteExerciseUseCase(
 ) {
 
     /**
-     * Delete an exercise, then update the order of the subsequent exercises for the same session
+     * Delete an exercise and update the order of the subsequent exercises for the same session
      *
      * @param exercise exercise to be deleted
-     * @param sessionExercises list of that session's exercises
      */
-    suspend operator fun invoke(
-        exercise: Exercise,
-        sessionExercises: List<Exercise>
-    ) {
-        repository.deleteExercise(exercise)
-
-        sessionExercises
-            .filter { it.order > exercise.order }
-            .forEach { repository.updateExercise(it.copy(order = it.order - 1)) }
+    suspend operator fun invoke(exercise: Exercise) {
+        repository.deleteExerciseAndUpdateSubsequenceExercisesOrder(exercise)
     }
 }

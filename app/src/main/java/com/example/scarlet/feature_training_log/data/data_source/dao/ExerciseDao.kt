@@ -26,4 +26,26 @@ interface ExerciseDao {
     @Delete
     suspend fun deleteExercise(exercise: ExerciseEntity)
 
+    @Transaction
+    suspend fun deleteExerciseAndUpdateSubsequentSetsOrder(exercise: ExerciseEntity) {
+        deleteExercise(exercise)
+
+        getExercisesBySessionIdWhereOrderIsGreaterThan(
+            sessionId = exercise.sessionId,
+            exerciseOrder = exercise.order
+        ).forEach {
+            updateExercise(it.copy(order = it.order - 1))
+        }
+    }
+
+    @Query(
+        """
+        SELECT *
+        FROM exercise
+        WHERE sessionId = :sessionId
+        AND `order` > :exerciseOrder
+    """)
+    suspend fun getExercisesBySessionIdWhereOrderIsGreaterThan(sessionId: Long, exerciseOrder: Int):
+            List<ExerciseEntity>
+
 }

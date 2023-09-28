@@ -61,7 +61,7 @@ interface ScarletRepository {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     suspend fun insertExercise(exercise: Exercise): Long
     suspend fun updateExercise(exercise: Exercise)
-    suspend fun deleteExercise(exercise: Exercise)
+    suspend fun deleteExerciseAndUpdateSubsequenceExercisesOrder(exercise: Exercise)
 
     suspend fun getExercisesWithMovementAndSetsBySessionId(sessionId: Long):
             List<ExerciseWithMovementAndSets>
