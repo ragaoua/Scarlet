@@ -25,7 +25,9 @@ import com.example.scarlet.feature_training_log.data.data_source.entity.SetEntit
         MovementEntity::class,
         SetEntity::class
     ],
-    version = 1)
+    version = 1,
+    exportSchema = true
+)
 @TypeConverters(DateConverter::class)
 abstract class ScarletDatabase : RoomDatabase() {
 
