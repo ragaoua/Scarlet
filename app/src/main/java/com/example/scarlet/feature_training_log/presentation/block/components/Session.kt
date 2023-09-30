@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.EditCalendar
+import androidx.compose.material.icons.filled.Expand
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -57,27 +58,35 @@ fun Session(
                         text = DateUtils.formatDate(session.date),
                         style = MaterialTheme.typography.titleLarge
                     )
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
+                    Row (verticalAlignment = Alignment.CenterVertically) {
                         AnimatedVisibility (visible = !isInSessionEditMode) {
                             IconButton(onClick = {
-                                onEvent(BlockEvent.ShowSessionDatePickerDialog(session.toSession()))
+                                onEvent(BlockEvent.ToggleSessionExercisesDetails(session.id))
                             }) {
                                 Icon(
-                                    imageVector = Icons.Default.EditCalendar,
-                                    contentDescription = stringResource(R.string.edit_session_date)
+                                    imageVector = Icons.Default.Expand, // TODO change icon when expanded
+                                    contentDescription = stringResource(R.string.expand_session_exercises_details) // TODO change description when expanded
                                 )
                             }
                         }
                         AnimatedVisibility (visible = isInSessionEditMode) {
-                            IconButton(onClick = {
-                                onEvent(BlockEvent.DeleteSession(session.toSession()))
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Default.Delete,
-                                    contentDescription = stringResource(R.string.delete)
-                                )
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                IconButton(onClick = {
+                                    onEvent(BlockEvent.ShowSessionDatePickerDialog(session.toSession()))
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Default.EditCalendar,
+                                        contentDescription = stringResource(R.string.edit_session_date)
+                                    )
+                                }
+                                IconButton(onClick = {
+                                    onEvent(BlockEvent.DeleteSession(session.toSession()))
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = stringResource(R.string.delete)
+                                    )
+                                }
                             }
                         }
                     }

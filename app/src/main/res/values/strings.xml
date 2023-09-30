@@ -53,6 +53,7 @@
     <string name="rir">RIR</string>
     <string name="collapse_details">Collapse exercise details</string>
     <string name="expand_details">Expand exercise details</string>
+    <string name="expand_session_exercises_details">Expand all exercises details</string>
 
     <!-- Set -->
     <string name="no_sets_msg">Click below to add a set</string>

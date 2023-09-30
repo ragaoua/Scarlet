@@ -175,6 +175,23 @@ class BlockViewModel @Inject constructor(
                         } ?: return
                 )}
             }
+            is BlockEvent.ToggleSessionExercisesDetails -> {
+                val sessionExercisesIds = state.value.days
+                    .flatMap { it.sessions }
+                    .find { it.id == event.sessionId }
+                    ?.exercises
+                    ?.map { it.id }
+                    ?: return
+                _state.update { state -> state.copy(
+                    isExerciseDetailExpandedById = state.isExerciseDetailExpandedById
+                        .map {
+                            Pair(
+                                it.key,
+                                if(it.key in sessionExercisesIds) !it.value else it.value
+                            )
+                        }.toMap()
+                )}
+            }
             is BlockEvent.ShowMovementSelectionSheet -> {
                 updateMovementNameFilter("")
                 _state.update { it.copy(

@@ -30,6 +30,7 @@ sealed interface BlockEvent {
     object ToggleSessionEditMode : BlockEvent
 
     data class ToggleExerciseDetail(val exerciseId: Long) : BlockEvent
+    data class ToggleSessionExercisesDetails(val sessionId: Long) : BlockEvent
 
     data class ShowMovementSelectionSheet(
         val session: SessionWithExercises<out IExercise>,
