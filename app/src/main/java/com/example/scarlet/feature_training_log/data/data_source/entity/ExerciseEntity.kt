@@ -1,5 +1,6 @@
 package com.example.scarlet.feature_training_log.data.data_source.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
@@ -37,6 +38,7 @@ data class ExerciseEntity(
     val sessionId: Long = 0,
     val movementId: Long = 0,
     val order: Int = 0,
+    @ColumnInfo(defaultValue = "RPE")
     val ratingType: RatingType = RatingType.RPE
 ) {
 

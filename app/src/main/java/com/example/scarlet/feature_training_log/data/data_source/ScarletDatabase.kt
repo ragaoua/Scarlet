@@ -1,8 +1,11 @@
 package com.example.scarlet.feature_training_log.data.data_source
 
+import androidx.room.AutoMigration
 import androidx.room.Database
+import androidx.room.RenameColumn
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.AutoMigrationSpec
 import com.example.scarlet.feature_training_log.data.data_source.dao.BlockDao
 import com.example.scarlet.feature_training_log.data.data_source.dao.DayDao
 import com.example.scarlet.feature_training_log.data.data_source.dao.ExerciseDao
@@ -25,7 +28,10 @@ import com.example.scarlet.feature_training_log.data.data_source.entity.SetEntit
         MovementEntity::class,
         SetEntity::class
     ],
-    version = 1,
+    version = 2,
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2, spec = ScarletDatabase.Migration1to2::class)
+    ],
     exportSchema = true
 )
 @TypeConverters(DateConverter::class)
@@ -37,5 +43,8 @@ abstract class ScarletDatabase : RoomDatabase() {
     abstract val exerciseDao: ExerciseDao
     abstract val setDao: SetDao
     abstract val movementDao: MovementDao
+
+    @RenameColumn(tableName = "set", fromColumnName = "rpe", toColumnName = "rating")
+    class Migration1to2: AutoMigrationSpec
 
 }
