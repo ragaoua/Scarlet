@@ -1,7 +1,7 @@
 package com.example.scarlet.feature_training_log.domain.use_case.block
 
 import com.example.scarlet.core.util.Resource
-import com.example.scarlet.feature_training_log.domain.model.Block
+import com.example.scarlet.core.util.SimpleResource
 import com.example.scarlet.feature_training_log.domain.model.BlockWithDays
 import com.example.scarlet.feature_training_log.domain.model.DayWithSessions
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
@@ -24,7 +24,7 @@ class RestoreBlockWithDaysWithSessionsWithExercisesWithMovementAndSetsUseCase(
      */
     suspend operator fun invoke(
         block: BlockWithDays<DayWithSessions<SessionWithExercises<ExerciseWithMovementAndSets>>>
-    ): Resource<Block> {
+    ): SimpleResource {
         val days = block.days
         val sessions = days.flatMap { it.sessions }
         val exercises = sessions.flatMap { it.exercises }
