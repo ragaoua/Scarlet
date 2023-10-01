@@ -56,6 +56,13 @@ class BlockViewModel @Inject constructor(
             }
             is BlockEvent.DeleteSession -> {
                 viewModelScope.launch(Dispatchers.IO) {
+                    val sessionToRestore = SessionWithExercises(
+                        session = event.session,
+                        exercises = useCases.getExercisesWithMovementAndSetsBySessionId(
+                            event.session.id
+                        ).data ?: emptyList()
+                    )
+
                     useCases.deleteSession(event.session)
 
                     _uiActions.send(UiAction.ShowSnackbar(
@@ -63,12 +70,6 @@ class BlockViewModel @Inject constructor(
                         actionLabel = StringResource(R.string.undo),
                         onActionPerformed = {
                             viewModelScope.launch(Dispatchers.IO) {
-                                val sessionToRestore = SessionWithExercises(
-                                    session = event.session,
-                                    exercises = useCases.getExercisesWithMovementAndSetsBySessionId(
-                                        event.session.id
-                                    ).data ?: emptyList()
-                                )
                                 useCases.restoreSessionWithExercisesWithMovementAndSets(sessionToRestore)
                             }
                         }

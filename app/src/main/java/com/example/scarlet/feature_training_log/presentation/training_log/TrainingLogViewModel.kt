@@ -95,6 +95,13 @@ class TrainingLogViewModel @Inject constructor(
             }
             is TrainingLogEvent.DeleteBlock -> {
                 viewModelScope.launch(Dispatchers.IO) {
+                    val blockToRestore = BlockWithDays(
+                        block = event.block,
+                        days = useCases.getDaysWithSessionsWithExercisesWithMovementAndSetsByBlockId(
+                            event.block.id
+                        ).first().data ?: emptyList()
+                    )
+
                     useCases.deleteBlock(event.block)
 
                     _uiActions.send(UiAction.ShowSnackbar(
@@ -102,12 +109,6 @@ class TrainingLogViewModel @Inject constructor(
                         actionLabel = StringResource(R.string.undo),
                         onActionPerformed = {
                             viewModelScope.launch(Dispatchers.IO) {
-                                val blockToRestore = BlockWithDays(
-                                    block = event.block,
-                                    days = useCases.getDaysWithSessionsWithExercisesWithMovementAndSetsByBlockId(
-                                        event.block.id
-                                    ).first().data ?: emptyList()
-                                )
                                 useCases.restoreBlockWithDaysWithSessionsWithExercisesWithMovementAndSets(
                                     blockToRestore
                                 )
