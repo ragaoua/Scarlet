@@ -51,4 +51,17 @@ interface SetDao {
     """)
     suspend fun getSetsByExerciseIdWhereOrderIsGreaterThan(exerciseId: Long, setOrder: Int): List<SetEntity>
 
+    @Transaction
+    suspend fun restoreSet(set: SetEntity) {
+        getSetsByExerciseIdWhereOrderIsGreaterThan(
+            exerciseId = set.exerciseId,
+            setOrder = set.order - 1
+        ).sortedByDescending { it.order } /* Sorting is necessary to satisfy the constraint
+                                             that (exerciseId,order) must be unique */
+            .forEach {
+                updateSet(it.copy(order = it.order + 1))
+            }
+        insertSet(set)
+    }
+
 }

@@ -166,6 +166,9 @@ class ScarletRepositoryImpl(
     override suspend fun deleteSetAndUpdateSubsequentSetsOrder(set: Set) =
         dbInstance.setDao.deleteSetAndUpdateSubsequentSetsOrder(SetEntity(set))
 
+    override suspend fun restoreSet(set: Set) {
+        dbInstance.setDao.restoreSet(SetEntity(set))
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////// MOVEMENT ///////////////////////////////////////////

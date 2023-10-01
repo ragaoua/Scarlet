@@ -28,7 +28,8 @@ import com.example.scarlet.feature_training_log.domain.use_case.session.RestoreS
 import com.example.scarlet.feature_training_log.domain.use_case.session.UpdateSessionUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.set.CopyPrecedingSetFieldUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.set.DeleteSetUseCase
-import com.example.scarlet.feature_training_log.domain.use_case.set.InsertSetUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.set.InsertEmptySetWhileSettingsOrderUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.set.RestoreSetUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.set.UpdateSetUseCase
 import com.example.scarlet.feature_training_log.presentation.block.BlockUseCases
 import com.example.scarlet.feature_training_log.presentation.training_log.TrainingLogUseCases
@@ -102,9 +103,10 @@ object AppModule {
         deleteMovement = DeleteMovementUseCase(repository),
         deleteExercise = DeleteExerciseUseCase(repository),
         restoreExerciseWithMovementAndSets = RestoreExerciseWithMovementAndSetsUseCase(repository),
-        insertSet = InsertSetUseCase(repository),
+        insertEmptySetWhileSettingsOrder = InsertEmptySetWhileSettingsOrderUseCase(repository),
         updateSet = UpdateSetUseCase(repository),
         deleteSet = DeleteSetUseCase(repository),
+        restoreSet = RestoreSetUseCase(repository),
         copyPrecedingSetField = CopyPrecedingSetFieldUseCase(repository),
         getExercisesWithMovementAndSetsBySessionId =
             GetExercisesWithMovementAndSetsBySessionIdUseCase(repository),

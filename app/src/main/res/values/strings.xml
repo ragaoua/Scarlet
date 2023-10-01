@@ -63,6 +63,7 @@
     <string name="update_load">Update load</string>
     <string name="percentage">Load percentage</string>
     <string name="base_load_kg">Base Load : %1$skg</string>
+    <string name="set_deleted">Set deleted</string>
     <!-- Set : Errors -->
     <string name="error_no_previous_set">Error : No previous set found</string>
     <string name="error_invalid_percentage">Error : percentage format is invalid</string>

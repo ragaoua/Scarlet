@@ -368,7 +368,7 @@ class BlockViewModel @Inject constructor(
             }
             is BlockEvent.AddSet -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    useCases.insertSet(event.exercise.id)
+                    useCases.insertEmptySetWhileSettingsOrder(event.exercise.id)
                 }
             }
             is BlockEvent.UpdateSet -> {
@@ -379,6 +379,16 @@ class BlockViewModel @Inject constructor(
             is BlockEvent.DeleteSet -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     useCases.deleteSet(event.set)
+
+                    _uiActions.send(UiAction.ShowSnackbar(
+                        message = StringResource(R.string.set_deleted),
+                        actionLabel = StringResource(R.string.undo),
+                        onActionPerformed = {
+                            viewModelScope.launch(Dispatchers.IO) {
+                                useCases.restoreSet(event.set)
+                            }
+                        }
+                    ))
                 }
             }
             is BlockEvent.CopyPreviousSet -> {

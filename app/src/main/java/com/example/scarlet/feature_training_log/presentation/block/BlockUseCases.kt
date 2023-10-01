@@ -17,7 +17,8 @@ import com.example.scarlet.feature_training_log.domain.use_case.session.RestoreS
 import com.example.scarlet.feature_training_log.domain.use_case.session.UpdateSessionUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.set.CopyPrecedingSetFieldUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.set.DeleteSetUseCase
-import com.example.scarlet.feature_training_log.domain.use_case.set.InsertSetUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.set.InsertEmptySetWhileSettingsOrderUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.set.RestoreSetUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.set.UpdateSetUseCase
 
 data class BlockUseCases(
@@ -35,7 +36,8 @@ data class BlockUseCases(
     val deleteMovement: DeleteMovementUseCase,
     val deleteExercise: DeleteExerciseUseCase,
     val restoreExerciseWithMovementAndSets: RestoreExerciseWithMovementAndSetsUseCase,
-    val insertSet: InsertSetUseCase,
+    val insertEmptySetWhileSettingsOrder: InsertEmptySetWhileSettingsOrderUseCase,
+    val restoreSet: RestoreSetUseCase,
     val updateSet: UpdateSetUseCase,
     val deleteSet: DeleteSetUseCase,
     val copyPrecedingSetField: CopyPrecedingSetFieldUseCase,
