@@ -41,8 +41,6 @@ class BlockViewModel @Inject constructor(
     private var updateCalculatedLoadJob: Job? = null
     private val LOAD_CALCULATION_DELAY = 500L
 
-//    private var sessionToRestoreOnUndo: SessionWithExercises<ExerciseWithMovementAndSets>? = null
-
     init {
         initDataCollection()
     }
@@ -346,7 +344,17 @@ class BlockViewModel @Inject constructor(
             }
             is BlockEvent.DeleteExercise -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    useCases.deleteExercise(exercise = event.exercise)
+                    useCases.deleteExercise(exercise = event.exercise.toExercise())
+
+                    _uiActions.send(UiAction.ShowSnackbar(
+                        message = StringResource(R.string.exercise_deleted),
+                        actionLabel = StringResource(R.string.undo),
+                        onActionPerformed = {
+                            viewModelScope.launch(Dispatchers.IO) {
+                                useCases.restoreExerciseWithMovementAndSets(event.exercise)
+                            }
+                        }
+                    ))
                 }
             }
             is BlockEvent.UpdateRatingType -> {

@@ -15,6 +15,7 @@ import com.example.scarlet.feature_training_log.domain.use_case.day.GetDaysWithS
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.DeleteExerciseUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.GetExercisesWithMovementAndSetsBySessionIdUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.InsertExerciseUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.exercise.RestoreExerciseWithMovementAndSetsUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.UpdateExerciseUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.movement.DeleteMovementUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.movement.GetMovementsFilteredByNameUseCase
@@ -100,6 +101,7 @@ object AppModule {
         updateMovement = UpdateMovementUseCase(repository, validateMovementName),
         deleteMovement = DeleteMovementUseCase(repository),
         deleteExercise = DeleteExerciseUseCase(repository),
+        restoreExerciseWithMovementAndSets = RestoreExerciseWithMovementAndSetsUseCase(repository),
         insertSet = InsertSetUseCase(repository),
         updateSet = UpdateSetUseCase(repository),
         deleteSet = DeleteSetUseCase(repository),

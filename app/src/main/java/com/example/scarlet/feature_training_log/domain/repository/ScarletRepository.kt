@@ -65,6 +65,11 @@ interface ScarletRepository {
 
     suspend fun getExercisesWithMovementAndSetsBySessionId(sessionId: Long):
             List<ExerciseWithMovementAndSets>
+    suspend fun insertExerciseWithMovementAndSets(
+        exercises: Exercise,
+        movements: Movement,
+        sets: List<Set>
+    )
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////// SET /////////////////////////////////////////////

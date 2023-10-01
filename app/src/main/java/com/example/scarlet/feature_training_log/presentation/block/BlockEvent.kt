@@ -2,6 +2,7 @@ package com.example.scarlet.feature_training_log.presentation.block
 
 import com.example.scarlet.feature_training_log.domain.model.Day
 import com.example.scarlet.feature_training_log.domain.model.Exercise
+import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
 import com.example.scarlet.feature_training_log.domain.model.IExercise
 import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.RatingType
@@ -47,7 +48,7 @@ sealed interface BlockEvent {
     object UpdateEditedMovement : BlockEvent
     object DeleteEditedMovement : BlockEvent
 
-    data class DeleteExercise(val exercise: Exercise) : BlockEvent
+    data class DeleteExercise(val exercise: ExerciseWithMovementAndSets) : BlockEvent
     data class UpdateRatingType(
         val exercise: Exercise,
         val ratingType: RatingType

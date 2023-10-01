@@ -89,7 +89,7 @@ fun Exercise(
                         )
                     }
                     IconButton(onClick = {
-                        onEvent(BlockEvent.DeleteExercise(exercise.toExercise()))
+                        onEvent(BlockEvent.DeleteExercise(exercise))
                     }) {
                         Icon(
                             imageVector = Icons.Default.Delete,
