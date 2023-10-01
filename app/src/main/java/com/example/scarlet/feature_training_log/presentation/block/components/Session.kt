@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
@@ -43,59 +43,59 @@ fun Session(
         modifier = modifier.padding(TitleLazyListPadding),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            item {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = DateUtils.formatDate(session.date),
-                        style = MaterialTheme.typography.titleLarge
-                    )
-                    Row (verticalAlignment = Alignment.CenterVertically) {
-                        AnimatedVisibility (visible = !isInSessionEditMode) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = DateUtils.formatDate(session.date),
+                    style = MaterialTheme.typography.titleLarge
+                )
+                Row (verticalAlignment = Alignment.CenterVertically) {
+                    AnimatedVisibility (visible = !isInSessionEditMode) {
+                        IconButton(onClick = {
+                            onEvent(BlockEvent.ToggleSessionExercisesDetails(session.id))
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.Expand, // TODO change icon when expanded
+                                contentDescription = stringResource(R.string.expand_session_exercises_details) // TODO change description when expanded
+                            )
+                        }
+                    }
+                    AnimatedVisibility (visible = isInSessionEditMode) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
                             IconButton(onClick = {
-                                onEvent(BlockEvent.ToggleSessionExercisesDetails(session.id))
+                                onEvent(BlockEvent.ShowSessionDatePickerDialog(session.toSession()))
                             }) {
                                 Icon(
-                                    imageVector = Icons.Default.Expand, // TODO change icon when expanded
-                                    contentDescription = stringResource(R.string.expand_session_exercises_details) // TODO change description when expanded
+                                    imageVector = Icons.Default.EditCalendar,
+                                    contentDescription = stringResource(R.string.edit_session_date)
                                 )
                             }
-                        }
-                        AnimatedVisibility (visible = isInSessionEditMode) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                IconButton(onClick = {
-                                    onEvent(BlockEvent.ShowSessionDatePickerDialog(session.toSession()))
-                                }) {
-                                    Icon(
-                                        imageVector = Icons.Default.EditCalendar,
-                                        contentDescription = stringResource(R.string.edit_session_date)
-                                    )
-                                }
-                                IconButton(onClick = {
-                                    onEvent(BlockEvent.DeleteSession(session.toSession()))
-                                }) {
-                                    Icon(
-                                        imageVector = Icons.Default.Delete,
-                                        contentDescription = stringResource(R.string.delete)
-                                    )
-                                }
+                            IconButton(onClick = {
+                                onEvent(BlockEvent.DeleteSession(session.toSession()))
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = stringResource(R.string.delete)
+                                )
                             }
                         }
                     }
                 }
-                HorizontalDivider()
             }
+            HorizontalDivider()
 
             if (session.exercises.isNotEmpty()) {
-                items(session.exercises) { exercise ->
+                session.exercises.forEach { exercise ->
                     Exercise(
                         session = session,
                         exercise = exercise,
@@ -105,32 +105,28 @@ fun Session(
                     )
                 }
             } else {
-                item {
-                    Text(
-                        text = stringResource(R.string.empty_session),
-                        style = MaterialTheme.typography.bodyMedium
-                        // TODO color = grey
-                    )
-                }
+                Text(
+                    text = stringResource(R.string.empty_session),
+                    style = MaterialTheme.typography.bodyMedium
+                    // TODO color = grey
+                )
             }
             if (!isInSessionEditMode) {
-                item {
-                    Button(
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = MaterialTheme.shapes.small,
-                        onClick = {
-                            onEvent(
-                                BlockEvent.ShowMovementSelectionSheet(
-                                    session = session
-                                )
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.small,
+                    onClick = {
+                        onEvent(
+                            BlockEvent.ShowMovementSelectionSheet(
+                                session = session
                             )
-                        }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = stringResource(R.string.new_exercise)
                         )
                     }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = stringResource(R.string.new_exercise)
+                    )
                 }
             }
         }
