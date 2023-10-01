@@ -15,7 +15,8 @@ import com.example.scarlet.feature_training_log.domain.model.RatingType
     tableName = "exercise",
     indices = [
         Index("sessionId"),
-        Index("movementId")
+        Index("movementId"),
+        Index(value = ["sessionId", "order"], unique = true)
     ],
     foreignKeys = [
         ForeignKey(

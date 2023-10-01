@@ -63,9 +63,11 @@ interface ExerciseDao {
         getExercisesBySessionIdWhereOrderIsGreaterThan(
             sessionId = exercise.sessionId,
             exerciseOrder = exercise.order - 1
-        ).forEach {
-            updateExercise(it.copy(order = it.order + 1))
-        }
+        ).sortedByDescending { it.order } /* Sorting is necessary to satisfy the constraint
+                                             that (sessionId,order) must be unique */
+            .forEach {
+                updateExercise(it.copy(order = it.order + 1))
+            }
         insertExercise(exercise)
         sets.forEach { setDao.insertSet(it) }
     }

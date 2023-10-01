@@ -28,9 +28,10 @@ import com.example.scarlet.feature_training_log.data.data_source.entity.SetEntit
         MovementEntity::class,
         SetEntity::class
     ],
-    version = 2,
+    version = 3,
     autoMigrations = [
-        AutoMigration(from = 1, to = 2, spec = ScarletDatabase.Migration1to2::class)
+        AutoMigration(from = 1, to = 2, spec = ScarletDatabase.Migration1to2::class),
+        AutoMigration(from = 2, to = 3)
     ],
     exportSchema = true
 )
