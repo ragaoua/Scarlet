@@ -41,6 +41,8 @@ data class BlockUiState (
         val session: SessionWithExercises<out IExercise>,
         val exercise: Exercise? = null,
         val movementNameFilter: String = "",
+        val isInSupersetSelectionMode: Boolean = false,
+        val supersetMovements: List<Movement> = emptyList(),
         val editMovementSheet: EditMovementSheetState? = null, // null means the sheet is hidden
     )
 

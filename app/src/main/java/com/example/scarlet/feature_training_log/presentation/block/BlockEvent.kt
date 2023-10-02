@@ -41,6 +41,9 @@ sealed interface BlockEvent {
     data class FilterMovementsByName(val nameFilter: String) : BlockEvent
     object AddMovement: BlockEvent
     data class SelectMovement(val movement: Movement) : BlockEvent
+    data class EnableSupersetSelectionMode(val movement: Movement) : BlockEvent
+    object DisableSupersetSelectionMode : BlockEvent
+    object AddSuperset : BlockEvent
 
     data class ShowEditMovementSheet(val movement: Movement) : BlockEvent
     object HideEditMovementSheet: BlockEvent

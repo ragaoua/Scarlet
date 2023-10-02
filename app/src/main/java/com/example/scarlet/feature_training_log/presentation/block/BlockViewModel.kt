@@ -221,26 +221,6 @@ class BlockViewModel @Inject constructor(
                             resource.error?.let {
                                 _uiActions.send(UiAction.ShowSnackbar(it))
                             }
-                            resource.data?.let { insertedMovementId ->
-                                sheet.exercise?.let { exercise ->
-                                    useCases.updateExercise(
-                                        exercise = exercise.copy(
-                                            movementId = insertedMovementId,
-                                        )
-                                    )
-                                } ?: run {
-                                    useCases.insertExercise(
-                                        Exercise(
-                                            sessionId = sheet.session.id,
-                                            movementId = insertedMovementId,
-                                            order = sheet.session.exercises.size + 1
-                                        )
-                                    )
-                                }
-                                _state.update { it.copy(
-                                    movementSelectionSheet = null
-                                )}
-                            }
                         }
                     }
                 }
@@ -320,27 +300,74 @@ class BlockViewModel @Inject constructor(
                 }
             }
             is BlockEvent.SelectMovement -> {
-                viewModelScope.launch(Dispatchers.IO) {
-                    state.value.movementSelectionSheet?.exercise?.let { exercise ->
-                        useCases.updateExercise(
-                            exercise = exercise.copy(
-                                movementId = event.movement.id
+                state.value.movementSelectionSheet?.let { sheet ->
+                    if (sheet.isInSupersetSelectionMode) {
+                        _state.update { state -> state.copy(
+                            movementSelectionSheet = sheet.copy(
+                                supersetMovements = sheet.supersetMovements
+                                    .toMutableList()
+                                    .apply {
+                                        if (event.movement in this) {
+                                            remove(event.movement)
+                                        } else {
+                                            add(event.movement)
+                                        }
+                                    }
                             )
-                        )
-                    } ?: run {
-                        state.value.movementSelectionSheet?.let { sheet ->
-                            useCases.insertExercise(
-                                Exercise(
-                                    sessionId = sheet.session.id,
-                                    movementId = event.movement.id,
-                                    order = sheet.session.exercises.size + 1
+                        )}
+                    } else {
+                        viewModelScope.launch(Dispatchers.IO) {
+                            sheet.exercise?.let { exercise ->
+                                useCases.updateExercise(
+                                    exercise = exercise.copy(
+                                        movementId = event.movement.id
+                                    )
                                 )
-                            )
+                            } ?: run {
+                                useCases.insertExercise(
+                                    Exercise(
+                                        sessionId = sheet.session.id,
+                                        movementId = event.movement.id,
+                                        order = sheet.session.exercises.size + 1 // TODO let the database handle the order
+                                    )
+                                )
+                            }
                         }
+                        _state.update { state -> state.copy(
+                            movementSelectionSheet = null
+                        )}
                     }
-                    _state.update { it.copy(
-                        movementSelectionSheet = null
+                }
+            }
+            is BlockEvent.EnableSupersetSelectionMode -> {
+                state.value.movementSelectionSheet?.let { sheet ->
+                    _state.update { state -> state.copy(
+                        movementSelectionSheet = sheet.copy(
+                            isInSupersetSelectionMode = true,
+                            supersetMovements = listOf(event.movement)
+                        )
                     )}
+                }
+            }
+            is BlockEvent.DisableSupersetSelectionMode -> {
+                _state.update { state -> state.copy(
+                    movementSelectionSheet = state.movementSelectionSheet?.copy(
+                        isInSupersetSelectionMode = false,
+                        supersetMovements = emptyList()
+                    )
+                )}
+            }
+            is BlockEvent.AddSuperset -> {
+                state.value.movementSelectionSheet?.let { sheet ->
+                    viewModelScope.launch(Dispatchers.IO) {
+//                        TODO
+//                        useCases.insertSuperset(
+//                            movements = sheet.supersetMovements
+//                        )
+                    }
+//                    _state.update { state -> state.copy(
+//                        movementSelectionSheet = null
+//                    )}
                 }
             }
             is BlockEvent.DeleteExercise -> {
