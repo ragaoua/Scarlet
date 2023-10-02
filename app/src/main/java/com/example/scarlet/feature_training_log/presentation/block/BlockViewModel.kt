@@ -193,13 +193,13 @@ class BlockViewModel @Inject constructor(
                 )}
             }
             is BlockEvent.ShowMovementSelectionSheet -> {
-                updateMovementNameFilter("")
                 _state.update { it.copy(
                     movementSelectionSheet = BlockUiState.MovementSelectionSheetState(
                         session = event.session,
                         exercise = event.exercise
                     )
                 )}
+                updateMovementNameFilter("")
             }
             BlockEvent.HideMovementSelectionSheet -> {
                 _state.update { it.copy(
@@ -514,13 +514,17 @@ class BlockViewModel @Inject constructor(
     }
 
     private fun updateMovementNameFilter(nameFilter: String) {
-        filterMovementsJob?.cancel()
-        filterMovementsJob = useCases.getMovementsFilteredByName(nameFilter)
-            .onEach { movements ->
-                _state.update { it.copy(
-                    movements = movements.data ?: emptyList()
-                )}
-            }.launchIn(viewModelScope)
+        state.value.movementSelectionSheet?.let { sheet ->
+            filterMovementsJob?.cancel()
+            filterMovementsJob = useCases.getMovementsFilteredByName(nameFilter)
+                .onEach { movements ->
+                    _state.update { state -> state.copy(
+                        movementSelectionSheet = sheet.copy(
+                            movements = movements.data ?: emptyList()
+                        )
+                    )}
+                }.launchIn(viewModelScope)
+        }
     }
 
     sealed interface UiAction {

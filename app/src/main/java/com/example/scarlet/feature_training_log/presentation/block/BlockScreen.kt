@@ -224,7 +224,7 @@ fun Screen(
                 )
             } ?: run {
                 MovementSelectionSheet(
-                    movements = state.movements,
+                    movements = sheetState.movements,
                     movementNameFilter = sheetState.movementNameFilter,
                     onEvent = onEvent,
                 )

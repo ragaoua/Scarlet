@@ -25,7 +25,6 @@ data class BlockUiState (
 
     /** Exercises */
     val isExerciseDetailExpandedById: Map<Long, Boolean> = emptyMap(),
-    val movements: List<Movement> = emptyList(),
     val movementSelectionSheet: MovementSelectionSheetState? = null, // null means the sheet is hidden
     val loadCalculationDialog: LoadCalculationDialogState? = null // null means the dialog is hidden
 ) {
@@ -38,6 +37,7 @@ data class BlockUiState (
     )
 
     data class MovementSelectionSheetState(
+        val movements: List<Movement> = emptyList(),
         val session: SessionWithExercises<out IExercise>,
         val exercise: Exercise? = null,
         val movementNameFilter: String = "",
