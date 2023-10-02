@@ -15,10 +15,13 @@ import com.example.scarlet.feature_training_log.data.data_source.entity.SetEntit
 @Dao
 interface ExerciseDao {
 
-    @Transaction
     @Query("SELECT * FROM exercise WHERE exercise.sessionId = :sessionId")
     suspend fun getExercisesWithMovementAndSetsBySessionId(sessionId: Long):
             List<ExerciseWithMovementAndSetsEntity>
+
+    @Query("SELECT * FROM exercise WHERE exercise.sessionId = :sessionId")
+    suspend fun getExercisesBySessionId(sessionId: Long):
+            List<ExerciseEntity>
 
     @Upsert
     suspend fun insertExercise(exercise: ExerciseEntity): Long
@@ -70,6 +73,12 @@ interface ExerciseDao {
             }
         insertExercise(exercise)
         sets.forEach { setDao.insertSet(it) }
+    }
+
+    @Transaction
+    suspend fun insertExerciseWhileSettingOrder(exercise: ExerciseEntity): Long {
+        val order = getExercisesBySessionId(exercise.sessionId).size + 1
+        return insertExercise(exercise.copy(order = order))
     }
 
 }

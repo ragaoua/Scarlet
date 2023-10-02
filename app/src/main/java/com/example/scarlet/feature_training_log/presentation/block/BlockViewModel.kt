@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.scarlet.R
 import com.example.scarlet.core.util.StringResource
 import com.example.scarlet.core.util.roundToClosestMultipleOf
-import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.SessionWithExercises
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -325,11 +324,8 @@ class BlockViewModel @Inject constructor(
                                 )
                             } ?: run {
                                 useCases.insertExercise(
-                                    Exercise(
-                                        sessionId = sheet.session.id,
-                                        movementId = event.movement.id,
-                                        order = sheet.session.exercises.size + 1 // TODO let the database handle the order
-                                    )
+                                    sessionId = sheet.session.id,
+                                    movementId = event.movement.id
                                 )
                             }
                         }

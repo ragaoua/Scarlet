@@ -9,14 +9,21 @@ class InsertExerciseUseCase(
 ) {
 
     /**
-     * Insert an exercise
+     * Insert an exercise.
+     * The order is defined by the number of exercises for the session.
      *
-     * @param exercise exercise to be inserted
+     * @param sessionId id of the exercise's session
+     * @param movementId id of the exercise's movement
      *
      * @return a resource with data (id of the inserted exercise)
      */
-    suspend operator fun invoke(exercise: Exercise): Resource<Long> {
-        return repository.insertExercise(exercise)
+    suspend operator fun invoke(sessionId: Long, movementId: Long): Resource<Long> {
+        return repository.insertExerciseWhileSettingOrder(
+            Exercise(
+                sessionId = sessionId,
+                movementId = movementId
+            )
+        )
             .let { Resource.Success(it) }
     }
 }

@@ -93,7 +93,7 @@ class TestRepository: ScarletRepository {
         TODO("Not yet implemented")
     }
 
-    override suspend fun insertExercise(exercise: Exercise): Long {
+    override suspend fun insertExerciseWhileSettingOrder(exercise: Exercise): Long {
         TODO("Not yet implemented")
     }
 
