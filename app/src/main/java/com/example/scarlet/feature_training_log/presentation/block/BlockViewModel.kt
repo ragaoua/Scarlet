@@ -426,7 +426,10 @@ class BlockViewModel @Inject constructor(
             }
             is BlockEvent.UpdateLoadPercentage -> {
                 val percentage = event.percentage.toIntOrNull()
-                if (percentage != null && percentage !in 1..100) return
+                    ?: if(event.percentage.isBlank()) null else return
+
+                if (percentage != null && percentage !in 0..100) return
+
 
                 _state.update { it.copy(
                     loadCalculationDialog = it.loadCalculationDialog?.copy(
