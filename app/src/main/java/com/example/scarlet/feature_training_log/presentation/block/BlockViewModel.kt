@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.scarlet.R
 import com.example.scarlet.core.util.StringResource
+import com.example.scarlet.core.util.roundToClosestMultipleOf
 import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.SessionWithExercises
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
@@ -441,7 +442,8 @@ class BlockViewModel @Inject constructor(
                     _state.update { state -> state.copy(
                         loadCalculationDialog = state.loadCalculationDialog?.copy(
                             calculatedLoad = percentage?.let {
-                                it * dialog.previousSetLoad / 100
+                                (it * dialog.previousSetLoad / 100)
+                                    .roundToClosestMultipleOf(0.5f)
                             }
                         )
                     )}
