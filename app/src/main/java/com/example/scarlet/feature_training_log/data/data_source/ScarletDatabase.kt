@@ -6,6 +6,8 @@ import androidx.room.RenameColumn
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.AutoMigrationSpec
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.scarlet.feature_training_log.data.data_source.dao.BlockDao
 import com.example.scarlet.feature_training_log.data.data_source.dao.DayDao
 import com.example.scarlet.feature_training_log.data.data_source.dao.ExerciseDao
@@ -28,7 +30,7 @@ import com.example.scarlet.feature_training_log.data.data_source.entity.SetEntit
         MovementEntity::class,
         SetEntity::class
     ],
-    version = 3,
+    version = 4,
     autoMigrations = [
         AutoMigration(from = 1, to = 2, spec = ScarletDatabase.Migration1to2::class),
         AutoMigration(from = 2, to = 3)
@@ -48,4 +50,13 @@ abstract class ScarletDatabase : RoomDatabase() {
     @RenameColumn(tableName = "set", fromColumnName = "rpe", toColumnName = "rating")
     class Migration1to2: AutoMigrationSpec
 
+    companion object {
+        val MIGRATION_3_4 = object : Migration(3, 4) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("DROP INDEX `index_exercise_sessionId_order`")
+                database.execSQL("ALTER TABLE `exercise` ADD COLUMN `supersetOrder` INTEGER NOT NULL DEFAULT 1")
+                database.execSQL("CREATE UNIQUE INDEX `index_exercise_sessionId_order_supersetOrder` ON `exercise` (`sessionId`, `order`, `supersetOrder`)")
+            }
+        }
+    }
 }

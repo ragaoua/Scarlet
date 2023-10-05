@@ -16,7 +16,7 @@ import com.example.scarlet.feature_training_log.domain.model.RatingType
     indices = [
         Index("sessionId"),
         Index("movementId"),
-        Index(value = ["sessionId", "order"], unique = true)
+        Index(value = ["sessionId", "order", "supersetOrder"], unique = true)
     ],
     foreignKeys = [
         ForeignKey(
@@ -39,6 +39,8 @@ data class ExerciseEntity(
     val sessionId: Long = 0,
     val movementId: Long = 0,
     val order: Int = 0,
+    @ColumnInfo(defaultValue = "1")
+    val supersetOrder: Int = 0,
     @ColumnInfo(defaultValue = "RPE")
     val ratingType: RatingType = RatingType.RPE
 ) {
@@ -48,6 +50,7 @@ data class ExerciseEntity(
         sessionId = exercise.sessionId,
         movementId = exercise.movementId,
         order = exercise.order,
+        supersetOrder = exercise.supersetOrder,
         ratingType = exercise.ratingType
     )
 
@@ -56,6 +59,7 @@ data class ExerciseEntity(
         sessionId = sessionId,
         movementId = movementId,
         order = order,
+        supersetOrder = supersetOrder,
         ratingType = ratingType
     )
 }
@@ -82,6 +86,7 @@ data class ExerciseWithMovementAndSetsEntity(
         id = exercise.id,
         sessionId = exercise.sessionId,
         order = exercise.order,
+        supersetOrder = exercise.supersetOrder,
         movementId = exercise.movementId,
         movement = movement.toMovement(),
         ratingType = exercise.ratingType,

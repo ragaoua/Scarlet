@@ -50,7 +50,8 @@ object AppModule {
             app,
             ScarletDatabase::class.java,
             "scarlet.db"
-        ).build()
+        ).addMigrations(ScarletDatabase.MIGRATION_3_4)
+            .build()
 
     @Provides
     @Singleton
