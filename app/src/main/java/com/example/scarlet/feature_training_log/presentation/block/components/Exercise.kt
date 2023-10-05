@@ -29,6 +29,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
+import com.example.scarlet.core.util.conditional
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
 import com.example.scarlet.feature_training_log.domain.model.IExercise
 import com.example.scarlet.feature_training_log.domain.model.SessionWithExercises
@@ -57,10 +58,8 @@ fun Exercise(
          *************************************************************************/
         Row(
             modifier =
-                if (!isInSessionEditMode) {
+                Modifier.conditional(!isInSessionEditMode) {
                     Modifier.clickable { onEvent(BlockEvent.ToggleExerciseDetail(exercise.id)) }
-                } else {
-                    Modifier
                 }
                 .fillMaxWidth()
                 .padding(8.dp)
