@@ -181,7 +181,8 @@ fun Screen(
                                 Session(
                                     modifier = Modifier
                                         .fillParentMaxWidth()
-                                        .animateItemPlacement(),
+                                        .animateItemPlacement()
+                                        .padding(8.dp),
                                     session = session,
                                     isExerciseDetailExpandedById = state.isExerciseDetailExpandedById,
                                     isInSessionEditMode = state.isInSessionEditMode,

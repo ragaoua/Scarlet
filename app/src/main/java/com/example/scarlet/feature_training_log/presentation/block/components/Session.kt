@@ -29,7 +29,6 @@ import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovemen
 import com.example.scarlet.feature_training_log.domain.model.SessionWithExercises
 import com.example.scarlet.feature_training_log.presentation.block.BlockEvent
 import com.example.scarlet.feature_training_log.presentation.core.DateUtils
-import com.example.scarlet.ui.theme.TitleLazyListPadding
 
 @Composable
 fun Session(
@@ -40,7 +39,7 @@ fun Session(
     onEvent: (BlockEvent) -> Unit
 ) {
     Column(
-        modifier = modifier.padding(TitleLazyListPadding),
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Column(
@@ -95,14 +94,27 @@ fun Session(
             HorizontalDivider()
 
             if (session.exercises.isNotEmpty()) {
-                session.exercises.forEach { exercise ->
-                    Exercise(
-                        session = session,
-                        exercise = exercise,
-                        isExerciseDetailExpandedById = isExerciseDetailExpandedById,
-                        isInSessionEditMode = isInSessionEditMode,
-                        onEvent = onEvent
-                    )
+                session.exercises.groupBy { it.order }.values.forEach { exercises ->
+                    // If there is more than one exercise with the same order,
+                    // display them as a superset
+                    if (exercises.size > 1) {
+                        Superset(
+                            session = session,
+                            exercises = exercises,
+                            isExerciseDetailExpandedById = isExerciseDetailExpandedById,
+                            isInSessionEditMode = isInSessionEditMode,
+                            onEvent = onEvent
+                        )
+                    } else {
+                        Exercise(
+                            modifier = Modifier.padding(horizontal = 8.dp),
+                            session = session,
+                            exercise = exercises.first(),
+                            isExerciseDetailExpandedById = isExerciseDetailExpandedById,
+                            isInSessionEditMode = isInSessionEditMode,
+                            onEvent = onEvent
+                        )
+                    }
                 }
             } else {
                 Text(

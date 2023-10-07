@@ -15,7 +15,7 @@ class GetDaysWithSessionsWithExercisesWithMovementAndSetsByBlockIdUseCase(
     /**
      * Retrieve a list of days for a given block
      * Each day's sessions are sorted by date
-     * Each session's exercises are sorted by order
+     * Each session's exercises are sorted by order then by supersetOrder
      * Each exercise's sets are sorted by order
      *
      * @param blockId id of the days' block
@@ -36,7 +36,11 @@ class GetDaysWithSessionsWithExercisesWithMovementAndSetsByBlockIdUseCase(
                             ).map { session ->
                                 session.copy(
                                     exercises = session.exercises
-                                        .sortedBy { it.order }
+                                        .sortedWith(
+                                            compareBy<ExerciseWithMovementAndSets> {
+                                                it.order
+                                            }.thenBy { it.supersetOrder }
+                                        )
                                         .map { exercise ->
                                             exercise.copy(
                                                 movement = exercise.movement,

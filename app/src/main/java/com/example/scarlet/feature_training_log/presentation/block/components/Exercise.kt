@@ -38,6 +38,7 @@ import com.example.scarlet.feature_training_log.presentation.core.components.Sec
 
 @Composable
 fun Exercise(
+    modifier: Modifier = Modifier,
     session: SessionWithExercises<out IExercise>,
     exercise: ExerciseWithMovementAndSets,
     isExerciseDetailExpandedById: Map<Long, Boolean>,
@@ -45,7 +46,7 @@ fun Exercise(
     onEvent: (BlockEvent) -> Unit
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .clip(MaterialTheme.shapes.medium)
             .background(MaterialTheme.colorScheme.surface)
             .border(
