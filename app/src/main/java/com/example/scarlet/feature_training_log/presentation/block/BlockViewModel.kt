@@ -301,6 +301,7 @@ class BlockViewModel @Inject constructor(
             is BlockEvent.SelectMovement -> {
                 state.value.movementSelectionSheet?.let { sheet ->
                     if (sheet.isInSupersetSelectionMode) {
+                        var keepSupersetSelectionMode: Boolean
                         _state.update { state -> state.copy(
                             movementSelectionSheet = sheet.copy(
                                 supersetMovements = sheet.supersetMovements
@@ -308,10 +309,11 @@ class BlockViewModel @Inject constructor(
                                     .apply {
                                         if (event.movement in this) {
                                             remove(event.movement)
-                                        } else {
-                                            add(event.movement)
-                                        }
-                                    }
+                                        } else add(event.movement)
+                                    }.also {
+                                        keepSupersetSelectionMode = it.isNotEmpty()
+                                    },
+                                isInSupersetSelectionMode = keepSupersetSelectionMode
                             )
                         )}
                     } else {
