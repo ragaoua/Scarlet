@@ -358,14 +358,14 @@ class BlockViewModel @Inject constructor(
             is BlockEvent.AddSuperset -> {
                 state.value.movementSelectionSheet?.let { sheet ->
                     viewModelScope.launch(Dispatchers.IO) {
-//                        TODO
-//                        useCases.insertSuperset(
-//                            movements = sheet.supersetMovements
-//                        )
+                        useCases.insertSuperset(
+                            sessionId = sheet.session.id,
+                            movementIds = sheet.supersetMovements.map { it.id }
+                        )
                     }
-//                    _state.update { state -> state.copy(
-//                        movementSelectionSheet = null
-//                    )}
+                    _state.update { state -> state.copy(
+                        movementSelectionSheet = null
+                    )}
                 }
             }
             is BlockEvent.DeleteExercise -> {

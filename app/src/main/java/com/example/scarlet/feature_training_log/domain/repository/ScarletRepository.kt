@@ -60,6 +60,7 @@ interface ScarletRepository {
     /////////////////////////////////////////// EXERCISE ///////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
     suspend fun insertExerciseWhileSettingOrder(exercise: Exercise): Long
+    suspend fun insertExercisesWhileSettingOrder(exercises: List<Exercise>)
     suspend fun updateExercise(exercise: Exercise)
     suspend fun deleteExerciseAndUpdateSubsequenceExercisesOrder(exercise: Exercise)
 

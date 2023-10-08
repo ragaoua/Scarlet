@@ -81,4 +81,14 @@ interface ExerciseDao {
         return insertExercise(exercise.copy(order = order, supersetOrder = 1))
     }
 
+    @Transaction
+    suspend fun insertExercisesWhileSettingOrder(exercises: List<ExerciseEntity>) {
+        exercises.groupBy { it.sessionId }.forEach { (sessionId, exercises) ->
+            val order = getExercisesBySessionId(sessionId).size + 1
+            exercises.forEachIndexed { index, exercise ->
+                insertExercise(exercise.copy(order = order, supersetOrder = index+1))
+            }
+        }
+    }
+
 }

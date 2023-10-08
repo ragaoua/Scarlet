@@ -128,6 +128,12 @@ class ScarletRepositoryImpl(
     override suspend fun insertExerciseWhileSettingOrder(exercise: Exercise) =
         dbInstance.exerciseDao.insertExerciseWhileSettingOrder(ExerciseEntity(exercise))
 
+    override suspend fun insertExercisesWhileSettingOrder(exercises: List<Exercise>) {
+        dbInstance.exerciseDao.insertExercisesWhileSettingOrder(
+            exercises.map { ExerciseEntity(it) }
+        )
+    }
+
     override suspend fun updateExercise(exercise: Exercise) {
         dbInstance.exerciseDao.updateExercise(ExerciseEntity(exercise))
     }
