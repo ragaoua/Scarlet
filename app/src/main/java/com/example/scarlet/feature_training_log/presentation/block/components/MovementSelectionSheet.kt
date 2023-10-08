@@ -21,7 +21,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -152,9 +151,8 @@ fun MovementSelectionSheet(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             AnimatedVisibility(visible = sheetState.isInSupersetSelectionMode) {
-                                Checkbox(
-                                    // TODO instead of a check mark, show a number indicating the
-                                    //  order of the movement in the superset
+                                NumberedCheckBox(
+                                    number = sheetState.supersetMovements.indexOf(movement) + 1,
                                     checked = movement in sheetState.supersetMovements,
                                     onCheckedChange = { onEvent(BlockEvent.SelectMovement(movement)) }
                                 )
