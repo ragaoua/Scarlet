@@ -107,7 +107,9 @@ fun Session(
                         )
                     } else {
                         Exercise(
-                            modifier = Modifier.padding(horizontal = 8.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 8.dp),
                             session = session,
                             exercise = exercises.first(),
                             isExerciseDetailExpandedById = isExerciseDetailExpandedById,

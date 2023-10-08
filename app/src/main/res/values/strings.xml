@@ -56,6 +56,7 @@
     <string name="expand_session_exercises_details">Expand all exercises details</string>
     <string name="exercise_deleted">Exercise deleted</string>
     <string name="add_superset">Add superset</string>
+    <string name="superset">Superset</string>
 
     <!-- Set -->
     <string name="no_sets_msg">Click below to add a set</string>
