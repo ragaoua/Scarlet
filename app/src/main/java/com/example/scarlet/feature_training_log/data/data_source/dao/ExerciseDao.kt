@@ -78,7 +78,7 @@ interface ExerciseDao {
     @Transaction
     suspend fun insertExerciseWhileSettingOrder(exercise: ExerciseEntity): Long {
         val order = getExercisesBySessionId(exercise.sessionId).size + 1
-        return insertExercise(exercise.copy(order = order))
+        return insertExercise(exercise.copy(order = order, supersetOrder = 1))
     }
 
 }
