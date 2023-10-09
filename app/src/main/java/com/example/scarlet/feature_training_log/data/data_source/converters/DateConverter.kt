@@ -1,4 +1,4 @@
-package com.example.scarlet.feature_training_log.data.data_source
+package com.example.scarlet.feature_training_log.data.data_source.converters
 
 import androidx.room.TypeConverter
 import java.util.Date

@@ -1,4 +1,4 @@
-package com.example.scarlet.feature_training_log.data.data_source
+package com.example.scarlet.feature_training_log.data.data_source.converters
 
 import androidx.room.TypeConverter
 import com.example.scarlet.feature_training_log.domain.model.RatingType

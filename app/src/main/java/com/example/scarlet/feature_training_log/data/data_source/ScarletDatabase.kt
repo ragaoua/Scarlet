@@ -8,6 +8,7 @@ import androidx.room.TypeConverters
 import androidx.room.migration.AutoMigrationSpec
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.scarlet.feature_training_log.data.data_source.converters.DateConverter
 import com.example.scarlet.feature_training_log.data.data_source.dao.BlockDao
 import com.example.scarlet.feature_training_log.data.data_source.dao.DayDao
 import com.example.scarlet.feature_training_log.data.data_source.dao.ExerciseDao
