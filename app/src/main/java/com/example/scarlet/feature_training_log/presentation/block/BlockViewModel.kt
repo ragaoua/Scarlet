@@ -517,7 +517,14 @@ class BlockViewModel @Inject constructor(
                     selectedDayId =
                         if (state.selectedDayId in days.map { it.id }) {
                             state.selectedDayId
-                        } else days.firstOrNull()?.id ?: 0,
+                        } else {
+                            val daysWithSessions = days.filter { it.sessions.isNotEmpty() }
+                            if (daysWithSessions.isNotEmpty()) {
+                                daysWithSessions.maxBy { day ->
+                                    day.sessions.maxOf { it.date }
+                                }.id
+                            } else days.firstOrNull()?.id ?: 0
+                        },
                     sessionIndexScrollPositionByDayId = days.associate { day ->
                         val oldSessions = state.days.find { it.id == day.id }?.sessions ?: emptyList()
 
