@@ -175,18 +175,24 @@ class BlockViewModel @Inject constructor(
                 )}
             }
             is BlockEvent.ToggleSessionExercisesDetails -> {
-                val sessionExercisesIds = state.value.days
-                    .flatMap { it.sessions }
-                    .find { it.id == event.sessionId }
-                    ?.exercises
-                    ?.map { it.id }
-                    ?: return
-                _state.update { state -> state.copy(
+                _state.update { state ->
+                    val sessionExercisesIds = state.days
+                        .flatMap { it.sessions }
+                        .find { it.id == event.sessionId }
+                        ?.exercises
+                        ?.map { it.id }
+                        ?: return
+                    val isAtLeastOneExerciseExpanded = state.isExerciseDetailExpandedById
+                        .filter { it.key in sessionExercisesIds }
+                        .any { it.value }
+                    state.copy(
                     isExerciseDetailExpandedById = state.isExerciseDetailExpandedById
                         .map {
                             Pair(
                                 it.key,
-                                if(it.key in sessionExercisesIds) !it.value else it.value
+                                if(it.key in sessionExercisesIds) {
+                                    !isAtLeastOneExerciseExpanded
+                                } else it.value
                             )
                         }.toMap()
                 )}
