@@ -32,6 +32,30 @@ interface ExerciseDao {
     @Delete
     suspend fun deleteExercise(exercise: ExerciseEntity)
 
+    @Query(
+        """
+        SELECT *
+        FROM exercise
+        WHERE sessionId = :sessionId
+        AND `order` > :exerciseOrder
+    """)
+    suspend fun getExercisesBySessionIdWhereOrderIsGreaterThan(sessionId: Long, exerciseOrder: Int):
+            List<ExerciseEntity>
+
+    @Query(
+        """
+        SELECT *
+        FROM exercise
+        WHERE sessionId = :sessionId
+        AND `order` = :exerciseOrder
+        AND supersetOrder > :supersetOrder
+    """)
+    suspend fun getExercisesBySessionIdAndOrderWhereSupersetOrderIsGreaterThan(
+        sessionId: Long,
+        exerciseOrder: Int,
+        supersetOrder: Int
+    ): List<ExerciseEntity>
+
     @Transaction
     suspend fun deleteExerciseAndUpdateSubsequentExercisesOrder(exercise: ExerciseEntity) {
         deleteExercise(exercise)
@@ -42,17 +66,15 @@ interface ExerciseDao {
         ).forEach {
             updateExercise(it.copy(order = it.order - 1))
         }
-    }
 
-    @Query(
-        """
-        SELECT *
-        FROM exercise
-        WHERE sessionId = :sessionId
-        AND `order` > :exerciseOrder
-    """)
-    suspend fun getExercisesBySessionIdWhereOrderIsGreaterThan(sessionId: Long, exerciseOrder: Int):
-            List<ExerciseEntity>
+        getExercisesBySessionIdAndOrderWhereSupersetOrderIsGreaterThan(
+            sessionId = exercise.sessionId,
+            exerciseOrder = exercise.order,
+            supersetOrder = exercise.supersetOrder
+        ).forEach {
+            updateExercise(it.copy(supersetOrder = it.supersetOrder - 1))
+        }
+    }
 
     @Transaction
     suspend fun insertExerciseWithMovementAndSets(
