@@ -139,7 +139,7 @@ class ScarletRepositoryImpl(
     }
 
     override suspend fun deleteExerciseAndUpdateSubsequenceExercisesOrder(exercise: Exercise) =
-        dbInstance.exerciseDao.deleteExerciseAndUpdateSubsequentSetsOrder(ExerciseEntity(exercise))
+        dbInstance.exerciseDao.deleteExerciseAndUpdateSubsequentExercisesOrder(ExerciseEntity(exercise))
 
     override suspend fun getExercisesWithMovementAndSetsBySessionId(sessionId: Long) =
         dbInstance.exerciseDao.getExercisesWithMovementAndSetsBySessionId(sessionId)

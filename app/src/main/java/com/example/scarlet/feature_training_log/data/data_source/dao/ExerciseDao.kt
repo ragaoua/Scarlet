@@ -33,7 +33,7 @@ interface ExerciseDao {
     suspend fun deleteExercise(exercise: ExerciseEntity)
 
     @Transaction
-    suspend fun deleteExerciseAndUpdateSubsequentSetsOrder(exercise: ExerciseEntity) {
+    suspend fun deleteExerciseAndUpdateSubsequentExercisesOrder(exercise: ExerciseEntity) {
         deleteExercise(exercise)
 
         getExercisesBySessionIdWhereOrderIsGreaterThan(
