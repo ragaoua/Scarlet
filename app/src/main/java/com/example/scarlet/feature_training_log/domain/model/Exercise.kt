@@ -54,6 +54,7 @@ data class ExerciseWithMovementAndSets(
         id = id,
         sessionId = sessionId,
         order = order,
+        supersetOrder = supersetOrder,
         movementId = movementId,
         ratingType = ratingType
     )
