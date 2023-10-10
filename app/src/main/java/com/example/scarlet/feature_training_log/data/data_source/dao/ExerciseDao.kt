@@ -98,12 +98,6 @@ interface ExerciseDao {
     }
 
     @Transaction
-    suspend fun insertExerciseWhileSettingOrder(exercise: ExerciseEntity): Long {
-        val order = getExercisesBySessionId(exercise.sessionId).size + 1
-        return insertExercise(exercise.copy(order = order, supersetOrder = 1))
-    }
-
-    @Transaction
     suspend fun insertExercisesWhileSettingOrder(exercises: List<ExerciseEntity>) {
         exercises.groupBy { it.sessionId }.forEach { (sessionId, exercises) ->
             val order = getExercisesBySessionId(sessionId).size + 1
