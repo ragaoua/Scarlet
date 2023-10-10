@@ -9,6 +9,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -51,9 +52,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -361,7 +362,7 @@ private fun DayNavigationBottomBar(
             verticalAlignment = Alignment.CenterVertically
         ) {
             items(state.days) { day ->
-                Text(
+                Column(
                     modifier = Modifier
                         .clip(MaterialTheme.shapes.small)
                         .clickable { onEvent(BlockEvent.SelectDay(day.toDay())) }
@@ -372,12 +373,21 @@ private fun DayNavigationBottomBar(
                         )
                         .padding(4.dp)
                         .widthIn(64.dp, 128.dp),
-                    text = day.name,
-                    maxLines = 3,
-                    overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.titleMedium,
-                    textAlign = TextAlign.Center
-                )
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = day.name,
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Text(
+                        text = pluralStringResource(
+                            id = R.plurals.nb_sessions,
+                            count = day.sessions.size,
+                            day.sessions.size
+                        ),
+                        style = MaterialTheme.typography.titleSmall
+                    )
+                }
             }
         }
     }

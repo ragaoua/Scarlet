@@ -43,6 +43,10 @@
     <string name="edit_session_date">Edit session date</string>
     <string name="save_session">Save session</string>
     <string name="session_deleted">Session deleted</string>
+    <plurals name="nb_sessions">
+        <item quantity="one">(%d session)</item>
+        <item quantity="other">(%d sessions)</item>
+    </plurals>
 
     <!-- Exercise -->
     <string name="new_exercise">New Exercise</string>
