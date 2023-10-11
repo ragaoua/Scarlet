@@ -60,19 +60,19 @@ interface ExerciseDao {
     suspend fun deleteExerciseAndUpdateSubsequentExercisesOrder(exercise: ExerciseEntity) {
         deleteExercise(exercise)
 
-        getExercisesBySessionIdWhereOrderIsGreaterThan(
-            sessionId = exercise.sessionId,
-            exerciseOrder = exercise.order
-        ).forEach {
-            updateExercise(it.copy(order = it.order - 1))
-        }
-
         getExercisesBySessionIdAndOrderWhereSupersetOrderIsGreaterThan(
             sessionId = exercise.sessionId,
             exerciseOrder = exercise.order,
             supersetOrder = exercise.supersetOrder
         ).forEach {
             updateExercise(it.copy(supersetOrder = it.supersetOrder - 1))
+        }
+
+        getExercisesBySessionIdWhereOrderIsGreaterThan(
+            sessionId = exercise.sessionId,
+            exerciseOrder = exercise.order
+        ).forEach {
+            updateExercise(it.copy(order = it.order - 1))
         }
     }
 
