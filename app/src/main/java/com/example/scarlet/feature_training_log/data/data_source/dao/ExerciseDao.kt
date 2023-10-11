@@ -60,12 +60,14 @@ interface ExerciseDao {
     suspend fun deleteExerciseAndUpdateSubsequentExercisesOrder(exercise: ExerciseEntity) {
         deleteExercise(exercise)
 
-        getExercisesBySessionIdAndOrderWhereSupersetOrderIsGreaterThan(
+        val supersetExercises = getExercisesBySessionIdAndOrderWhereSupersetOrderIsGreaterThan(
             sessionId = exercise.sessionId,
             exerciseOrder = exercise.order,
             supersetOrder = exercise.supersetOrder
-        ).sortedBy { it.supersetOrder } /* Sorting is necessary to satisfy the unique constraint
-                                           on (sessionId,order,supersetOrder) */
+        )
+        supersetExercises
+            .sortedBy { it.supersetOrder } /* Sorting is necessary to satisfy the unique
+                                              constraint on (sessionId,order,supersetOrder) */
             .forEach {
                 updateExercise(it.copy(supersetOrder = it.supersetOrder - 1))
             }
@@ -75,8 +77,8 @@ interface ExerciseDao {
             exerciseOrder = exercise.order
         )
         subsequentExercises
-            .sortedBy { it.order } /* Sorting is necessary to satisfy the unique constraint
-                                      on (sessionId,order,supersetOrder) */
+            .sortedBy { it.order } /* Sorting is necessary to satisfy the unique
+                                      constraint on (sessionId,order,supersetOrder) */
             .forEach {
                 updateExercise(it.copy(order = it.order - 1))
             }
@@ -91,14 +93,30 @@ interface ExerciseDao {
         setDao: SetDao
     ) {
         movementDao.insertMovement(movement, onConflict = OnConflictStrategy.IGNORE)
-        getExercisesBySessionIdWhereOrderIsGreaterThan(
+
+        var subsequentExercisesOrder = exercise.order - 1
+        if(exercise.supersetOrder > 1) {
+            subsequentExercisesOrder = exercise.order
+            val supersetExercises = getExercisesBySessionIdAndOrderWhereSupersetOrderIsGreaterThan(
+                sessionId = exercise.sessionId,
+                exerciseOrder = exercise.order,
+                supersetOrder = exercise.supersetOrder - 1
+            )
+            supersetExercises
+                .sortedByDescending { it.supersetOrder } /* Sorting is necessary to satisfy
+                                                            the unique constraint on
+                                                             (sessionId,order,supersetOrder) */
+                .forEach {
+                    updateExercise(it.copy(supersetOrder = it.supersetOrder + 1))
+                }
+        }
+        val subsequentExercises = getExercisesBySessionIdWhereOrderIsGreaterThan(
             sessionId = exercise.sessionId,
-            exerciseOrder = exercise.order - 1
-        ).sortedByDescending { it.order } /* Sorting is necessary to satisfy the constraint
-                                             that (sessionId,order) must be unique */
-            .forEach {
-                updateExercise(it.copy(order = it.order + 1))
-            }
+            exerciseOrder = subsequentExercisesOrder
+        )
+        subsequentExercises.forEach {
+            updateExercise(it.copy(order = it.order + 1))
+        }
         insertExercise(exercise)
         sets.forEach { setDao.insertSet(it) }
     }
