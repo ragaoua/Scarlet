@@ -138,7 +138,7 @@ fun Screen(
      * Actual screen
      ************************************************************************/
     ScarletTheme {
-        val topAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+        val topAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
         Scaffold(
             modifier = Modifier
                 .fillMaxSize()
