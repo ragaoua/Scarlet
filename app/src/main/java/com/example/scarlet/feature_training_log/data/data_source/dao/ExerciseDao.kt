@@ -64,16 +64,22 @@ interface ExerciseDao {
             sessionId = exercise.sessionId,
             exerciseOrder = exercise.order,
             supersetOrder = exercise.supersetOrder
-        ).forEach {
-            updateExercise(it.copy(supersetOrder = it.supersetOrder - 1))
-        }
+        ).sortedBy { it.supersetOrder } /* Sorting is necessary to satisfy the unique constraint
+                                           on (sessionId,order,supersetOrder) */
+            .forEach {
+                updateExercise(it.copy(supersetOrder = it.supersetOrder - 1))
+            }
 
-        getExercisesBySessionIdWhereOrderIsGreaterThan(
+        val subsequentExercises = getExercisesBySessionIdWhereOrderIsGreaterThan(
             sessionId = exercise.sessionId,
             exerciseOrder = exercise.order
-        ).forEach {
-            updateExercise(it.copy(order = it.order - 1))
-        }
+        )
+        subsequentExercises
+            .sortedBy { it.order } /* Sorting is necessary to satisfy the unique constraint
+                                      on (sessionId,order,supersetOrder) */
+            .forEach {
+                updateExercise(it.copy(order = it.order - 1))
+            }
     }
 
     @Transaction
