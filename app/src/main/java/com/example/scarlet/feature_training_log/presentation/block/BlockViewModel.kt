@@ -376,6 +376,12 @@ class BlockViewModel @Inject constructor(
             }
             is BlockEvent.DeleteExercise -> {
                 viewModelScope.launch(Dispatchers.IO) {
+                    val isExerciseInASuperset = state.value.days
+                        .flatMap { it.sessions }
+                        .flatMap { it.exercises }
+                        .any { it.order == event.exercise.order &&
+                                it.id != event.exercise.id }
+
                     useCases.deleteExercise(exercise = event.exercise.toExercise())
 
                     _uiActions.send(UiAction.ShowSnackbar(
@@ -383,7 +389,10 @@ class BlockViewModel @Inject constructor(
                         actionLabel = StringResource(R.string.undo),
                         onActionPerformed = {
                             viewModelScope.launch(Dispatchers.IO) {
-                                useCases.restoreExerciseWithMovementAndSets(event.exercise)
+                                useCases.restoreExerciseWithMovementAndSets(
+                                    exercise = event.exercise,
+                                    isExerciseInASuperset = isExerciseInASuperset
+                                )
                             }
                         }
                     ))

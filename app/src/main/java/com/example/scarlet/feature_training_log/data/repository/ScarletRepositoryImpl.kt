@@ -158,6 +158,20 @@ class ScarletRepositoryImpl(
         )
     }
 
+    override suspend fun insertSupersetExerciseWithMovementAndSets(
+        exercises: Exercise,
+        movements: Movement,
+        sets: List<Set>
+    ) {
+        dbInstance.exerciseDao.insertSupersetExerciseWithMovementAndSets(
+            ExerciseEntity(exercises),
+            MovementEntity(movements),
+            sets.map { SetEntity(it) },
+            dbInstance.movementDao,
+            dbInstance.setDao
+        )
+    }
+
     ///////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////// SET /////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////

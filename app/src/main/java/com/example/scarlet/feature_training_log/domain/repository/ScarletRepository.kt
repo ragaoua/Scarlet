@@ -70,6 +70,11 @@ interface ScarletRepository {
         movements: Movement,
         sets: List<Set>
     )
+    suspend fun insertSupersetExerciseWithMovementAndSets(
+        exercises: Exercise,
+        movements: Movement,
+        sets: List<Set>
+    )
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////// SET /////////////////////////////////////////////
