@@ -70,4 +70,7 @@ sealed interface BlockEvent {
     data class UpdateLoadPercentage(val percentage: String) : BlockEvent
     data class UpdateCalculatedLoad(val load: Float) : BlockEvent
     object UpdateSetBasedOnPrecedingSet: BlockEvent
+
+    object ShowFloatingActionButtons : BlockEvent
+    object HideFloatingActionButtons : BlockEvent
 }

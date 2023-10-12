@@ -511,6 +511,16 @@ class BlockViewModel @Inject constructor(
                     )}
                 }
             }
+            BlockEvent.ShowFloatingActionButtons -> {
+                _state.update { it.copy(
+                    areFloatingActionButtonsVisible = true
+                )}
+            }
+            BlockEvent.HideFloatingActionButtons -> {
+                _state.update { it.copy(
+                    areFloatingActionButtonsVisible = false
+                )}
+            }
         }
     }
 

@@ -23,15 +23,18 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
+import com.example.scarlet.core.util.isScrollingDown
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
 import com.example.scarlet.feature_training_log.domain.model.SessionWithExercises
 import com.example.scarlet.feature_training_log.presentation.block.BlockEvent
 import com.example.scarlet.feature_training_log.presentation.core.DateUtils
+import kotlinx.coroutines.delay
 
 @Composable
 fun Session(
@@ -41,6 +44,17 @@ fun Session(
     isInSessionEditMode: Boolean,
     onEvent: (BlockEvent) -> Unit
 ) {
+    val scrollState = rememberScrollState()
+    val isScrollingDown = scrollState.isScrollingDown()
+    LaunchedEffect(isScrollingDown) {
+        delay(100)
+        if (isScrollingDown) {
+            onEvent(BlockEvent.HideFloatingActionButtons)
+        } else {
+            onEvent(BlockEvent.ShowFloatingActionButtons)
+        }
+    }
+
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center
@@ -48,7 +62,7 @@ fun Session(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .verticalScroll(rememberScrollState()),
+                .verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {

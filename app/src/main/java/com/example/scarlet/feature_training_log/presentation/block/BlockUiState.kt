@@ -26,7 +26,9 @@ data class BlockUiState (
     /** Exercises */
     val isExerciseDetailExpandedById: Map<Long, Boolean> = emptyMap(),
     val movementSelectionSheet: MovementSelectionSheetState? = null, // null means the sheet is hidden
-    val loadCalculationDialog: LoadCalculationDialogState? = null // null means the dialog is hidden
+    val loadCalculationDialog: LoadCalculationDialogState? = null, // null means the dialog is hidden
+
+    val areFloatingActionButtonsVisible: Boolean = true
 ) {
 
     data class SessionDatePickerDialogState(val session: Session)

@@ -4,6 +4,10 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -275,40 +279,39 @@ private fun BlockFloatingActionButtons(
     state: BlockUiState,
     onEvent: (BlockEvent) -> Unit
 ) {
-    // The Modifier.fillMaxWidth() and Arrangement.End are needed because, otherwise,
-    // the AnimatedVisibility won't show the AddSession button when deleting the last
-    // session, even though state.isInSessionEditMode is made false by the viewmodel in
-    // that case. I can't seem to find the reason for this behavior
-    Row (
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.End
+    AnimatedVisibility(
+        visible = state.areFloatingActionButtonsVisible,
+        enter = slideInVertically { it } + scaleIn(),
+        exit = slideOutVertically { it } + scaleOut()
     ) {
-        AnimatedVisibility(
-            visible = state.days.flatMap { it.sessions }.isNotEmpty(),
-            enter = fadeIn(),
-            exit = fadeOut()
-        ) {
-            FloatingActionButton(
-                onClick = { onEvent(BlockEvent.ToggleSessionEditMode) },
-                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+        Row {
+            AnimatedVisibility(
+                visible = state.days.flatMap { it.sessions }.isNotEmpty(),
+                enter = fadeIn(),
+                exit = fadeOut()
             ) {
-                Icon(
-                    imageVector = if (state.isInSessionEditMode) {
-                        Icons.Default.Check
-                    } else Icons.Default.Edit,
-                    contentDescription = stringResource(id = R.string.edit_sessions)
-                )
+                FloatingActionButton(
+                    onClick = { onEvent(BlockEvent.ToggleSessionEditMode) },
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                ) {
+                    Icon(
+                        imageVector = if (state.isInSessionEditMode) {
+                            Icons.Default.Check
+                        } else Icons.Default.Edit,
+                        contentDescription = stringResource(id = R.string.edit_sessions)
+                    )
+                }
             }
-        }
-        AnimatedVisibility(visible = !state.isInSessionEditMode) {
-            FloatingActionButton(
-                onClick = { onEvent(BlockEvent.AddSession) },
-                modifier = Modifier.padding(start = 16.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = stringResource(id = R.string.new_session)
-                )
+            AnimatedVisibility(visible = !state.isInSessionEditMode) {
+                FloatingActionButton(
+                    onClick = { onEvent(BlockEvent.AddSession) },
+                    modifier = Modifier.padding(start = 16.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = stringResource(id = R.string.new_session)
+                    )
+                }
             }
         }
     }
