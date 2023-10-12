@@ -14,10 +14,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
@@ -144,9 +148,14 @@ fun Screen(
     ScarletTheme {
         val topAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
         Scaffold(
+            // Modifier.safeDrawingPadding is needed to ensure that content isn't obscured
+            // and elements don't overlap with the system UI, since we're using
+            // WindowCompat.setDecorFitsSystemWindows(window, false) in MainActivity.
+            // See https://developer.android.com/jetpack/compose/layouts/insets#insets-setup
             modifier = Modifier
                 .fillMaxSize()
-                .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
+                .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)
+                .safeDrawingPadding(),
             snackbarHost = {
                 SnackbarHost(snackbarHostState) { data ->
                     Snackbar(
@@ -274,13 +283,16 @@ private fun sessionsLazyListState(
     return lazyListState
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun BlockFloatingActionButtons(
     state: BlockUiState,
     onEvent: (BlockEvent) -> Unit
 ) {
+    val isImeVisible = WindowInsets.isImeVisible
+
     AnimatedVisibility(
-        visible = state.areFloatingActionButtonsVisible,
+        visible = state.areFloatingActionButtonsVisible && !isImeVisible,
         enter = slideInVertically { it } + scaleIn(),
         exit = slideOutVertically { it } + scaleOut()
     ) {
