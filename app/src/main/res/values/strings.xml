@@ -32,6 +32,7 @@
     <string name="save_block_name">Save name</string>
     <string name="add_new_block">Add a new block</string>
     <string name="block_deleted">Block deleted</string>
+    <string name="day">Day %d</string>
     <!-- Block : Errors -->
     <string name="error_block_name_is_empty">The block name can\'t be empty</string>
     <string name="block_with_name_already_exists">Block with name \"%1$s\" already exists</string>

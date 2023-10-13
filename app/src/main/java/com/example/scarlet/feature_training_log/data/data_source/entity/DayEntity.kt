@@ -28,21 +28,18 @@ data class DayEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
     val blockId: Long = 0,
-    val name: String = "",
     val order: Int = 0
 ) {
 
     constructor(day: Day) : this(
         id = day.id,
         blockId = day.blockId,
-        name = day.name,
         order = day.order
     )
 
     fun toDay() = Day(
         id = id,
         blockId = blockId,
-        name = name,
         order = order
     )
 }
@@ -60,7 +57,6 @@ data class DayWithSessionsEntity(
     fun toModel() = DayWithSessions(
         id = day.id,
         blockId = day.blockId,
-        name = day.name,
         order = day.order,
         sessions = sessions.map { it.toModel() }
     )
@@ -81,7 +77,6 @@ data class DayWithSessionsWithExercisesWithMovementAndSetsEntity(
     fun toModel() = DayWithSessions(
         id = day.id,
         blockId = day.blockId,
-        name = day.name,
         order = day.order,
         sessions = sessionsWithExercisesWithMovementAndSets.map { it.toModel() }
     )

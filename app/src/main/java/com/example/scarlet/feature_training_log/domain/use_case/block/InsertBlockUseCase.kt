@@ -28,10 +28,7 @@ class InsertBlockUseCase(
 
         var block = Block(name = blockName)
         val days = (1..nbDays).map {
-            Day(
-                name = "Day $it", // No need to localize this string, this is just a placeholder
-                order = it
-            )
+            Day(order = it)
         }
 
         repository.insertBlockWithDays(block, days)

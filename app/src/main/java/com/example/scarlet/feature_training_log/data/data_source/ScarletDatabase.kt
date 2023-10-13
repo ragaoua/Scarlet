@@ -2,6 +2,7 @@ package com.example.scarlet.feature_training_log.data.data_source
 
 import androidx.room.AutoMigration
 import androidx.room.Database
+import androidx.room.DeleteColumn
 import androidx.room.RenameColumn
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
@@ -31,10 +32,11 @@ import com.example.scarlet.feature_training_log.data.data_source.entity.SetEntit
         MovementEntity::class,
         SetEntity::class
     ],
-    version = 4,
+    version = 5,
     autoMigrations = [
         AutoMigration(from = 1, to = 2, spec = ScarletDatabase.Migration1to2::class),
-        AutoMigration(from = 2, to = 3)
+        AutoMigration(from = 2, to = 3),
+        AutoMigration(from = 4, to = 5, spec = ScarletDatabase.Migration4to5::class)
     ],
     exportSchema = true
 )
@@ -60,4 +62,7 @@ abstract class ScarletDatabase : RoomDatabase() {
             }
         }
     }
+
+    @DeleteColumn(tableName = "day", columnName = "name")
+    class Migration4to5: AutoMigrationSpec
 }

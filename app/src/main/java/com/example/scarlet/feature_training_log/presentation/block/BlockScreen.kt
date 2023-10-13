@@ -391,7 +391,7 @@ private fun DayNavigationBottomBar(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = day.name,
+                        text = stringResource(R.string.day, day.order),
                         style = MaterialTheme.typography.titleMedium
                     )
                     Text(
