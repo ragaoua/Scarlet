@@ -11,12 +11,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -58,9 +59,9 @@ fun Exercise(
          * EXERCISE HEADER
          *************************************************************************/
         Row(
-            modifier =
-                Modifier.conditional(!isInSessionEditMode) {
-                    Modifier.clickable { onEvent(BlockEvent.ToggleExerciseDetail(exercise.id)) }
+            modifier = Modifier
+                .conditional(!isInSessionEditMode) {
+                    clickable { onEvent(BlockEvent.ToggleExerciseDetail(exercise.id)) }
                 }
                 .fillMaxWidth()
                 .padding(8.dp)
@@ -68,6 +69,20 @@ fun Exercise(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
+            if(!isInSessionEditMode) {
+                if (isExerciseDetailExpandedById[exercise.id] == true) {
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowDown,
+                        contentDescription = stringResource(R.string.collapse_details)
+                    )
+                } else {
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowRight,
+                        contentDescription = stringResource(R.string.expand_details)
+                    )
+                }
+                Spacer(modifier = Modifier.width(4.dp))
+            }
             Text(
                 modifier = Modifier.weight(1f),
                 text = exercise.movement.name,
@@ -96,18 +111,6 @@ fun Exercise(
                             contentDescription = stringResource(R.string.delete)
                         )
                     }
-                }
-            } else {
-                if (isExerciseDetailExpandedById[exercise.id] == true) {
-                    Icon(
-                        imageVector = Icons.Default.KeyboardArrowUp,
-                        contentDescription = stringResource(R.string.collapse_details)
-                    )
-                } else {
-                    Icon(
-                        imageVector = Icons.Default.KeyboardArrowDown,
-                        contentDescription = stringResource(R.string.expand_details)
-                    )
                 }
             }
         }
