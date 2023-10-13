@@ -83,31 +83,6 @@ fun Session(
                 )
                 Row (verticalAlignment = Alignment.CenterVertically) {
                     AnimatedVisibility (visible = !isInSessionEditMode) {
-                        IconButton(onClick = {
-                            onEvent(BlockEvent.ToggleSessionExercisesDetails(session.id))
-                        }) {
-                            AnimatedContent(
-                                targetState = isExerciseDetailExpandedById.none { it.value },
-                                label = "Collapse/expand sessions exercises icon",
-                                transitionSpec = {
-                                    scaleIn() togetherWith scaleOut()
-                                }
-                            ) { allExercisesCollapsed ->
-                                if (allExercisesCollapsed) {
-                                    Icon(
-                                        imageVector = Icons.Default.UnfoldMore,
-                                        contentDescription = stringResource(R.string.expand_session_exercises_details)
-                                    )
-                                } else {
-                                    Icon(
-                                        imageVector = Icons.Default.UnfoldLess,
-                                        contentDescription = stringResource(R.string.collapse_session_exercises_details)
-                                    )
-                                }
-                            }
-                        }
-                    }
-                    AnimatedVisibility (visible = isInSessionEditMode) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             IconButton(onClick = {
                                 onEvent(BlockEvent.ShowSessionDatePickerDialog(session.toSession()))
@@ -118,13 +93,38 @@ fun Session(
                                 )
                             }
                             IconButton(onClick = {
-                                onEvent(BlockEvent.DeleteSession(session.toSession()))
+                                onEvent(BlockEvent.ToggleSessionExercisesDetails(session.id))
                             }) {
-                                Icon(
-                                    imageVector = Icons.Default.Delete,
-                                    contentDescription = stringResource(R.string.delete)
-                                )
+                                AnimatedContent(
+                                    targetState = isExerciseDetailExpandedById.none { it.value },
+                                    label = "Collapse/expand sessions exercises icon",
+                                    transitionSpec = {
+                                        scaleIn() togetherWith scaleOut()
+                                    }
+                                ) { allExercisesCollapsed ->
+                                    if (allExercisesCollapsed) {
+                                        Icon(
+                                            imageVector = Icons.Default.UnfoldMore,
+                                            contentDescription = stringResource(R.string.expand_session_exercises_details)
+                                        )
+                                    } else {
+                                        Icon(
+                                            imageVector = Icons.Default.UnfoldLess,
+                                            contentDescription = stringResource(R.string.collapse_session_exercises_details)
+                                        )
+                                    }
+                                }
                             }
+                        }
+                    }
+                    AnimatedVisibility (visible = isInSessionEditMode) {
+                        IconButton(onClick = {
+                            onEvent(BlockEvent.DeleteSession(session.toSession()))
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = stringResource(R.string.delete)
+                            )
                         }
                     }
                 }
