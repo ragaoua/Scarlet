@@ -39,8 +39,8 @@ class CopyPrecedingSetFieldUseCase(
         repository.updateSet(
             when (fieldToCopy) {
                 SetFieldType.REPS -> set.copy(reps = precedingSet.reps)
-                SetFieldType.WEIGHT -> set.copy(weight = precedingSet.weight)
-                SetFieldType.RPE -> set.copy(rating = precedingSet.rating)
+                SetFieldType.LOAD -> set.copy(load = precedingSet.load)
+                SetFieldType.RATING -> set.copy(rating = precedingSet.rating)
             }
         )
 

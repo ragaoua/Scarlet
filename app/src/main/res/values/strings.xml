@@ -53,7 +53,7 @@
     <string name="new_exercise">New Exercise</string>
     <string name="set">Set</string>
     <string name="reps">Reps</string>
-    <string name="weight">Weight</string>
+    <string name="load">Load</string>
     <string name="rpe">RPE</string>
     <string name="rir">RIR</string>
     <string name="collapse_details">Collapse exercise details</string>

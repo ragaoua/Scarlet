@@ -464,7 +464,7 @@ class BlockViewModel @Inject constructor(
                     .flatMap { it.sets }
                     .find { it.exerciseId == event.set.exerciseId &&
                             it.order == event.set.order - 1
-                    }?.weight
+                    }?.load
                     ?: return
                 _state.update { it.copy(
                     loadCalculationDialog = BlockUiState.LoadCalculationDialogState(
@@ -517,7 +517,7 @@ class BlockViewModel @Inject constructor(
                 viewModelScope.launch(Dispatchers.IO) {
                     useCases.updateSet(
                         set = state.value.loadCalculationDialog?.set?.copy(
-                            weight = state.value.loadCalculationDialog?.calculatedLoad
+                            load = state.value.loadCalculationDialog?.calculatedLoad
                         ) ?: return@launch
                     )
                     _state.update { it.copy(

@@ -7,6 +7,6 @@ data class Set(
     val exerciseId: Long = 0,
     val order: Int = 0,
     val reps: Int? = null,
-    val weight: Float? = null,
+    val load: Float? = null,
     val rating: Float? = null
 ) : Serializable

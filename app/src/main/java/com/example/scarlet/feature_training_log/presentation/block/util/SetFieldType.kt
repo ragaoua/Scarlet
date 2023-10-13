@@ -5,6 +5,6 @@ package com.example.scarlet.feature_training_log.presentation.block.util
  */
 enum class SetFieldType {
     REPS,
-    WEIGHT,
-    RPE
+    LOAD,
+    RATING
 }

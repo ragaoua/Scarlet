@@ -26,7 +26,7 @@ import com.example.scarlet.feature_training_log.presentation.block.util.SetField
  * @param modifier modifier for the row
  * @param set set to be displayed
  * @param isCopyRepsIconVisible whether the copy icon should be visible for the reps field
- * @param isCopyWeightIconVisible whether the copy icon should be visible for the weight field
+ * @param isCopyLoadIconVisible whether the copy icon should be visible for the load field
  * @param isLastSet whether the set is the last one of the exercise. This is used to determine
  * the ime action of the last field
  * @param onEvent event to be triggered when the user interacts with the row
@@ -38,7 +38,7 @@ fun ExerciseSetRow(
     modifier: Modifier = Modifier,
     set: Set,
     isCopyRepsIconVisible: Boolean,
-    isCopyWeightIconVisible: Boolean,
+    isCopyLoadIconVisible: Boolean,
     isLastSet: Boolean,
     onEvent: (BlockEvent) -> Unit
 ) {
@@ -84,30 +84,30 @@ fun ExerciseSetRow(
         SetTextField(
             modifier = Modifier
                 .padding(horizontal = 2.dp)
-                .weight(SetFieldRatio.WEIGHT),
-            originalValue = set.weight?.let {
+                .weight(SetFieldRatio.LOAD),
+            originalValue = set.load?.let {
                 if (it % 1 == 0f) {
                     it.toInt().toString()
                 } else it.toString()
             } ?: "",
             onValueChangeCheck = { text ->
                 if (text.isBlank()) true else {
-                    text.toFloatOrNull()?.let { weight ->
-                        weight < 1000
+                    text.toFloatOrNull()?.let { load ->
+                        load < 1000
                     } ?: false // TODO : validate in a use case
                 }
             },
             updateSet = { text ->
                 onEvent(BlockEvent.UpdateSet(
-                    set.copy(weight = text.toFloatOrNull())
+                    set.copy(load = text.toFloatOrNull())
                 ))
             },
             imeAction = ImeAction.Next,
-            onIconClicked = if (isCopyWeightIconVisible) {
+            onIconClicked = if (isCopyLoadIconVisible) {
                 {
                     onEvent(BlockEvent.CopyPreviousSet(
                         set = set,
-                        fieldToCopy = SetFieldType.WEIGHT
+                        fieldToCopy = SetFieldType.LOAD
                     ))
                 }
             } else null,
@@ -119,7 +119,7 @@ fun ExerciseSetRow(
         SetTextField(
             modifier = Modifier
                 .padding(horizontal = 2.dp)
-                .weight(SetFieldRatio.RPE),
+                .weight(SetFieldRatio.RATING),
             originalValue = set.rating?.let {
                 if (it % 1 == 0f) {
                     it.toInt().toString()
@@ -127,8 +127,8 @@ fun ExerciseSetRow(
             } ?: "",
             onValueChangeCheck = { text ->
                 if (text.isBlank()) true else {
-                    text.toFloatOrNull()?.let { rpe ->
-                        rpe <= 10
+                    text.toFloatOrNull()?.let { rating ->
+                        rating <= 10
                     } ?: false // TODO : validate in a use case
                 }
             },

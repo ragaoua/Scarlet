@@ -27,7 +27,7 @@ data class SetEntity(
     val exerciseId: Long = 0,
     val order: Int = 0,
     val reps: Int? = null,
-    val weight: Float? = null,
+    val load: Float? = null,
     val rating: Float? = null
 ) {
 
@@ -36,7 +36,7 @@ data class SetEntity(
         exerciseId = set.exerciseId,
         order = set.order,
         reps = set.reps,
-        weight = set.weight,
+        load = set.load,
         rating = set.rating
     )
 
@@ -45,7 +45,7 @@ data class SetEntity(
         exerciseId = exerciseId,
         order = order,
         reps = reps,
-        weight = weight,
+        load = load,
         rating = rating
     )
 }

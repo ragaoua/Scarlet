@@ -176,11 +176,11 @@ fun Exercise(
                             isCopyRepsIconVisible = previousSet?.let {
                                 it.reps != null && it.reps != set.reps
                             } ?: false,
-                            isCopyWeightIconVisible = previousSet?.let {
+                            isCopyLoadIconVisible = previousSet?.let {
                                 // contrary to reps, here we want to display the icon even if the
-                                // weight is the same, because of the long click feature that
+                                // load is the same, because of the long click feature that
                                 // displays the load calculation dialog
-                                it.weight != null
+                                it.load != null
                             } ?: false,
                             isLastSet = set == exercise.sets.last(),
                             onEvent = onEvent

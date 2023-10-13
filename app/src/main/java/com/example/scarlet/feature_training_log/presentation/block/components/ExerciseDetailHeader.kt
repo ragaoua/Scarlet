@@ -38,15 +38,15 @@ fun ExerciseDetailHeader(
             )
         }
 
-        Box(modifier = Modifier.weight(SetFieldRatio.WEIGHT)) {
+        Box(modifier = Modifier.weight(SetFieldRatio.LOAD)) {
             Text(
-                text = stringResource(R.string.weight),
+                text = stringResource(R.string.load),
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.align(Alignment.Center)
             )
         }
 
-        Box(modifier = Modifier.weight(SetFieldRatio.RPE)) {
+        Box(modifier = Modifier.weight(SetFieldRatio.RATING)) {
             LabeledSwitch(
                 modifier = Modifier.align(Alignment.Center),
                 lText = stringResource(R.string.rpe),

@@ -32,11 +32,12 @@ import com.example.scarlet.feature_training_log.data.data_source.entity.SetEntit
         MovementEntity::class,
         SetEntity::class
     ],
-    version = 5,
+    version = 6,
     autoMigrations = [
         AutoMigration(from = 1, to = 2, spec = ScarletDatabase.Migration1to2::class),
         AutoMigration(from = 2, to = 3),
-        AutoMigration(from = 4, to = 5, spec = ScarletDatabase.Migration4to5::class)
+        AutoMigration(from = 4, to = 5, spec = ScarletDatabase.Migration4to5::class),
+        AutoMigration(from = 5, to = 6, spec = ScarletDatabase.Migration5to6::class)
     ],
     exportSchema = true
 )
@@ -65,4 +66,7 @@ abstract class ScarletDatabase : RoomDatabase() {
 
     @DeleteColumn(tableName = "day", columnName = "name")
     class Migration4to5: AutoMigrationSpec
+
+    @RenameColumn(tableName = "set", fromColumnName = "weight", toColumnName = "load")
+    class Migration5to6: AutoMigrationSpec
 }
