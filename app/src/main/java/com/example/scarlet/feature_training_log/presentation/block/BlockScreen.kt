@@ -1,5 +1,6 @@
 package com.example.scarlet.feature_training_log.presentation.block
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -107,7 +108,7 @@ fun Screen(
     uiActions: Flow<BlockViewModel.UiAction>
 ) {
     /************************************************************************
-     * Treating UI actions from the ViewModel
+     * Processing UI actions from the ViewModel
      ************************************************************************/
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
@@ -140,6 +141,15 @@ fun Screen(
                 }
             }
         }
+    }
+
+    /************************************************************************
+     * Back button handling
+     ************************************************************************/
+    BackHandler(
+        enabled = state.isInSessionEditMode
+    ) {
+        onEvent(BlockEvent.ToggleSessionEditMode)
     }
 
     /************************************************************************
