@@ -139,6 +139,8 @@ fun MovementSelectionSheet(
                                 .combinedClickable(
                                     onClick = { onEvent(BlockEvent.SelectMovement(movement)) },
                                     onLongClick = {
+                                        // do not allow superset selection when
+                                        // editing an exercise's movement
                                         if (sheetState.exercise == null &&
                                             !sheetState.isInSupersetSelectionMode
                                         ) {
