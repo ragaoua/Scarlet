@@ -26,7 +26,8 @@ class GetDaysWithSessionsWithExercisesWithMovementAndSetsByBlockIdUseCase(
             Flow<Resource<List<DayWithSessions<SessionWithExercises<ExerciseWithMovementAndSets>>>>> {
         return repository.getDaysWithSessionsWithExercisesWithMovementAndSetsByBlockId(blockId)
             .map { list ->
-                list.map { day ->
+                list.sortedBy { it.order }
+                    .map { day ->
                     day.copy(
                         sessions = day.sessions
                             .sortedWith(
