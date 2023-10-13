@@ -46,6 +46,7 @@ fun Session(
     modifier: Modifier = Modifier,
     session: SessionWithExercises<ExerciseWithMovementAndSets>,
     isExerciseDetailExpandedById: Map<Long, Boolean>,
+    expandedDropdownMenuExerciseId: Long?,
     isInSessionEditMode: Boolean,
     onEvent: (BlockEvent) -> Unit
 ) {
@@ -139,17 +140,20 @@ fun Session(
                             session = session,
                             exercises = exercises,
                             isExerciseDetailExpandedById = isExerciseDetailExpandedById,
+                            expandedDropdownMenuExerciseId = expandedDropdownMenuExerciseId,
                             isInSessionEditMode = isInSessionEditMode,
                             onEvent = onEvent
                         )
                     } else {
+                        val exercise = exercises.first()
                         Exercise(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 8.dp),
                             session = session,
-                            exercise = exercises.first(),
+                            exercise = exercise,
                             isExerciseDetailExpandedById = isExerciseDetailExpandedById,
+                            isDropdownMenuExpanded = expandedDropdownMenuExerciseId == exercise.id,
                             isInSessionEditMode = isInSessionEditMode,
                             onEvent = onEvent
                         )

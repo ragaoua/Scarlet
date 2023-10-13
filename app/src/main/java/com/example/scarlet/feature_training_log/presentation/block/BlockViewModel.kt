@@ -197,12 +197,23 @@ class BlockViewModel @Inject constructor(
                         }.toMap()
                 )}
             }
+            is BlockEvent.ShowExerciseDropdownMenu -> {
+                _state.update { it.copy(
+                    expandedDropdownMenuExerciseId = event.exerciseId
+                )}
+            }
+            BlockEvent.DismissExerciseDropdownMenu -> {
+                _state.update { it.copy(
+                    expandedDropdownMenuExerciseId = null
+                )}
+            }
             is BlockEvent.ShowMovementSelectionSheet -> {
                 _state.update { it.copy(
                     movementSelectionSheet = BlockUiState.MovementSelectionSheetState(
                         session = event.session,
                         exercise = event.exercise
-                    )
+                    ),
+                    expandedDropdownMenuExerciseId = null
                 )}
                 updateMovementNameFilter("")
             }
@@ -397,6 +408,9 @@ class BlockViewModel @Inject constructor(
                         }
                     ))
                 }
+                _state.update { state -> state.copy(
+                    expandedDropdownMenuExerciseId = null
+                )}
             }
             is BlockEvent.UpdateRatingType -> {
                 viewModelScope.launch(Dispatchers.IO) {

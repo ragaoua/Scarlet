@@ -33,6 +33,8 @@ sealed interface BlockEvent {
     data class ToggleExerciseDetail(val exerciseId: Long) : BlockEvent
     data class ToggleSessionExercisesDetails(val sessionId: Long) : BlockEvent
 
+    data class ShowExerciseDropdownMenu(val exerciseId: Long) : BlockEvent
+    object DismissExerciseDropdownMenu : BlockEvent
     data class ShowMovementSelectionSheet(
         val session: SessionWithExercises<out IExercise>,
         val exercise: Exercise? = null

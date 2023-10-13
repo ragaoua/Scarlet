@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,6 +19,9 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -43,6 +47,7 @@ fun Exercise(
     session: SessionWithExercises<out IExercise>,
     exercise: ExerciseWithMovementAndSets,
     isExerciseDetailExpandedById: Map<Long, Boolean>,
+    isDropdownMenuExpanded: Boolean,
     isInSessionEditMode: Boolean,
     onEvent: (BlockEvent) -> Unit
 ) {
@@ -64,8 +69,7 @@ fun Exercise(
                     clickable { onEvent(BlockEvent.ToggleExerciseDetail(exercise.id)) }
                 }
                 .fillMaxWidth()
-                .padding(8.dp)
-                .padding(start = 4.dp),
+                .padding(start = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -88,27 +92,50 @@ fun Exercise(
                 text = exercise.movement.name,
                 style = MaterialTheme.typography.titleLarge
             )
-            if(isInSessionEditMode) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+            if(!isInSessionEditMode) {
+                Box {
                     IconButton(onClick = {
-                        onEvent(BlockEvent.ShowMovementSelectionSheet(
-                            session = session,
-                            exercise = exercise.toExercise()
-                        ))
+                        onEvent(BlockEvent.ShowExerciseDropdownMenu(exercise.id))
                     }) {
                         Icon(
-                            imageVector = Icons.Default.Edit,
+                            imageVector = Icons.Default.MoreVert,
                             contentDescription = stringResource(R.string.select_movement)
                         )
                     }
-                    IconButton(onClick = {
-                        onEvent(BlockEvent.DeleteExercise(exercise))
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.Delete,
-                            contentDescription = stringResource(R.string.delete)
+                    DropdownMenu(
+                        expanded = isDropdownMenuExpanded,
+                        onDismissRequest = { onEvent(BlockEvent.DismissExerciseDropdownMenu) }
+                    ) {
+                        DropdownMenuItem(
+                            text = {
+                                Row (verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = stringResource(R.string.delete)
+                                    )
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text(stringResource(R.string.delete))
+                                }
+                            },
+                            onClick = { onEvent(BlockEvent.DeleteExercise(exercise)) }
+                        )
+                        DropdownMenuItem(
+                            text = {
+                                Row (verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(
+                                        imageVector = Icons.Default.Edit,
+                                        contentDescription = stringResource(R.string.edit_movement)
+                                    )
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text(stringResource(R.string.edit_movement))
+                                }
+                            },
+                            onClick = {
+                                onEvent(BlockEvent.ShowMovementSelectionSheet(
+                                    session = session,
+                                    exercise = exercise.toExercise()
+                                ))
+                            }
                         )
                     }
                 }

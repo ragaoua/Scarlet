@@ -18,6 +18,8 @@ data class BlockUiState (
     val selectedDayId: Long = days.firstOrNull()?.id ?: 0,
     val editBlockSheet: EditBlockSheetState? = null, // null means the sheet is hidden
 
+    val expandedDropdownMenuExerciseId: Long? = null, // null means no exercise dropdown menu is expanded
+
     /** Sessions */
     val sessionIndexScrollPositionByDayId: Map<Long, Int> = emptyMap(),
     val isInSessionEditMode: Boolean = false,

@@ -199,6 +199,7 @@ fun Screen(
                                         .padding(8.dp),
                                     session = session,
                                     isExerciseDetailExpandedById = state.isExerciseDetailExpandedById,
+                                    expandedDropdownMenuExerciseId = state.expandedDropdownMenuExerciseId,
                                     isInSessionEditMode = state.isInSessionEditMode,
                                     onEvent = onEvent
                                 )

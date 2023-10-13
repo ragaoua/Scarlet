@@ -22,6 +22,7 @@ fun Superset(
     session: SessionWithExercises<out IExercise>,
     exercises: List<ExerciseWithMovementAndSets>,
     isExerciseDetailExpandedById: Map<Long, Boolean>,
+    expandedDropdownMenuExerciseId: Long?,
     isInSessionEditMode: Boolean,
     onEvent: (BlockEvent) -> Unit
 ) {
@@ -45,6 +46,7 @@ fun Superset(
                     session = session,
                     exercise = exercise,
                     isExerciseDetailExpandedById = isExerciseDetailExpandedById,
+                    isDropdownMenuExpanded = expandedDropdownMenuExerciseId == exercise.id,
                     isInSessionEditMode = isInSessionEditMode,
                     onEvent = onEvent
                 )
