@@ -19,8 +19,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.EditCalendar
-import androidx.compose.material.icons.filled.Expand
-import androidx.compose.material.icons.filled.VerticalAlignCenter
+import androidx.compose.material.icons.filled.UnfoldLess
+import androidx.compose.material.icons.filled.UnfoldMore
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -94,12 +94,12 @@ fun Session(
                             ) { allExercisesCollapsed ->
                                 if (allExercisesCollapsed) {
                                     Icon(
-                                        imageVector = Icons.Default.Expand,
+                                        imageVector = Icons.Default.UnfoldMore,
                                         contentDescription = stringResource(R.string.expand_session_exercises_details)
                                     )
                                 } else {
                                     Icon(
-                                        imageVector = Icons.Default.VerticalAlignCenter,
+                                        imageVector = Icons.Default.UnfoldLess,
                                         contentDescription = stringResource(R.string.collapse_session_exercises_details)
                                     )
                                 }
