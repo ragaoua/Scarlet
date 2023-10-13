@@ -1,6 +1,10 @@
 package com.example.scarlet.feature_training_log.presentation.block.components
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +20,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.EditCalendar
 import androidx.compose.material.icons.filled.Expand
+import androidx.compose.material.icons.filled.VerticalAlignCenter
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -80,10 +85,25 @@ fun Session(
                         IconButton(onClick = {
                             onEvent(BlockEvent.ToggleSessionExercisesDetails(session.id))
                         }) {
-                            Icon(
-                                imageVector = Icons.Default.Expand, // TODO change icon when expanded
-                                contentDescription = stringResource(R.string.expand_session_exercises_details) // TODO change description when expanded
-                            )
+                            AnimatedContent(
+                                targetState = isExerciseDetailExpandedById.none { it.value },
+                                label = "Collapse/expand sessions exercises icon",
+                                transitionSpec = {
+                                    scaleIn() togetherWith scaleOut()
+                                }
+                            ) { allExercisesCollapsed ->
+                                if (allExercisesCollapsed) {
+                                    Icon(
+                                        imageVector = Icons.Default.Expand,
+                                        contentDescription = stringResource(R.string.expand_session_exercises_details)
+                                    )
+                                } else {
+                                    Icon(
+                                        imageVector = Icons.Default.VerticalAlignCenter,
+                                        contentDescription = stringResource(R.string.collapse_session_exercises_details)
+                                    )
+                                }
+                            }
                         }
                     }
                     AnimatedVisibility (visible = isInSessionEditMode) {

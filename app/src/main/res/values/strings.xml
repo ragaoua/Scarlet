@@ -58,6 +58,7 @@
     <string name="collapse_details">Collapse exercise details</string>
     <string name="expand_details">Expand exercise details</string>
     <string name="expand_session_exercises_details">Expand all exercises details</string>
+    <string name="collapse_session_exercises_details">Collapse all exercises details</string>
     <string name="exercise_deleted">Exercise deleted</string>
     <string name="add_superset">Add superset</string>
     <string name="superset">Superset</string>
