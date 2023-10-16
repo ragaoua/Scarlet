@@ -5,7 +5,6 @@ import com.example.scarlet.feature_training_log.domain.model.BlockWithDays
 import com.example.scarlet.feature_training_log.domain.model.Day
 import com.example.scarlet.feature_training_log.domain.model.DayWithSessions
 import com.example.scarlet.feature_training_log.domain.model.Exercise
-import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovement
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
 import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Session
@@ -20,7 +19,10 @@ class TestRepository: ScarletRepository {
     private val days = mutableListOf<DayWithSessions<Session>>()
     private val sessions = mutableListOf<Session>()
 
-    override suspend fun insertBlockWithDays(block: Block): Long {
+    override suspend fun insertBlockWithDays(
+        block: Block,
+        days: List<Day>
+    ): Long {
         val blockToBeInserted = block.copy(id = (blocks.size+1).toLong())
 
         blocks.add(blockToBeInserted)
@@ -52,32 +54,23 @@ class TestRepository: ScarletRepository {
         return blocks.find { it.name == name }
     }
 
-    override suspend fun insertDay(day: Day): Long {
-        val dayToBeInserted = day.copy(id = (days.size+1).toLong())
-
-        days.add(
-            DayWithSessions(
-                id = dayToBeInserted.id,
-                blockId = dayToBeInserted.blockId,
-                name = dayToBeInserted.name,
-                order = dayToBeInserted.order,
-                sessions = emptyList()
-            )
-        )
-
-        return dayToBeInserted.id
+    override suspend fun insertBlockWithDaysWithSessionsWithExercisesWithMovementAndSets(
+        block: Block,
+        days: List<Day>,
+        sessions: List<Session>,
+        exercises: List<Exercise>,
+        movements: List<Movement>,
+        sets: List<Set>
+    ): Long {
+        TODO("Not yet implemented")
     }
 
     override suspend fun getDaysByBlockId(blockId: Long): List<Day> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun insertSession(session: Session): Long {
-        val sessionToBeInserted = session.copy(id = (sessions.size+1).toLong())
-
-        sessions.add(sessionToBeInserted)
-
-        return sessionToBeInserted.id
+    override fun getDaysWithSessionsWithExercisesWithMovementAndSetsByBlockId(blockId: Long): Flow<List<DayWithSessions<SessionWithExercises<ExerciseWithMovementAndSets>>>> {
+        TODO("Not yet implemented")
     }
 
     override suspend fun updateSession(session: Session) {
@@ -88,12 +81,31 @@ class TestRepository: ScarletRepository {
         TODO("Not yet implemented")
     }
 
-    override fun getDaysWithSessionsWithExercisesWithMovementAndSetsByBlockId(blockId: Long):
-            Flow<List<DayWithSessions<SessionWithExercises<ExerciseWithMovement>>>> {
+    override suspend fun getSessionsWithExercisesByDayId(dayId: Long): List<SessionWithExercises<Exercise>> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun insertExerciseWhileSettingOrder(exercise: Exercise): Long {
+    override suspend fun insertSessionWithExercises(
+        session: Session,
+        exercises: List<Exercise>
+    ): Long {
+        val sessionToBeInserted = session.copy(id = (sessions.size+1).toLong())
+
+        sessions.add(sessionToBeInserted)
+
+        return sessionToBeInserted.id
+    }
+
+    override suspend fun insertSessionWithExercisesWithMovementAndSets(
+        session: Session,
+        exercises: List<Exercise>,
+        movements: List<Movement>,
+        sets: List<Set>
+    ): Long {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun insertExercisesWhileSettingOrder(exercises: List<Exercise>) {
         TODO("Not yet implemented")
     }
 
@@ -105,8 +117,23 @@ class TestRepository: ScarletRepository {
         TODO("Not yet implemented")
     }
 
-    override fun getExercisesWithMovementAndSetsBySessionId(sessionId: Long):
-            Flow<List<ExerciseWithMovementAndSets>> {
+    override suspend fun getExercisesWithMovementAndSetsBySessionId(sessionId: Long): List<ExerciseWithMovementAndSets> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun insertExerciseWithMovementAndSets(
+        exercises: Exercise,
+        movements: Movement,
+        sets: List<Set>
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun insertSupersetExerciseWithMovementAndSets(
+        exercises: Exercise,
+        movements: Movement,
+        sets: List<Set>
+    ) {
         TODO("Not yet implemented")
     }
 
@@ -118,7 +145,11 @@ class TestRepository: ScarletRepository {
         TODO("Not yet implemented")
     }
 
-    override suspend fun deleteSet(set: Set) {
+    override suspend fun deleteSetAndUpdateSubsequentSetsOrder(set: Set) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun restoreSet(set: Set) {
         TODO("Not yet implemented")
     }
 
@@ -126,7 +157,19 @@ class TestRepository: ScarletRepository {
         TODO("Not yet implemented")
     }
 
+    override suspend fun updateMovement(movement: Movement) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteMovement(movement: Movement) {
+        TODO("Not yet implemented")
+    }
+
     override fun getAllMovements(): Flow<List<Movement>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getMovementByName(name: String): Movement? {
         TODO("Not yet implemented")
     }
 }
