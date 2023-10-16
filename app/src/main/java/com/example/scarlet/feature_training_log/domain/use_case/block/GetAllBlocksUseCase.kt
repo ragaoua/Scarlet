@@ -13,26 +13,23 @@ class GetAllBlocksUseCase(
 ) {
 
     /**
-     * Retrieve a list of all blocks
+     * Retrieve a list of all blocks with all days and sessions.
+     * The block are sorted by latest session's date descending then by id descending.
+     * The sessions are sorted by date.
      *
-     * @return a flow of resources with an error or data (list of blocks)
+     * @return a flow of resources data (list of blocks)
      */
     operator fun invoke(): Flow<Resource<List<BlockWithDays<DayWithSessions<Session>>>>> {
         return repository.getAllBlocks()
             .map { blocks ->
-                blocks.map { block ->
-                    block.copy(
-                        days = block.days.map {day ->
-                            day.copy(
-                                sessions = day.sessions.sortedBy { it.date }
-                            )
-                        }
-                    )
-                }
-                .sortedWith(compareByDescending<BlockWithDays<DayWithSessions<Session>>> { block ->
-                    block.days.flatMap { it.sessions }.lastOrNull()?.date
-                }
-                    .thenByDescending { block -> block.id }
+                blocks.map { block -> block.copy(
+                    days = block.days.map { day -> day.copy(
+                        sessions = day.sessions.sortedBy { it.date }
+                    )}
+                )}.sortedWith(
+                    compareByDescending<BlockWithDays<DayWithSessions<Session>>> { block ->
+                        block.days.flatMap { it.sessions }.maxOfOrNull { it.date }
+                    }.thenByDescending { block -> block.id }
                 ).let { Resource.Success(it) }
             }
     }
