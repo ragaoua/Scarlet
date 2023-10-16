@@ -15,6 +15,7 @@ import com.example.scarlet.feature_training_log.data.data_source.entity.SetEntit
 @Dao
 interface ExerciseDao {
 
+    @Transaction
     @Query("SELECT * FROM exercise WHERE exercise.sessionId = :sessionId")
     suspend fun getExercisesWithMovementAndSetsBySessionId(sessionId: Long):
             List<ExerciseWithMovementAndSetsEntity>

@@ -42,6 +42,7 @@ interface SessionDao {
     @Delete
     suspend fun deleteSession(session: SessionEntity)
 
+    @Transaction
     @Query("SELECT * FROM session WHERE dayId = :dayId")
     suspend fun getSessionsWithExercisesByDayId(dayId: Long): List<SessionWithExercisesEntity>
 
