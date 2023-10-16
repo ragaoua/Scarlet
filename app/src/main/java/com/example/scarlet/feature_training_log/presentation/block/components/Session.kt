@@ -96,7 +96,9 @@ fun Session(
                                 onEvent(BlockEvent.ToggleSessionExercisesDetails(session.id))
                             }) {
                                 AnimatedContent(
-                                    targetState = isExerciseDetailExpandedById.none { it.value },
+                                    targetState = session.exercises.none {
+                                        isExerciseDetailExpandedById[it.id] == true
+                                    },
                                     label = "Collapse/expand sessions exercises icon",
                                     transitionSpec = {
                                         scaleIn() togetherWith scaleOut()
