@@ -88,7 +88,9 @@ fun Exercise(
                 Spacer(modifier = Modifier.width(4.dp))
             }
             Text(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(vertical = 4.dp),
                 text = exercise.movement.name,
                 style = MaterialTheme.typography.titleLarge
             )
