@@ -12,20 +12,24 @@ import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
 
+/**
+ * Inserts a block with an empty name and checks that an error is returned
+ * Inserts a block with a name that already exists and checks that an error is returned
+ * Inserts a block with a name that doesn't exist and checks that an id is returned
+ */
 class InsertBlockUseCaseTest {
 
-    private lateinit var insertBlock: InsertBlockUseCase
-    private lateinit var repository: ScarletRepository
-    private lateinit var validateBlockName: ValidateBlockNameHelper
+    private val repository: ScarletRepository = TestRepository()
+    private val validateBlockName: ValidateBlockNameHelper = ValidateBlockNameHelper(repository)
+    private val insertBlock = InsertBlockUseCase(repository, validateBlockName)
 
     @Before
     fun setUp() {
-        repository = TestRepository()
-        validateBlockName = ValidateBlockNameHelper(repository)
-        insertBlock = InsertBlockUseCase(repository, validateBlockName)
-
         runBlocking {
-            repository.insertBlockWithDays(Block(name = "Block A"))
+            repository.insertBlockWithDays(
+                block = Block(name = "Block A"),
+                days = emptyList()
+            )
         }
     }
 
@@ -40,9 +44,7 @@ class InsertBlockUseCaseTest {
                     )
                 } ?: fail("No error returned when inserting a block with an empty name")
             }
-        }
 
-        runBlocking {
             insertBlock("Block A", 1).also { resource ->
                 resource.error?.let { error ->
                     assertTrue(
@@ -51,9 +53,7 @@ class InsertBlockUseCaseTest {
                     )
                 } ?: fail("No error returned when inserting a block with an already used name")
             }
-        }
 
-        runBlocking {
             insertBlock("MyBlock", 3).also { resource ->
                 resource.data ?: fail("No id returned when inserting")
                 // TODO test that the block has been inserted ?
