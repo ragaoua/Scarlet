@@ -154,7 +154,7 @@ fun Session(
                                 .padding(horizontal = 8.dp),
                             session = session,
                             exercise = exercise,
-                            isExerciseDetailExpandedById = isExerciseDetailExpandedById,
+                            isExerciseDetailExpanded = isExerciseDetailExpandedById[exercise.id] == true,
                             isDropdownMenuExpanded = expandedDropdownMenuExerciseId == exercise.id,
                             isInSessionEditMode = isInSessionEditMode,
                             onEvent = onEvent

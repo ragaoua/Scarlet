@@ -46,7 +46,7 @@ fun Exercise(
     modifier: Modifier = Modifier,
     session: SessionWithExercises<out IExercise>,
     exercise: ExerciseWithMovementAndSets,
-    isExerciseDetailExpandedById: Map<Long, Boolean>,
+    isExerciseDetailExpanded: Boolean,
     isDropdownMenuExpanded: Boolean,
     isInSessionEditMode: Boolean,
     onEvent: (BlockEvent) -> Unit
@@ -74,7 +74,7 @@ fun Exercise(
             verticalAlignment = Alignment.CenterVertically
         ) {
             if(!isInSessionEditMode) {
-                if (isExerciseDetailExpandedById[exercise.id] == true) {
+                if (isExerciseDetailExpanded) {
                     Icon(
                         imageVector = Icons.Default.KeyboardArrowDown,
                         contentDescription = stringResource(R.string.collapse_details)
@@ -85,8 +85,8 @@ fun Exercise(
                         contentDescription = stringResource(R.string.expand_details)
                     )
                 }
-                Spacer(modifier = Modifier.width(4.dp))
             }
+            Spacer(modifier = Modifier.width(4.dp))
             Text(
                 modifier = Modifier
                     .weight(1f)
@@ -148,7 +148,7 @@ fun Exercise(
          * EXERCISE DETAIL
          *************************************************************************/
         AnimatedVisibility(
-            visible = (isExerciseDetailExpandedById[exercise.id] == true) && !isInSessionEditMode
+            visible = (isExerciseDetailExpanded) && !isInSessionEditMode
         ) {
             HorizontalDivider(modifier = Modifier.fillMaxWidth())
             Column(
