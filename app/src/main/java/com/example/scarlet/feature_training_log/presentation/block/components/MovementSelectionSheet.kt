@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -202,23 +203,32 @@ fun MovementSelectionSheet(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            val focusRequester = remember { FocusRequester() }
-            SideEffect { focusRequester.requestFocus() }
-
-            OutlinedTextField(
-                value = sheetState.movementNameFilter,
-                onValueChange = {
-                    onEvent(BlockEvent.FilterMovementsByName(it))
-                },
-                placeholder = {
-                    Text(stringResource(R.string.enter_movement))
-                },
-                singleLine = true,
-                modifier = Modifier
-                    .focusRequester(focusRequester)
-                    .fillMaxWidth()
-                    .padding(8.dp)
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                val focusRequester = remember { FocusRequester() }
+                SideEffect { focusRequester.requestFocus() }
+                OutlinedTextField(
+                    value = sheetState.movementNameFilter,
+                    onValueChange = {
+                        onEvent(BlockEvent.FilterMovementsByName(it))
+                    },
+                    placeholder = {
+                        Text(stringResource(R.string.enter_movement))
+                    },
+                    singleLine = true,
+                    modifier = Modifier
+                        .focusRequester(focusRequester)
+                        .padding(start = 8.dp)
+                        .weight(1f)
+                )
+                IconButton(onClick = {
+                    onEvent(BlockEvent.FilterMovementsByName(""))
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.Clear,
+                        contentDescription = stringResource(R.string.clear)
+                    )
+                }
+            }
         }
     }
 }
