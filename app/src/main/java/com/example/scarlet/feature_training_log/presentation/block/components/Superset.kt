@@ -13,14 +13,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
-import com.example.scarlet.feature_training_log.domain.model.IExercise
-import com.example.scarlet.feature_training_log.domain.model.SessionWithExercises
 import com.example.scarlet.feature_training_log.presentation.block.BlockEvent
 
 @Composable
 fun Superset(
-    session: SessionWithExercises<out IExercise>,
     exercises: List<ExerciseWithMovementAndSets>,
+    lastExerciseOrder: Int,
     isExerciseDetailExpandedById: Map<Long, Boolean>,
     expandedDropdownMenuExerciseId: Long?,
     isInSessionEditMode: Boolean,
@@ -43,8 +41,9 @@ fun Superset(
         ) {
             exercises.forEach { exercise ->
                 Exercise(
-                    session = session,
                     exercise = exercise,
+                    lastExerciseOrder = lastExerciseOrder,
+                    lastSupersetOrder = exercises.last().supersetOrder,
                     isExerciseDetailExpanded = isExerciseDetailExpandedById[exercise.id] == true,
                     isDropdownMenuExpanded = expandedDropdownMenuExerciseId == exercise.id,
                     isInSessionEditMode = isInSessionEditMode,

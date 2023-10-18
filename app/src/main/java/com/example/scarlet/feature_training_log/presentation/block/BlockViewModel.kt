@@ -210,7 +210,7 @@ class BlockViewModel @Inject constructor(
             is BlockEvent.ShowMovementSelectionSheet -> {
                 _state.update { it.copy(
                     movementSelectionSheet = BlockUiState.MovementSelectionSheetState(
-                        session = event.session,
+                        sessionId = event.sessionId,
                         exercise = event.exercise
                     ),
                     expandedDropdownMenuExerciseId = null
@@ -343,7 +343,7 @@ class BlockViewModel @Inject constructor(
                                 )
                             } ?: run {
                                 useCases.insertExercise(
-                                    sessionId = sheet.session.id,
+                                    sessionId = sheet.sessionId,
                                     movementId = event.movement.id
                                 )
                             }
@@ -376,7 +376,7 @@ class BlockViewModel @Inject constructor(
                 state.value.movementSelectionSheet?.let { sheet ->
                     viewModelScope.launch(Dispatchers.IO) {
                         useCases.insertSuperset(
-                            sessionId = sheet.session.id,
+                            sessionId = sheet.sessionId,
                             movementIds = sheet.supersetMovements.map { it.id }
                         )
                     }
@@ -419,6 +419,60 @@ class BlockViewModel @Inject constructor(
                             ratingType = event.ratingType
                         )
                     )
+                }
+            }
+            is BlockEvent.MoveExerciseUp -> {
+                if (event.exercise.order == 1 && event.exercise.supersetOrder == 1) return
+
+                viewModelScope.launch(Dispatchers.IO) {
+                    if (event.exercise.supersetOrder == 1) {
+                        val supersetExercises = state.value.days
+                            .flatMap { it.sessions }
+                            .flatMap { it.exercises }
+                            .filter {
+                                it.sessionId == event.exercise.sessionId &&
+                                    it.order == event.exercise.order
+                            }
+                        useCases.updateExercisesOrder(
+                            exercises = supersetExercises.map { it.toExercise() },
+                            newOrder = event.exercise.order - 1
+                        )
+                    } else {
+                        useCases.updateExerciseSupersetOrder(
+                            exercise = event.exercise,
+                            newSupersetOrder = event.exercise.supersetOrder - 1
+                        )
+                    }
+                }
+            }
+            is BlockEvent.MoveExerciseDown -> {
+                val sessionExercises = state.value.days
+                    .flatMap { it.sessions }
+                    .flatMap { it.exercises }
+                    .filter { it.sessionId == event.exercise.sessionId }
+                val supersetExercises = sessionExercises
+                    .filter { it.order == event.exercise.order }
+                val sessionMaxOrder = sessionExercises.maxOfOrNull { it.order } ?: return
+                val supersetMaxOrder = supersetExercises.maxOfOrNull { it.supersetOrder } ?: return
+
+                if (event.exercise.order == sessionMaxOrder &&
+                    event.exercise.supersetOrder == supersetMaxOrder
+                ) {
+                    return
+                }
+
+                viewModelScope.launch(Dispatchers.IO) {
+                    if (event.exercise.supersetOrder == supersetMaxOrder) {
+                        useCases.updateExercisesOrder(
+                            exercises = supersetExercises.map { it.toExercise() },
+                            newOrder = event.exercise.order + 1
+                        )
+                    } else {
+                        useCases.updateExerciseSupersetOrder(
+                            exercise = event.exercise,
+                            newSupersetOrder = event.exercise.supersetOrder + 1
+                        )
+                    }
                 }
             }
             is BlockEvent.AddSet -> {

@@ -3,11 +3,9 @@ package com.example.scarlet.feature_training_log.presentation.block
 import com.example.scarlet.feature_training_log.domain.model.Day
 import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
-import com.example.scarlet.feature_training_log.domain.model.IExercise
 import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.RatingType
 import com.example.scarlet.feature_training_log.domain.model.Session
-import com.example.scarlet.feature_training_log.domain.model.SessionWithExercises
 import com.example.scarlet.feature_training_log.domain.model.Set
 import com.example.scarlet.feature_training_log.presentation.block.util.SetFieldType
 import java.util.Date
@@ -36,7 +34,7 @@ sealed interface BlockEvent {
     data class ShowExerciseDropdownMenu(val exerciseId: Long) : BlockEvent
     object DismissExerciseDropdownMenu : BlockEvent
     data class ShowMovementSelectionSheet(
-        val session: SessionWithExercises<out IExercise>,
+        val sessionId: Long,
         val exercise: Exercise? = null
     ) : BlockEvent
     object HideMovementSelectionSheet : BlockEvent
@@ -58,6 +56,8 @@ sealed interface BlockEvent {
         val exercise: Exercise,
         val ratingType: RatingType
     ) : BlockEvent
+    data class MoveExerciseUp(val exercise: Exercise) : BlockEvent
+    data class MoveExerciseDown(val exercise: Exercise) : BlockEvent
 
     data class AddSet(val exercise: Exercise) : BlockEvent
     data class UpdateSet(val set: Set) : BlockEvent

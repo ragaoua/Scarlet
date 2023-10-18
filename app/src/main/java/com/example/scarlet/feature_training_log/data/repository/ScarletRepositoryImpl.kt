@@ -164,11 +164,25 @@ class ScarletRepositoryImpl(
         sets: List<Set>
     ) {
         dbInstance.exerciseDao.insertSupersetExerciseWithMovementAndSets(
-            ExerciseEntity(exercises),
-            MovementEntity(movements),
-            sets.map { SetEntity(it) },
-            dbInstance.movementDao,
-            dbInstance.setDao
+            exercise = ExerciseEntity(exercises),
+            movement = MovementEntity(movements),
+            sets = sets.map { SetEntity(it) },
+            movementDao = dbInstance.movementDao,
+            setDao = dbInstance.setDao
+        )
+    }
+
+    override suspend fun updateExerciseOrder(exercises: List<Exercise>, newOrder: Int) {
+        dbInstance.exerciseDao.updateExercisesOrder(
+            exercises = exercises.map { ExerciseEntity(it) },
+            newOrder = newOrder
+        )
+    }
+
+    override suspend fun updateExerciseSupersetOrder(exercise: Exercise, newSupersetOrder: Int) {
+        dbInstance.exerciseDao.updateExerciseSupersetOrder(
+            exercise = ExerciseEntity(exercise),
+            newSupersetOrder = newSupersetOrder
         )
     }
 

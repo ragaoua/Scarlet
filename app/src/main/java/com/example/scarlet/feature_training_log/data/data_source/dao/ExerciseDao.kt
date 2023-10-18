@@ -153,4 +153,134 @@ interface ExerciseDao {
         }
     }
 
+    @Query(
+        """
+        SELECT *
+        FROM exercise
+        WHERE sessionId = :sessionId
+        AND `order` BETWEEN :lowerEndOrder AND :upperEndOrder
+    """
+    )
+    suspend fun getExercisesBySessionIdWhereOrderIsBetween(
+        sessionId: Long,
+        lowerEndOrder: Int,
+        upperEndOrder: Int
+    ): List<ExerciseEntity>
+
+    /**
+     * Update the order of a list of exercises and update
+     * the order of the other exercises if necessary
+     *
+     * Assume the exercises share the same session id and order.
+     * Otherwise, an exception can be thrown as the unique
+     * constraint on (sessionId,order,supersetOrder) can be violated
+     *
+     * @param exercises list of exercises to update
+     * @param newOrder new order of the exercises
+     */
+    @Transaction
+    suspend fun updateExercisesOrder(exercises: List<ExerciseEntity>, newOrder: Int) {
+        exercises.forEach { exercise ->
+            // 1 - Temporarily set the order of the exercise to 0 to avoid unique
+            // constraint violation on (sessionId,order,supersetOrder).
+            updateExercise(exercise.copy(order = 0))
+        }
+
+        exercises.forEach { exercise ->
+            // 2 - Update other exercises orders
+            if (newOrder < exercise.order) {
+                getExercisesBySessionIdWhereOrderIsBetween(
+                    sessionId = exercise.sessionId,
+                    lowerEndOrder = newOrder,
+                    upperEndOrder = exercise.order - 1
+                ).sortedByDescending { it.order } /* Sorting is necessary to avoid unique constraint
+                                                     violation on (sessionId,order,supersetOrder) when
+                                                     updating */
+                    .forEach {
+                        updateExercise(it.copy(order = it.order + 1))
+                    }
+            } else {
+                getExercisesBySessionIdWhereOrderIsBetween(
+                    sessionId = exercise.sessionId,
+                    lowerEndOrder = exercise.order + 1,
+                    upperEndOrder = newOrder
+                ).sortedBy { it.order } /* Sorting is necessary to avoid unique constraint
+                                           violation on (sessionId,order,supersetOrder) when
+                                           updating */
+                    .forEach {
+                        updateExercise(it.copy(order = it.order - 1))
+                    }
+            }
+        }
+
+        exercises.forEach { exercise ->
+            // 3 - Finally update the exercise's order
+            updateExercise(exercise.copy(order = newOrder))
+        }
+    }
+
+    @Query(
+        """
+        SELECT *
+        FROM exercise
+        WHERE sessionId = :sessionId
+        AND `order` = :exerciseOrder
+        AND supersetOrder BETWEEN :lowerEndSupersetOrder AND :upperEndSupersetOrder
+    """
+    )
+    suspend fun getExercisesBySessionIdAndOrderWhereSupersetOrderIsBetween(
+        sessionId: Long,
+        exerciseOrder: Int,
+        lowerEndSupersetOrder: Int,
+        upperEndSupersetOrder: Int
+    ): List<ExerciseEntity>
+
+    /**
+     * Update the supersetOrder of an exercise and update
+     * the supersetOrder of the other exercises if necessary
+     *
+     * @param exercise exercise to update
+     * @param newSupersetOrder new supersetOrder of the exercise
+     */
+    @Transaction
+    suspend fun updateExerciseSupersetOrder(exercise: ExerciseEntity, newSupersetOrder: Int) {
+        // 1 - Temporarily set the superOrder of the exercise to 0 to avoid unique
+        // constraint violation on (sessionId,order,supersetOrder).
+        updateExercise(exercise.copy(supersetOrder = 0))
+
+        // 2 - Update other superset exercises supersetOrders
+        if (newSupersetOrder < exercise.supersetOrder) {
+            getExercisesBySessionIdAndOrderWhereSupersetOrderIsBetween(
+                sessionId = exercise.sessionId,
+                exerciseOrder = exercise.order,
+                lowerEndSupersetOrder = newSupersetOrder,
+                upperEndSupersetOrder = exercise.supersetOrder - 1
+            ).sortedByDescending { it.supersetOrder } /* Sorting is necessary to avoid unique
+                                                         constraint violation on
+                                                         (sessionId,order,supersetOrder) when
+                                                         updating */
+                .forEach {
+                    updateExercise(it.copy(supersetOrder = it.supersetOrder + 1))
+                }
+        } else {
+            getExercisesBySessionIdAndOrderWhereSupersetOrderIsBetween(
+                sessionId = exercise.sessionId,
+                exerciseOrder = exercise.order,
+                lowerEndSupersetOrder = exercise.supersetOrder + 1,
+                upperEndSupersetOrder = newSupersetOrder
+            ).sortedBy { it.supersetOrder } /* Sorting is necessary to avoid unique constraint
+                                       violation on (sessionId,order,supersetOrder) when
+                                       updating */
+                .forEach {
+                    updateExercise(it.copy(supersetOrder = it.supersetOrder - 1))
+                }
+        }
+
+        // 3 - Finally update the exercise's order
+        updateExercise(exercise.copy(supersetOrder = newSupersetOrder))
+    }
+
+
+
+
 }

@@ -19,6 +19,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -36,16 +37,15 @@ import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
 import com.example.scarlet.core.util.conditional
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
-import com.example.scarlet.feature_training_log.domain.model.IExercise
-import com.example.scarlet.feature_training_log.domain.model.SessionWithExercises
 import com.example.scarlet.feature_training_log.presentation.block.BlockEvent
 import com.example.scarlet.feature_training_log.presentation.core.components.SecondaryActionButton
 
 @Composable
 fun Exercise(
     modifier: Modifier = Modifier,
-    session: SessionWithExercises<out IExercise>,
     exercise: ExerciseWithMovementAndSets,
+    lastExerciseOrder: Int,
+    lastSupersetOrder: Int,
     isExerciseDetailExpanded: Boolean,
     isDropdownMenuExpanded: Boolean,
     isInSessionEditMode: Boolean,
@@ -134,12 +134,31 @@ fun Exercise(
                             },
                             onClick = {
                                 onEvent(BlockEvent.ShowMovementSelectionSheet(
-                                    session = session,
+                                    sessionId = exercise.sessionId,
                                     exercise = exercise.toExercise()
                                 ))
                             }
                         )
                     }
+                }
+            } else {
+                IconButton(
+                    onClick = { onEvent(BlockEvent.MoveExerciseDown(exercise.toExercise())) },
+                    enabled = exercise.order < lastExerciseOrder || exercise.supersetOrder < lastSupersetOrder
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowDown,
+                        contentDescription = stringResource(R.string.move_down)
+                    )
+                }
+                IconButton(
+                    onClick = { onEvent(BlockEvent.MoveExerciseUp(exercise.toExercise())) },
+                    enabled = exercise.order > 1 || exercise.supersetOrder > 1
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowUp,
+                        contentDescription = stringResource(R.string.move_up)
+                    )
                 }
             }
         }

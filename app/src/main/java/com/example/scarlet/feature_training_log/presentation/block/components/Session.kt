@@ -134,13 +134,14 @@ fun Session(
             HorizontalDivider()
 
             if (session.exercises.isNotEmpty()) {
+                val lastExerciseOrder = session.exercises.last().order
                 session.exercises.groupBy { it.order }.values.forEach { exercises ->
                     // If there is more than one exercise with the same order,
                     // display them as a superset
                     if (exercises.size > 1) {
                         Superset(
-                            session = session,
                             exercises = exercises,
+                            lastExerciseOrder = lastExerciseOrder,
                             isExerciseDetailExpandedById = isExerciseDetailExpandedById,
                             expandedDropdownMenuExerciseId = expandedDropdownMenuExerciseId,
                             isInSessionEditMode = isInSessionEditMode,
@@ -152,8 +153,9 @@ fun Session(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 8.dp),
-                            session = session,
                             exercise = exercise,
+                            lastExerciseOrder = lastExerciseOrder,
+                            lastSupersetOrder = 1,
                             isExerciseDetailExpanded = isExerciseDetailExpandedById[exercise.id] == true,
                             isDropdownMenuExpanded = expandedDropdownMenuExerciseId == exercise.id,
                             isInSessionEditMode = isInSessionEditMode,
@@ -175,7 +177,7 @@ fun Session(
                     onClick = {
                         onEvent(
                             BlockEvent.ShowMovementSelectionSheet(
-                                session = session
+                                sessionId = session.id
                             )
                         )
                     }

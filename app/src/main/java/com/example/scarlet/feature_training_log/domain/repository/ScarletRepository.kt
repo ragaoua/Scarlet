@@ -76,6 +76,24 @@ interface ScarletRepository {
         sets: List<Set>
     )
 
+    /**
+     * Update the order of a list of exercises and update
+     * the order of the other exercises if necessary
+     *
+     * @param exercises list of exercises to update
+     * @param newOrder new order of the exercises
+     */
+    suspend fun updateExerciseOrder(exercises: List<Exercise>, newOrder: Int)
+
+    /**
+     * Update the supersetOrder of an exercise and update
+     * the supersetOrder of the other exercises if necessary
+     *
+     * @param exercise exercise to update
+     * @param newSupersetOrder new supersetOrder of the exercise
+     */
+    suspend fun updateExerciseSupersetOrder(exercise: Exercise, newSupersetOrder: Int)
+
     ///////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////// SET /////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////

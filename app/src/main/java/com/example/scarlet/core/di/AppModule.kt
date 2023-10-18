@@ -17,7 +17,9 @@ import com.example.scarlet.feature_training_log.domain.use_case.exercise.GetExer
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.InsertExerciseUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.InsertSupersetUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.RestoreExerciseWithMovementAndSetsUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.exercise.UpdateExerciseSupersetOrderUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.UpdateExerciseUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.exercise.UpdateExercisesOrderUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.movement.DeleteMovementUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.movement.GetMovementsFilteredByNameUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.movement.InsertMovementUseCase
@@ -101,6 +103,8 @@ object AppModule {
         insertExercise = InsertExerciseUseCase(repository),
         insertSuperset = InsertSupersetUseCase(repository),
         updateExercise = UpdateExerciseUseCase(repository),
+        updateExercisesOrder = UpdateExercisesOrderUseCase(repository),
+        updateExerciseSupersetOrder = UpdateExerciseSupersetOrderUseCase(repository),
         insertMovement = InsertMovementUseCase(repository, validateMovementName),
         updateMovement = UpdateMovementUseCase(repository, validateMovementName),
         deleteMovement = DeleteMovementUseCase(repository),

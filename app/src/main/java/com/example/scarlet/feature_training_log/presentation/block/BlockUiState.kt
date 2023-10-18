@@ -5,7 +5,6 @@ import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.domain.model.DayWithSessions
 import com.example.scarlet.feature_training_log.domain.model.Exercise
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
-import com.example.scarlet.feature_training_log.domain.model.IExercise
 import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.domain.model.SessionWithExercises
@@ -42,7 +41,7 @@ data class BlockUiState (
 
     data class MovementSelectionSheetState(
         val movements: List<Movement> = emptyList(),
-        val session: SessionWithExercises<out IExercise>,
+        val sessionId: Long,
         val exercise: Exercise? = null,
         val movementNameFilter: String = "",
         val isInSupersetSelectionMode: Boolean = false,
