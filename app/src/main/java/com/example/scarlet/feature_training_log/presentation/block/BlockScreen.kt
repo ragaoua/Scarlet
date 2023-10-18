@@ -300,10 +300,9 @@ private fun BlockFloatingActionButtons(
     state: BlockUiState,
     onEvent: (BlockEvent) -> Unit
 ) {
-    val isImeVisible = WindowInsets.isImeVisible
 
     AnimatedVisibility(
-        visible = state.areFloatingActionButtonsVisible && !isImeVisible,
+        visible = state.areFloatingActionButtonsVisible && !WindowInsets.isImeVisible,
         enter = slideInVertically { it } + scaleIn(),
         exit = slideOutVertically { it } + scaleOut()
     ) {
@@ -374,6 +373,7 @@ private fun BlockTopAppBar(
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun DayNavigationBottomBar(
     state: BlockUiState,
@@ -381,40 +381,47 @@ private fun DayNavigationBottomBar(
 ) {
     if (state.days.size <= 1) return
 
-    NavigationBar {
-        LazyRow(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            items(state.days) { day ->
-                Column(
-                    modifier = Modifier
-                        .clip(MaterialTheme.shapes.small)
-                        .clickable { onEvent(BlockEvent.SelectDay(day.toDay())) }
-                        .background(
-                            if (day.id == state.selectedDayId) {
-                                MaterialTheme.colorScheme.primary
-                            } else Color.Transparent
+    AnimatedVisibility(
+        visible = !WindowInsets.isImeVisible,
+        enter = slideInVertically { it },
+        exit = slideOutVertically { it }
+    ) {
+        NavigationBar {
+            LazyRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                items(state.days) { day ->
+                    Column(
+                        modifier = Modifier
+                            .clip(MaterialTheme.shapes.small)
+                            .clickable { onEvent(BlockEvent.SelectDay(day.toDay())) }
+                            .background(
+                                if (day.id == state.selectedDayId) {
+                                    MaterialTheme.colorScheme.primary
+                                } else Color.Transparent
+                            )
+                            .padding(4.dp)
+                            .widthIn(64.dp, 128.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = stringResource(R.string.day, day.order),
+                            style = MaterialTheme.typography.titleMedium
                         )
-                        .padding(4.dp)
-                        .widthIn(64.dp, 128.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = stringResource(R.string.day, day.order),
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    Text(
-                        text = pluralStringResource(
-                            id = R.plurals.nb_sessions,
-                            count = day.sessions.size,
-                            day.sessions.size
-                        ),
-                        style = MaterialTheme.typography.titleSmall
-                    )
+                        Text(
+                            text = pluralStringResource(
+                                id = R.plurals.nb_sessions,
+                                count = day.sessions.size,
+                                day.sessions.size
+                            ),
+                            style = MaterialTheme.typography.titleSmall
+                        )
+                    }
                 }
             }
         }
     }
+
 }
