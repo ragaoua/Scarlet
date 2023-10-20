@@ -72,6 +72,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -434,7 +435,9 @@ private fun SetTextField(
         singleLine = true,
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Decimal,
-//            imeAction = // TODO
+            imeAction = if (setTextField.isLastField) {
+                ImeAction.Done
+            } else ImeAction.Next
         ),
         keyboardActions = KeyboardActions(
             onAny = { onEvent(BlockEvent.UpdateSet) }

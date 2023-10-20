@@ -482,16 +482,32 @@ class BlockViewModel @Inject constructor(
                 }
             }
             is BlockEvent.ShowSetTextField -> {
+                val lastSetOrder = state.value.days
+                    .flatMap { it.sessions }
+                    .flatMap { it.exercises }
+                    .filter { it.id == event.set.exerciseId }
+                    .flatMap { it.sets }
+                    .maxOfOrNull { it.order }
+                    ?: return
                 _state.update { state -> state.copy(
-                    setTextField = BlockUiState.SetTextField(
-                        set = event.set,
-                        field = event.setFieldType,
-                        value = when(event.setFieldType) {
-                            SetFieldType.REPS -> event.set.reps
-                            SetFieldType.LOAD -> event.set.load
-                            SetFieldType.RATING -> event.set.rating
-                        }?.toString() ?: ""
-                    )
+                    setTextField = when(event.setFieldType) {
+                        SetFieldType.REPS -> BlockUiState.SetTextField(
+                            set = event.set,
+                            value = event.set.reps?.toString() ?: "",
+                            field = event.setFieldType
+                        )
+                        SetFieldType.LOAD -> BlockUiState.SetTextField(
+                            set = event.set,
+                            value = event.set.load?.toString() ?: "",
+                            field = event.setFieldType
+                        )
+                        SetFieldType.RATING -> BlockUiState.SetTextField(
+                            set = event.set,
+                            value = event.set.rating?.toString() ?: "",
+                            field = event.setFieldType,
+                            isLastField = event.set.order == lastSetOrder
+                        )
+                    }
                 )}
             }
             BlockEvent.HideSetTextField -> {
@@ -517,15 +533,41 @@ class BlockViewModel @Inject constructor(
             BlockEvent.UpdateSet -> {
                 state.value.setTextField?.let { setTextField ->
                     viewModelScope.launch(Dispatchers.IO) {
-                        useCases.updateSet(
-                            when (setTextField.field) {
-                                SetFieldType.REPS -> setTextField.set.copy(reps = setTextField.value.toIntOrNull())
-                                SetFieldType.LOAD -> setTextField.set.copy(load = setTextField.value.toFloatOrNull())
-                                SetFieldType.RATING -> setTextField.set.copy(rating = setTextField.value.toFloatOrNull())
-                            }
-                        )
+                        val updatedSet = when (setTextField.field) {
+                            SetFieldType.REPS -> setTextField.set.copy(reps = setTextField.value.toIntOrNull())
+                            SetFieldType.LOAD -> setTextField.set.copy(load = setTextField.value.toFloatOrNull())
+                            SetFieldType.RATING -> setTextField.set.copy(rating = setTextField.value.toFloatOrNull())
+                        }
+                        useCases.updateSet(updatedSet)
+
+                        val nextSet = state.value.days
+                            .flatMap { it.sessions }
+                            .flatMap { it.exercises }
+                            .filter { it.id == setTextField.set.exerciseId }
+                            .flatMap { it.sets }
+                            .find { it.order == setTextField.set.order + 1 }
+
                         _state.update { state -> state.copy(
-                            setTextField = null
+                            setTextField = when(setTextField.field) {
+                                SetFieldType.REPS -> BlockUiState.SetTextField(
+                                    set = updatedSet,
+                                    value = updatedSet.load?.toString() ?: "",
+                                    field = SetFieldType.LOAD
+                                )
+                                SetFieldType.LOAD -> BlockUiState.SetTextField(
+                                    set = updatedSet,
+                                    value = updatedSet.rating?.toString() ?: "",
+                                    field = SetFieldType.RATING,
+                                    isLastField = nextSet == null
+                                )
+                                SetFieldType.RATING -> nextSet?.let {
+                                    BlockUiState.SetTextField(
+                                        set = it,
+                                        value = it.reps?.toString() ?: "",
+                                        field = SetFieldType.REPS
+                                    )
+                                }
+                            }
                         )}
                     }
                 }
