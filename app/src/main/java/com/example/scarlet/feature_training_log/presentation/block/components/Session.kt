@@ -37,7 +37,9 @@ import com.example.scarlet.R
 import com.example.scarlet.core.util.isScrollingDown
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
 import com.example.scarlet.feature_training_log.domain.model.SessionWithExercises
+import com.example.scarlet.feature_training_log.domain.model.Set
 import com.example.scarlet.feature_training_log.presentation.block.BlockEvent
+import com.example.scarlet.feature_training_log.presentation.block.util.SetFieldType
 import com.example.scarlet.feature_training_log.presentation.core.DateUtils
 import kotlinx.coroutines.delay
 
@@ -48,6 +50,8 @@ fun Session(
     isExerciseDetailExpandedById: Map<Long, Boolean>,
     expandedDropdownMenuExerciseId: Long?,
     isInSessionEditMode: Boolean,
+    selectedSet: Set? = null,
+    selectedSetField: SetFieldType? = null,
     onEvent: (BlockEvent) -> Unit
 ) {
     val scrollState = rememberScrollState()
@@ -145,6 +149,8 @@ fun Session(
                             isExerciseDetailExpandedById = isExerciseDetailExpandedById,
                             expandedDropdownMenuExerciseId = expandedDropdownMenuExerciseId,
                             isInSessionEditMode = isInSessionEditMode,
+                            selectedSet = selectedSet,
+                            selectedSetField = selectedSetField,
                             onEvent = onEvent
                         )
                     } else {
@@ -159,6 +165,8 @@ fun Session(
                             isExerciseDetailExpanded = isExerciseDetailExpandedById[exercise.id] == true,
                             isDropdownMenuExpanded = expandedDropdownMenuExerciseId == exercise.id,
                             isInSessionEditMode = isInSessionEditMode,
+                            selectedSet = selectedSet,
+                            selectedSetField = selectedSetField,
                             onEvent = onEvent
                         )
                     }

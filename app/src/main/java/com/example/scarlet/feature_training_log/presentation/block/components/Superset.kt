@@ -13,7 +13,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
+import com.example.scarlet.feature_training_log.domain.model.Set
 import com.example.scarlet.feature_training_log.presentation.block.BlockEvent
+import com.example.scarlet.feature_training_log.presentation.block.util.SetFieldType
 
 @Composable
 fun Superset(
@@ -22,6 +24,8 @@ fun Superset(
     isExerciseDetailExpandedById: Map<Long, Boolean>,
     expandedDropdownMenuExerciseId: Long?,
     isInSessionEditMode: Boolean,
+    selectedSet: Set? = null,
+    selectedSetField: SetFieldType? = null,
     onEvent: (BlockEvent) -> Unit
 ) {
     LabeledBorderBox(
@@ -47,6 +51,8 @@ fun Superset(
                     isExerciseDetailExpanded = isExerciseDetailExpandedById[exercise.id] == true,
                     isDropdownMenuExpanded = expandedDropdownMenuExerciseId == exercise.id,
                     isInSessionEditMode = isInSessionEditMode,
+                    selectedSet = selectedSet,
+                    selectedSetField = selectedSetField,
                     onEvent = onEvent
                 )
             }

@@ -9,6 +9,7 @@ import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.domain.model.SessionWithExercises
 import com.example.scarlet.feature_training_log.domain.model.Set
+import com.example.scarlet.feature_training_log.presentation.block.util.SetFieldType
 
 data class BlockUiState (
     /** Block */
@@ -28,6 +29,8 @@ data class BlockUiState (
     val isExerciseDetailExpandedById: Map<Long, Boolean> = emptyMap(),
     val movementSelectionSheet: MovementSelectionSheetState? = null, // null means the sheet is hidden
     val loadCalculationDialog: LoadCalculationDialogState? = null, // null means the dialog is hidden
+
+    val setTextField: SetTextField? = null, // null means the text field is hidden
 
     val areFloatingActionButtonsVisible: Boolean = true
 ) {
@@ -60,5 +63,11 @@ data class BlockUiState (
         val previousSetLoad: Float,
         val percentage: Int? = null, // 0-100
         val calculatedLoad: Float? = null
+    )
+
+    data class SetTextField(
+        val set: Set,
+        val value : String,
+        val field: SetFieldType
     )
 }

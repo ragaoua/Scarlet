@@ -7,6 +7,7 @@ import com.example.scarlet.R
 import com.example.scarlet.core.util.StringResource
 import com.example.scarlet.core.util.roundToClosestMultipleOf
 import com.example.scarlet.feature_training_log.domain.model.SessionWithExercises
+import com.example.scarlet.feature_training_log.presentation.block.util.SetFieldType
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -480,9 +481,53 @@ class BlockViewModel @Inject constructor(
                     useCases.insertEmptySetWhileSettingsOrder(event.exercise.id)
                 }
             }
-            is BlockEvent.UpdateSet -> {
-                viewModelScope.launch(Dispatchers.IO) {
-                    useCases.updateSet(event.set)
+            is BlockEvent.ShowSetTextField -> {
+                _state.update { state -> state.copy(
+                    setTextField = BlockUiState.SetTextField(
+                        set = event.set,
+                        field = event.setFieldType,
+                        value = when(event.setFieldType) {
+                            SetFieldType.REPS -> event.set.reps
+                            SetFieldType.LOAD -> event.set.load
+                            SetFieldType.RATING -> event.set.rating
+                        }?.toString() ?: ""
+                    )
+                )}
+            }
+            BlockEvent.HideSetTextField -> {
+                _state.update { state -> state.copy(
+                    setTextField = null
+                )}
+            }
+            is BlockEvent.UpdateSetFieldValue -> {
+                state.value.setTextField?.let { setTextField ->
+                    val isValueValid = useCases.validateSetFieldValue(
+                        value = event.value,
+                        setFieldType = setTextField.field
+                    )
+                    if(!isValueValid) return
+
+                    _state.update { state -> state.copy(
+                        setTextField = setTextField.copy(
+                            value = event.value
+                        )
+                    )}
+                }
+            }
+            BlockEvent.UpdateSet -> {
+                state.value.setTextField?.let { setTextField ->
+                    viewModelScope.launch(Dispatchers.IO) {
+                        useCases.updateSet(
+                            when (setTextField.field) {
+                                SetFieldType.REPS -> setTextField.set.copy(reps = setTextField.value.toIntOrNull())
+                                SetFieldType.LOAD -> setTextField.set.copy(load = setTextField.value.toFloatOrNull())
+                                SetFieldType.RATING -> setTextField.set.copy(rating = setTextField.value.toFloatOrNull())
+                            }
+                        )
+                        _state.update { state -> state.copy(
+                            setTextField = null
+                        )}
+                    }
                 }
             }
             is BlockEvent.DeleteSet -> {
@@ -502,11 +547,12 @@ class BlockViewModel @Inject constructor(
             }
             is BlockEvent.CopyPreviousSet -> {
                 viewModelScope.launch(Dispatchers.IO) {
+                    val sessionExercises = state.value.days
+                        .flatMap { it.sessions }
+                        .flatMap { it.exercises }
                     useCases.copyPrecedingSetField(
                         set = event.set,
-                        sessionExercises = state.value.days
-                            .flatMap { it.sessions }
-                            .flatMap { it.exercises },
+                        sessionExercises = sessionExercises,
                         fieldToCopy = event.fieldToCopy
                     )
                 }

@@ -9,6 +9,7 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,6 +29,8 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
@@ -46,23 +49,30 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -175,7 +185,7 @@ fun Screen(
                 }
             },
             topBar = { BlockTopAppBar(state, onEvent, topAppBarScrollBehavior) },
-            bottomBar = { DayNavigationBottomBar(state, onEvent) },
+            bottomBar = { BottomBar(state, onEvent) },
             floatingActionButton = { BlockFloatingActionButtons(state, onEvent) }
         ) { innerPadding ->
             Surface(
@@ -211,6 +221,8 @@ fun Screen(
                                     isExerciseDetailExpandedById = state.isExerciseDetailExpandedById,
                                     expandedDropdownMenuExerciseId = state.expandedDropdownMenuExerciseId,
                                     isInSessionEditMode = state.isInSessionEditMode,
+                                    selectedSet = state.setTextField?.set,
+                                    selectedSetField = state.setTextField?.field,
                                     onEvent = onEvent
                                 )
                             }
@@ -294,15 +306,13 @@ private fun sessionsLazyListState(
     return lazyListState
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun BlockFloatingActionButtons(
     state: BlockUiState,
     onEvent: (BlockEvent) -> Unit
 ) {
-
     AnimatedVisibility(
-        visible = state.areFloatingActionButtonsVisible && !WindowInsets.isImeVisible,
+        visible = state.areFloatingActionButtonsVisible && state.setTextField == null,
         enter = slideInVertically { it } + scaleIn(),
         exit = slideOutVertically { it } + scaleOut()
     ) {
@@ -373,7 +383,65 @@ private fun BlockTopAppBar(
     )
 }
 
+@Composable
+private fun BottomBar(
+    state: BlockUiState,
+    onEvent: (BlockEvent) -> Unit
+) {
+    AnimatedContent(
+        targetState = state.setTextField != null,
+        label = "Bottom bar animation",
+        transitionSpec = {
+            slideInVertically { it } togetherWith slideOutVertically { it }
+        }
+    ) { isSetTextFieldVisible ->
+        // state.setTextField != null is necessary to allow smart cast of
+        // state.setTextField (SetTextField?) to SetTextField and avoid using
+        // the !! operator
+        if (isSetTextFieldVisible && state.setTextField != null) {
+            SetTextField(state.setTextField, onEvent)
+        } else {
+            DayNavigationBottomBar(state, onEvent)
+        }
+    }
+}
+
+@Composable
 @OptIn(ExperimentalLayoutApi::class)
+private fun SetTextField(
+    setTextField: BlockUiState.SetTextField,
+    onEvent: (BlockEvent) -> Unit
+) {
+    val focusRequester = remember { FocusRequester() }
+    SideEffect { focusRequester.requestFocus() }
+
+    var hasImeBeenVisible by remember { mutableStateOf(false) }
+    val isImeVisible = WindowInsets.isImeVisible
+    LaunchedEffect(isImeVisible) {
+        if (isImeVisible) {
+            hasImeBeenVisible = true
+        } else if (hasImeBeenVisible) {
+            onEvent(BlockEvent.HideSetTextField)
+        }
+    }
+
+    TextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .focusRequester(focusRequester),
+        value = setTextField.value,
+        onValueChange = { onEvent(BlockEvent.UpdateSetFieldValue(it)) },
+        singleLine = true,
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Decimal,
+//            imeAction = // TODO
+        ),
+        keyboardActions = KeyboardActions(
+            onAny = { onEvent(BlockEvent.UpdateSet) }
+        )
+    )
+}
+
 @Composable
 private fun DayNavigationBottomBar(
     state: BlockUiState,
@@ -381,47 +449,43 @@ private fun DayNavigationBottomBar(
 ) {
     if (state.days.size <= 1) return
 
-    AnimatedVisibility(
-        visible = !WindowInsets.isImeVisible,
-        enter = slideInVertically { it },
-        exit = slideOutVertically { it }
-    ) {
-        NavigationBar {
-            LazyRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                items(state.days) { day ->
-                    Column(
-                        modifier = Modifier
-                            .clip(MaterialTheme.shapes.small)
-                            .clickable { onEvent(BlockEvent.SelectDay(day.toDay())) }
-                            .background(
-                                if (day.id == state.selectedDayId) {
-                                    MaterialTheme.colorScheme.primary
-                                } else Color.Transparent
-                            )
-                            .padding(4.dp)
-                            .widthIn(64.dp, 128.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = stringResource(R.string.day, day.order),
-                            style = MaterialTheme.typography.titleMedium
+    NavigationBar {
+        LazyRow(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(
+                16.dp,
+                Alignment.CenterHorizontally
+            ),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            items(state.days) { day ->
+                Column(
+                    modifier = Modifier
+                        .clip(MaterialTheme.shapes.small)
+                        .clickable { onEvent(BlockEvent.SelectDay(day.toDay())) }
+                        .background(
+                            if (day.id == state.selectedDayId) {
+                                MaterialTheme.colorScheme.primary
+                            } else Color.Transparent
                         )
-                        Text(
-                            text = pluralStringResource(
-                                id = R.plurals.nb_sessions,
-                                count = day.sessions.size,
-                                day.sessions.size
-                            ),
-                            style = MaterialTheme.typography.titleSmall
-                        )
-                    }
+                        .padding(4.dp)
+                        .widthIn(64.dp, 128.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = stringResource(R.string.day, day.order),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Text(
+                        text = pluralStringResource(
+                            id = R.plurals.nb_sessions,
+                            count = day.sessions.size,
+                            day.sessions.size
+                        ),
+                        style = MaterialTheme.typography.titleSmall
+                    )
                 }
             }
         }
     }
-
 }

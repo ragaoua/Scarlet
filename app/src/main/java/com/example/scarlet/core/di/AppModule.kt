@@ -34,6 +34,7 @@ import com.example.scarlet.feature_training_log.domain.use_case.set.DeleteSetUse
 import com.example.scarlet.feature_training_log.domain.use_case.set.InsertEmptySetWhileSettingsOrderUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.set.RestoreSetUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.set.UpdateSetUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.set.ValidateSetFieldValueUseCase
 import com.example.scarlet.feature_training_log.presentation.block.BlockUseCases
 import com.example.scarlet.feature_training_log.presentation.training_log.TrainingLogUseCases
 import dagger.Module
@@ -112,6 +113,7 @@ object AppModule {
         restoreExerciseWithMovementAndSets = RestoreExerciseWithMovementAndSetsUseCase(repository),
         insertEmptySetWhileSettingsOrder = InsertEmptySetWhileSettingsOrderUseCase(repository),
         updateSet = UpdateSetUseCase(repository),
+        validateSetFieldValue = ValidateSetFieldValueUseCase(),
         deleteSet = DeleteSetUseCase(repository),
         restoreSet = RestoreSetUseCase(repository),
         copyPrecedingSetField = CopyPrecedingSetFieldUseCase(repository),

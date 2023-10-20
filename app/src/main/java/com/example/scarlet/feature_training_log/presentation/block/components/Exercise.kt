@@ -37,7 +37,9 @@ import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
 import com.example.scarlet.core.util.conditional
 import com.example.scarlet.feature_training_log.domain.model.ExerciseWithMovementAndSets
+import com.example.scarlet.feature_training_log.domain.model.Set
 import com.example.scarlet.feature_training_log.presentation.block.BlockEvent
+import com.example.scarlet.feature_training_log.presentation.block.util.SetFieldType
 import com.example.scarlet.feature_training_log.presentation.core.components.SecondaryActionButton
 
 @Composable
@@ -49,6 +51,8 @@ fun Exercise(
     isExerciseDetailExpanded: Boolean,
     isDropdownMenuExpanded: Boolean,
     isInSessionEditMode: Boolean,
+    selectedSet: Set? = null,
+    selectedSetField: SetFieldType? = null,
     onEvent: (BlockEvent) -> Unit
 ) {
     Column(
@@ -194,6 +198,8 @@ fun Exercise(
                         ExerciseSetRow(
                             modifier = Modifier.fillMaxWidth(),
                             set = set,
+                            selectedSet = selectedSet,
+                            selectedSetField = selectedSetField,
                             isCopyRepsIconVisible = previousSet?.let {
                                 it.reps != null && it.reps != set.reps
                             } ?: false,

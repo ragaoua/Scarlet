@@ -1,19 +1,17 @@
 package com.example.scarlet.feature_training_log.presentation.block.components
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.style.TextAlign
 import com.example.scarlet.R
 import com.example.scarlet.feature_training_log.domain.model.Set
 import com.example.scarlet.feature_training_log.presentation.block.BlockEvent
@@ -31,12 +29,14 @@ import com.example.scarlet.feature_training_log.presentation.block.util.SetField
  * the ime action of the last field
  * @param onEvent event to be triggered when the user interacts with the row
  *
- * @see SetTextField
+ * @see SetField
  */
 @Composable
 fun ExerciseSetRow(
     modifier: Modifier = Modifier,
     set: Set,
+    selectedSet: Set? = null,
+    selectedSetField: SetFieldType? = null,
     isCopyRepsIconVisible: Boolean,
     isCopyLoadIconVisible: Boolean,
     isLastSet: Boolean,
@@ -46,31 +46,17 @@ fun ExerciseSetRow(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Box(modifier = Modifier.weight(SetFieldRatio.SET)) {
-            Text(
-                text = "${set.order}.",
-                modifier = Modifier.align(Alignment.Center)
-            )
-        }
+        Text(
+            modifier = Modifier.weight(SetFieldRatio.SET),
+            text = "${set.order}.",
+            style = LocalTextStyle.current.copy(textAlign = TextAlign.Center),
+        )
 
-        SetTextField(
-            modifier = Modifier
-                .padding(horizontal = 2.dp)
-                .weight(SetFieldRatio.REPS),
-            originalValue = set.reps?.toString() ?: "",
-            onValueChangeCheck = { text ->
-                if (text.isBlank()) true else {
-                    text.toIntOrNull()?.let { reps ->
-                        reps < 1000
-                    } ?: false // TODO : validate in a use case
-                }
-            },
-            updateSet = { text ->
-                onEvent(BlockEvent.UpdateSet(
-                    set.copy(reps = text.toIntOrNull())
-                ))
-            },
-            imeAction = ImeAction.Next,
+        SetField(
+            modifier = Modifier.weight(SetFieldRatio.REPS),
+            text = set.reps?.toString() ?: "",
+            isSelected = selectedSet == set && selectedSetField == SetFieldType.REPS,
+            onClick = { onEvent(BlockEvent.ShowSetTextField(set, SetFieldType.REPS)) },
             onIconClicked = if (isCopyRepsIconVisible) {
                 {
                     onEvent(BlockEvent.CopyPreviousSet(
@@ -81,28 +67,11 @@ fun ExerciseSetRow(
             } else null
         )
 
-        SetTextField(
-            modifier = Modifier
-                .padding(horizontal = 2.dp)
-                .weight(SetFieldRatio.LOAD),
-            originalValue = set.load?.let {
-                if (it % 1 == 0f) {
-                    it.toInt().toString()
-                } else it.toString()
-            } ?: "",
-            onValueChangeCheck = { text ->
-                if (text.isBlank()) true else {
-                    text.toFloatOrNull()?.let { load ->
-                        load < 1000
-                    } ?: false // TODO : validate in a use case
-                }
-            },
-            updateSet = { text ->
-                onEvent(BlockEvent.UpdateSet(
-                    set.copy(load = text.toFloatOrNull())
-                ))
-            },
-            imeAction = ImeAction.Next,
+        SetField(
+            modifier = Modifier.weight(SetFieldRatio.LOAD),
+            text = set.load?.toString() ?: "",
+            isSelected = selectedSet == set && selectedSetField == SetFieldType.LOAD,
+            onClick = { onEvent(BlockEvent.ShowSetTextField(set, SetFieldType.LOAD)) },
             onIconClicked = if (isCopyLoadIconVisible) {
                 {
                     onEvent(BlockEvent.CopyPreviousSet(
@@ -111,33 +80,14 @@ fun ExerciseSetRow(
                     ))
                 }
             } else null,
-            onIconLongClicked = {
-                onEvent(BlockEvent.ShowLoadCalculationDialog(set))
-            }
+            onIconLongClicked = { onEvent(BlockEvent.ShowLoadCalculationDialog(set)) }
         )
 
-        SetTextField(
-            modifier = Modifier
-                .padding(horizontal = 2.dp)
-                .weight(SetFieldRatio.RATING),
-            originalValue = set.rating?.let {
-                if (it % 1 == 0f) {
-                    it.toInt().toString()
-                } else it.toString()
-            } ?: "",
-            onValueChangeCheck = { text ->
-                if (text.isBlank()) true else {
-                    text.toFloatOrNull()?.let { rating ->
-                        rating <= 10
-                    } ?: false // TODO : validate in a use case
-                }
-            },
-            updateSet = { text ->
-                onEvent(BlockEvent.UpdateSet(
-                    set.copy(rating = text.toFloatOrNull())
-                ))
-            },
-            imeAction = if (isLastSet) ImeAction.Done else ImeAction.Next
+        SetField(
+            modifier = Modifier.weight(SetFieldRatio.RATING),
+            text = set.rating?.toString() ?: "",
+            isSelected = selectedSet == set && selectedSetField == SetFieldType.RATING,
+            onClick = { onEvent(BlockEvent.ShowSetTextField(set, SetFieldType.RATING)) }
         )
 
         Icon(
@@ -145,9 +95,7 @@ fun ExerciseSetRow(
             contentDescription = stringResource(R.string.delete),
             modifier = Modifier
                 .weight(SetFieldRatio.OTHER)
-                .clickable {
-                    onEvent(BlockEvent.DeleteSet(set))
-                }
+                .clickable { onEvent(BlockEvent.DeleteSet(set)) }
         )
     }
 }
