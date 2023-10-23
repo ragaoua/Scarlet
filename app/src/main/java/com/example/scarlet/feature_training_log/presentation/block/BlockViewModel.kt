@@ -482,40 +482,17 @@ class BlockViewModel @Inject constructor(
                 }
             }
             is BlockEvent.ShowSetTextField -> {
-                val lastSetOrder = state.value.days
-                    .flatMap { it.sessions }
-                    .flatMap { it.exercises }
-                    .filter { it.id == event.set.exerciseId }
-                    .flatMap { it.sets }
-                    .maxOfOrNull { it.order }
-                    ?: return
                 _state.update { state -> state.copy(
-                    setTextField = when(event.setFieldType) {
-                        SetFieldType.REPS -> BlockUiState.SetTextField(
-                            set = event.set,
-                            value = event.set.reps?.toString() ?: "",
-                            field = event.setFieldType
-                        )
-                        SetFieldType.LOAD -> BlockUiState.SetTextField(
-                            set = event.set,
-                            value = event.set.load?.let {
-                                if (it % 1 == 0f) {
-                                    it.toInt().toString()
-                                } else it.toString()
-                            } ?: "",
-                            field = event.setFieldType
-                        )
-                        SetFieldType.RATING -> BlockUiState.SetTextField(
-                            set = event.set,
-                            value = event.set.rating?.let {
-                                if (it % 1 == 0f) {
-                                    it.toInt().toString()
-                                } else it.toString()
-                            } ?: "",
-                            field = event.setFieldType,
-                            isLastField = event.set.order == lastSetOrder
-                        )
-                    }
+                    setTextField = BlockUiState.SetTextField(
+                        set = event.set,
+                        field = event.setFieldType,
+                        onValueChangeCheck = {
+                            useCases.validateSetFieldValue(
+                                value = it,
+                                setFieldType = event.setFieldType
+                            )
+                        }
+                    )
                 )}
             }
             BlockEvent.HideSetTextField -> {
@@ -523,57 +500,61 @@ class BlockViewModel @Inject constructor(
                     setTextField = null
                 )}
             }
-            is BlockEvent.UpdateSetFieldValue -> {
-                state.value.setTextField?.let { setTextField ->
-                    val isValueValid = useCases.validateSetFieldValue(
-                        value = event.value,
-                        setFieldType = setTextField.field
-                    )
-                    if(!isValueValid) return
-
-                    _state.update { state -> state.copy(
-                        setTextField = setTextField.copy(
-                            value = event.value
-                        )
-                    )}
-                }
-            }
-            BlockEvent.UpdateSet -> {
+            is BlockEvent.UpdateSet -> {
                 state.value.setTextField?.let { setTextField ->
                     viewModelScope.launch(Dispatchers.IO) {
                         val updatedSet = when (setTextField.field) {
-                            SetFieldType.REPS -> setTextField.set.copy(reps = setTextField.value.toIntOrNull())
-                            SetFieldType.LOAD -> setTextField.set.copy(load = setTextField.value.toFloatOrNull())
-                            SetFieldType.RATING -> setTextField.set.copy(rating = setTextField.value.toFloatOrNull())
+                            SetFieldType.REPS -> setTextField.set.copy(reps = event.value.toIntOrNull())
+                            SetFieldType.LOAD -> setTextField.set.copy(load = event.value.toFloatOrNull())
+                            SetFieldType.RATING -> setTextField.set.copy(rating = event.value.toFloatOrNull())
                         }
                         useCases.updateSet(updatedSet)
 
-                        val nextSet = state.value.days
-                            .flatMap { it.sessions }
-                            .flatMap { it.exercises }
-                            .filter { it.id == setTextField.set.exerciseId }
-                            .flatMap { it.sets }
-                            .find { it.order == setTextField.set.order + 1 }
+                        _state.update { state -> state.copy(
+                            setTextField = null
+                        )}
 
                         _state.update { state -> state.copy(
                             setTextField = when(setTextField.field) {
                                 SetFieldType.REPS -> BlockUiState.SetTextField(
                                     set = updatedSet,
-                                    value = updatedSet.load?.toString() ?: "",
-                                    field = SetFieldType.LOAD
+                                    field = SetFieldType.LOAD,
+                                    onValueChangeCheck = { value ->
+                                        useCases.validateSetFieldValue(
+                                            value = value,
+                                            setFieldType = SetFieldType.LOAD
+                                        )
+                                    }
                                 )
                                 SetFieldType.LOAD -> BlockUiState.SetTextField(
                                     set = updatedSet,
-                                    value = updatedSet.rating?.toString() ?: "",
                                     field = SetFieldType.RATING,
-                                    isLastField = nextSet == null
+                                    onValueChangeCheck = { value ->
+                                        useCases.validateSetFieldValue(
+                                            value = value,
+                                            setFieldType = SetFieldType.RATING
+                                        )
+                                    }
                                 )
-                                SetFieldType.RATING -> nextSet?.let {
-                                    BlockUiState.SetTextField(
-                                        set = it,
-                                        value = it.reps?.toString() ?: "",
-                                        field = SetFieldType.REPS
-                                    )
+                                SetFieldType.RATING -> {
+                                    val nextSet = state.days
+                                        .flatMap { it.sessions }
+                                        .flatMap { it.exercises }
+                                        .filter { it.id == setTextField.set.exerciseId }
+                                        .flatMap { it.sets }
+                                        .find { it.order == setTextField.set.order + 1 }
+                                    nextSet?.let {
+                                        BlockUiState.SetTextField(
+                                            set = it,
+                                            field = SetFieldType.REPS,
+                                            onValueChangeCheck = { value ->
+                                                useCases.validateSetFieldValue(
+                                                    value = value,
+                                                    setFieldType = SetFieldType.REPS
+                                                )
+                                            }
+                                        )
+                                    }
                                 }
                             }
                         )}

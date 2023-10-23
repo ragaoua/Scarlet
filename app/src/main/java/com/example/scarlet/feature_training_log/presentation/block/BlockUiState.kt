@@ -67,8 +67,7 @@ data class BlockUiState (
 
     data class SetTextField(
         val set: Set,
-        val value : String,
         val field: SetFieldType,
-        val isLastField: Boolean = false
+        val onValueChangeCheck: (String) -> Boolean,
     )
 }

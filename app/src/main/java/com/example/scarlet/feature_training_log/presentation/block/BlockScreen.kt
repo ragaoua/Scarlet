@@ -72,7 +72,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -85,6 +84,7 @@ import com.example.scarlet.feature_training_log.presentation.block.components.Lo
 import com.example.scarlet.feature_training_log.presentation.block.components.MovementSelectionSheet
 import com.example.scarlet.feature_training_log.presentation.block.components.Session
 import com.example.scarlet.feature_training_log.presentation.block.components.SessionDatePickerDialog
+import com.example.scarlet.feature_training_log.presentation.block.util.SetFieldType
 import com.example.scarlet.ui.theme.ScarletTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -413,6 +413,22 @@ private fun SetTextField(
     setTextField: BlockUiState.SetTextField,
     onEvent: (BlockEvent) -> Unit
 ) {
+    var value by remember(setTextField) {
+        mutableStateOf(when(setTextField.field) {
+            SetFieldType.REPS -> setTextField.set.reps?.toString() ?: ""
+            SetFieldType.LOAD -> setTextField.set.load?.let {
+                if (it % 1 == 0f) {
+                    it.toInt().toString()
+                } else it.toString()
+            } ?: ""
+            SetFieldType.RATING -> setTextField.set.rating?.let {
+                if (it % 1 == 0f) {
+                    it.toInt().toString()
+                } else it.toString()
+            } ?: ""
+        })
+    }
+
     val focusRequester = remember { FocusRequester() }
     SideEffect { focusRequester.requestFocus() }
 
@@ -430,17 +446,21 @@ private fun SetTextField(
         modifier = Modifier
             .fillMaxWidth()
             .focusRequester(focusRequester),
-        value = setTextField.value,
-        onValueChange = { onEvent(BlockEvent.UpdateSetFieldValue(it)) },
+        value = value,
+        onValueChange = {
+            if (setTextField.onValueChangeCheck(it)) {
+                value = it
+            }
+        },
         singleLine = true,
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Decimal,
-            imeAction = if (setTextField.isLastField) {
-                ImeAction.Done
-            } else ImeAction.Next
+//            imeAction = if (setTextField.isLastField) {
+//                ImeAction.Done
+//            } else ImeAction.Next
         ),
         keyboardActions = KeyboardActions(
-            onAny = { onEvent(BlockEvent.UpdateSet) }
+            onAny = { onEvent(BlockEvent.UpdateSet(value)) }
         )
     )
 }
