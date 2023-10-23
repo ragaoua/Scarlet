@@ -1,6 +1,10 @@
 package com.example.scarlet.feature_training_log.presentation.block.components
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -14,11 +18,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
@@ -74,16 +78,22 @@ fun Exercise(
             verticalAlignment = Alignment.CenterVertically
         ) {
             if(!isInSessionEditMode) {
-                if (isExerciseDetailExpanded) {
-                    Icon(
-                        imageVector = Icons.Default.KeyboardArrowDown,
-                        contentDescription = stringResource(R.string.collapse_details)
-                    )
-                } else {
-                    Icon(
-                        imageVector = Icons.Default.KeyboardArrowRight,
-                        contentDescription = stringResource(R.string.expand_details)
-                    )
+                AnimatedContent(
+                    targetState = isExerciseDetailExpanded,
+                    label = "Collapse/expand exercise icon",
+                    transitionSpec = { scaleIn() togetherWith scaleOut() }
+                ) { isExerciseDetailExpanded ->
+                    if (isExerciseDetailExpanded) {
+                        Icon(
+                            imageVector = Icons.Default.KeyboardArrowDown,
+                            contentDescription = stringResource(R.string.collapse_details)
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                            contentDescription = stringResource(R.string.expand_details)
+                        )
+                    }
                 }
             }
             Spacer(modifier = Modifier.width(4.dp))
