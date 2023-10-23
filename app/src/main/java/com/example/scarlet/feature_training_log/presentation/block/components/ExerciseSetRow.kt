@@ -23,10 +23,10 @@ import com.example.scarlet.feature_training_log.presentation.block.util.SetField
  *
  * @param modifier modifier for the row
  * @param set set to be displayed
+ * @param selectedSet set that is currently selected
+ * @param selectedSetField field of the set that is currently selected
  * @param isCopyRepsIconVisible whether the copy icon should be visible for the reps field
  * @param isCopyLoadIconVisible whether the copy icon should be visible for the load field
- * @param isLastSet whether the set is the last one of the exercise. This is used to determine
- * the ime action of the last field
  * @param onEvent event to be triggered when the user interacts with the row
  *
  * @see SetField
@@ -39,7 +39,6 @@ fun ExerciseSetRow(
     selectedSetField: SetFieldType? = null,
     isCopyRepsIconVisible: Boolean,
     isCopyLoadIconVisible: Boolean,
-    isLastSet: Boolean,
     onEvent: (BlockEvent) -> Unit
 ) {
     Row(

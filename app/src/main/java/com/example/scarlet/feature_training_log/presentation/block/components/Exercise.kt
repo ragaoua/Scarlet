@@ -209,7 +209,6 @@ fun Exercise(
                                 // displays the load calculation dialog
                                 it.load != null
                             } ?: false,
-                            isLastSet = set == exercise.sets.last(),
                             onEvent = onEvent
                         )
                     }
