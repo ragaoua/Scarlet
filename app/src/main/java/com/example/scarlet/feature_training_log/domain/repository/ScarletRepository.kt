@@ -75,6 +75,7 @@ interface ScarletRepository {
         movements: Movement,
         sets: List<Set>
     )
+    suspend fun getNbExercisesByMovementId(movementId: Long): Int
 
     /**
      * Update the order of a list of exercises and update

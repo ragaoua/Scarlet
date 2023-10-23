@@ -90,6 +90,16 @@
     <string name="edit_movement">Edit movement</string>
     <string name="movement_name">Movement name</string>
     <string name="delete_movement">Delete this movement</string>
+    <string name="confirm_movement_deletion">Confirm the deletion of the movement ?</string>
+    <string name="no_exercise_associated_with_movement">No exercise is associated with this movement</string>
+    <plurals name="confirm_movement_deletion_message">
+        <item quantity="one">
+            Deleting \"%1$s\" would also delete 1 exercise that associated with it.
+        </item>
+        <item quantity="other">
+            Deleting \"%1$s\" would also delete all %2$d exercises that are associated with it.
+        </item>
+    </plurals>
     <!-- Movement : Errors -->
     <string name="error_movement_already_exists">This movement already exists</string>
     <string name="error_movement_name_is_empty">The movement name can\'t be empty</string>

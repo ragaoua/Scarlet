@@ -304,6 +304,29 @@ class BlockViewModel @Inject constructor(
             }
             BlockEvent.DeleteEditedMovement -> {
                 viewModelScope.launch(Dispatchers.IO) {
+                    _state.update { state -> state.copy(
+                        movementSelectionSheet = state.movementSelectionSheet?.copy(
+                            editMovementSheet = state.movementSelectionSheet.editMovementSheet?.let { editMovementSheet ->
+                                editMovementSheet.copy(
+                                    isDeletingMovement = true,
+                                    nbExercises = useCases.getNbExercisesByMovementId(editMovementSheet.movement.id)
+                                )
+                            }
+                        )
+                    )}
+                }
+            }
+            BlockEvent.CancelMovementDeletion -> {
+                _state.update { it.copy(
+                    movementSelectionSheet = it.movementSelectionSheet?.copy(
+                        editMovementSheet = it.movementSelectionSheet.editMovementSheet?.copy(
+                            isDeletingMovement = false
+                        )
+                    )
+                )}
+            }
+            BlockEvent.ConfirmMovementDeletion -> {
+                viewModelScope.launch(Dispatchers.IO) {
                     useCases.deleteMovement(
                         movement = state.value.movementSelectionSheet?.editMovementSheet?.movement
                             ?: return@launch

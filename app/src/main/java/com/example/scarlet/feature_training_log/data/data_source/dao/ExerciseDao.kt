@@ -33,6 +33,13 @@ interface ExerciseDao {
     @Delete
     suspend fun deleteExercise(exercise: ExerciseEntity)
 
+    @Query("""
+        SELECT COUNT(*)
+        FROM exercise
+        WHERE exercise.movementId = :movementId
+    """)
+    suspend fun getNbExercisesByMovementId(movementId: Long): Int
+
     @Query(
         """
         SELECT *

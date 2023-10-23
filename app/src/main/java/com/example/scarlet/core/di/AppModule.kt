@@ -14,6 +14,7 @@ import com.example.scarlet.feature_training_log.domain.use_case.block.helpers.Va
 import com.example.scarlet.feature_training_log.domain.use_case.day.GetDaysWithSessionsWithExercisesWithMovementAndSetsByBlockIdUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.DeleteExerciseUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.GetExercisesWithMovementAndSetsBySessionIdUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.exercise.GetNbExercisesByMovementIdUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.InsertExerciseUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.InsertSupersetUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.RestoreExerciseWithMovementAndSetsUseCase
@@ -118,6 +119,7 @@ object AppModule {
         getExercisesWithMovementAndSetsBySessionId =
             GetExercisesWithMovementAndSetsBySessionIdUseCase(repository),
         restoreSessionWithExercisesWithMovementAndSets =
-            RestoreSessionWithExercisesWithMovementAndSetsUseCase(repository)
+            RestoreSessionWithExercisesWithMovementAndSetsUseCase(repository),
+        getNbExercisesByMovementId = GetNbExercisesByMovementIdUseCase(repository)
     )
 }

@@ -52,7 +52,9 @@ data class BlockUiState (
     data class EditMovementSheetState(
         val movement: Movement,
         val editedMovementName: String = movement.name,
-        val movementNameError: StringResource? = null
+        val movementNameError: StringResource? = null,
+        val isDeletingMovement: Boolean = false,
+        val nbExercises: Int = 0
     )
 
     data class LoadCalculationDialogState(

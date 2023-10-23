@@ -172,6 +172,9 @@ class ScarletRepositoryImpl(
         )
     }
 
+    override suspend fun getNbExercisesByMovementId(movementId: Long): Int =
+        dbInstance.exerciseDao.getNbExercisesByMovementId(movementId)
+
     override suspend fun updateExerciseOrder(exercises: List<Exercise>, newOrder: Int) {
         dbInstance.exerciseDao.updateExercisesOrder(
             exercises = exercises.map { ExerciseEntity(it) },

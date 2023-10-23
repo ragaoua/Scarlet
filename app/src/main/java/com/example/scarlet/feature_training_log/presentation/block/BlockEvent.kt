@@ -50,6 +50,8 @@ sealed interface BlockEvent {
     data class UpdateEditedMovementName(val editedMovementName: String) : BlockEvent
     object UpdateEditedMovement : BlockEvent
     object DeleteEditedMovement : BlockEvent
+    object ConfirmMovementDeletion : BlockEvent
+    object CancelMovementDeletion : BlockEvent
 
     data class DeleteExercise(val exercise: ExerciseWithMovementAndSets) : BlockEvent
     data class UpdateRatingType(

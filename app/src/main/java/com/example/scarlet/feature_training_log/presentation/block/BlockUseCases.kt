@@ -4,6 +4,7 @@ import com.example.scarlet.feature_training_log.domain.use_case.block.UpdateBloc
 import com.example.scarlet.feature_training_log.domain.use_case.day.GetDaysWithSessionsWithExercisesWithMovementAndSetsByBlockIdUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.DeleteExerciseUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.GetExercisesWithMovementAndSetsBySessionIdUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.exercise.GetNbExercisesByMovementIdUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.InsertExerciseUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.InsertSupersetUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.RestoreExerciseWithMovementAndSetsUseCase
@@ -50,5 +51,6 @@ data class BlockUseCases(
     val getExercisesWithMovementAndSetsBySessionId:
         GetExercisesWithMovementAndSetsBySessionIdUseCase,
     val restoreSessionWithExercisesWithMovementAndSets:
-        RestoreSessionWithExercisesWithMovementAndSetsUseCase
+        RestoreSessionWithExercisesWithMovementAndSetsUseCase,
+    val getNbExercisesByMovementId: GetNbExercisesByMovementIdUseCase
 )

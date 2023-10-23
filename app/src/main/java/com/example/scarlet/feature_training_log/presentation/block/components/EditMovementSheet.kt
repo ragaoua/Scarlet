@@ -111,7 +111,6 @@ fun EditMovementSheet(
                     )
                 ) {
                     Text(stringResource(R.string.delete_movement))
-                    /* TODO : show a dialog indicating if exercises use this movement */
                 }
                 Spacer(modifier = Modifier.width(16.dp))
                 Button(
@@ -121,6 +120,15 @@ fun EditMovementSheet(
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
+        }
+
+        if (sheetState.isDeletingMovement) {
+            ConfirmMovementDeletionDialog(
+                movement = sheetState.movement.name,
+                nbExercises = sheetState.nbExercises,
+                onConfirm = { onEvent(BlockEvent.ConfirmMovementDeletion) },
+                onDismiss = { onEvent(BlockEvent.CancelMovementDeletion) }
+            )
         }
     }
 }
