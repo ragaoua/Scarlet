@@ -72,7 +72,9 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -413,8 +415,8 @@ private fun SetTextField(
     setTextField: BlockUiState.SetTextField,
     onEvent: (BlockEvent) -> Unit
 ) {
-    var value by remember(setTextField) {
-        mutableStateOf(when(setTextField.field) {
+    var tfValue by remember(setTextField) {
+        val text = when(setTextField.field) {
             SetFieldType.REPS -> setTextField.set.reps?.toString() ?: ""
             SetFieldType.LOAD -> setTextField.set.load?.let {
                 if (it % 1 == 0f) {
@@ -426,7 +428,13 @@ private fun SetTextField(
                     it.toInt().toString()
                 } else it.toString()
             } ?: ""
-        })
+        }
+        mutableStateOf(
+            TextFieldValue(
+                text = text,
+                selection = TextRange(0, text.length)
+            )
+        )
     }
 
     val focusRequester = remember { FocusRequester() }
@@ -446,10 +454,10 @@ private fun SetTextField(
         modifier = Modifier
             .fillMaxWidth()
             .focusRequester(focusRequester),
-        value = value,
+        value = tfValue,
         onValueChange = {
-            if (setTextField.onValueChangeCheck(it)) {
-                value = it
+            if (setTextField.onValueChangeCheck(it.text)) {
+                tfValue = it
             }
         },
         singleLine = true,
@@ -460,7 +468,7 @@ private fun SetTextField(
 //            } else ImeAction.Next
         ),
         keyboardActions = KeyboardActions(
-            onAny = { onEvent(BlockEvent.UpdateSet(value)) }
+            onAny = { onEvent(BlockEvent.UpdateSet(tfValue.text)) }
         )
     )
 }
