@@ -415,7 +415,7 @@ private fun SetTextField(
     setTextField: BlockUiState.SetTextField,
     onEvent: (BlockEvent) -> Unit
 ) {
-    var tfValue by remember(setTextField) {
+    var tfValue by remember(setTextField.set.id, setTextField.field) {
         val text = when(setTextField.field) {
             SetFieldType.REPS -> setTextField.set.reps?.toString() ?: ""
             SetFieldType.LOAD -> setTextField.set.load?.let {
@@ -446,8 +446,7 @@ private fun SetTextField(
         if (isImeVisible) {
             hasImeBeenVisible = true
         } else if (hasImeBeenVisible) {
-            onEvent(BlockEvent.UpdateSetField(
-                value = tfValue.text,
+            onEvent(BlockEvent.UpdateSet(
                 goToNextField = false
             ))
         }
@@ -461,6 +460,7 @@ private fun SetTextField(
         onValueChange = {
             if (it.text == tfValue.text || setTextField.onValueChangeCheck(it.text)) {
                 tfValue = it
+                onEvent(BlockEvent.UpdateSetFieldValue(tfValue.text))
             }
         },
         singleLine = true,
@@ -471,7 +471,7 @@ private fun SetTextField(
 //            } else ImeAction.Next
         ),
         keyboardActions = KeyboardActions(
-            onAny = { onEvent(BlockEvent.UpdateSetField(tfValue.text)) }
+            onAny = { onEvent(BlockEvent.UpdateSet()) }
         )
     )
 }

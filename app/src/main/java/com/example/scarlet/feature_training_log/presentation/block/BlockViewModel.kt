@@ -495,21 +495,39 @@ class BlockViewModel @Inject constructor(
                     )
                 )}
             }
-            is BlockEvent.UpdateSetField -> {
+            is BlockEvent.UpdateSetFieldValue -> {
+                state.value.setTextField?.let { setTextField ->
+                    val updatedSet = when (setTextField.field) {
+                        SetFieldType.REPS -> setTextField.set.copy(reps = event.value.toIntOrNull())
+                        SetFieldType.LOAD -> setTextField.set.copy(load = event.value.toFloatOrNull())
+                        SetFieldType.RATING -> setTextField.set.copy(rating = event.value.toFloatOrNull())
+                    }
+                    _state.update { state -> state.copy(
+                        days = state.days.map { day -> day.copy(
+                            sessions = day.sessions.map { session -> session.copy(
+                                exercises = session.exercises.map { exercise -> exercise.copy(
+                                    sets = exercise.sets.map { set ->
+                                        if(set.id == updatedSet.id) {
+                                            updatedSet
+                                        } else set
+                                    }
+                                )}
+                            )}
+                        )},
+                        setTextField = setTextField.copy(set = updatedSet)
+                    )}
+                }
+            }
+            is BlockEvent.UpdateSet -> {
                 state.value.setTextField?.let { setTextField ->
                     viewModelScope.launch(Dispatchers.IO) {
-                        val updatedSet = when (setTextField.field) {
-                            SetFieldType.REPS -> setTextField.set.copy(reps = event.value.toIntOrNull())
-                            SetFieldType.LOAD -> setTextField.set.copy(load = event.value.toFloatOrNull())
-                            SetFieldType.RATING -> setTextField.set.copy(rating = event.value.toFloatOrNull())
-                        }
-                        useCases.updateSet(updatedSet)
+                        useCases.updateSet(setTextField.set)
 
                         _state.update { state -> state.copy(
                             setTextField = if (event.goToNextField) {
                                 when(setTextField.field) {
                                     SetFieldType.REPS -> BlockUiState.SetTextField(
-                                        set = updatedSet,
+                                        set = setTextField.set,
                                         field = SetFieldType.LOAD,
                                         onValueChangeCheck = { value ->
                                             useCases.validateSetFieldValue(
@@ -519,7 +537,7 @@ class BlockViewModel @Inject constructor(
                                         }
                                     )
                                     SetFieldType.LOAD -> BlockUiState.SetTextField(
-                                        set = updatedSet,
+                                        set = setTextField.set,
                                         field = SetFieldType.RATING,
                                         onValueChangeCheck = { value ->
                                             useCases.validateSetFieldValue(
