@@ -61,8 +61,7 @@ sealed interface BlockEvent {
 
     data class AddSet(val exercise: Exercise) : BlockEvent
     data class ShowSetTextField(val set: Set, val setFieldType: SetFieldType): BlockEvent
-    object HideSetTextField: BlockEvent
-    data class UpdateSet(val value: String) : BlockEvent
+    data class UpdateSetField(val value: String, val goToNextField: Boolean = true) : BlockEvent
     data class DeleteSet(val set: Set) : BlockEvent
     data class CopyPreviousSet(
         val set: Set,

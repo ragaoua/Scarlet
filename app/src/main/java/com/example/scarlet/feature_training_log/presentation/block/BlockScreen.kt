@@ -446,7 +446,10 @@ private fun SetTextField(
         if (isImeVisible) {
             hasImeBeenVisible = true
         } else if (hasImeBeenVisible) {
-            onEvent(BlockEvent.HideSetTextField)
+            onEvent(BlockEvent.UpdateSetField(
+                value = tfValue.text,
+                goToNextField = false
+            ))
         }
     }
 
@@ -468,7 +471,7 @@ private fun SetTextField(
 //            } else ImeAction.Next
         ),
         keyboardActions = KeyboardActions(
-            onAny = { onEvent(BlockEvent.UpdateSet(tfValue.text)) }
+            onAny = { onEvent(BlockEvent.UpdateSetField(tfValue.text)) }
         )
     )
 }

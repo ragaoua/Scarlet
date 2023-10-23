@@ -495,12 +495,7 @@ class BlockViewModel @Inject constructor(
                     )
                 )}
             }
-            BlockEvent.HideSetTextField -> {
-                _state.update { state -> state.copy(
-                    setTextField = null
-                )}
-            }
-            is BlockEvent.UpdateSet -> {
+            is BlockEvent.UpdateSetField -> {
                 state.value.setTextField?.let { setTextField ->
                     viewModelScope.launch(Dispatchers.IO) {
                         val updatedSet = when (setTextField.field) {
@@ -511,48 +506,50 @@ class BlockViewModel @Inject constructor(
                         useCases.updateSet(updatedSet)
 
                         _state.update { state -> state.copy(
-                            setTextField = when(setTextField.field) {
-                                SetFieldType.REPS -> BlockUiState.SetTextField(
-                                    set = updatedSet,
-                                    field = SetFieldType.LOAD,
-                                    onValueChangeCheck = { value ->
-                                        useCases.validateSetFieldValue(
-                                            value = value,
-                                            setFieldType = SetFieldType.LOAD
-                                        )
-                                    }
-                                )
-                                SetFieldType.LOAD -> BlockUiState.SetTextField(
-                                    set = updatedSet,
-                                    field = SetFieldType.RATING,
-                                    onValueChangeCheck = { value ->
-                                        useCases.validateSetFieldValue(
-                                            value = value,
-                                            setFieldType = SetFieldType.RATING
-                                        )
-                                    }
-                                )
-                                SetFieldType.RATING -> {
-                                    val nextSet = state.days
-                                        .flatMap { it.sessions }
-                                        .flatMap { it.exercises }
-                                        .filter { it.id == setTextField.set.exerciseId }
-                                        .flatMap { it.sets }
-                                        .find { it.order == setTextField.set.order + 1 }
-                                    nextSet?.let {
-                                        BlockUiState.SetTextField(
-                                            set = it,
-                                            field = SetFieldType.REPS,
-                                            onValueChangeCheck = { value ->
-                                                useCases.validateSetFieldValue(
-                                                    value = value,
-                                                    setFieldType = SetFieldType.REPS
-                                                )
-                                            }
-                                        )
+                            setTextField = if (event.goToNextField) {
+                                when(setTextField.field) {
+                                    SetFieldType.REPS -> BlockUiState.SetTextField(
+                                        set = updatedSet,
+                                        field = SetFieldType.LOAD,
+                                        onValueChangeCheck = { value ->
+                                            useCases.validateSetFieldValue(
+                                                value = value,
+                                                setFieldType = SetFieldType.LOAD
+                                            )
+                                        }
+                                    )
+                                    SetFieldType.LOAD -> BlockUiState.SetTextField(
+                                        set = updatedSet,
+                                        field = SetFieldType.RATING,
+                                        onValueChangeCheck = { value ->
+                                            useCases.validateSetFieldValue(
+                                                value = value,
+                                                setFieldType = SetFieldType.RATING
+                                            )
+                                        }
+                                    )
+                                    SetFieldType.RATING -> {
+                                        val nextSet = state.days
+                                            .flatMap { it.sessions }
+                                            .flatMap { it.exercises }
+                                            .filter { it.id == setTextField.set.exerciseId }
+                                            .flatMap { it.sets }
+                                            .find { it.order == setTextField.set.order + 1 }
+                                        nextSet?.let {
+                                            BlockUiState.SetTextField(
+                                                set = it,
+                                                field = SetFieldType.REPS,
+                                                onValueChangeCheck = { value ->
+                                                    useCases.validateSetFieldValue(
+                                                        value = value,
+                                                        setFieldType = SetFieldType.REPS
+                                                    )
+                                                }
+                                            )
+                                        }
                                     }
                                 }
-                            }
+                            } else null
                         )}
                     }
                 }
