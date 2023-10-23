@@ -459,7 +459,7 @@ private fun SetTextField(
             .focusRequester(focusRequester),
         value = tfValue,
         onValueChange = {
-            if (setTextField.onValueChangeCheck(it.text)) {
+            if (it.text == tfValue.text || setTextField.onValueChangeCheck(it.text)) {
                 tfValue = it
             }
         },
