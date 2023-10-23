@@ -16,6 +16,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
@@ -57,6 +58,13 @@ fun LoadCalculationDialog(
                 enabled = dialogState.calculatedLoad != null
             ) {
                 Text(stringResource(R.string.confirm))
+            }
+        },
+        dismissButton = {
+            OutlinedButton(onClick = {
+                onEvent(BlockEvent.HideLoadCalculationDialog)
+            }) {
+                Text(stringResource(R.string.cancel))
             }
         },
         title = {
