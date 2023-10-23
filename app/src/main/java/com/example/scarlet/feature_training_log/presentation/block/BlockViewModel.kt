@@ -511,10 +511,6 @@ class BlockViewModel @Inject constructor(
                         useCases.updateSet(updatedSet)
 
                         _state.update { state -> state.copy(
-                            setTextField = null
-                        )}
-
-                        _state.update { state -> state.copy(
                             setTextField = when(setTextField.field) {
                                 SetFieldType.REPS -> BlockUiState.SetTextField(
                                     set = updatedSet,
