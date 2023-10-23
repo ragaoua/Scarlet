@@ -82,7 +82,7 @@ fun SetTextField(
 
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
     val coroutineScope = rememberCoroutineScope()
-    Box(modifier = modifier) {
+    Box(modifier = modifier.padding(horizontal = 2.dp)) {
         BasicTextField(
             value = tfValue,
             onValueChange = {
