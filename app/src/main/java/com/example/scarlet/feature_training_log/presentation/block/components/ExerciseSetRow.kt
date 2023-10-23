@@ -69,7 +69,11 @@ fun ExerciseSetRow(
 
         SetField(
             modifier = Modifier.weight(SetFieldRatio.LOAD),
-            text = set.load?.toString() ?: "",
+            text = set.load?.let {
+                if (it % 1 == 0f) {
+                    it.toInt().toString()
+                } else it.toString()
+            } ?: "",
             isSelected = selectedSet == set && selectedSetField == SetFieldType.LOAD,
             onClick = { onEvent(BlockEvent.ShowSetTextField(set, SetFieldType.LOAD)) },
             onIconClicked = if (isCopyLoadIconVisible) {
@@ -85,7 +89,11 @@ fun ExerciseSetRow(
 
         SetField(
             modifier = Modifier.weight(SetFieldRatio.RATING),
-            text = set.rating?.toString() ?: "",
+            text = set.rating?.let {
+                if (it % 1 == 0f) {
+                    it.toInt().toString()
+                } else it.toString()
+            } ?: "",
             isSelected = selectedSet == set && selectedSetField == SetFieldType.RATING,
             onClick = { onEvent(BlockEvent.ShowSetTextField(set, SetFieldType.RATING)) }
         )

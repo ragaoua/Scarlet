@@ -498,12 +498,20 @@ class BlockViewModel @Inject constructor(
                         )
                         SetFieldType.LOAD -> BlockUiState.SetTextField(
                             set = event.set,
-                            value = event.set.load?.toString() ?: "",
+                            value = event.set.load?.let {
+                                if (it % 1 == 0f) {
+                                    it.toInt().toString()
+                                } else it.toString()
+                            } ?: "",
                             field = event.setFieldType
                         )
                         SetFieldType.RATING -> BlockUiState.SetTextField(
                             set = event.set,
-                            value = event.set.rating?.toString() ?: "",
+                            value = event.set.rating?.let {
+                                if (it % 1 == 0f) {
+                                    it.toInt().toString()
+                                } else it.toString()
+                            } ?: "",
                             field = event.setFieldType,
                             isLastField = event.set.order == lastSetOrder
                         )
