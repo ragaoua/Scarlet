@@ -11,6 +11,8 @@ class DeleteBlockUseCase(
      * Delete a block
      *
      * @param block block to be deleted
+     *
+     * Note: this won't be unit tested because it simply calls a repository method
      */
     suspend operator fun invoke(block: Block) {
         repository.deleteBlock(block)
