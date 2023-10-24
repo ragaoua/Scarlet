@@ -20,6 +20,7 @@ import java.util.Date
  * Some blocks don't have sessions.
  *
  * Check if the blocks are returned in the correct number and correctly sorted.
+ * Check if the days are returned correctly sorted by order.
  * Check if the sessions are returned correctly sorted by date.
  *
  * @see GetAllBlocksUseCase
@@ -36,7 +37,12 @@ class GetAllBlocksUseCaseTest {
             (1..3).forEach { _ ->
                 repository.insertBlockWithDays(
                     block = Block(),
-                    days = (1..4).map { Day(id = ++latestInsertedDayId) }
+                    days = (1..4).map {
+                        Day(
+                            id = ++latestInsertedDayId,
+                            order = it
+                        )
+                    }
                 )
             }
 
@@ -94,6 +100,15 @@ class GetAllBlocksUseCaseTest {
             }
 
             blocksWithSessions.forEach { block ->
+                for (i in 1..block.days.lastIndex) {
+                    val day = block.days[i-1]
+                    val nextDay = block.days[i]
+                    assertTrue(
+                        "Wrong sorting of days for block $block",
+                        day.order <= nextDay.order
+                    )
+                }
+
                 val blockSessions = block.days.flatMap { it.sessions }
                 for (i in 1..blockSessions.lastIndex) {
                     val session = blockSessions[i-1]

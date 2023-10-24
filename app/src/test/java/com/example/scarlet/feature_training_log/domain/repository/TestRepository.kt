@@ -23,9 +23,23 @@ class TestRepository: ScarletRepository {
         block: Block,
         days: List<Day>
     ): Long {
-        val blockToBeInserted = block.copy(id = (blocks.size+1).toLong())
+        val blockToBeInserted = if (block.id == 0L) {
+            block.copy(id = (blocks.size + 1).toLong())
+        } else block
 
         blocks.add(blockToBeInserted)
+
+        days.forEachIndexed { index, day ->
+            val dayToBeInserted = DayWithSessions(
+                id = if (day.id == 0L) {
+                    (days.size + 1).toLong()
+                } else day.id,
+                blockId = blockToBeInserted.id,
+                order = index,
+                sessions = emptyList<Session>()
+            )
+            this.days.add(dayToBeInserted)
+        }
 
         return blockToBeInserted.id
     }
