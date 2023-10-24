@@ -31,7 +31,13 @@ class TestRepository: ScarletRepository {
     }
 
     override suspend fun updateBlock(block: Block) {
-        TODO("Not yet implemented")
+        val blockToBeUpdatedIndex = blocks.indexOfFirst { it.id == block.id }
+
+        if (blockToBeUpdatedIndex == -1) {
+            throw Exception("Block with id ${block.id} not found")
+        }
+
+        blocks[blockToBeUpdatedIndex] = block
     }
 
     override suspend fun deleteBlock(block: Block) {
