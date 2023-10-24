@@ -21,6 +21,8 @@ class RestoreBlockWithDaysWithSessionsWithExercisesWithMovementAndSetsUseCase(
      * @param block the block to insert
      *
      * @return a resource with an error if found, or a simple resource with no data
+     *
+     * Note: this won't be unit tested because it simply calls a repository method
      */
     suspend operator fun invoke(
         block: BlockWithDays<DayWithSessions<SessionWithExercises<ExerciseWithMovementAndSets>>>
