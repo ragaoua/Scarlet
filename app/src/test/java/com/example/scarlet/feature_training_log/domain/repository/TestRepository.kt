@@ -137,6 +137,18 @@ class TestRepository: ScarletRepository {
         TODO("Not yet implemented")
     }
 
+    override suspend fun getNbExercisesByMovementId(movementId: Long): Int {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun updateExerciseOrder(exercises: List<Exercise>, newOrder: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun updateExerciseSupersetOrder(exercise: Exercise, newSupersetOrder: Int) {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun insertSetWhileSettingOrder(set: Set): Long {
         TODO("Not yet implemented")
     }

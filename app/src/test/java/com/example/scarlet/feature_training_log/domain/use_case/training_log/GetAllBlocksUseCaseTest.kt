@@ -16,11 +16,11 @@ import java.lang.Math.random
 import java.util.Date
 
 /**
- * Inserts 5 blocks with 4 days each and 20 sessions with random dates.
+ * Insert 5 blocks with 4 days each and 20 sessions with random dates.
  * Some blocks don't have sessions.
  *
- * Checks if the blocks are returned in the correct number and correctly sorted.
- * Checks if the sessions are returned correctly sorted by date.
+ * Check if the blocks are returned in the correct number and correctly sorted.
+ * Check if the sessions are returned correctly sorted by date.
  *
  * @see GetAllBlocksUseCase
  */
@@ -60,49 +60,50 @@ class GetAllBlocksUseCaseTest {
 
     @Test
     fun getAllBlocksUseCase_returnsAllBlocksCorrectlySorted() = runBlocking {
-        getAllBlocks().first()
-            .data?.let { blocksWithSessions ->
-                assertTrue(
-                    "Wrong number of blocks returned : ${blocksWithSessions.size}",
-                    blocksWithSessions.size == 5
-                )
+        getAllBlocks().first().data?.let { blocksWithSessions ->
+            assertTrue(
+                "Wrong number of blocks returned : ${blocksWithSessions.size}",
+                blocksWithSessions.size == 5
+            )
 
-                for (i in 1..blocksWithSessions.lastIndex) {
-                    val blockLatestSession =
-                        blocksWithSessions[i-1].days.flatMap { it.sessions }.maxOfOrNull { it.date }
-                    val nextBlockLatestSession =
-                        blocksWithSessions[i].days.flatMap { it.sessions }.maxOfOrNull { it.date }
+            for (i in 1..blocksWithSessions.lastIndex) {
+                val blockLatestSession =
+                    blocksWithSessions[i-1].days.flatMap { it.sessions }.maxOfOrNull { it.date }
+                val nextBlockLatestSession =
+                    blocksWithSessions[i].days.flatMap { it.sessions }.maxOfOrNull { it.date }
 
-                    // When both blocks share the same date for their latest session
-                    // OR when both blocks have no sessions, compare block ids
-                    if (blockLatestSession == nextBlockLatestSession) {
-                        val blockId = blocksWithSessions[i-1].id
-                        val nextBlockId = blocksWithSessions[i].id
-                        assertTrue(
-                            "Wrong sorting of blocks : both block share the same date " +
-                                    "(or have no sessions) but the id is not descending",
-                            blockId >= nextBlockId
-                        )
-                    } else {
-                        assertTrue(
-                            "Wrong sorting of blocks",
-                            nextBlockLatestSession == null ||
-                                    nextBlockLatestSession <= blockLatestSession
-                        )
-                    }
+                // When both blocks share the same date for their latest session
+                // OR when both blocks have no sessions, compare block ids
+                if (blockLatestSession == nextBlockLatestSession) {
+                    val blockId = blocksWithSessions[i-1].id
+                    val nextBlockId = blocksWithSessions[i].id
+                    assertTrue(
+                        """
+                        Wrong sorting of blocks : both block share the same date for their
+                        latest session (or have no sessions) but the id's are not sorted descending
+                        """,
+                        blockId >= nextBlockId
+                    )
+                } else {
+                    assertTrue(
+                        "Wrong sorting of blocks",
+                        nextBlockLatestSession == null ||
+                                nextBlockLatestSession <= blockLatestSession
+                    )
                 }
+            }
 
-                blocksWithSessions.forEach { block ->
-                    val blockSessions = block.days.flatMap { day -> day.sessions }
-                    for (i in 1..blockSessions.lastIndex) {
-                        val session = blockSessions[i-1]
-                        val nextSession = blockSessions[i]
-                        assertTrue(
-                            "Wrong sorting of sessions for block $block",
-                            session.date <= nextSession.date
-                        )
-                    }
+            blocksWithSessions.forEach { block ->
+                val blockSessions = block.days.flatMap { it.sessions }
+                for (i in 1..blockSessions.lastIndex) {
+                    val session = blockSessions[i-1]
+                    val nextSession = blockSessions[i]
+                    assertTrue(
+                        "Wrong sorting of sessions for block $block",
+                        session.date <= nextSession.date
+                    )
                 }
-            } ?: fail("No data returned")
+            }
+        } ?: fail("No data returned")
     }
 }

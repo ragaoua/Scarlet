@@ -13,15 +13,19 @@ import org.junit.Before
 import org.junit.Test
 
 /**
- * Inserts a block with an empty name and checks that an error is returned
- * Inserts a block with a name that already exists and checks that an error is returned
- * Inserts a block with a name that doesn't exist and checks that an id is returned
+ * Insert a block with an empty name and check that an error is returned
+ * Insert a block with a name that already exists and check that an error is returned
+ * Insert a block with a name that doesn't exist and check that an id is returned
+ *
+ * @see InsertBlockUseCase
  */
 class InsertBlockUseCaseTest {
 
     private val repository: ScarletRepository = TestRepository()
-    private val validateBlockName: ValidateBlockNameHelper = ValidateBlockNameHelper(repository)
-    private val insertBlock = InsertBlockUseCase(repository, validateBlockName)
+    private val insertBlock = InsertBlockUseCase(
+        repository = repository,
+        validateBlockName = ValidateBlockNameHelper(repository)
+    )
 
     @Before
     fun setUp() {
@@ -34,31 +38,23 @@ class InsertBlockUseCaseTest {
     }
 
     @Test
-    fun insertBlockUseCase_insertsBlock() {
-        runBlocking {
-            insertBlock("", 1).also { resource ->
-                resource.error?.let { error ->
-                    assertTrue(
-                        "Wrong resource id returned",
-                        error.resId == R.string.error_block_name_is_empty
-                    )
-                } ?: fail("No error returned when inserting a block with an empty name")
-            }
+    fun insertBlockUseCase_insertsBlock() = runBlocking {
+        insertBlock(blockName = "", nbDays = 1).error?.let { error ->
+            assertTrue(
+                "Wrong error resource id returned",
+                error.resId == R.string.error_block_name_is_empty
+            )
+        } ?: fail("No error returned when inserting a block with an empty name")
 
-            insertBlock("Block A", 1).also { resource ->
-                resource.error?.let { error ->
-                    assertTrue(
-                        "Wrong resource id returned",
-                        error.resId == R.string.block_with_name_already_exists
-                    )
-                } ?: fail("No error returned when inserting a block with an already used name")
-            }
+        insertBlock(blockName = "Block A", nbDays = 1).error?.let { error ->
+            assertTrue(
+                "Wrong resource id returned",
+                error.resId == R.string.block_with_name_already_exists
+            )
+        } ?: fail("No error returned when inserting a block with an already used name")
 
-            insertBlock("MyBlock", 3).also { resource ->
-                resource.data ?: fail("No id returned when inserting")
-                // TODO test that the block has been inserted ?
-                // TODO test that the days have been inserted ?
-            }
+        if (insertBlock(blockName = "MyBlock", nbDays = 3).data == null) {
+            fail("No id returned when inserting")
         }
     }
 }
