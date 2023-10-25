@@ -1,11 +1,10 @@
-package com.example.scarlet.feature_training_log.domain.use_case.training_log
+package com.example.scarlet.feature_training_log.domain.use_case.block
 
 import com.example.scarlet.feature_training_log.data.repository.TestRepository
 import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.domain.model.Day
 import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.domain.repository.ScarletRepository
-import com.example.scarlet.feature_training_log.domain.use_case.block.GetAllBlocksUseCase
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertTrue
