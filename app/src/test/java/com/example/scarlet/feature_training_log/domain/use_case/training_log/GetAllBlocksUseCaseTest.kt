@@ -119,6 +119,6 @@ class GetAllBlocksUseCaseTest {
                     )
                 }
             }
-        } ?: fail("No data returned")
+        } ?: fail("Data is null")
     }
 }
