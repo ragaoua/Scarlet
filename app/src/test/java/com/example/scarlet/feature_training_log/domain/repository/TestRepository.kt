@@ -16,8 +16,11 @@ import kotlinx.coroutines.flow.flow
 class TestRepository: ScarletRepository {
 
     private val blocks = mutableListOf<Block>()
-    private val days = mutableListOf<DayWithSessions<Session>>()
+    private val days = mutableListOf<Day>()
     private val sessions = mutableListOf<Session>()
+    private val exercises = mutableListOf<Exercise>()
+    private val sets = mutableListOf<Set>()
+    private val movements = mutableListOf<Movement>()
 
     override suspend fun insertBlockWithDays(
         block: Block,
@@ -28,30 +31,31 @@ class TestRepository: ScarletRepository {
         } else block
 
         blocks.add(blockToBeInserted)
+        blocks.shuffle()
 
         days.forEachIndexed { index, day ->
-            val dayToBeInserted = DayWithSessions(
+            val dayToBeInserted = Day(
                 id = if (day.id == 0L) {
-                    (days.size + 1).toLong()
+                    (this.days.size + 1).toLong()
                 } else day.id,
                 blockId = blockToBeInserted.id,
-                order = index,
-                sessions = emptyList<Session>()
+                order = index + 1
             )
             this.days.add(dayToBeInserted)
         }
+        this.days.shuffle()
 
         return blockToBeInserted.id
     }
 
     override suspend fun updateBlock(block: Block) {
-        val blockToBeUpdatedIndex = blocks.indexOfFirst { it.id == block.id }
+        val indexOfUpdatedBlock = blocks.indexOfFirst { it.id == block.id }
 
-        if (blockToBeUpdatedIndex == -1) {
+        if (indexOfUpdatedBlock == -1) {
             throw Exception("Block with id ${block.id} not found")
         }
 
-        blocks[blockToBeUpdatedIndex] = block
+        blocks[indexOfUpdatedBlock] = block
     }
 
     override suspend fun deleteBlock(block: Block) {
@@ -64,7 +68,14 @@ class TestRepository: ScarletRepository {
                 BlockWithDays(
                     id = block.id,
                     name = block.name,
-                    days = days.filter { day -> day.blockId == block.id }
+                    days = days.filter { it.blockId == block.id }.map { day ->
+                        DayWithSessions(
+                            id = day.id,
+                            blockId = day.blockId,
+                            order = day.order,
+                            sessions = sessions.filter { it.dayId == day.id }
+                        )
+                    }
                 )
             }
         )}
@@ -89,8 +100,40 @@ class TestRepository: ScarletRepository {
         TODO("Not yet implemented")
     }
 
-    override fun getDaysWithSessionsWithExercisesWithMovementAndSetsByBlockId(blockId: Long): Flow<List<DayWithSessions<SessionWithExercises<ExerciseWithMovementAndSets>>>> {
-        TODO("Not yet implemented")
+    override fun getDaysWithSessionsWithExercisesWithMovementAndSetsByBlockId(
+        blockId: Long
+    ): Flow<List<DayWithSessions<SessionWithExercises<ExerciseWithMovementAndSets>>>> {
+        return flow { emit(
+            blocks.find { it.id == blockId }?.let { block ->
+                days.filter { it.blockId == block.id }.map { day ->
+                    DayWithSessions(
+                        id = day.id,
+                        blockId = day.blockId,
+                        order = day.order,
+                        sessions = sessions.filter { it.dayId == day.id }.map { session ->
+                            SessionWithExercises(
+                                id = session.id,
+                                date = session.date,
+                                dayId = session.dayId,
+                                exercises = exercises.filter { it.sessionId == session.id }.map { exercise ->
+                                    ExerciseWithMovementAndSets(
+                                        id = exercise.id,
+                                        sessionId = exercise.sessionId,
+                                        movementId = exercise.movementId,
+                                        order = exercise.order,
+                                        supersetOrder = exercise.supersetOrder,
+                                        movement = movements.find {
+                                            it.id == exercise.movementId
+                                        } ?: throw Exception("Movement with id ${exercise.movementId} not found"),
+                                        sets = sets.filter { it.exerciseId == exercise.id }
+                                    )
+                                }
+                            )
+                        }
+                    )
+                }
+            } ?: throw Exception("Block with id $blockId not found")
+        )}
     }
 
     override suspend fun updateSession(session: Session) {
@@ -109,9 +152,23 @@ class TestRepository: ScarletRepository {
         session: Session,
         exercises: List<Exercise>
     ): Long {
-        val sessionToBeInserted = session.copy(id = (sessions.size+1).toLong())
+        val sessionToBeInserted = if (session.id == 0L) {
+            session.copy(id = (sessions.size + 1).toLong())
+        } else session
 
         sessions.add(sessionToBeInserted)
+        sessions.shuffle()
+
+        exercises.forEach { exercise ->
+            val exerciseToBeInserted = exercise.copy(
+                id = if (exercise.id == 0L) {
+                    (this.exercises.size + 1).toLong()
+                } else exercise.id,
+                sessionId = sessionToBeInserted.id
+            )
+            this.exercises.add(exerciseToBeInserted)
+        }
+        this.exercises.shuffle()
 
         return sessionToBeInserted.id
     }
@@ -126,7 +183,21 @@ class TestRepository: ScarletRepository {
     }
 
     override suspend fun insertExercisesWhileSettingOrder(exercises: List<Exercise>) {
-        TODO("Not yet implemented")
+        exercises.groupBy { it.sessionId }.forEach { (sessionId, exercises) ->
+            val exercisesOrder = this.exercises.filter { it.sessionId == sessionId }.size + 1
+
+            exercises.forEachIndexed { index, exercise ->
+                val exerciseToBeInserted = exercise.copy(
+                    id = if (exercise.id == 0L) {
+                        (this.exercises.size + 1).toLong()
+                    } else exercise.id,
+                    order = exercisesOrder,
+                    supersetOrder = index + 1
+                )
+                this.exercises.add(exerciseToBeInserted)
+            }
+        }
+        this.exercises.shuffle()
     }
 
     override suspend fun updateExercise(exercise: Exercise) {
@@ -170,7 +241,17 @@ class TestRepository: ScarletRepository {
     }
 
     override suspend fun insertSetWhileSettingOrder(set: Set): Long {
-        TODO("Not yet implemented")
+        val setToBeInserted = set.copy(
+            id = if (set.id == 0L) {
+                (sets.size + 1).toLong()
+            } else set.id,
+            order = sets.filter { it.exerciseId == set.exerciseId }.size + 1
+        )
+
+        sets.add(setToBeInserted)
+        sets.shuffle()
+
+        return setToBeInserted.id
     }
 
     override suspend fun updateSet(set: Set) {
@@ -186,7 +267,14 @@ class TestRepository: ScarletRepository {
     }
 
     override suspend fun insertMovement(movement: Movement): Long {
-        TODO("Not yet implemented")
+        val movementToBeInserted = if (movement.id == 0L) {
+            movement.copy(id = (movements.size+1).toLong())
+        } else movement
+
+        movements.add(movementToBeInserted)
+        movements.shuffle()
+
+        return movementToBeInserted.id
     }
 
     override suspend fun updateMovement(movement: Movement) {
