@@ -25,34 +25,26 @@ class GetDaysWithSessionsWithExercisesWithMovementAndSetsByBlockIdUseCase(
     operator fun invoke(blockId: Long):
             Flow<Resource<List<DayWithSessions<SessionWithExercises<ExerciseWithMovementAndSets>>>>> {
         return repository.getDaysWithSessionsWithExercisesWithMovementAndSetsByBlockId(blockId)
-            .map { list ->
-                list.sortedBy { it.order }
-                    .map { day ->
-                    day.copy(
+            .map { days ->
+                days.sortedBy { it.order }
+                    .map { day -> day.copy(
                         sessions = day.sessions
                             .sortedWith(
                                 compareBy<SessionWithExercises<ExerciseWithMovementAndSets>> {
                                     it.date
                                 }.thenBy { it.id }
-                            ).map { session ->
-                                session.copy(
-                                    exercises = session.exercises
-                                        .sortedWith(
-                                            compareBy<ExerciseWithMovementAndSets> {
-                                                it.order
-                                            }.thenBy { it.supersetOrder }
-                                        )
-                                        .map { exercise ->
-                                            exercise.copy(
-                                                movement = exercise.movement,
-                                                sets = exercise.sets
-                                                    .sortedBy { exercise.order }
-                                            )
-                                        }
-                                )
-                            }
-                    )
-                }.let { Resource.Success(it) }
+                            ).map { session -> session.copy(
+                                exercises = session.exercises
+                                    .sortedWith(
+                                        compareBy<ExerciseWithMovementAndSets> {
+                                            it.order
+                                        }.thenBy { it.supersetOrder }
+                                    ).map { exercise -> exercise.copy(
+                                        movement = exercise.movement,
+                                        sets = exercise.sets.sortedBy { exercise.order }
+                                    )}
+                            )}
+                    )}.let { Resource.Success(it) }
             }
     }
 }
