@@ -1,4 +1,4 @@
-package com.example.scarlet.feature_training_log.domain.repository
+package com.example.scarlet.feature_training_log.data.repository
 
 import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.domain.model.BlockWithDays
@@ -10,6 +10,7 @@ import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.domain.model.SessionWithExercises
 import com.example.scarlet.feature_training_log.domain.model.Set
+import com.example.scarlet.feature_training_log.domain.repository.ScarletRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

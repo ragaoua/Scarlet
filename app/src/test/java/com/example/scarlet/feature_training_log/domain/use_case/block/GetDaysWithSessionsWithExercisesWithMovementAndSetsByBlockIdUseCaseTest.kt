@@ -2,6 +2,7 @@ package com.example.scarlet.feature_training_log.domain.use_case.block
 
 import com.example.scarlet.core.util.isSortedBy
 import com.example.scarlet.core.util.isSortedWith
+import com.example.scarlet.feature_training_log.data.repository.TestRepository
 import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.domain.model.Day
 import com.example.scarlet.feature_training_log.domain.model.Exercise
@@ -9,7 +10,6 @@ import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.domain.model.Set
 import com.example.scarlet.feature_training_log.domain.repository.ScarletRepository
-import com.example.scarlet.feature_training_log.domain.repository.TestRepository
 import com.example.scarlet.feature_training_log.domain.use_case.day.GetDaysWithSessionsWithExercisesWithMovementAndSetsByBlockIdUseCase
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
