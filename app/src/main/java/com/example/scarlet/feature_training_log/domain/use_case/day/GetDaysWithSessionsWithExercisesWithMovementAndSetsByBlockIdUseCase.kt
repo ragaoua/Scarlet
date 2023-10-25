@@ -41,7 +41,7 @@ class GetDaysWithSessionsWithExercisesWithMovementAndSetsByBlockIdUseCase(
                                         }.thenBy { it.supersetOrder }
                                     ).map { exercise -> exercise.copy(
                                         movement = exercise.movement,
-                                        sets = exercise.sets.sortedBy { exercise.order }
+                                        sets = exercise.sets.sortedBy { it.order }
                                     )}
                             )}
                     )}.let { Resource.Success(it) }
