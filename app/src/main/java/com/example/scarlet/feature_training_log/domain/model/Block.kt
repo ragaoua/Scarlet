@@ -33,3 +33,14 @@ data class BlockWithDays<T: IDay>(
         name = name
     )
 }
+
+data class BlockWithSessions<T: ISession>(
+    override val id: Long = IBlock.id,
+    override val name: String = IBlock.name,
+    val sessions: List<T> = emptyList()
+): IBlock {
+    fun toBlock() = Block(
+        id = id,
+        name = name
+    )
+}

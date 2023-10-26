@@ -33,8 +33,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.scarlet.R
-import com.example.scarlet.feature_training_log.domain.model.BlockWithDays
-import com.example.scarlet.feature_training_log.domain.model.DayWithSessions
+import com.example.scarlet.feature_training_log.domain.model.BlockWithSessions
 import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.presentation.core.DateUtils
 import com.example.scarlet.feature_training_log.presentation.destinations.BlockScreenDestination
@@ -45,7 +44,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 fun BlockListSection(
     modifier: Modifier,
     navigator: DestinationsNavigator,
-    blocks: List<BlockWithDays<DayWithSessions<Session>>> = emptyList(),
+    blocks: List<BlockWithSessions<Session>> = emptyList(),
     onEvent: (TrainingLogEvent) -> Unit
 ) {
     LazyColumn(
@@ -64,15 +63,13 @@ fun BlockListSection(
                 BlockButton(
                     navigator = navigator,
                     block = latestBlock,
-                    blockSubtext = latestBlock.days.flatMap { it.sessions }.let { blockSessions ->
-                        if (blockSessions.isNotEmpty()) {
-                            stringResource(
-                                R.string.block_started_on,
-                                DateUtils.formatDate(blockSessions.first().date)
-                            )
-                        } else {
-                            stringResource(R.string.empty_block)
-                        }
+                    blockSubtext = if (latestBlock.sessions.isNotEmpty()) {
+                        stringResource(
+                            R.string.block_started_on,
+                            DateUtils.formatDate(latestBlock.sessions.first().date)
+                        )
+                    } else {
+                        stringResource(R.string.empty_block)
                     },
                     onEvent = onEvent
                 )
@@ -89,13 +86,11 @@ fun BlockListSection(
                     BlockButton(
                         navigator = navigator,
                         block = block,
-                        blockSubtext = block.days.flatMap { it.sessions }.let { blockSessions ->
-                            if (blockSessions.isNotEmpty()) {
-                                DateUtils.formatDate(blockSessions.first().date) + " - " +
-                                        DateUtils.formatDate(blockSessions.last().date)
-                            } else {
-                                stringResource(R.string.empty_block)
-                            }
+                        blockSubtext = if (block.sessions.isNotEmpty()) {
+                            DateUtils.formatDate(block.sessions.first().date) + " - " +
+                                    DateUtils.formatDate(block.sessions.last().date)
+                        } else {
+                            stringResource(R.string.empty_block)
                         },
                         onEvent = onEvent,
                         colors = ButtonDefaults.buttonColors(
@@ -139,7 +134,7 @@ fun SectionTitle(
 @Composable
 private fun BlockButton(
     navigator: DestinationsNavigator,
-    block: BlockWithDays<DayWithSessions<Session>>,
+    block: BlockWithSessions<Session>,
     blockSubtext: String,
     onEvent: (TrainingLogEvent) -> Unit,
     colors: ButtonColors = ButtonDefaults.buttonColors()

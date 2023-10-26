@@ -1,7 +1,7 @@
 package com.example.scarlet.feature_training_log.data.repository
 
 import com.example.scarlet.feature_training_log.domain.model.Block
-import com.example.scarlet.feature_training_log.domain.model.BlockWithDays
+import com.example.scarlet.feature_training_log.domain.model.BlockWithSessions
 import com.example.scarlet.feature_training_log.domain.model.Day
 import com.example.scarlet.feature_training_log.domain.model.DayWithSessions
 import com.example.scarlet.feature_training_log.domain.model.Exercise
@@ -63,22 +63,16 @@ class TestRepository: ScarletRepository {
         TODO("Not yet implemented")
     }
 
-    override fun getAllBlocks(): Flow<List<BlockWithDays<DayWithSessions<Session>>>> {
+    override fun getAllBlocksWithSessions(): Flow<List<BlockWithSessions<Session>>> {
         return flow { emit(
             blocks.map { block ->
-                BlockWithDays(
+                BlockWithSessions(
                     id = block.id,
                     name = block.name,
-                    days = days.filter { it.blockId == block.id }.map { day ->
-                        DayWithSessions(
-                            id = day.id,
-                            blockId = day.blockId,
-                            order = day.order,
-                            sessions = sessions.filter { it.dayId == day.id }
-                        )
+                    sessions = days.filter { it.blockId == block.id }.map { it.id }.let { blockDayIds ->
+                        sessions.filter { it.dayId in blockDayIds }
                     }
-                )
-            }
+                )}
         )}
     }
 

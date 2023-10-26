@@ -8,7 +8,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import com.example.scarlet.feature_training_log.data.data_source.entity.BlockEntity
-import com.example.scarlet.feature_training_log.data.data_source.entity.BlockWithDaysWithSessionsEntity
+import com.example.scarlet.feature_training_log.data.data_source.entity.BlockWithSessionsEntity
 import com.example.scarlet.feature_training_log.data.data_source.entity.DayEntity
 import com.example.scarlet.feature_training_log.data.data_source.entity.ExerciseEntity
 import com.example.scarlet.feature_training_log.data.data_source.entity.MovementEntity
@@ -47,7 +47,7 @@ interface BlockDao {
 
     @Transaction
     @Query("SELECT * FROM block")
-    fun getAllBlocks(): Flow<List<BlockWithDaysWithSessionsEntity>>
+    fun getAllBlocksWithSessions(): Flow<List<BlockWithSessionsEntity>>
 
     @Query("SELECT * FROM block WHERE name = :name")
     suspend fun getBlockByName(name: String): BlockEntity?
