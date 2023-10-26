@@ -18,6 +18,8 @@ class RestoreSessionWithExercisesWithMovementAndSetsUseCase(
      * @param session the session to insert
      *
      * @return a resource with an error if found, or a simple resource with no data
+     *
+     * Note: this won't be unit tested because it's a simple call to the repository
      */
     suspend operator fun invoke(
         session: SessionWithExercises<ExerciseWithMovementAndSets>
