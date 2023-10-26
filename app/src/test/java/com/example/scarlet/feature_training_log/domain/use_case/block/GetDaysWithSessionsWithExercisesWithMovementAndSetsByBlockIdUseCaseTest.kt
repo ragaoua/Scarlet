@@ -6,6 +6,8 @@ import com.example.scarlet.feature_training_log.data.repository.TestRepository
 import com.example.scarlet.feature_training_log.domain.model.Block
 import com.example.scarlet.feature_training_log.domain.model.Day
 import com.example.scarlet.feature_training_log.domain.model.Exercise
+import com.example.scarlet.feature_training_log.domain.model.IExercise
+import com.example.scarlet.feature_training_log.domain.model.ISession
 import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.domain.model.Set
@@ -43,26 +45,31 @@ class GetDaysWithSessionsWithExercisesWithMovementAndSetsByBlockIdUseCaseTest {
 
     @Before
     fun setUp() = runBlocking {
+        val nbMovements = 10
+        val nbDays = 4
+        val nbSessions = 50
+        val nbExercisesPerSession = 5
+        val nbSupersetExercisesPerSession = 3
+        val nbSetsPerExercise = 3
+
         // Insert movements
-        val nbMovementsInserted = 10
-        (1L..nbMovementsInserted).forEach {
+        (1L..nbMovements).forEach {
             repository.insertMovement(
                 Movement(id = it) // The movement's name is irrelevant here
             )
         }
 
-        // Insert blocks and days
-        val nbDaysInserted = 4
+        // Insert block and days
         repository.insertBlockWithDays(
             block = Block(id = BLOCK_ID),
-            days = (1L..nbDaysInserted).map { Day(id = it) }
+            days = (1L..nbDays).map { Day(id = it) }
         )
 
         // Insert sessions and exercises
-        (1L..50L).forEach { sessionId ->
+        (1L..nbSessions).forEach { sessionId ->
             // Insert a session
 
-            // Randomly assign a date but limit the choice to 5 possibilities.
+            // Randomly assign a date but limit the choices to 5 possibilities.
             // Given the number of sessions (50) and days (4) inserted, at least 1 day
             // will have 2 sessions with the same date, which is what we want to test
             // (if 2 sessions have the same date, they should be sorted by id)
@@ -70,25 +77,23 @@ class GetDaysWithSessionsWithExercisesWithMovementAndSetsByBlockIdUseCaseTest {
             val session = Session(
                 id = sessionId,
                 date = date,
-                dayId = (random() * (nbDaysInserted-1)).toLong() + 1 // Randomly assign a day
+                dayId = (random() * (nbDays-1) + 1).toLong() // Randomly assign a day
             )
             repository.insertSessionWithExercises(session, emptyList())
 
             // Insert exercises and sets
-            val nbExercisesInserted = 5
-            val nbSupersetExercisesInserted = 3
-            (1..nbExercisesInserted).forEach {
+            (1..nbExercisesPerSession).forEach {
                 // Insert exercise
-                val exerciseId = it + ((nbExercisesInserted+nbSupersetExercisesInserted) * (sessionId-1))
+                val exerciseId = it + ((nbExercisesPerSession+nbSupersetExercisesPerSession) * (sessionId-1))
                 val exercise = Exercise(
                     id = exerciseId,
                     sessionId = sessionId,
-                    movementId = (random() * (nbMovementsInserted-1)).toLong() + 1 // Randomly assign a movement
+                    movementId = (random() * (nbMovements-1)).toLong() + 1 // Randomly assign a movement
                 )
                 repository.insertExercisesWhileSettingOrder(listOf(exercise))
 
                 // Insert sets
-                (1..3).forEach { _ ->
+                (1..nbSetsPerExercise).forEach { _ ->
                     val set = Set(exerciseId = exerciseId)
 
                     repository.insertSetWhileSettingOrder(set)
@@ -96,18 +101,20 @@ class GetDaysWithSessionsWithExercisesWithMovementAndSetsByBlockIdUseCaseTest {
             }
 
             // Insert superset
-            val supersetExercises = (1..nbSupersetExercisesInserted).map {
+            val supersetExercises = (1..nbSupersetExercisesPerSession).map {
                 Exercise(
-                    id = it + ((nbExercisesInserted+nbSupersetExercisesInserted) * (sessionId-1)) + nbExercisesInserted,
+                    id = it + ((nbExercisesPerSession+nbSupersetExercisesPerSession) * (sessionId-1)) + nbExercisesPerSession,
                     sessionId = sessionId,
-                    movementId = (random() * (nbMovementsInserted-1)).toLong() + 1 // Randomly assign a movement
+                    movementId = (random() * (nbMovements-1)).toLong() + 1 // Randomly assign a movement
                 )
             }
             repository.insertExercisesWhileSettingOrder(supersetExercises)
 
             supersetExercises.forEach {
-                val set = Set(exerciseId = it.id)
-                repository.insertSetWhileSettingOrder(set)
+                (1..nbSetsPerExercise).forEach { _ ->
+                    val set = Set(exerciseId = it.id)
+                    repository.insertSetWhileSettingOrder(set)
+                }
             }
         }
     }
@@ -120,21 +127,19 @@ class GetDaysWithSessionsWithExercisesWithMovementAndSetsByBlockIdUseCaseTest {
             }
 
             days.forEach { day ->
-                val areSessionsSortedByDateThenId = day.sessions.isSortedWith { s1, s2 ->
-                    s1.date.compareTo(s2.date)
-                        .takeIf { it != 0 }
-                        ?: s1.id.compareTo(s2.id)
-                }
+                val areSessionsSortedByDateThenId = day.sessions.isSortedWith (
+                    compareBy<ISession> { it.date }
+                        .thenBy { it.id }
+                )
                 if (!areSessionsSortedByDateThenId) {
                     fail("Session are not sorted by date then by id")
                 }
 
                 day.sessions.forEach { session ->
-                    val areExercisesSortedByOrderThenSupersetOrder = session.exercises.isSortedWith { e1, e2 ->
-                        e1.order.compareTo(e2.order)
-                            .takeIf { it != 0 }
-                            ?: e1.supersetOrder.compareTo(e2.supersetOrder)
-                    }
+                    val areExercisesSortedByOrderThenSupersetOrder = session.exercises.isSortedWith(
+                        compareBy<IExercise> { it.order }
+                            .thenBy { it.supersetOrder }
+                    )
                     if (!areExercisesSortedByOrderThenSupersetOrder) {
                         fail("Exercises are not sorted by order then by supersetOrder")
                     }

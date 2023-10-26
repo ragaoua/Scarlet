@@ -1,14 +1,6 @@
 package com.example.scarlet.core.util
 
-/**
- * Check if an iterable is sorted with a given comparison function.
- * If the iterable is empty, it is considered sorted.
- *
- * @param comparison the comparison function to use for sorting
- *
- * @return true if the iterable is sorted, false otherwise
- */
-inline fun <T> Iterable<T>.isSortedWith(crossinline comparison: (T, T) -> Int): Boolean {
+fun <T> Iterable<T>.isSortedWith(comparator: Comparator<in T>): Boolean {
     val iterator = iterator()
     if (!iterator.hasNext()) {
         return true
@@ -18,7 +10,7 @@ inline fun <T> Iterable<T>.isSortedWith(crossinline comparison: (T, T) -> Int): 
     while (iterator.hasNext()) {
         val currentElement = iterator.next()
 
-        if (comparison(prevElement, currentElement) > 0) {
+        if (comparator.compare(prevElement, currentElement) > 0) {
             return false
         }
 
@@ -38,31 +30,7 @@ inline fun <T> Iterable<T>.isSortedWith(crossinline comparison: (T, T) -> Int): 
  * @return true if the iterable is sorted, false otherwise
  */
 inline fun <T, R : Comparable<R>> Iterable<T>.isSortedBy(crossinline selector: (T) -> R?): Boolean {
-    val iterator = iterator()
-    if (!iterator.hasNext()) {
-        return true
-    }
-
-    var previousValue = selector(iterator.next())
-    while (iterator.hasNext()) {
-        val currentValue = selector(iterator.next())
-
-        if(previousValue == null) {
-            if (currentValue != null) {
-                return false
-            }
-        } else {
-            if (currentValue != null) {
-                if (currentValue < previousValue) {
-                    return false
-                }
-            }
-        }
-
-        previousValue = currentValue
-    }
-
-    return true
+    return isSortedWith(compareBy(selector))
 }
 
 
