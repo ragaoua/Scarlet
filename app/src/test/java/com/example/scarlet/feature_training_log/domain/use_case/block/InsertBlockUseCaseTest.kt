@@ -7,8 +7,6 @@ import com.example.scarlet.feature_training_log.domain.repository.ScarletReposit
 import com.example.scarlet.feature_training_log.domain.use_case.block.helpers.ValidateBlockNameHelper
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertTrue
-import org.junit.Assert.fail
-import org.junit.Before
 import org.junit.Test
 
 /**
@@ -26,8 +24,7 @@ class InsertBlockUseCaseTest {
         validateBlockName = ValidateBlockNameHelper(repository)
     )
 
-    @Before
-    fun setUp() {
+    init {
         runBlocking {
             repository.insertBlockWithDays(
                 block = Block(name = "Block A"),
@@ -37,23 +34,20 @@ class InsertBlockUseCaseTest {
     }
 
     @Test
-    fun insertBlockUseCase_insertsBlock() = runBlocking {
-        insertBlock(blockName = "", nbDays = 1).error?.let { error ->
-            assertTrue(
-                "Wrong error resource id returned",
-                error.resId == R.string.error_block_name_is_empty
-            )
-        } ?: fail("No error returned when inserting a block with an empty name")
+    fun insertingBlockWithEmptyName_returnsError() = runBlocking {
+        val error = insertBlock(blockName = "", nbDays = 1).error
+        assertTrue(error?.resId == R.string.error_block_name_is_empty)
+    }
 
-        insertBlock(blockName = "Block A", nbDays = 1).error?.let { error ->
-            assertTrue(
-                "Wrong resource id returned",
-                error.resId == R.string.block_with_name_already_exists
-            )
-        } ?: fail("No error returned when inserting a block with an already used name")
+    @Test
+    fun insertingBlockWithAlreadyUsedName_returnsError() = runBlocking {
+        val error = insertBlock(blockName = "Block A", nbDays = 1).error
+        assertTrue(error?.resId == R.string.block_with_name_already_exists)
+    }
 
-        if (insertBlock(blockName = "MyBlock", nbDays = 3).data == null) {
-            fail("No id returned when inserting")
-        }
+    @Test
+    fun insertBlock_returnsId() = runBlocking {
+        val id = insertBlock(blockName = "MyBlock", nbDays = 3).data
+        assertTrue(id != null)
     }
 }

@@ -8,8 +8,6 @@ import com.example.scarlet.feature_training_log.domain.repository.ScarletReposit
 import com.example.scarlet.feature_training_log.domain.use_case.block.helpers.ValidateBlockNameHelper
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertTrue
-import org.junit.Assert.fail
-import org.junit.Before
 import org.junit.Test
 
 /**
@@ -28,8 +26,7 @@ class UpdateBlockUseCaseTest {
     )
     private var block: Block = Block(name = "Block A")
 
-    @Before
-    fun setUp() {
+    init {
         runBlocking {
             repository.insertBlockWithDays(
                 block = Block(name = "Block A"),
@@ -41,23 +38,21 @@ class UpdateBlockUseCaseTest {
     }
 
     @Test
-    fun updateBlockUseCase_updatesBlock() = runBlocking {
-        updateBlock(block.copy(name = "")).error?.let { error ->
-            assertTrue(
-                "Wrong error resource id returned",
-                error.resId == R.string.error_block_name_is_empty
-            )
-        } ?: fail("No error returned when updating a block with an empty name")
+    fun updateBlockWithEmptyName_returnsError() = runBlocking {
+        val error = updateBlock(block.copy(name = "")).error
 
-        updateBlock(block.copy(name = "Block A")).error?.let { error ->
-            assertTrue(
-                "Wrong resource id returned",
-                error.resId == R.string.block_with_name_already_exists
-            )
-        } ?: fail("No error returned when updating a block with an already used name")
+        assertTrue(error?.resId == R.string.error_block_name_is_empty)
+    }
 
-        if (updateBlock(block.copy(name = "MyBlock")) !is Resource.Success) {
-            fail("No success resource returned when updating")
-        }
+    @Test
+    fun updateBlockWithAlreadyUsedName_returnsError() = runBlocking {
+        val error = updateBlock(block.copy(name = "Block A")).error
+        assertTrue(error?.resId == R.string.block_with_name_already_exists)
+    }
+
+    @Test
+    fun updateBlock_returnsSuccess() = runBlocking {
+        val resource = updateBlock(block.copy(name = "MyBlock"))
+        assertTrue(resource is Resource.Success)
     }
 }
