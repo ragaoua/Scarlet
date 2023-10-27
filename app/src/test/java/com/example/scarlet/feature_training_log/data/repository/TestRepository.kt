@@ -140,7 +140,14 @@ class TestRepository: ScarletRepository {
     }
 
     override suspend fun getSessionsWithExercisesByDayId(dayId: Long): List<SessionWithExercises<Exercise>> {
-        TODO("Not yet implemented")
+        return sessions.filter { it.dayId == dayId }.map { session ->
+            SessionWithExercises(
+                id = session.id,
+                date = session.date,
+                dayId = session.dayId,
+                exercises = exercises.filter { it.sessionId == session.id }
+            )
+        }
     }
 
     override suspend fun insertSessionWithExercises(
