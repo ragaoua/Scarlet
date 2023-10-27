@@ -1,5 +1,6 @@
 package com.example.scarlet.feature_training_log.domain.use_case.session
 
+import com.example.scarlet.feature_training_log.domain.model.ISession
 import com.example.scarlet.feature_training_log.domain.model.Session
 import com.example.scarlet.feature_training_log.domain.repository.ScarletRepository
 
@@ -17,17 +18,19 @@ class InsertSessionUseCase(
      * @return the id of the inserted session
      */
     suspend operator fun invoke(dayId: Long): Long {
-        val daySessions = repository.getSessionsWithExercisesByDayId(dayId)
+        val latestSessionForThatDay = repository.getSessionsWithExercisesByDayId(dayId)
+            .sortedWith(compareByDescending<ISession> { it.date }.thenByDescending { it.id })
+            .firstOrNull()
 
-        val session = Session(dayId = dayId)
-        val exercises = daySessions.lastOrNull()?.exercises?.map {
-            // Sets the ids to 0 shouldn't be necessary, but it's here just in case
+        val insertedSession = Session(dayId = dayId)
+        val exercises = latestSessionForThatDay?.exercises?.map {
+            // Setting the id to 0 shouldn't be necessary, but it's here just in case
             it.copy(
                 id = 0,
                 sessionId = 0
             )
         } ?: emptyList()
 
-        return repository.insertSessionWithExercises(session, exercises)
+        return repository.insertSessionWithExercises(insertedSession, exercises)
     }
 }
