@@ -13,8 +13,10 @@ class InsertSessionUseCase(
      * the exercises from the latest one (only the exercises, not the sets).
      *
      * @param dayId day id for the session to be inserted
+     *
+     * @return the id of the inserted session
      */
-    suspend operator fun invoke(dayId: Long) {
+    suspend operator fun invoke(dayId: Long): Long {
         val daySessions = repository.getSessionsWithExercisesByDayId(dayId)
 
         val session = Session(dayId = dayId)
@@ -25,6 +27,7 @@ class InsertSessionUseCase(
                 sessionId = 0
             )
         } ?: emptyList()
-        repository.insertSessionWithExercises(session, exercises)
+
+        return repository.insertSessionWithExercises(session, exercises)
     }
 }
