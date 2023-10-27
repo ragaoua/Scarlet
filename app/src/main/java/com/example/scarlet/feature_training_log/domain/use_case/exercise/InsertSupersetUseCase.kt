@@ -13,6 +13,8 @@ class InsertSupersetUseCase(
      *
      * @param sessionId id of the exercise's session
      * @param movementIds list of movement ids for the exercises
+     *
+     * Note: this won't be unit tested because it's a simple call to the repository
      */
     suspend operator fun invoke(sessionId: Long, movementIds: List<Long>) {
         repository.insertExercisesWhileSettingOrder(

@@ -13,6 +13,8 @@ class InsertExerciseUseCase(
      *
      * @param sessionId id of the exercise's session
      * @param movementId id of the exercise's movement
+     *
+     * Note: this won't be unit tested because it's a simple call to the repository
      */
     suspend operator fun invoke(sessionId: Long, movementId: Long) {
         repository.insertExercisesWhileSettingOrder(

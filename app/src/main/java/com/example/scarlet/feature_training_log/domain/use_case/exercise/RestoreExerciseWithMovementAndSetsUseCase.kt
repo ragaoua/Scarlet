@@ -14,6 +14,8 @@ class RestoreExerciseWithMovementAndSetsUseCase(
      *
      * @param exercise the exercise to insert
      * @param isExerciseInASuperset whether the exercise is in a superset or not
+     *
+     * Note: this won't be unit tested because it's a simple call to the repository
      */
     suspend operator fun invoke(
         exercise: ExerciseWithMovementAndSets,

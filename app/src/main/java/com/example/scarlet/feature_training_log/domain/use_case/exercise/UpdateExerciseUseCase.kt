@@ -11,6 +11,8 @@ class UpdateExerciseUseCase(
      * Update an exercise
      *
      * @param exercise exercise to be updated
+     *
+     * Note: this won't be unit tested because it's a simple call to the repository
      */
     suspend operator fun invoke(exercise: Exercise) {
         repository.updateExercise(exercise)

@@ -11,6 +11,8 @@ class DeleteExerciseUseCase(
      * Delete an exercise and update the order of the subsequent exercises for the same session
      *
      * @param exercise exercise to be deleted
+     *
+     * Note: this won't be unit tested because it's a simple call to the repository
      */
     suspend operator fun invoke(exercise: Exercise) {
         repository.deleteExerciseAndUpdateSubsequenceExercisesOrder(exercise)

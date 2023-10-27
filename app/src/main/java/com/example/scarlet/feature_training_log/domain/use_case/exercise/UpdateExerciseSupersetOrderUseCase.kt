@@ -13,6 +13,8 @@ class UpdateExerciseSupersetOrderUseCase(
      *
      * @param exercise exercise to update
      * @param newSupersetOrder new supersetOrder of the exercise
+     *
+     * Note: this won't be unit tested because it's a simple call to the repository
      */
     suspend operator fun invoke(exercise: Exercise, newSupersetOrder: Int) {
         repository.updateExerciseSupersetOrder(exercise, newSupersetOrder)

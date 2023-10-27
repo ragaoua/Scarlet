@@ -14,6 +14,8 @@ class GetExercisesWithMovementAndSetsBySessionIdUseCase(
      * @param sessionId id of the exercises' session
      *
      * @return a flow of resources with data (the list of exercises)
+     *
+     * Note: this won't be unit tested because it's a simple call to the repository
      */
     suspend operator fun invoke(sessionId: Long):
             Resource<List<ExerciseWithMovementAndSets>> {
