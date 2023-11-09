@@ -662,17 +662,19 @@ class BlockViewModel @Inject constructor(
     }
 
     private fun updateMovementNameFilter(nameFilter: String) {
-        state.value.movementSelectionSheet?.let { sheet ->
-            filterMovementsJob?.cancel()
-            filterMovementsJob = useCases.getMovementsFilteredByName(nameFilter)
-                .onEach { movements ->
-                    _state.update { state -> state.copy(
-                        movementSelectionSheet = sheet.copy(
-                            movements = movements.data ?: emptyList()
-                        )
-                    )}
-                }.launchIn(viewModelScope)
-        }
+        filterMovementsJob?.cancel()
+        filterMovementsJob = useCases.getMovementsFilteredByName(nameFilter)
+            .onEach { resource ->
+                val movements = resource.data ?: emptyList()
+                _state.update { state -> state.copy(
+                    movementSelectionSheet = state.movementSelectionSheet?.copy(
+                        movements = movements,
+                        addMovementName = if(nameFilter.isNotBlank() &&movements.any { it.name == nameFilter }) {
+                            nameFilter
+                        } else null
+                    )
+                )}
+            }.launchIn(viewModelScope)
     }
 
     sealed interface UiAction {

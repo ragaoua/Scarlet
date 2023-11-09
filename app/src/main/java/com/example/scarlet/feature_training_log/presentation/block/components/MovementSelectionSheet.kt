@@ -102,10 +102,7 @@ fun MovementSelectionSheet(
                             }
                         }
                     }
-                    if (
-                        sheetState.movements.none { it.name == sheetState.movementNameFilter } and
-                        sheetState.movementNameFilter.isNotBlank()
-                    ) {
+                    sheetState.addMovementName?.let { addMovementName ->
                         item {
                             SecondaryActionButton(
                                 onClick = {
@@ -117,13 +114,13 @@ fun MovementSelectionSheet(
                                     imageVector = Icons.Default.Add,
                                     contentDescription = stringResource(
                                         R.string.add_new_movement_btn_msg,
-                                        sheetState.movementNameFilter
+                                        addMovementName
                                     )
                                 )
                                 Text(
                                     text = stringResource(
                                         R.string.add_new_movement_btn_msg,
-                                        sheetState.movementNameFilter
+                                        addMovementName
                                     ),
                                     style = MaterialTheme.typography.titleLarge,
                                     textAlign = TextAlign.Center,
