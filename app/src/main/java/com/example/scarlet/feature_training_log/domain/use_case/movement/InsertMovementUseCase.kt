@@ -3,7 +3,6 @@ package com.example.scarlet.feature_training_log.domain.use_case.movement
 import com.example.scarlet.R
 import com.example.scarlet.core.util.Resource
 import com.example.scarlet.core.util.StringResource
-import com.example.scarlet.core.util.toTitleCase
 import com.example.scarlet.feature_training_log.domain.model.Movement
 import com.example.scarlet.feature_training_log.domain.repository.ScarletRepository
 import com.example.scarlet.feature_training_log.domain.use_case.movement.helpers.ValidateMovementNameHelper
@@ -30,13 +29,11 @@ class InsertMovementUseCase(
 
         return repository.getAllMovements().first()
             .let { movements ->
-                if (movements.any { it.name.equals(movementName, ignoreCase = true) }) {
+                if (movements.any { it.name == movementName }) {
                     Resource.Error(StringResource(R.string.error_movement_already_exists))
                 } else {
                     repository.insertMovement(
-                        Movement(
-                            name = movementName.toTitleCase() // TODO : strip string
-                        )
+                        Movement(name = movementName)
                     ).let { Resource.Success(it) }
                 }
             }

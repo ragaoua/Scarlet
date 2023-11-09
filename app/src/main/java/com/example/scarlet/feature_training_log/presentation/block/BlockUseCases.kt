@@ -12,6 +12,7 @@ import com.example.scarlet.feature_training_log.domain.use_case.exercise.UpdateE
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.UpdateExerciseUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.UpdateExercisesOrderUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.movement.DeleteMovementUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.movement.FormatNewMovementNameUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.movement.GetMovementsFilteredByNameUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.movement.InsertMovementUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.movement.UpdateMovementUseCase
@@ -33,6 +34,7 @@ data class BlockUseCases(
     val updateSession: UpdateSessionUseCase,
     val deleteSession: DeleteSessionUseCase,
     val getMovementsFilteredByName: GetMovementsFilteredByNameUseCase,
+    val formatNewMovementName: FormatNewMovementNameUseCase,
     val insertExercise: InsertExerciseUseCase,
     val insertSuperset: InsertSupersetUseCase,
     val updateExercise: UpdateExerciseUseCase,

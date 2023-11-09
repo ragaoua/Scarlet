@@ -22,6 +22,7 @@ import com.example.scarlet.feature_training_log.domain.use_case.exercise.UpdateE
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.UpdateExerciseUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.exercise.UpdateExercisesOrderUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.movement.DeleteMovementUseCase
+import com.example.scarlet.feature_training_log.domain.use_case.movement.FormatNewMovementNameUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.movement.GetMovementsFilteredByNameUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.movement.InsertMovementUseCase
 import com.example.scarlet.feature_training_log.domain.use_case.movement.UpdateMovementUseCase
@@ -101,6 +102,7 @@ object AppModule {
         updateSession = UpdateSessionUseCase(repository),
         deleteSession = DeleteSessionUseCase(repository),
         getMovementsFilteredByName = GetMovementsFilteredByNameUseCase(repository),
+        formatNewMovementName = FormatNewMovementNameUseCase(repository),
         insertExercise = InsertExerciseUseCase(repository),
         insertSuperset = InsertSupersetUseCase(repository),
         updateExercise = UpdateExerciseUseCase(repository),

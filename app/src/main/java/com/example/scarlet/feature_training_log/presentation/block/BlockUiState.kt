@@ -44,7 +44,7 @@ data class BlockUiState (
         val exercise: Exercise? = null,
         val movementNameFilter: String = "",
         val movements: List<Movement> = emptyList(),
-        val addMovementName: String? = null, // When null, the "add movement" button is disabled
+        val newMovementName: String? = null, // When null, the "add movement" button is disabled
         val isInSupersetSelectionMode: Boolean = false,
         val supersetMovements: List<Movement> = emptyList(),
         val editMovementSheet: EditMovementSheetState? = null, // null means the sheet is hidden

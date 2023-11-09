@@ -231,9 +231,9 @@ class BlockViewModel @Inject constructor(
                 updateMovementNameFilter(event.nameFilter)
             }
             is BlockEvent.AddMovement -> {
-                state.value.movementSelectionSheet?.let { sheet ->
+                state.value.movementSelectionSheet?.newMovementName?.let { addMovementName ->
                     viewModelScope.launch(Dispatchers.IO) {
-                        useCases.insertMovement(sheet.movementNameFilter).also { resource ->
+                        useCases.insertMovement(addMovementName).also { resource ->
                             resource.error?.let {
                                 _uiActions.send(UiAction.ShowSnackbar(it))
                             }
@@ -669,9 +669,7 @@ class BlockViewModel @Inject constructor(
                 _state.update { state -> state.copy(
                     movementSelectionSheet = state.movementSelectionSheet?.copy(
                         movements = movements,
-                        addMovementName = if(nameFilter.isNotBlank() &&movements.any { it.name == nameFilter }) {
-                            nameFilter
-                        } else null
+                        newMovementName = useCases.formatNewMovementName(nameFilter, movements).data
                     )
                 )}
             }.launchIn(viewModelScope)

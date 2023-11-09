@@ -102,7 +102,7 @@ fun MovementSelectionSheet(
                             }
                         }
                     }
-                    sheetState.addMovementName?.let { addMovementName ->
+                    sheetState.newMovementName?.let { addMovementName ->
                         item {
                             SecondaryActionButton(
                                 onClick = {
