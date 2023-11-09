@@ -10,8 +10,6 @@ class GetMovementsFilteredByNameUseCase(
     val repository: ScarletRepository
 ) {
 
-    private var movements: Flow<List<Movement>>? = null
-
     /**
      * Retrieve a list of movements filtered by name (the movements' name has to contain the filter)
      * The filter is case insensitive.
@@ -21,8 +19,7 @@ class GetMovementsFilteredByNameUseCase(
      * @return a flow of resources with data (the list of movements)
      */
     operator fun invoke(nameFilter: String): Flow<Resource<List<Movement>>> {
-        return (movements ?: run { repository.getAllMovements() })
-            .also{ movements = it }
+        return repository.getAllMovements()
             .map { movementList ->
                 movementList
                     .filter { it.name.contains(nameFilter, ignoreCase = true) }

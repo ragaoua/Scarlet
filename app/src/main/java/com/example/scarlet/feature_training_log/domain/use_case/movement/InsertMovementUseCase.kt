@@ -15,8 +15,6 @@ class InsertMovementUseCase(
     private val validateMovementName: ValidateMovementNameHelper
 ) {
 
-    private var movements: Flow<List<Movement>>? = null
-
     /**
      * Insert a movement after checking it doesn't already exist.
      *
@@ -31,9 +29,8 @@ class InsertMovementUseCase(
             }
         }
 
-        return (movements ?: run { repository.getAllMovements() })
-            .also { movements = it }
-            .map { movements ->
+        return repository.getAllMovements().first()
+            .let { movements ->
                 if (movements.any { it.name.equals(movementName, ignoreCase = true) }) {
                     Resource.Error(StringResource(R.string.error_movement_already_exists))
                 } else {
