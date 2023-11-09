@@ -281,8 +281,14 @@ class BlockViewModel @Inject constructor(
                         return@launch
                     }
 
+                    val formattedMovementName = useCases.formatNewMovementName(
+                        name = sheet.editedMovementName,
+                        movements = emptyList() // ignore movements already in db when editing
+                                                // because we want the "updateMovement" use case to
+                                                // return an error if the name is already used
+                    ).data ?: return@launch
                     useCases.updateMovement(
-                        sheet.movement.copy(name = sheet.editedMovementName)
+                        sheet.movement.copy(name = formattedMovementName)
                     ).also { resource ->
                         resource.error?.let { error ->
                             _state.update { it.copy(
