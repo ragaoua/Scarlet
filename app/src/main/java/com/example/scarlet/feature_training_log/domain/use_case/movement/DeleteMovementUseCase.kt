@@ -11,6 +11,8 @@ class DeleteMovementUseCase(
      * Delete a movement
      *
      * @param movement movement to be deleted
+     *
+     * Note: this won't be unit tested because it's a simple call to the repository
      */
     suspend operator fun invoke(movement: Movement) {
         repository.deleteMovement(movement)
