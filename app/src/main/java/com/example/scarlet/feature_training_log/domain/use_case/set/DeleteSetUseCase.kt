@@ -11,6 +11,8 @@ class DeleteSetUseCase(
      * Delete a set and update the order of the subsequent sets for the same exercise
      *
      * @param set set to be deleted
+     *
+     * Note: this won't be unit tested because it's a simple call to the repository
      */
     suspend operator fun invoke(set: Set) {
         repository.deleteSetAndUpdateSubsequentSetsOrder(set)

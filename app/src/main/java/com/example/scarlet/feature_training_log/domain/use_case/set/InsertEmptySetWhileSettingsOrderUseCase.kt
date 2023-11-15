@@ -14,6 +14,8 @@ class InsertEmptySetWhileSettingsOrderUseCase(
      * @param exerciseId id of the set's exercise
      *
      * @return a simple resource with no data
+     *
+     * Note: this won't be unit tested because it's a simple call to the repository
      */
     suspend operator fun invoke(exerciseId: Long) {
         repository.insertSetWhileSettingOrder(
