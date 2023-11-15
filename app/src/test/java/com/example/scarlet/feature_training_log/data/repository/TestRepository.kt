@@ -292,6 +292,6 @@ class TestRepository: ScarletRepository {
     }
 
     override suspend fun getMovementByName(name: String): Movement? {
-        TODO("Not yet implemented")
+        return movements.find { it.name == name }
     }
 }
