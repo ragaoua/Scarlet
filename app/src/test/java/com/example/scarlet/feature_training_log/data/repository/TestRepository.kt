@@ -288,7 +288,7 @@ class TestRepository: ScarletRepository {
     }
 
     override fun getAllMovements(): Flow<List<Movement>> {
-        TODO("Not yet implemented")
+        return movements.let { flow { emit(it) } }
     }
 
     override suspend fun getMovementByName(name: String): Movement? {
