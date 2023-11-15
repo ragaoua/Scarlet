@@ -19,7 +19,7 @@ class UpdateMovementUseCase(
      * @return a resource with an error if found, or a simple resource with no data
      */
     suspend operator fun invoke(movement: Movement): SimpleResource {
-        validateMovementName(movement.name).let { resource ->
+        validateMovementName(movement).let { resource ->
             resource.error?.let {
                 return Resource.Error(resource.error)
             }

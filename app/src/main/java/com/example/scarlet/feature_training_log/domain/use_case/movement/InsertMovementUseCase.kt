@@ -18,14 +18,14 @@ class InsertMovementUseCase(
      * @return a resource with an error or data (id of the inserted movement)
      */
     suspend operator fun invoke(movementName: String): Resource<Long> {
-        validateMovementName(movementName).let { resource ->
+        val movement = Movement(name = movementName)
+        validateMovementName(movement).let { resource ->
             resource.error?.let {
                 return Resource.Error(resource.error)
             }
         }
 
-        return repository.insertMovement(
-            Movement(name = movementName)
-        ).let { Resource.Success(it) }
+        return repository.insertMovement(movement)
+            .let { Resource.Success(it) }
     }
 }
