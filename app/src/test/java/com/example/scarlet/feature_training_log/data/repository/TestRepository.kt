@@ -280,7 +280,13 @@ class TestRepository: ScarletRepository {
     }
 
     override suspend fun updateMovement(movement: Movement) {
-        TODO("Not yet implemented")
+        val indexOfUpdatedMovement = movements.indexOfFirst { it.id == movement.id }
+
+        if (indexOfUpdatedMovement == -1) {
+            throw Exception("Movement with id ${movement.id} not found")
+        }
+
+        movements[indexOfUpdatedMovement] = movement
     }
 
     override suspend fun deleteMovement(movement: Movement) {
