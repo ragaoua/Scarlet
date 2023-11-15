@@ -4,7 +4,7 @@ import java.util.Locale
 
 fun String.toTitleCase(): String {
     return split(" ").joinToString(" ") { word ->
-        word.replaceFirstChar {
+        word.lowercase().replaceFirstChar {
             it.titlecase(Locale.ROOT)
         }
     }
