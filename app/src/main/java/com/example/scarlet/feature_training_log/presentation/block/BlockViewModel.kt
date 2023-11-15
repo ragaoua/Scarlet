@@ -634,7 +634,7 @@ class BlockViewModel @Inject constructor(
                         .flatMap { it.exercises }
                         .associate { day -> Pair(
                             day.id,
-                            state.isExerciseDetailExpandedById[day.id] ?: true
+                            state.isExerciseDetailExpandedById[day.id] ?: false
                         ) },
                     selectedDayId =
                         if (state.selectedDayId in days.map { it.id }) {
