@@ -257,7 +257,13 @@ class TestRepository: ScarletRepository {
     }
 
     override suspend fun updateSet(set: Set) {
-        TODO("Not yet implemented")
+        val indexOfUpdatedSet = sets.indexOfFirst { it.id == set.id }
+
+        if (indexOfUpdatedSet == -1) {
+            throw Exception("Set with id ${set.id} not found")
+        }
+
+        sets[indexOfUpdatedSet] = set
     }
 
     override suspend fun deleteSetAndUpdateSubsequentSetsOrder(set: Set) {
