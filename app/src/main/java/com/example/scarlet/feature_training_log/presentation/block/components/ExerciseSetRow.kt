@@ -1,10 +1,10 @@
 package com.example.scarlet.feature_training_log.presentation.block.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -132,14 +132,14 @@ fun ExerciseSetRow(
             imeAction = if (isLastSet) ImeAction.Done else ImeAction.Next
         )
 
-        IconButton(
-            onClick = { onEvent(BlockEvent.DeleteSet(set)) },
-            modifier = Modifier.weight(SetFieldRatio.OTHER)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Delete,
-                contentDescription = stringResource(R.string.delete)
-            )
-        }
+        Icon(
+            imageVector = Icons.Default.Delete,
+            contentDescription = stringResource(R.string.delete),
+            modifier = Modifier
+                .weight(SetFieldRatio.OTHER)
+                .clickable {
+                    onEvent(BlockEvent.DeleteSet(set))
+                },
+        )
     }
 }
