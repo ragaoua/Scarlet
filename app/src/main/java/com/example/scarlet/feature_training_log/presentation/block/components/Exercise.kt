@@ -122,19 +122,6 @@ fun Exercise(
                             text = {
                                 Row (verticalAlignment = Alignment.CenterVertically) {
                                     Icon(
-                                        imageVector = Icons.Default.Delete,
-                                        contentDescription = stringResource(R.string.delete)
-                                    )
-                                    Spacer(modifier = Modifier.width(8.dp))
-                                    Text(stringResource(R.string.delete))
-                                }
-                            },
-                            onClick = { onEvent(BlockEvent.DeleteExercise(exercise)) }
-                        )
-                        DropdownMenuItem(
-                            text = {
-                                Row (verticalAlignment = Alignment.CenterVertically) {
-                                    Icon(
                                         imageVector = Icons.Default.Edit,
                                         contentDescription = stringResource(R.string.edit_movement)
                                     )
@@ -148,6 +135,19 @@ fun Exercise(
                                     exercise = exercise.toExercise()
                                 ))
                             }
+                        )
+                        DropdownMenuItem(
+                            text = {
+                                Row (verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = stringResource(R.string.delete)
+                                    )
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text(stringResource(R.string.delete))
+                                }
+                            },
+                            onClick = { onEvent(BlockEvent.DeleteExercise(exercise)) }
                         )
                     }
                 }
